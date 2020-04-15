@@ -1,6 +1,9 @@
 package bitmex.Bot.view;
 
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.bitMEX.client.BitmexClient;
+import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
+import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +32,29 @@ public class ConsoleHelper {
             writeMessage("Произошла ошибка при попытке ввода числа. Попробуйте еще раз.");
             return readInt();
         }
+    }
+
+    public static void printInfoSettings() {
+        ConsoleHelper.writeMessage("timeBetweenOrders === " + Gasket.getTimeBetweenOrders());
+        ConsoleHelper.writeMessage("gameAllDirection === " + Gasket.isGameAllDirection());
+        ConsoleHelper.writeMessage("strategeWorkOne === " + Gasket.getStrategeWorkOne());
+        ConsoleHelper.writeMessage("dateDifference === " + Gasket.getDateDifference());
+        ConsoleHelper.writeMessage("rangePriceMAX === " + Gasket.getRangePriceMAX());
+        ConsoleHelper.writeMessage("rangePriceMIN === " + Gasket.getRangePriceMIN());
+        ConsoleHelper.writeMessage("gameDirection === " + Gasket.isGameDirection());
+        ConsoleHelper.writeMessage("PROFIT_Sell === " + Gasket.getPROFIT_Sell());
+        ConsoleHelper.writeMessage("twoAccounts === " + Gasket.isTwoAccounts());
+        ConsoleHelper.writeMessage("priceActiv === " + Gasket.getPriceActiv());
+        ConsoleHelper.writeMessage("PROFIT_Buy === " + Gasket.getPROFIT_Buy());
+        ConsoleHelper.writeMessage("rangeLivel === " + Gasket.getRangeLivel());
+        ConsoleHelper.writeMessage("typeOrder === " + Gasket.getTypeOrder());
+        ConsoleHelper.writeMessage("visible === " + Gasket.getVisible());
+        ConsoleHelper.writeMessage("trading === " + Gasket.isTrading());
+        ConsoleHelper.writeMessage("PROFIT === " + Gasket.getPROFIT());
+        ConsoleHelper.writeMessage("take === " + Gasket.getTake());
+        ConsoleHelper.writeMessage("stop === " + Gasket.getStop());
+        ConsoleHelper.writeMessage("PORT === " + Gasket.getPORT());
+        ConsoleHelper.writeMessage("lot === " + Gasket.getLot());
     }
 
     public static void printStatistics() {

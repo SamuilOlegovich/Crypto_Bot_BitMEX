@@ -68,13 +68,13 @@ public class StrategyOneSellRange {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
                     new StrategyOneSellThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOSR", volume, ask);
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOSR", volume, getMin());
                 }
             } else if (Gasket.getStrategeWorkOne() == 2) {
                 if (Gasket.isStrategyOneSellRangeFLAG()) {
                     Gasket.setStrategyOneSellRangeFLAG(false);
                     new StrategyOneSellThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOSR", volume, ask);
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOSR", volume, getMin());
                 }
             }
             maxOpenInterestMinus = null;
@@ -86,6 +86,21 @@ public class StrategyOneSellRange {
             volume = null;
             ask = null;
         }
+    }
+
+    // находим найвысший элемен, это и будет точка минимум для села
+    private InfoIndicator getMin() {
+        InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice() > openInterestPlus.getPrice()
+                ? maxOpenInterestMinus : openInterestPlus;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaMinus.getPrice()
+                ? infoIndicator : maxDeltaMinus;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaPlus2.getPrice()
+                ? infoIndicator : maxDeltaPlus2;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaPlus.getPrice()
+                ? infoIndicator : maxDeltaPlus;
+        infoIndicator = infoIndicator.getPrice() > deltaPlus.getPrice()
+                ? infoIndicator : deltaPlus;
+        return infoIndicator;
     }
 
     // проверяем вписываемся ли в диапазон цен

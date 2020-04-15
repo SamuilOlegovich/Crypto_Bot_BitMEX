@@ -65,13 +65,13 @@ public class StrategyOneBuyRange {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
                     new StrategyOneBuyThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOBR", volume, bid);
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOBR", volume, getMin());
                 }
             } else if (Gasket.getStrategeWorkOne() == 2) {
                 if (Gasket.isStrategyOneBuyRangeFLAG()) {
                     Gasket.setStrategyOneBuyRangeFLAG(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOBR", volume, bid);
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOBR", volume, getMin());
                 }
             }
             maxOpenInterestMinus = null;
@@ -82,6 +82,18 @@ public class StrategyOneBuyRange {
             volume = null;
             bid = null;
         }
+    }
+
+    private InfoIndicator getMin() {
+        InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice() < maxOpenInterestPlus.getPrice()
+                ? maxOpenInterestMinus : maxOpenInterestPlus;
+        infoIndicator = infoIndicator.getPrice() < openInterestMinus.getPrice()
+                ? infoIndicator : openInterestMinus;
+        infoIndicator = infoIndicator.getPrice() < maxDeltaMinus.getPrice()
+                ? infoIndicator : maxDeltaMinus;
+        infoIndicator = infoIndicator.getPrice() < deltaMinus.getPrice()
+                ? infoIndicator : deltaMinus;
+        return infoIndicator;
     }
 
     // проверяем вписываемся ли в диапазон цен

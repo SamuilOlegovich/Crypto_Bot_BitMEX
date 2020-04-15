@@ -35,49 +35,52 @@ public class ConsoleHelper {
     }
 
     public static void printInfoSettings() {
-        ConsoleHelper.writeMessage("timeBetweenOrders === " + Gasket.getTimeBetweenOrders());
-        ConsoleHelper.writeMessage("gameAllDirection === " + Gasket.isGameAllDirection());
-        ConsoleHelper.writeMessage("strategeWorkOne === " + Gasket.getStrategeWorkOne());
-        ConsoleHelper.writeMessage("dateDifference === " + Gasket.getDateDifference());
-        ConsoleHelper.writeMessage("rangePriceMAX === " + Gasket.getRangePriceMAX());
-        ConsoleHelper.writeMessage("rangePriceMIN === " + Gasket.getRangePriceMIN());
-        ConsoleHelper.writeMessage("gameDirection === " + Gasket.isGameDirection());
-        ConsoleHelper.writeMessage("PROFIT_Sell === " + Gasket.getPROFIT_Sell());
-        ConsoleHelper.writeMessage("twoAccounts === " + Gasket.isTwoAccounts());
-        ConsoleHelper.writeMessage("priceActiv === " + Gasket.getPriceActiv());
-        ConsoleHelper.writeMessage("PROFIT_Buy === " + Gasket.getPROFIT_Buy());
-        ConsoleHelper.writeMessage("rangeLivel === " + Gasket.getRangeLivel());
-        ConsoleHelper.writeMessage("typeOrder === " + Gasket.getTypeOrder());
-        ConsoleHelper.writeMessage("visible === " + Gasket.getVisible());
-        ConsoleHelper.writeMessage("trading === " + Gasket.isTrading());
-        ConsoleHelper.writeMessage("PROFIT === " + Gasket.getPROFIT());
-        ConsoleHelper.writeMessage("take === " + Gasket.getTake());
-        ConsoleHelper.writeMessage("stop === " + Gasket.getStop());
-        ConsoleHelper.writeMessage("PORT === " + Gasket.getPORT());
-        ConsoleHelper.writeMessage("lot === " + Gasket.getLot());
-        ConsoleHelper.writeMessage("strategyOneRange === " + Gasket.isStrategyOneRange());
-        ConsoleHelper.writeMessage("strategyOneTime === " + Gasket.isStrategyOneTime());
-        ConsoleHelper.writeMessage("strategyOne === " + Gasket.isStrategyOne());
-        ConsoleHelper.writeMessage("one === " + Gasket.isOne());
+        ConsoleHelper.writeMessage("\n" + "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n"
+                + "timeBetweenOrders === " + Gasket.getTimeBetweenOrders() + "\n"
+                + "gameAllDirection === " + Gasket.isGameAllDirection() + "\n"
+                + "strategeWorkOne === " + Gasket.getStrategeWorkOne() + "\n"
+                + "dateDifference === " + Gasket.getDateDifference() + "\n"
+                + "rangePriceMAX === " + Gasket.getRangePriceMAX() + "\n"
+                + "rangePriceMIN === " + Gasket.getRangePriceMIN() + "\n"
+                + "gameDirection === " + Gasket.isGameDirection() + "\n"
+                + "PROFIT_Sell === " + Gasket.getPROFIT_Sell() + "\n"
+                + "twoAccounts === " + Gasket.isTwoAccounts() + "\n"
+                + "priceActiv === " + Gasket.getPriceActiv() + "\n"
+                + "PROFIT_Buy === " + Gasket.getPROFIT_Buy() + "\n"
+                + "rangeLivel === " + Gasket.getRangeLivel() + "\n"
+                + "typeOrder === " + Gasket.getTypeOrder() + "\n"
+                + "visible === " + Gasket.getVisible() + "\n"
+                + "trading === " + Gasket.isTrading() + "\n"
+                + "PROFIT === " + Gasket.getPROFIT() + "\n"
+                + "take === " + Gasket.getTake() + "\n"
+                + "stop === " + Gasket.getStop() + "\n"
+                + "PORT === " + Gasket.getPORT() + "\n"
+                + "lot === " + Gasket.getLot() + "\n"
+                + "strategyOneRange === " + Gasket.isStrategyOneRange() + "\n"
+                + "strategyOneTime === " + Gasket.isStrategyOneTime() + "\n"
+                + "strategyOne === " + Gasket.isStrategyOne() + "\n"
+                + "one === " + Gasket.isOne() + "\n"  + "\n"
+                + "ЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ" + "\n"
+                + "ВВЕДИТЕ ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ"  + "\n"
+                + "ПРИМЕР: lot=10.0" + "\n");
     }
 
     public static void printStatistics() {
-        ConsoleHelper.writeMessage("SOS_R_STOP === " + Gasket.getSosRStop());
-        ConsoleHelper.writeMessage("SOS_R_TAKE === " + Gasket.getSosRTake());
-        ConsoleHelper.writeMessage("SOS_T_STOP === " + Gasket.getSosTStop());
-        ConsoleHelper.writeMessage("SOS_T_TAKE === " + Gasket.getSosTTake());
-        ConsoleHelper.writeMessage("SOB_R_STOP === " + Gasket.getSobRStop());
-        ConsoleHelper.writeMessage("SOB_R_TAKE === " + Gasket.getSobRTake());
-        ConsoleHelper.writeMessage("SOB_T_STOP === " + Gasket.getSobTStop());
-        ConsoleHelper.writeMessage("SOB_T_TAKE === " + Gasket.getSobTTake());
-        ConsoleHelper.writeMessage("SOS_STOP === " + Gasket.getSosStop());
-        ConsoleHelper.writeMessage("SOS_TAKE === " + Gasket.getSosTake());
-        ConsoleHelper.writeMessage("SOB_STOP === " + Gasket.getSobStop());
-        ConsoleHelper.writeMessage("SOB_TAKE === " + Gasket.getSobTake());
-        ConsoleHelper.writeMessage("OB_STOP === " + Gasket.getObStop());
-        ConsoleHelper.writeMessage("OB_TAKE === " + Gasket.getObTake());
-        ConsoleHelper.writeMessage("OS_STOP === " + Gasket.getOsStop());
-        ConsoleHelper.writeMessage("OS_TAKE === " + Gasket.getOsTake());
-        ConsoleHelper.writeMessage("");
+        ConsoleHelper.writeMessage("\n" + "SOS_R_STOP === " + Gasket.getSosRStop() + "\n"
+                + "SOS_R_TAKE === " + Gasket.getSosRTake() + "\n"
+                + "SOS_T_STOP === " + Gasket.getSosTStop() + "\n"
+                + "SOS_T_TAKE === " + Gasket.getSosTTake() + "\n"
+                + "SOB_R_STOP === " + Gasket.getSobRStop() + "\n"
+                + "SOB_R_TAKE === " + Gasket.getSobRTake() + "\n"
+                + "SOB_T_STOP === " + Gasket.getSobTStop() + "\n"
+                + "SOB_T_TAKE === " + Gasket.getSobTTake() + "\n"
+                + "SOS_STOP === " + Gasket.getSosStop() + "\n"
+                + "SOS_TAKE === " + Gasket.getSosTake() + "\n"
+                + "SOB_STOP === " + Gasket.getSobStop() + "\n"
+                + "SOB_TAKE === " + Gasket.getSobTake() + "\n"
+                + "OB_STOP === " + Gasket.getObStop() + "\n"
+                + "OB_TAKE === " + Gasket.getObTake() + "\n"
+                + "OS_STOP === " + Gasket.getOsStop() + "\n"
+                + "OS_TAKE === " + Gasket.getOsTake() + "\n");
     }
 }

@@ -115,7 +115,6 @@ public class StrategyOneSellTime {
 //                && (maxDeltaPlus2.getPrice() >= volume.getPrice() && maxDeltaPlus2.getPrice() <= topLevel)
 //                && (maxDeltaPlus.getPrice() >= volume.getPrice() && maxDeltaPlus.getPrice() <= topLevel)
 //                && (deltaPlus.getPrice() >= volume.getPrice() && deltaPlus.getPrice() <= topLevel);
-
         return (maxOpenInterestMinus.getPrice() >= volume.getPrice())
                 && (openInterestPlus.getPrice() >= volume.getPrice())
                 && (maxDeltaMinus.getPrice() >= volume.getPrice())

@@ -1,8 +1,8 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.Gasket;
 
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
@@ -56,48 +56,27 @@ public class TestOrderSell extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN класса TestOrderSell начал считать --- " + getDate());
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("d-MM-yyyy hh:mm:ss");
-//        Calendar calendarS = new GregorianCalendar();
-//        calendarS.roll(Calendar.HOUR, Gasket.getDateDifference());
-//        writeMessage(ID + " --- RUN класса TestOrderSell начал считать --- "
-//                + dateFormat.format(calendarS.getTime()));
 
         while (true) {
-//            BitmexChartData bitmexChartData = Gasket.price(Gasket.getTicker());
-//            double high = bitmexChartData.getHigh();
-//            double low = bitmexChartData.getLow();
-
             BitmexQuote bitmexQuote = Gasket.getBitmexQuote();
             double priceAsk = bitmexQuote.getAskPrice();
             double priceBid = bitmexQuote.getAskPrice();
 
-//            writeMessage(ID + " --- OPEN --- " + priseOpenOrder
-//                    + " --- HIGH --- " + high + " --- LOW --- " + low
-//                    + " --- STOP --- " + priseStopOrder + " --- TAKE --- " + priseTakeOrder);
-
-//            if (high >= priseStopOrder) {
             if (priceAsk >= priseStopOrder) {
                 flag();
                 setStop();
 
                 ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС ---- " + getDate());
-//                Calendar calendar = new GregorianCalendar();
-//                calendar.roll(Calendar.HOUR, Gasket.getDateDifference());
-//                writeMessage(ID + " --- Сработал СТОП ЛОСС ---- " + dateFormat.format(calendar.getTime()));
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() - Gasket.getStop());
                 ConsoleHelper.writeMessage(ID + " --- ИТОГО на счету СЕЛЛ --- " + Gasket.getPROFIT_Sell());
                 break;
             }
 
-//            if (low <= priseTakeOrder) {
             if (priceBid <= priseTakeOrder) {
                 flag();
                 setTake();
 
                 ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ ---- " + getDate());
-//                Calendar calendar = new GregorianCalendar();
-//                calendar.roll(Calendar.HOUR, Gasket.getDateDifference());
-//                writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ ---- " + dateFormat.format(calendar.getTime()));
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() + Gasket.getTake());
                 ConsoleHelper.writeMessage(ID + " --- ИТОГО на счету CEЛЛ --- " + Gasket.getPROFIT_Sell());
                 break;

@@ -1,12 +1,12 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.Gasket;
 
+import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 
 public class StrategyOneBuyThread extends Thread {
     private InfoIndicator volume;
@@ -29,7 +29,7 @@ public class StrategyOneBuyThread extends Thread {
         double min = volume.getPrice() > bid.getPrice()
                 ? bid.getPrice() - Gasket.getRangePriceMIN() : volume.getPrice() - Gasket.getRangePriceMIN();
 
-        ConsoleHelper.writeMessage(ID + " --- RUN StrategyOneBuyThread начал работать ---- " + getDate());
+        ConsoleHelper.writeMessage(ID + " --- RUN Strategy One Buy Thread начал работать ---- " + getDate());
         ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
 
         while (true) {
@@ -38,7 +38,7 @@ public class StrategyOneBuyThread extends Thread {
             if (close < min) {
                flag();
 
-                ConsoleHelper.writeMessage(ID + " --- Сделку Бай ОТМЕНЕНА ---- " + getDate());
+                ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА ---- " + getDate());
                 return;
             }
 
@@ -52,7 +52,7 @@ public class StrategyOneBuyThread extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса StrategyOneSell.");
+                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса Strategy One Sell.");
                 e.printStackTrace();
             }
         }

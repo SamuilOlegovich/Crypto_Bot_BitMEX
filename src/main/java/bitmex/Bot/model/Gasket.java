@@ -30,7 +30,7 @@ public class Gasket {
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
     private static double rangePriceMAX = 4.0;          // диапазон в долларах от уровней для срабатывания ордера
-    private static double rangePriceMIN = 8.0;          // диапазон в долларах от уровней для отмены ордера
+    private static double rangePriceMIN = 0.0;          // диапазон в долларах от уровней для отмены ордера
     private static String typeOrder = "Limit";          // тип первого открываемого ордера
     private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;

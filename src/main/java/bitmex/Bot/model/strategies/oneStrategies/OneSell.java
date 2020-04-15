@@ -31,26 +31,26 @@ public class OneSell {
 
     public void setIInfoString(InfoIndicator iInfoIndicator) {
         switch (iInfoIndicator.getType()) {
-            case VOLUME:
-                volume = iInfoIndicator;
-                break;
-            case DELTA_ASK:
-                deltaPlus = iInfoIndicator;
-                break;
-            case ASK:
-                ask = iInfoIndicator;
-                break;
             case OPEN_POS_MINUS_HL:
                 maxOpenInterestMinus = iInfoIndicator;
-                break;
-            case DELTA_ASK_HL:
-                twoDelta(iInfoIndicator);
                 break;
             case OPEN_POS_PLUS:
                 openInterestPlus = iInfoIndicator;
                 break;
             case DELTA_BID_HL:
                 maxDeltaMinus = iInfoIndicator;
+                break;
+            case DELTA_ASK:
+                deltaPlus = iInfoIndicator;
+                break;
+            case DELTA_ASK_HL:
+                twoDelta(iInfoIndicator);
+                break;
+            case VOLUME:
+                volume = iInfoIndicator;
+                break;
+            case ASK:
+                ask = iInfoIndicator;
                 break;
         }
         makeADecision();
@@ -64,18 +64,18 @@ public class OneSell {
             return;
         }
 
-        if (inTheRangePrice() && inTheRangeTime() /*&& isReal()*/) {
+        if (inTheRangePrice() && inTheRangeTime()) {
             if (Gasket.getStrategeWorkOne() == 1) {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
                     new StrategyOneSellThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOS", volume, ask);
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOS", volume, getMin());
                 }
             } else if (Gasket.getStrategeWorkOne() == 2) {
                 if (Gasket.isOneSellFLAG()) {
                     Gasket.setOneSellFLAG(false);
                     new StrategyOneSellThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOS", volume, ask);
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOS", volume, getMin());
                 }
             }
             maxOpenInterestMinus = null;
@@ -89,17 +89,39 @@ public class OneSell {
         }
     }
 
+    // находим найвысший элемен, это и будет точка минимум для села
+    private InfoIndicator getMin() {
+        InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice() > openInterestPlus.getPrice()
+                ? maxOpenInterestMinus : openInterestPlus;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaMinus.getPrice()
+                ? infoIndicator : maxDeltaMinus;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaPlus2.getPrice()
+                ? infoIndicator : maxDeltaPlus2;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaPlus.getPrice()
+                ? infoIndicator : maxDeltaPlus;
+        infoIndicator = infoIndicator.getPrice() > deltaPlus.getPrice()
+                ? infoIndicator : deltaPlus;
+        return infoIndicator;
+    }
+
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
-        double topLevel = volume.getPrice() > ask.getPrice()
-                ? volume.getPrice() + Gasket.getRangeLivel() : ask.getPrice() + Gasket.getRangeLivel();
+//        double topLevel = volume.getPrice() > ask.getPrice()
+//                ? volume.getPrice() + Gasket.getRangeLivel() : ask.getPrice() + Gasket.getRangeLivel();
 
-        return (maxOpenInterestMinus.getPrice() >= volume.getPrice() && maxOpenInterestMinus.getPrice() <= topLevel)
-                && (openInterestPlus.getPrice() >= volume.getPrice() && openInterestPlus.getPrice() <= topLevel)
-                && (maxDeltaMinus.getPrice() >= volume.getPrice() && maxDeltaMinus.getPrice() <= topLevel)
-                && (maxDeltaPlus2.getPrice() >= volume.getPrice() && maxDeltaPlus2.getPrice() <= topLevel)
-                && (maxDeltaPlus.getPrice() >= volume.getPrice() && maxDeltaPlus.getPrice() <= topLevel)
-                && (deltaPlus.getPrice() >= volume.getPrice() && deltaPlus.getPrice() <= topLevel);
+//        return (maxOpenInterestMinus.getPrice() >= volume.getPrice() && maxOpenInterestMinus.getPrice() <= topLevel)
+//                && (openInterestPlus.getPrice() >= volume.getPrice() && openInterestPlus.getPrice() <= topLevel)
+//                && (maxDeltaMinus.getPrice() >= volume.getPrice() && maxDeltaMinus.getPrice() <= topLevel)
+//                && (maxDeltaPlus2.getPrice() >= volume.getPrice() && maxDeltaPlus2.getPrice() <= topLevel)
+//                && (maxDeltaPlus.getPrice() >= volume.getPrice() && maxDeltaPlus.getPrice() <= topLevel)
+//                && (deltaPlus.getPrice() >= volume.getPrice() && deltaPlus.getPrice() <= topLevel);
+
+        return (maxOpenInterestMinus.getPrice() >= volume.getPrice())
+                && (openInterestPlus.getPrice() >= volume.getPrice())
+                && (maxDeltaMinus.getPrice() >= volume.getPrice())
+                && (maxDeltaPlus2.getPrice() >= volume.getPrice())
+                && (maxDeltaPlus.getPrice() >= volume.getPrice())
+                && (deltaPlus.getPrice() >= volume.getPrice());
     }
 
     // проверяем нет ли тут предварительных уровней

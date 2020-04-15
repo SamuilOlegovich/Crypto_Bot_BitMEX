@@ -109,11 +109,17 @@ public class StrategyOneBuy {
         Date before = maxDeltaMinus.getTime();
         Date after = volume.getTime();
 
-        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime() && maxOpenInterestMinus.getTime().getTime() <= before.getTime())
-                && (maxOpenInterestPlus.getTime().getTime() >= after.getTime() && maxOpenInterestPlus.getTime().getTime() <= before.getTime())
-                && (openInterestMinus.getTime().getTime() >= after.getTime() && openInterestMinus.getTime().getTime() <= before.getTime())
-                && (maxDeltaMinus.getTime().getTime() >= after.getTime() && maxDeltaMinus.getTime().getTime() <= before.getTime())
-                && (deltaMinus.getTime().getTime() >= after.getTime() && deltaMinus.getTime().getTime() <= before.getTime())
-                && (bid.getTime().getTime() >= after.getTime() && bid.getTime().getTime() <= before.getTime());
+        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime()
+                && maxOpenInterestMinus.getTime().getTime() <= before.getTime())
+                && (maxOpenInterestPlus.getTime().getTime() >= after.getTime()
+                && maxOpenInterestPlus.getTime().getTime() <= before.getTime())
+                && (openInterestMinus.getTime().getTime() >= after.getTime()
+                && openInterestMinus.getTime().getTime() <= before.getTime())
+                && (maxDeltaMinus.getTime().getTime() >= after.getTime()
+                && maxDeltaMinus.getTime().getTime() <= before.getTime())
+                && (deltaMinus.getTime().getTime() >= after.getTime()
+                && deltaMinus.getTime().getTime() <= before.getTime())
+                && (bid.getTime().getTime() >= after.getTime()
+                && bid.getTime().getTime() <= before.getTime());
     }
 }

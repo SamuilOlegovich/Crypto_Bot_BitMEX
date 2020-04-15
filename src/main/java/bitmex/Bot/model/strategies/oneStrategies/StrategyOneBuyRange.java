@@ -86,11 +86,14 @@ public class StrategyOneBuyRange {
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
-        return (maxOpenInterestMinus.getPrice() <= volume.getPrice())
-                && (maxOpenInterestPlus.getPrice() <= volume.getPrice())
-                && (openInterestMinus.getPrice() <= volume.getPrice())
-                && (maxDeltaMinus.getPrice() <= volume.getPrice())
-                && (deltaMinus.getPrice() <= volume.getPrice());
+        double lowLevel = volume.getPrice() < bid.getPrice()
+                ? volume.getPrice() - Gasket.getRangeLivel() : bid.getPrice() - Gasket.getRangeLivel();
+
+        return (maxOpenInterestMinus.getPrice() <= volume.getPrice() && maxOpenInterestMinus.getPrice() >= lowLevel)
+                && (maxOpenInterestPlus.getPrice() <= volume.getPrice() && maxOpenInterestPlus.getPrice() >= lowLevel)
+                && (openInterestMinus.getPrice() <= volume.getPrice() && openInterestMinus.getPrice() >= lowLevel)
+                && (maxDeltaMinus.getPrice() <= volume.getPrice() && maxDeltaMinus.getPrice() >= lowLevel)
+                && (deltaMinus.getPrice() <= volume.getPrice() && deltaMinus.getPrice() >= lowLevel);
     }
 
     // проверяем нет ли тут предварительных уровней

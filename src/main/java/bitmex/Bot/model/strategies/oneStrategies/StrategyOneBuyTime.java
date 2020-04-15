@@ -3,10 +3,8 @@ package bitmex.Bot.model.strategies.oneStrategies;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.Gasket;
 
-import java.util.Date;
-
-public class OneBuy {
-    private static OneBuy oneBuy;
+public class StrategyOneBuyTime {
+    private static StrategyOneBuyTime strategyOneBuyStrictlyConsistentInTime;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator maxOpenInterestPlus;
@@ -17,12 +15,14 @@ public class OneBuy {
     private InfoIndicator bid;
 
 
-    private OneBuy() {
+
+    private StrategyOneBuyTime() {
     }
 
-    public static OneBuy getInstance() {
-        if (oneBuy == null) oneBuy = new OneBuy();
-        return oneBuy;
+    public static StrategyOneBuyTime getInstance() {
+        if (strategyOneBuyStrictlyConsistentInTime == null) strategyOneBuyStrictlyConsistentInTime
+                = new StrategyOneBuyTime();
+        return strategyOneBuyStrictlyConsistentInTime;
     }
 
     public synchronized void setIInfoString(InfoIndicator iInfoIndicator) {
@@ -55,8 +55,7 @@ public class OneBuy {
     // принимаем решение
     private synchronized void makeADecision() {
         if (volume == null || bid == null || deltaMinus == null || openInterestMinus == null
-                || maxOpenInterestPlus == null || maxOpenInterestMinus == null
-                || maxDeltaMinus == null) {
+                || maxOpenInterestPlus == null || maxOpenInterestMinus == null || maxDeltaMinus == null) {
             return;
         }
 
@@ -65,13 +64,13 @@ public class OneBuy {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-OB", volume, getMin());
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOBT", volume, getMin());
                 }
             } else if (Gasket.getStrategeWorkOne() == 2) {
-                if (Gasket.isOneBuyFLAG()) {
-                    Gasket.setOneBuyFLAG(false);
+                if (Gasket.isStrategyOneBuyFLAG()) {
+                    Gasket.setStrategyOneBuyFLAG(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-OB", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOBT", volume, getMin());
                 }
             }
             maxOpenInterestMinus = null;
@@ -100,7 +99,7 @@ public class OneBuy {
     private boolean inTheRangePrice() {
 //        double lowLevel = volume.getPrice() < bid.getPrice()
 //                ? volume.getPrice() - Gasket.getRangeLivel() : bid.getPrice() - Gasket.getRangeLivel();
-
+//
 //        return (maxOpenInterestMinus.getPrice() <= volume.getPrice() && maxOpenInterestMinus.getPrice() >= lowLevel)
 //                && (maxOpenInterestPlus.getPrice() <= volume.getPrice() && maxOpenInterestPlus.getPrice() >= lowLevel)
 //                && (openInterestMinus.getPrice() <= volume.getPrice() && openInterestMinus.getPrice() >= lowLevel)
@@ -112,7 +111,6 @@ public class OneBuy {
                 && (openInterestMinus.getPrice() <= volume.getPrice())
                 && (maxDeltaMinus.getPrice() <= volume.getPrice())
                 && (deltaMinus.getPrice() <= volume.getPrice());
-
     }
 
     // проверяем нет ли тут предварительных уровней
@@ -124,20 +122,11 @@ public class OneBuy {
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
-        Date before = maxDeltaMinus.getTime();
-        Date after = volume.getTime();
-
-        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime()
-                && maxOpenInterestMinus.getTime().getTime() <= before.getTime())
-                && (maxOpenInterestPlus.getTime().getTime() >= after.getTime()
-                && maxOpenInterestPlus.getTime().getTime() <= before.getTime())
-                && (openInterestMinus.getTime().getTime() >= after.getTime()
-                && openInterestMinus.getTime().getTime() <= before.getTime())
-                && (maxDeltaMinus.getTime().getTime() >= after.getTime()
-                && maxDeltaMinus.getTime().getTime() <= before.getTime())
-                && (deltaMinus.getTime().getTime() >= after.getTime()
-                && deltaMinus.getTime().getTime() <= before.getTime())
-                && (bid.getTime().getTime() >= after.getTime()
-                && bid.getTime().getTime() <= before.getTime());
+        return (maxOpenInterestMinus.getTime().getTime() >= maxOpenInterestPlus.getTime().getTime())
+                && (openInterestMinus.getTime().getTime() >= maxOpenInterestMinus.getTime().getTime())
+                && (maxOpenInterestPlus.getTime().getTime() >= maxDeltaMinus.getTime().getTime())
+                && (deltaMinus.getTime().getTime() >= openInterestMinus.getTime().getTime())
+                && (bid.getTime().getTime() >= deltaMinus.getTime().getTime())
+                && (volume.getTime().getTime() >= bid.getTime().getTime());
     }
 }

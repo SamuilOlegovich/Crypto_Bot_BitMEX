@@ -4,8 +4,8 @@ import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.Gasket;
 
 
-public class StrategyOneSellStrictlyConsistentInTime {
-    private static StrategyOneSellStrictlyConsistentInTime strategyOneSellStrictlyConsistentInTime;
+public class StrategyOneSellTime {
+    private static StrategyOneSellTime strategyOneSellStrictlyConsistentInTime;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator openInterestPlus;
@@ -20,12 +20,12 @@ public class StrategyOneSellStrictlyConsistentInTime {
     private int countDelta = 0;
 
 
-    private StrategyOneSellStrictlyConsistentInTime() {
+    private StrategyOneSellTime() {
     }
 
-    public static StrategyOneSellStrictlyConsistentInTime getInstance() {
+    public static StrategyOneSellTime getInstance() {
         if (strategyOneSellStrictlyConsistentInTime == null) strategyOneSellStrictlyConsistentInTime
-                = new StrategyOneSellStrictlyConsistentInTime();
+                = new StrategyOneSellTime();
         return strategyOneSellStrictlyConsistentInTime;
     }
 
@@ -69,13 +69,13 @@ public class StrategyOneSellStrictlyConsistentInTime {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
                     new StrategyOneSellThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOSSCT", volume, ask);
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOST", volume, getMin());
                 }
             } else if (Gasket.getStrategeWorkOne() == 2) {
                 if (Gasket.isStrategyOneSellFLAG()) {
                     Gasket.setStrategyOneSellFLAG(false);
                     new StrategyOneSellThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOSSCT", volume, ask);
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOST", volume, getMin());
                 }
             }
             maxOpenInterestMinus = null;
@@ -89,17 +89,39 @@ public class StrategyOneSellStrictlyConsistentInTime {
         }
     }
 
+    // находим найвысший элемен, это и будет точка минимум для села
+    private InfoIndicator getMin() {
+        InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice() > openInterestPlus.getPrice()
+                ? maxOpenInterestMinus : openInterestPlus;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaMinus.getPrice()
+                ? infoIndicator : maxDeltaMinus;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaPlus2.getPrice()
+                ? infoIndicator : maxDeltaPlus2;
+        infoIndicator = infoIndicator.getPrice() > maxDeltaPlus.getPrice()
+                ? infoIndicator : maxDeltaPlus;
+        infoIndicator = infoIndicator.getPrice() > deltaPlus.getPrice()
+                ? infoIndicator : deltaPlus;
+        return infoIndicator;
+    }
+
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
-        double topLevel = volume.getPrice() > ask.getPrice()
-                ? volume.getPrice() + Gasket.getRangeLivel() : ask.getPrice() + Gasket.getRangeLivel();
+//        double topLevel = volume.getPrice() > ask.getPrice()
+//                ? volume.getPrice() + Gasket.getRangeLivel() : ask.getPrice() + Gasket.getRangeLivel();
+//
+//        return (maxOpenInterestMinus.getPrice() >= volume.getPrice() && maxOpenInterestMinus.getPrice() <= topLevel)
+//                && (openInterestPlus.getPrice() >= volume.getPrice() && openInterestPlus.getPrice() <= topLevel)
+//                && (maxDeltaMinus.getPrice() >= volume.getPrice() && maxDeltaMinus.getPrice() <= topLevel)
+//                && (maxDeltaPlus2.getPrice() >= volume.getPrice() && maxDeltaPlus2.getPrice() <= topLevel)
+//                && (maxDeltaPlus.getPrice() >= volume.getPrice() && maxDeltaPlus.getPrice() <= topLevel)
+//                && (deltaPlus.getPrice() >= volume.getPrice() && deltaPlus.getPrice() <= topLevel);
 
-        return (maxOpenInterestMinus.getPrice() >= volume.getPrice() && maxOpenInterestMinus.getPrice() <= topLevel)
-                && (openInterestPlus.getPrice() >= volume.getPrice() && openInterestPlus.getPrice() <= topLevel)
-                && (maxDeltaMinus.getPrice() >= volume.getPrice() && maxDeltaMinus.getPrice() <= topLevel)
-                && (maxDeltaPlus2.getPrice() >= volume.getPrice() && maxDeltaPlus2.getPrice() <= topLevel)
-                && (maxDeltaPlus.getPrice() >= volume.getPrice() && maxDeltaPlus.getPrice() <= topLevel)
-                && (deltaPlus.getPrice() >= volume.getPrice() && deltaPlus.getPrice() <= topLevel);
+        return (maxOpenInterestMinus.getPrice() >= volume.getPrice())
+                && (openInterestPlus.getPrice() >= volume.getPrice())
+                && (maxDeltaMinus.getPrice() >= volume.getPrice())
+                && (maxDeltaPlus2.getPrice() >= volume.getPrice())
+                && (maxDeltaPlus.getPrice() >= volume.getPrice())
+                && (deltaPlus.getPrice() >= volume.getPrice());
     }
 
     // проверяем нет ли тут предварительных уровней
@@ -121,14 +143,13 @@ public class StrategyOneSellStrictlyConsistentInTime {
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
-//        return (openInterestPlus.getTime().getTime() <= maxDeltaPlus.getTime().getTime())
-//                && (maxDeltaPlus.getTime().getTime() <= maxOpenInterestMinus.getTime().getTime())
-//                && (maxDeltaPlus2.getTime().getTime() <= openInterestPlus.getTime().getTime())
-//                && (maxDeltaMinus.getTime().getTime() <= maxDeltaPlus.getTime().getTime())
-//                && (maxOpenInterestMinus.getTime().getTime() <= ask.getTime().getTime())
-//                && (deltaPlus.getTime().getTime() <= volume.getTime().getTime())
-//                && (volume.getTime().getTime() >= deltaPlus.getTime().getTime())
-//                && (ask.getTime().getTime() <= deltaPlus.getTime().getTime());
-        return true;
+        return (openInterestPlus.getTime().getTime() <= maxDeltaPlus.getTime().getTime())
+                && (maxDeltaPlus.getTime().getTime() <= maxOpenInterestMinus.getTime().getTime())
+                && (maxDeltaPlus2.getTime().getTime() <= openInterestPlus.getTime().getTime())
+                && (maxDeltaMinus.getTime().getTime() <= maxDeltaPlus.getTime().getTime())
+                && (maxOpenInterestMinus.getTime().getTime() <= ask.getTime().getTime())
+                && (deltaPlus.getTime().getTime() <= volume.getTime().getTime())
+                && (volume.getTime().getTime() >= deltaPlus.getTime().getTime())
+                && (ask.getTime().getTime() <= deltaPlus.getTime().getTime());
     }
 }

@@ -7,8 +7,8 @@ import bitmex.Bot.model.strategies.oneStrategies.*;
 
 public class StrategyFactory {
     private static StrategyFactory strategyFactory;
-    private StrategyOneSellStrictlyConsistentInTime strategyOneSellStrictlyConsistentInTime;
-    private StrategyOneBuyStrictlyConsistentInTime strategyOneBuyStrictlyConsistentInTime;
+    private StrategyOneSellTime strategyOneSellStrictlyConsistentInTime;
+    private StrategyOneBuyTime strategyOneBuyStrictlyConsistentInTime;
     private StrategyOneSellRange strategyOneSellRange;
     private StrategyOneBuyRange strategyOneBuyRange;
     private StrategyOneSell strategyOneSell;
@@ -80,14 +80,14 @@ public class StrategyFactory {
 
         if (strategyOneTime) {
             if (strategyOneSellStrictlyConsistentInTime == null) {
-                strategyOneSellStrictlyConsistentInTime = StrategyOneSellStrictlyConsistentInTime.getInstance();
+                strategyOneSellStrictlyConsistentInTime = StrategyOneSellTime.getInstance();
                 strategyOneSellStrictlyConsistentInTime.setIInfoString(infoIndicator);
             } else {
                 strategyOneSellStrictlyConsistentInTime.setIInfoString(infoIndicator);
             }
 
             if (strategyOneBuyStrictlyConsistentInTime == null) {
-                strategyOneBuyStrictlyConsistentInTime = StrategyOneBuyStrictlyConsistentInTime.getInstance();
+                strategyOneBuyStrictlyConsistentInTime = StrategyOneBuyTime.getInstance();
                 strategyOneBuyStrictlyConsistentInTime.setIInfoString(infoIndicator);
             } else {
                 strategyOneBuyStrictlyConsistentInTime.setIInfoString(infoIndicator);

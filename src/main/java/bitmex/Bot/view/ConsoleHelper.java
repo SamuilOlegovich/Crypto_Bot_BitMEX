@@ -55,6 +55,10 @@ public class ConsoleHelper {
         ConsoleHelper.writeMessage("stop === " + Gasket.getStop());
         ConsoleHelper.writeMessage("PORT === " + Gasket.getPORT());
         ConsoleHelper.writeMessage("lot === " + Gasket.getLot());
+        ConsoleHelper.writeMessage("strategyOneRange === " + Gasket.isStrategyOneRange());
+        ConsoleHelper.writeMessage("strategyOneTime === " + Gasket.isStrategyOneTime());
+        ConsoleHelper.writeMessage("strategyOne === " + Gasket.isStrategyOne());
+        ConsoleHelper.writeMessage("one === " + Gasket.isOne());
     }
 
     public static void printStatistics() {

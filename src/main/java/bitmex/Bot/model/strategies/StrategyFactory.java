@@ -1,6 +1,7 @@
 package bitmex.Bot.model.strategies;
 
 
+import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.strategies.oneStrategies.*;
 //import com.sumzerotrading.bitmex.model.serverAndParser.strategies.oneStrategies.*;
@@ -16,9 +17,6 @@ public class StrategyFactory {
     private OneSell oneSell;
     private OneBuy oneBuy;
 
-    private boolean strategyOneRange = true;
-    private boolean strategyOneTime = true;
-    private boolean strategyOne = true;
 
     private StrategyFactory() {
     }
@@ -30,7 +28,7 @@ public class StrategyFactory {
 
 
     public void onOff(InfoIndicator infoIndicator) {
-        if (strategyOne) {
+        if (Gasket.isOne()) {
             if (oneBuy == null) {
                 oneBuy = OneBuy.getInstance();
                 oneBuy.setIInfoString(infoIndicator);
@@ -46,7 +44,7 @@ public class StrategyFactory {
             }
         }
 
-        if (strategyOne) {
+        if (Gasket.isStrategyOne()) {
             if (strategyOneBuy == null) {
                 strategyOneBuy = StrategyOneBuy.getInstance();
                 strategyOneBuy.setIInfoString(infoIndicator);
@@ -62,7 +60,7 @@ public class StrategyFactory {
             }
         }
 
-        if (strategyOneRange) {
+        if (Gasket.isStrategyOneRange()) {
             if (strategyOneBuyRange == null) {
                 strategyOneBuyRange = StrategyOneBuyRange.getInstance();
                 strategyOneBuyRange.setIInfoString(infoIndicator);
@@ -78,7 +76,7 @@ public class StrategyFactory {
             }
         }
 
-        if (strategyOneTime) {
+        if (Gasket.isStrategyOne()) {
             if (strategyOneSellStrictlyConsistentInTime == null) {
                 strategyOneSellStrictlyConsistentInTime = StrategyOneSellTime.getInstance();
                 strategyOneSellStrictlyConsistentInTime.setIInfoString(infoIndicator);

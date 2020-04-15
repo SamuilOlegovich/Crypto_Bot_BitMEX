@@ -45,6 +45,12 @@ public class Gasket {
     private static double lot = 1.0;            // количество контрактов
     private static int PORT = 4444;             // порт подключения
 
+        // включаем отключаем стратегии
+    private static boolean strategyOneRange = true;
+    private static boolean strategyOneTime = true;
+    private static boolean strategyOne = true;
+    private static boolean one = true;
+
             // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика)
     private static int SOS_R_STOP = 0;
     private static int SOS_R_TAKE = 0;
@@ -434,5 +440,37 @@ public class Gasket {
 
     public static void setPORT(int PORT) {
         Gasket.PORT = PORT;
+    }
+
+    public static boolean isStrategyOneRange() {
+        return strategyOneRange;
+    }
+
+    public static void setStrategyOneRange(boolean strategyOneRange) {
+        Gasket.strategyOneRange = strategyOneRange;
+    }
+
+    public static boolean isStrategyOneTime() {
+        return strategyOneTime;
+    }
+
+    public static void setStrategyOneTime(boolean strategyOneTime) {
+        Gasket.strategyOneTime = strategyOneTime;
+    }
+
+    public static boolean isStrategyOne() {
+        return strategyOne;
+    }
+
+    public static void setStrategyOne(boolean strategyOne) {
+        Gasket.strategyOne = strategyOne;
+    }
+
+    public static boolean isOne() {
+        return one;
+    }
+
+    public static void setOne(boolean one) {
+        Gasket.one = one;
     }
 }

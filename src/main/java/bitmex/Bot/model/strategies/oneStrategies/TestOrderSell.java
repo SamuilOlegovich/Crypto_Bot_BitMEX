@@ -38,14 +38,14 @@ public class TestOrderSell extends Thread {
     }
 
     private void setStop() {
-        if (ID.endsWith("SOSSCT")) Gasket.setSosTStop(Gasket.getSosTStop() + 1);
+        if (ID.endsWith("SOST")) Gasket.setSosTStop(Gasket.getSosTStop() + 1);
         if (ID.endsWith("SOSR")) Gasket.setSosRStop(Gasket.getSosRStop() + 1);
         if (ID.endsWith("SOS")) Gasket.setSosStop(Gasket.getSosStop() + 1);
         if (ID.endsWith("OS")) Gasket.setOsStop(Gasket.getOsStop() + 1);
     }
 
     private void setTake() {
-        if (ID.endsWith("SOSSCT")) Gasket.setSosTTake(Gasket.getSosTTake() + 1);
+        if (ID.endsWith("SOST")) Gasket.setSosTTake(Gasket.getSosTTake() + 1);
         if (ID.endsWith("SOSR")) Gasket.setSosRTake(Gasket.getSosRTake() + 1);
         if (ID.endsWith("SOS")) Gasket.setSosTake(Gasket.getSosTake() + 1);
         if (ID.endsWith("OS")) Gasket.setOsTake(Gasket.getOsTake() + 1);

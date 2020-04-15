@@ -1,4 +1,4 @@
-package bitmex.Bot.model.serverAndParser.strategies.oneStrategies;
+package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
@@ -6,15 +6,15 @@ import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
-public class TradeSell extends Thread {
+public class TradeBuy extends Thread {
 
     private BitmexOrder orderLimitIfTouchedAnswer;
     private BitmexOrder orderLimitIfTouchedOpen;
     private BitmexOrder orderStopLimitAnswer;
     private BitmexOrder orderStopLimitOpen;
-    private BitmexOrder orderSellAnswer;
+    private BitmexOrder orderBuyAnswer;
     private BitmexClient bitmexClient;
-    private BitmexOrder orderSellOpen;
+    private BitmexOrder orderBuyOpen;
     private int timeBetweenOrders;
     private double priceActiv;
     private String typeOrder;
@@ -27,12 +27,12 @@ public class TradeSell extends Thread {
     private String ID;
 
 
-    public TradeSell(String id) {
+    public TradeBuy(String id) {
         this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
         this.bitmexClient = Gasket.getBitmexClient();
         this.priceActiv = Gasket.getPriceActiv();
         this.typeOrder = Gasket.getTypeOrder();
-        this.orderSellOpen = new BitmexOrder();
+        this.orderBuyOpen = new BitmexOrder();
         this.visible = Gasket.getVisible();
         this.ticker = Gasket.getTicker();
         this.take = Gasket.getTake();
@@ -44,38 +44,28 @@ public class TradeSell extends Thread {
     }
 
     private void init() {
-        if (!Gasket.isTwoAccounts() && !Gasket.isGameDirection() && Gasket.isGameAllDirection()) start();
-        if (!Gasket.isTwoAccounts() && !Gasket.isGameDirection()) start();
-        if (Gasket.isTwoAccounts()) {
-            bitmexClient = Gasket.getBitmexClient2Accounts();
-            start();
-        }
-    }
-
-    private double getPrise() {
-
-        if (Gasket.isTwoAccounts()) {
-            return Gasket.getBitmex2Quote().getAskPrice();
-        } else return Gasket.getBitmexQuote().getAskPrice();
+        if (!Gasket.isTwoAccounts() && Gasket.isGameAllDirection()) start();
+        if (!Gasket.isTwoAccounts() && Gasket.isGameDirection()) start();
+        if (Gasket.isTwoAccounts()) start();
     }
 
 
     @Override
     public void run() {
-        price = getPrise();
-        orderSellOpen.setTimeInForce("GoodTillCancel");
-        orderSellOpen.setSymbol(ticker.getSymbol());
-        orderSellOpen.setDisplayQty(visible);
-        orderSellOpen.setOrdType(typeOrder);
-        orderSellOpen.setOrderQty(lot);
-        orderSellOpen.setPrice(price);
-        orderSellOpen.setSide("Buy");
+        price = Gasket.getBitmexQuote().getAskPrice();
+        orderBuyOpen.setTimeInForce("GoodTillCancel");
+        orderBuyOpen.setSymbol(ticker.getSymbol());
+        orderBuyOpen.setDisplayQty(visible);
+        orderBuyOpen.setOrdType(typeOrder);
+        orderBuyOpen.setOrderQty(lot);
+        orderBuyOpen.setPrice(price);
+        orderBuyOpen.setSide("Buy");
 
 
-        orderSellAnswer = bitmexClient.submitOrder(orderSellOpen);
-        ConsoleHelper.writeMessage(ID + " --- Открыл SELL позицию --- "
-                + orderSellAnswer.getOrderID() + "\n"
-                + orderSellAnswer.toString());
+        orderBuyAnswer = bitmexClient.submitOrder(orderBuyOpen);
+        ConsoleHelper.writeMessage(ID + " --- Открыл BUY позицию --- "
+                + orderBuyAnswer.getOrderID() + "\n"
+                + orderBuyAnswer.toString());
 
         try {
             Thread.sleep(1000 * timeBetweenOrders);
@@ -83,12 +73,11 @@ public class TradeSell extends Thread {
             e.printStackTrace();
         }
 
-
-        orderLimitIfTouchedOpen = orderSellOpen;
-        orderLimitIfTouchedOpen.setText("Take profit - " + orderSellAnswer.getOrderID());
-        orderLimitIfTouchedOpen.setStopPx(price - priceActiv);
+        orderLimitIfTouchedOpen = orderBuyOpen;
+        orderLimitIfTouchedOpen.setText("Take profit - " + orderBuyAnswer.getOrderID());
+        orderLimitIfTouchedOpen.setStopPx(price + priceActiv);
         orderLimitIfTouchedOpen.setOrdType("LimitIfTouched");
-        orderLimitIfTouchedOpen.setPrice(price - take);
+        orderLimitIfTouchedOpen.setPrice(price + take);
         orderLimitIfTouchedOpen.setSide("Sell");
         orderLimitIfTouchedOpen.setOrderID("");
 
@@ -105,11 +94,11 @@ public class TradeSell extends Thread {
         }
 
 
-        orderStopLimitOpen = orderSellOpen;
-        orderStopLimitOpen.setText("Stop loss - " + orderSellAnswer.getOrderID());
-        orderStopLimitOpen.setStopPx(price + priceActiv);
+        orderStopLimitOpen = orderBuyOpen;
+        orderStopLimitOpen.setText("Stop loss - " + orderBuyAnswer.getOrderID());
+        orderStopLimitOpen.setStopPx(price - priceActiv);
         orderStopLimitOpen.setOrdType("StopLimit");
-        orderStopLimitOpen.setPrice(price + stop);
+        orderStopLimitOpen.setPrice(price - stop);
         orderStopLimitOpen.setSide("Sell");
         orderStopLimitOpen.setOrderID("");
 

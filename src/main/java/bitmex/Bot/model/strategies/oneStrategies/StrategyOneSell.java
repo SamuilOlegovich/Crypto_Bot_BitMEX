@@ -1,12 +1,13 @@
-package bitmex.Bot.model.serverAndParser.strategies.oneStrategies;
+package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 
 import java.util.Date;
 
-public class StrategyOneSellRange {
-    private static StrategyOneSellRange strategyOneSellRange;
+
+public class StrategyOneSell {
+    private static StrategyOneSell strategyOneSell;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator openInterestPlus;
@@ -20,12 +21,13 @@ public class StrategyOneSellRange {
     private int countDelta = 0;
 
 
-    private StrategyOneSellRange() {
+
+    private StrategyOneSell() {
     }
 
-    public static StrategyOneSellRange getInstance() {
-        if (strategyOneSellRange == null) strategyOneSellRange = new StrategyOneSellRange();
-        return strategyOneSellRange;
+    public static StrategyOneSell getInstance() {
+        if (strategyOneSell == null) strategyOneSell = new StrategyOneSell();
+        return strategyOneSell;
     }
 
     public void setIInfoString(InfoIndicator iInfoIndicator) {
@@ -68,13 +70,13 @@ public class StrategyOneSellRange {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
                     new StrategyOneSellThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOSR", volume, ask);
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOS", volume, ask);
                 }
             } else if (Gasket.getStrategeWorkOne() == 2) {
-                if (Gasket.isStrategyOneSellRangeFLAG()) {
-                    Gasket.setStrategyOneSellRangeFLAG(false);
+                if (Gasket.isStrategyOneSellFLAG()) {
+                    Gasket.setStrategyOneSellFLAG(false);
                     new StrategyOneSellThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOSR", volume, ask);
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOS", volume, ask);
                 }
             }
             maxOpenInterestMinus = null;
@@ -90,13 +92,15 @@ public class StrategyOneSellRange {
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
-        return (maxOpenInterestMinus.getPrice() >= volume.getPrice())
-                && (openInterestPlus.getPrice() >= volume.getPrice())
-                && (maxDeltaMinus.getPrice() >= volume.getPrice())
-                && (maxDeltaPlus2.getPrice() >= volume.getPrice())
-                && (maxDeltaPlus.getPrice() >= volume.getPrice())
-                && (deltaPlus.getPrice() >= volume.getPrice())
-                && (ask.getPrice() >= volume.getPrice());
+        double topLevel = volume.getPrice() > ask.getPrice()
+                ? volume.getPrice() + Gasket.getRangeLivel() : ask.getPrice() + Gasket.getRangeLivel();
+
+        return (maxOpenInterestMinus.getPrice() >= volume.getPrice() && maxOpenInterestMinus.getPrice() <= topLevel)
+                && (openInterestPlus.getPrice() >= volume.getPrice() && openInterestPlus.getPrice() <= topLevel)
+                && (maxDeltaMinus.getPrice() >= volume.getPrice() && maxDeltaMinus.getPrice() <= topLevel)
+                && (maxDeltaPlus2.getPrice() >= volume.getPrice() && maxDeltaPlus2.getPrice() <= topLevel)
+                && (maxDeltaPlus.getPrice() >= volume.getPrice() && maxDeltaPlus.getPrice() <= topLevel)
+                && (deltaPlus.getPrice() >= volume.getPrice() && deltaPlus.getPrice() <= topLevel);
     }
 
     // проверяем нет ли тут предварительных уровней

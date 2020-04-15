@@ -1,4 +1,4 @@
-package bitmex.Bot.model.serverAndParser.strategies.oneStrategies;
+package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.Gasket;

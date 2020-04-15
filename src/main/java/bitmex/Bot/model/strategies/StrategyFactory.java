@@ -1,8 +1,8 @@
-package bitmex.Bot.model.serverAndParser.strategies;
+package bitmex.Bot.model.strategies;
 
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.serverAndParser.strategies.oneStrategies.*;
+import bitmex.Bot.model.strategies.oneStrategies.*;
 //import com.sumzerotrading.bitmex.model.serverAndParser.strategies.oneStrategies.*;
 
 public class StrategyFactory {

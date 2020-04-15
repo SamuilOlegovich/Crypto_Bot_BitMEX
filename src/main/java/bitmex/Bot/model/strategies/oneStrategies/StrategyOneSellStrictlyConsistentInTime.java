@@ -1,12 +1,11 @@
-package bitmex.Bot.model.serverAndParser.strategies.oneStrategies;
+package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.Gasket;
 
-import java.util.Date;
 
-public class OneSell {
-    private static OneSell oneSell;
+public class StrategyOneSellStrictlyConsistentInTime {
+    private static StrategyOneSellStrictlyConsistentInTime strategyOneSellStrictlyConsistentInTime;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator openInterestPlus;
@@ -17,16 +16,17 @@ public class OneSell {
     private InfoIndicator volume;
     private InfoIndicator ask;
 
+
     private int countDelta = 0;
 
 
-
-    private OneSell() {
+    private StrategyOneSellStrictlyConsistentInTime() {
     }
 
-    public static OneSell getInstance() {
-        if (oneSell == null) oneSell = new OneSell();
-        return oneSell;
+    public static StrategyOneSellStrictlyConsistentInTime getInstance() {
+        if (strategyOneSellStrictlyConsistentInTime == null) strategyOneSellStrictlyConsistentInTime
+                = new StrategyOneSellStrictlyConsistentInTime();
+        return strategyOneSellStrictlyConsistentInTime;
     }
 
     public void setIInfoString(InfoIndicator iInfoIndicator) {
@@ -57,7 +57,7 @@ public class OneSell {
     }
 
     // принимаем решение
-    private synchronized void makeADecision() {
+    private void makeADecision() {
         if (volume == null || ask == null || deltaPlus == null || maxOpenInterestMinus == null
                 || maxDeltaPlus == null || openInterestPlus == null || maxDeltaPlus2 == null
                 || maxDeltaMinus == null ) {
@@ -69,13 +69,13 @@ public class OneSell {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
                     new StrategyOneSellThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOS", volume, ask);
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOSSCT", volume, ask);
                 }
             } else if (Gasket.getStrategeWorkOne() == 2) {
-                if (Gasket.isOneSellFLAG()) {
-                    Gasket.setOneSellFLAG(false);
+                if (Gasket.isStrategyOneSellFLAG()) {
+                    Gasket.setStrategyOneSellFLAG(false);
                     new StrategyOneSellThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOS", volume, ask);
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOSSCT", volume, ask);
                 }
             }
             maxOpenInterestMinus = null;
@@ -121,20 +121,14 @@ public class OneSell {
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
-        Date before = maxDeltaMinus.getTime();
-        Date after = volume.getTime();
-
-        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime()
-                && maxOpenInterestMinus.getTime().getTime() <= before.getTime())
-                && (openInterestPlus.getTime().getTime() >= after.getTime()
-                && openInterestPlus.getTime().getTime() <= before.getTime())
-                && (maxDeltaPlus2.getTime().getTime() >= after.getTime()
-                && maxDeltaPlus2.getTime().getTime() <= before.getTime())
-                && (maxDeltaPlus.getTime().getTime() >= after.getTime()
-                && maxDeltaPlus.getTime().getTime() <= before.getTime())
-                && (deltaPlus.getTime().getTime() >= after.getTime()
-                && deltaPlus.getTime().getTime() <= before.getTime())
-                && (ask.getTime().getTime() >= after.getTime()
-                && ask.getTime().getTime() <= before.getTime());
+//        return (openInterestPlus.getTime().getTime() <= maxDeltaPlus.getTime().getTime())
+//                && (maxDeltaPlus.getTime().getTime() <= maxOpenInterestMinus.getTime().getTime())
+//                && (maxDeltaPlus2.getTime().getTime() <= openInterestPlus.getTime().getTime())
+//                && (maxDeltaMinus.getTime().getTime() <= maxDeltaPlus.getTime().getTime())
+//                && (maxOpenInterestMinus.getTime().getTime() <= ask.getTime().getTime())
+//                && (deltaPlus.getTime().getTime() <= volume.getTime().getTime())
+//                && (volume.getTime().getTime() >= deltaPlus.getTime().getTime())
+//                && (ask.getTime().getTime() <= deltaPlus.getTime().getTime());
+        return true;
     }
 }

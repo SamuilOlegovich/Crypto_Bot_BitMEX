@@ -1,7 +1,7 @@
 package bitmex.Bot.model.serverAndParser;
 
-import bitmex.Bot.model.serverAndParser.enums.BidAsk;
-import bitmex.Bot.model.serverAndParser.enums.TimeFrame;
+import bitmex.Bot.model.enums.TimeFrame;
+import bitmex.Bot.model.enums.BidAsk;
 
 
 import java.text.SimpleDateFormat;

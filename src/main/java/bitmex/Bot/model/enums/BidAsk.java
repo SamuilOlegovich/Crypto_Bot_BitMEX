@@ -1,4 +1,4 @@
-package bitmex.Bot.model.serverAndParser.enums;
+package bitmex.Bot.model.enums;
 
 public enum BidAsk {
     DELTA_MIN_VOL_ASK_HL,

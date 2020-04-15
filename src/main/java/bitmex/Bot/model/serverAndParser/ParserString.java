@@ -2,10 +2,10 @@ package bitmex.Bot.model.serverAndParser;
 
 
 
-import bitmex.Bot.model.serverAndParser.enums.BidAsk;
+import bitmex.Bot.model.enums.BidAsk;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.serverAndParser.strategies.StrategyFactory;
-import bitmex.Bot.model.serverAndParser.enums.TimeFrame;
+import bitmex.Bot.model.strategies.StrategyFactory;
+import bitmex.Bot.model.enums.TimeFrame;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

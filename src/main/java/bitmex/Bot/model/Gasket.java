@@ -26,6 +26,7 @@ public class Gasket {
     private static boolean gameAllDirection = false;    // true - играть во все стороны на одном счету
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
+    private static boolean useRealOrNotReal = true;     // true - реальный счет
     private static volatile double PROFIT = 0.0;        // итоговый профит
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
@@ -34,7 +35,7 @@ public class Gasket {
     private static String typeOrder = "Limit";          // тип первого открываемого ордера
     private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;
-    private static int strategeWorkOne = 2;     // количество стратегий одновременно работающих (можно еще допелить или убрать)
+    private static int strategyWorkOne = 2;     // количество стратегий одновременно работающих (можно еще допелить или убрать)
     private static double rangeLivel = 8.0;     // диапазон в долларах для появления уровней
     private static int dateDifference = -3;     // разница в часовом поясе
     private static boolean trading = false;     // торговать - true нет - false
@@ -126,6 +127,14 @@ public class Gasket {
         Gasket.take = take;
     }
 
+    public static boolean isUseRealOrNotReal() {
+        return useRealOrNotReal;
+    }
+
+    public static void setUseRealOrNotReal(boolean useRealOrNotReal) {
+        Gasket.useRealOrNotReal = useRealOrNotReal;
+    }
+
     public static double getStop() {
         return Gasket.stop;
     }
@@ -190,12 +199,12 @@ public class Gasket {
         Gasket.PROFIT_Sell = PROFIT_Sell;
     }
 
-    public static int getStrategeWorkOne() {
-        return strategeWorkOne;
+    public static int getStrategyWorkOne() {
+        return strategyWorkOne;
     }
 
-    public static void setStrategeWorkOne(int strategeWorkOne) {
-        Gasket.strategeWorkOne = strategeWorkOne;
+    public static void setStrategyWorkOne(int strategyWorkOne) {
+        Gasket.strategyWorkOne = strategyWorkOne;
     }
 
     public static double getRangeLivel() {

@@ -12,6 +12,10 @@ import java.io.InputStreamReader;
 public class ConsoleHelper {
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+    public static void main(String[] args) {
+        ConsoleHelper.printInfoSettings();
+    }
+
     public static void writeMessage(String string) {
         System.out.println(string);
     }
@@ -35,34 +39,71 @@ public class ConsoleHelper {
     }
 
     public static void printInfoSettings() {
-        ConsoleHelper.writeMessage("\n" + "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n"
-                + "timeBetweenOrders === " + Gasket.getTimeBetweenOrders() + "\n"
-                + "gameAllDirection === " + Gasket.isGameAllDirection() + "\n"
-                + "strategeWorkOne === " + Gasket.getStrategeWorkOne() + "\n"
-                + "dateDifference === " + Gasket.getDateDifference() + "\n"
-                + "rangePriceMAX === " + Gasket.getRangePriceMAX() + "\n"
-                + "rangePriceMIN === " + Gasket.getRangePriceMIN() + "\n"
-                + "gameDirection === " + Gasket.isGameDirection() + "\n"
-                + "PROFIT_Sell === " + Gasket.getPROFIT_Sell() + "\n"
-                + "twoAccounts === " + Gasket.isTwoAccounts() + "\n"
-                + "priceActiv === " + Gasket.getPriceActiv() + "\n"
-                + "PROFIT_Buy === " + Gasket.getPROFIT_Buy() + "\n"
-                + "rangeLivel === " + Gasket.getRangeLivel() + "\n"
-                + "typeOrder === " + Gasket.getTypeOrder() + "\n"
-                + "visible === " + Gasket.getVisible() + "\n"
-                + "trading === " + Gasket.isTrading() + "\n"
-                + "PROFIT === " + Gasket.getPROFIT() + "\n"
-                + "take === " + Gasket.getTake() + "\n"
-                + "stop === " + Gasket.getStop() + "\n"
-                + "PORT === " + Gasket.getPORT() + "\n"
-                + "lot === " + Gasket.getLot() + "\n"
-                + "strategyOneRange === " + Gasket.isStrategyOneRange() + "\n"
-                + "strategyOneTime === " + Gasket.isStrategyOneTime() + "\n"
-                + "strategyOne === " + Gasket.isStrategyOne() + "\n"
-                + "one === " + Gasket.isOne() + "\n"  + "\n"
-                + "ЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ" + "\n"
-                + "ВВЕДИТЕ ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ"  + "\n"
-                + "ПРИМЕР: lot=10.0" + "\n");
+        ConsoleHelper.writeMessage("\n" + "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n\n"
+                + "timeBetweenOrders === " + Gasket.getTimeBetweenOrders()
+                + " === время в секундах между выставлениями ордеров по одной стратегии\n"
+                + "strategeWorkOne === " + Gasket.getStrategyWorkOne()
+                + " === количество стратегий одновременно работающих (можно еще допелить или убрать)\n"
+                + "dateDifference === " + Gasket.getDateDifference()
+                + " ==== разница в часовом поясе\n\n"
+
+                + "rangePriceMAX === " + Gasket.getRangePriceMAX()
+                + " === диапазон в долларах от уровней для срабатывания ордера\n"
+                + "rangePriceMIN === " + Gasket.getRangePriceMIN()
+                + " === диапазон в долларах от уровней для отмены ордера\n\n"
+
+                + "priceActiv === " + Gasket.getPriceActiv()
+                + " === цена тригер для стоп лимитов и тейк лимитов\n"
+                + "rangeLivel === " + Gasket.getRangeLivel()
+                + " === диапазон в долларах для появления уровней\n"
+                + "typeOrder === " + Gasket.getTypeOrder()
+                + " === тип первого открываемого ордера\n"
+                + "visible === " + Gasket.getVisible()
+                + " === видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно\n\n"
+
+
+                + "useRealOrNotReal === " + Gasket.isUseRealOrNotReal()
+                + " === Выбираем счет, true - реальный счет\n"
+                + "gameAllDirection === " + Gasket.isGameAllDirection()
+                + " === true - играть во все стороны на одном счету\n"
+                + "gameAllDirection === " + Gasket.isGameAllDirection()
+                + " === true - играть во все стороны на одном счету\n"
+                + "gameDirection === " + Gasket.isGameDirection()
+                + " === направление игры при одном счете, true - Buy, false - Sell\n"
+                + "twoAccounts === " + Gasket.isTwoAccounts()
+                + " === true - два счета, можно играть в две стороны, false - только в одну сторону\n"
+                + "trading === " + Gasket.isTrading()
+                + " === торговать - true нет - false\n\n"
+
+                + "PORT === " + Gasket.getPORT()
+                + " === порт подключения\n\n"
+
+                + "take === " + Gasket.getTake()
+                + " === тейк профит в долларах\n"
+                + "stop === " + Gasket.getStop()
+                + " === стоп лосс в долларах\n"
+                + "lot === " + Gasket.getLot()
+                + " === количество контрактов\n\n"
+
+                + "PROFIT_Sell === " + Gasket.getPROFIT_Sell()
+                + " === профит по сделкам в селл\n"
+                + "PROFIT_Buy === " + Gasket.getPROFIT_Buy()
+                + " === профит по сделкам в бай\n"
+                + "PROFIT === " + Gasket.getPROFIT()
+                + " === итоговый\n\n"
+
+                + "strategyOneRange === " + Gasket.isStrategyOneRange()
+                + " === включить выключить стратегию\n"
+                + "strategyOneTime === " + Gasket.isStrategyOneTime()
+                + " === включить выключить стратегию\n"
+                + "strategyOne === " + Gasket.isStrategyOne()
+                + " === включить выключить стратегию\n"
+                + "one === " + Gasket.isOne()
+                + " === включить выключить стратегию\n"
+
+                + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
+                + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"
+                + "ПРИМЕР: lot=10.0\n");
     }
 
     public static void printStatistics() {

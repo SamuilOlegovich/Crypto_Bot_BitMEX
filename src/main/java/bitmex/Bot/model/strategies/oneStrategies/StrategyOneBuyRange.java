@@ -61,13 +61,13 @@ public class StrategyOneBuyRange {
         }
 
         if (inTheRangePrice() && inTheRangeTime()) {
-            if (Gasket.getStrategeWorkOne() == 1) {
+            if (Gasket.getStrategyWorkOne() == 1) {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
                     new StrategyOneBuyThread(
                             ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOBR", volume, getMin());
                 }
-            } else if (Gasket.getStrategeWorkOne() == 2) {
+            } else if (Gasket.getStrategyWorkOne() == 2) {
                 if (Gasket.isStrategyOneBuyRangeFLAG()) {
                     Gasket.setStrategyOneBuyRangeFLAG(false);
                     new StrategyOneBuyThread(

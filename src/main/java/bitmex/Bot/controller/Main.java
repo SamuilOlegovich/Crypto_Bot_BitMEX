@@ -9,21 +9,19 @@ import bitmex.Bot.view.ConsoleHelper;
 
 public class Main {
 
-    private static boolean useProduction = true; // true - реальный счет
 
     private static BitmexApiKey bitmexApiKey2Accounts;
     private static BitmexClient bitmexClient2Accounts;
     private static BitmexApiKey bitmexApiKey;
     private static BitmexClient bitmexClient;
-
     private static Ticker ticker;
 
 
     public static void main(String[] args) {
         ticker = new Ticker("XBTUSD");
         ControlConsoleSetting controlConsoleSetting = new ControlConsoleSetting();
-        bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), useProduction);
-        bitmexClient = new BitmexClient(useProduction, ApiKey.getApiKeyName(), ApiKey.getApiKey());
+        bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), Gasket.isUseRealOrNotReal());
+        bitmexClient = new BitmexClient(Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName(), ApiKey.getApiKey());
         bitmexClient.subscribeQuotes(ticker, bitmexClient);
         Gasket.setBitmexClient(bitmexClient);
         Gasket.setGameDirection(true);
@@ -35,9 +33,9 @@ public class Main {
         if (Gasket.isTwoAccounts()) {
             if (!ApiKey.getApiKey2Accounts().equals("") || !ApiKey.getApiKeyName2Accounts().equals("")) {
                 bitmexApiKey2Accounts = new BitmexApiKey(
-                        ApiKey.getApiKeyName2Accounts(), ApiKey.getApiKey2Accounts(), useProduction);
+                        ApiKey.getApiKeyName2Accounts(), ApiKey.getApiKey2Accounts(), Gasket.isUseRealOrNotReal());
                 bitmexClient2Accounts = new BitmexClient(
-                        useProduction, ApiKey.getApiKeyName2Accounts(), ApiKey.getApiKey2Accounts());
+                        Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName2Accounts(), ApiKey.getApiKey2Accounts());
                 bitmexClient2Accounts.subscribeQuotes(ticker, bitmexClient2Accounts);
                 Gasket.setBitmexClient2Accounts(bitmexClient2Accounts);
                 bitmexClient2Accounts.setID(2);

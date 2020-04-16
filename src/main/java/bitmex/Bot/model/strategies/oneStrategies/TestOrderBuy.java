@@ -28,8 +28,8 @@ public class TestOrderBuy extends Thread {
     }
 
     private void flag() {
-        if (Gasket.getStrategeWorkOne() == 1) Gasket.setStrategyOneAllFLAG(true);
-        else if (Gasket.getStrategeWorkOne() == 2) {
+        if (Gasket.getStrategyWorkOne() == 1) Gasket.setStrategyOneAllFLAG(true);
+        else if (Gasket.getStrategyWorkOne() == 2) {
             if (!Gasket.isStrategyOneBuyRangeFLAG()) Gasket.setStrategyOneBuyRangeFLAG(true);
             if (!Gasket.isStrategyOneBuyFLAG()) Gasket.setStrategyOneBuyFLAG(true);
             if (!Gasket.isOneBuyFLAG()) Gasket.setOneBuyFLAG(true);

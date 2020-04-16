@@ -122,8 +122,16 @@ public class Gasket {
         return Gasket.take;
     }
 
+    public static void setTake(double take) {
+        Gasket.take = take;
+    }
+
     public static double getStop() {
         return Gasket.stop;
+    }
+
+    public static void setStop(double stop) {
+        Gasket.stop = stop;
     }
 
     public static double getPROFIT() {
@@ -153,8 +161,17 @@ public class Gasket {
     public static double getRangePriceMAX() {
         return rangePriceMAX;
     }
+
+    public static void setRangePriceMAX(double rangePriceMAX) {
+        Gasket.rangePriceMAX = rangePriceMAX;
+    }
+
     public static double getRangePriceMIN() {
         return rangePriceMIN;
+    }
+
+    public static void setRangePriceMIN(double rangePriceMIN) {
+        Gasket.rangePriceMIN = rangePriceMIN;
     }
 
     public static double getPROFIT_Buy() {
@@ -177,8 +194,16 @@ public class Gasket {
         return strategeWorkOne;
     }
 
+    public static void setStrategeWorkOne(int strategeWorkOne) {
+        Gasket.strategeWorkOne = strategeWorkOne;
+    }
+
     public static double getRangeLivel() {
         return rangeLivel;
+    }
+
+    public static void setRangeLivel(double rangeLivel) {
+        Gasket.rangeLivel = rangeLivel;
     }
 
     public static boolean isStrategyOneBuyRangeFLAG() {
@@ -199,6 +224,10 @@ public class Gasket {
 
     public static int getDateDifference() {
         return dateDifference;
+    }
+
+    public static void setDateDifference(int dateDifference) {
+        Gasket.dateDifference = dateDifference;
     }
 
     public static void setBitmexQuote(BitmexQuote bitmexQuote) {
@@ -280,6 +309,7 @@ public class Gasket {
     public static void setTimeBetweenOrders(int timeBetweenOrders) {
         Gasket.timeBetweenOrders = timeBetweenOrders;
     }
+
 
 
     public static int getSosRStop() {
@@ -409,6 +439,8 @@ public class Gasket {
     public static void setOsTake(int osTake) {
         OS_TAKE = osTake;
     }
+
+
 
     public static boolean isGameDirection() {
         return gameDirection;

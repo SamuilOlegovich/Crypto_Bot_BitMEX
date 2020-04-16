@@ -10,10 +10,6 @@ import bitmex.Bot.view.ConsoleHelper;
 public class Main {
 
     private static boolean useProduction = true; // true - реальный счет
-    private static String apiKey = "0U0-z8_7rzMol3-W70hPjZRpDtODrsx7ydekmqhAnsDncJqe";
-    private static String apiKeyName = "2mGXmniE2uZcqn3Ds-Cz66dK";
-    private static String apiKeyName2Accounts = "";
-    private static String apiKey2Accounts = "";
 
     private static BitmexApiKey bitmexApiKey2Accounts;
     private static BitmexClient bitmexClient2Accounts;
@@ -25,8 +21,9 @@ public class Main {
 
     public static void main(String[] args) {
         ticker = new Ticker("XBTUSD");
-        bitmexApiKey = new BitmexApiKey(apiKeyName, apiKey, useProduction);
-        bitmexClient = new BitmexClient(useProduction, apiKeyName, apiKey);
+        ControlConsoleSetting controlConsoleSetting = new ControlConsoleSetting();
+        bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), useProduction);
+        bitmexClient = new BitmexClient(useProduction, ApiKey.getApiKeyName(), ApiKey.getApiKey());
         bitmexClient.subscribeQuotes(ticker, bitmexClient);
         Gasket.setBitmexClient(bitmexClient);
         Gasket.setGameDirection(true);
@@ -36,15 +33,19 @@ public class Main {
         bitmexClient.setID(1);
 
         if (Gasket.isTwoAccounts()) {
-            if (!apiKey2Accounts.equals("") || !apiKeyName2Accounts.equals("")) {
-                bitmexApiKey2Accounts = new BitmexApiKey(apiKeyName2Accounts, apiKey2Accounts, useProduction);
-                bitmexClient2Accounts = new BitmexClient(useProduction, apiKeyName2Accounts, apiKey2Accounts);
+            if (!ApiKey.getApiKey2Accounts().equals("") || !ApiKey.getApiKeyName2Accounts().equals("")) {
+                bitmexApiKey2Accounts = new BitmexApiKey(
+                        ApiKey.getApiKeyName2Accounts(), ApiKey.getApiKey2Accounts(), useProduction);
+                bitmexClient2Accounts = new BitmexClient(
+                        useProduction, ApiKey.getApiKeyName2Accounts(), ApiKey.getApiKey2Accounts());
                 bitmexClient2Accounts.subscribeQuotes(ticker, bitmexClient2Accounts);
                 Gasket.setBitmexClient2Accounts(bitmexClient2Accounts);
                 bitmexClient2Accounts.setID(2);
-            } else ConsoleHelper.writeMessage("Данные второго счета отсутствуют или не верны");
+            } else { ConsoleHelper.writeMessage("Данные второго счета отсутствуют или не верны"); }
         }
 
+        ConsoleHelper.printInfoSettings();
+        controlConsoleSetting.start();
         server.start();
 
         try {
@@ -53,6 +54,7 @@ public class Main {
             e.printStackTrace();
         }
 
+        ConsoleHelper.writeMessage("");
         ConsoleHelper.writeMessage("ПРОГРАММА УСПЕШНО ЗАПУЩЕНА");
         ConsoleHelper.writeMessage("ОЖИДАЙТЕ РЕЗУЛЬТАТОВ");
         ConsoleHelper.writeMessage("");

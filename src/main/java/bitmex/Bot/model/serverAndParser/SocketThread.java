@@ -10,6 +10,7 @@ import java.net.Socket;
 
 
 public class SocketThread extends Thread {
+
     private ParserString parserString;
     private Socket socket;
 
@@ -19,6 +20,7 @@ public class SocketThread extends Thread {
         this.socket = socket;
         start();
     }
+
 
     @Override
     public void run() {

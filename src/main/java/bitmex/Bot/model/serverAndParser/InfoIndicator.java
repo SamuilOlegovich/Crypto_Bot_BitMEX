@@ -8,12 +8,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class InfoIndicator {
+
     private TimeFrame period;
     private double price;
     private BidAsk type;
     private int preview;
     private long value;
     private Date time;
+
 
     public InfoIndicator(TimeFrame period, int preview, Date time, double price, long value, BidAsk type) {
         this.preview = preview;
@@ -23,6 +25,7 @@ public class InfoIndicator {
         this.type = type;
         this.time = time;
     }
+
 
     public TimeFrame getPeriod() {
         return period;
@@ -48,12 +51,14 @@ public class InfoIndicator {
         return time;
     }
 
+
     @Override
     public String toString() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        return
-                "{\"period\": \"" + period + "\",\"preview\": \"" + preview
-                        + "\",\"time\": \"" + time + "\",\"price\": \"" + price
-                        + "\",\"value\": \"" + value + "\",\"type\": \"" + type + "\"}";
+
+        return "{\"period\": \"" + period + "\",\"preview\": \"" + preview + "\",\"time\": \""
+                + simpleDateFormat.format(time) + "\",\"price\": \""
+                + price + "\",\"value\": \"" + value
+                + "\",\"type\": \"" + type + "\"}";
     }
 }

@@ -1,17 +1,16 @@
 package bitmex.Bot.model.strategies;
 
 
-import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.strategies.oneStrategies.*;
-//import com.sumzerotrading.bitmex.model.serverAndParser.strategies.oneStrategies.*;
+import bitmex.Bot.model.Gasket;
 
 public class StrategyFactory {
     private static StrategyFactory strategyFactory;
-    private StrategyOneSellTime strategyOneSellStrictlyConsistentInTime;
-    private StrategyOneBuyTime strategyOneBuyStrictlyConsistentInTime;
     private StrategyOneSellRange strategyOneSellRange;
     private StrategyOneBuyRange strategyOneBuyRange;
+    private StrategyOneSellTime strategyOneSellTime;
+    private StrategyOneBuyTime strategyOneBuyTime;
     private StrategyOneSell strategyOneSell;
     private StrategyOneBuy strategyOneBuy;
     private OneSell oneSell;
@@ -77,18 +76,18 @@ public class StrategyFactory {
         }
 
         if (Gasket.isStrategyOne()) {
-            if (strategyOneSellStrictlyConsistentInTime == null) {
-                strategyOneSellStrictlyConsistentInTime = StrategyOneSellTime.getInstance();
-                strategyOneSellStrictlyConsistentInTime.setIInfoString(infoIndicator);
+            if (strategyOneSellTime == null) {
+                strategyOneSellTime = StrategyOneSellTime.getInstance();
+                strategyOneSellTime.setIInfoString(infoIndicator);
             } else {
-                strategyOneSellStrictlyConsistentInTime.setIInfoString(infoIndicator);
+                strategyOneSellTime.setIInfoString(infoIndicator);
             }
 
-            if (strategyOneBuyStrictlyConsistentInTime == null) {
-                strategyOneBuyStrictlyConsistentInTime = StrategyOneBuyTime.getInstance();
-                strategyOneBuyStrictlyConsistentInTime.setIInfoString(infoIndicator);
+            if (strategyOneBuyTime == null) {
+                strategyOneBuyTime = StrategyOneBuyTime.getInstance();
+                strategyOneBuyTime.setIInfoString(infoIndicator);
             } else {
-                strategyOneBuyStrictlyConsistentInTime.setIInfoString(infoIndicator);
+                strategyOneBuyTime.setIInfoString(infoIndicator);
             }
         }
     }

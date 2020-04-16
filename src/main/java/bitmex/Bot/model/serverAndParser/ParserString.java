@@ -41,6 +41,7 @@ public class ParserString {
     private Date getDate(String string) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Date dateFromString = null;
+
         try {
             dateFromString = simpleDateFormat.parse(string);
         } catch (Exception e) {

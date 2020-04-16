@@ -35,6 +35,14 @@ public class ControlConsoleSetting extends Thread {
         try {
             switch (strings[0]) {
 
+                case "useStopLevelOrNotStopTime" :
+                    Gasket.setUseStopLevelOrNotStopTime(Integer.parseInt(strings[1]));
+                    ConsoleHelper.writeMessage("useStopLevelOrNotStopTime === " + Gasket.getUseStopLevelOrNotStopTime());
+                    break;
+                case "useStopLevelOrNotStop" :
+                    Gasket.setUseStopLevelOrNotStop(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("useStopLevelOrNotStop === " + Gasket.isUseStopLevelOrNotStop());
+                    break;
                 case "timeBetweenOrders":
                     Gasket.setTimeBetweenOrders(Integer.parseInt(strings[1]));
                     ConsoleHelper.writeMessage("timeBetweenOrders === " + Gasket.getTimeBetweenOrders() + "\n");
@@ -84,12 +92,12 @@ public class ControlConsoleSetting extends Thread {
                     ConsoleHelper.writeMessage("twoAccounts === " + Gasket.isTwoAccounts() + "\n");
                     break;
                 case "priceActiv":
-                    Gasket.setPriceActiv(Double.parseDouble(strings[1]));
-                    ConsoleHelper.writeMessage("priceActiv === " + Gasket.getPriceActiv() + "\n");
+                    Gasket.setPriceActive(Double.parseDouble(strings[1]));
+                    ConsoleHelper.writeMessage("priceActiv === " + Gasket.getPriceActive() + "\n");
                     break;
                 case "rangeLivel":
-                    Gasket.setRangeLivel(Double.parseDouble(strings[1]));
-                    ConsoleHelper.writeMessage("rangeLivel === " + Gasket.getRangeLivel() + "\n");
+                    Gasket.setRangeLevel(Double.parseDouble(strings[1]));
+                    ConsoleHelper.writeMessage("rangeLivel === " + Gasket.getRangeLevel() + "\n");
                     break;
                 case "typeOrder":
                     Gasket.setTypeOrder(strings[1].trim());
@@ -130,6 +138,9 @@ public class ControlConsoleSetting extends Thread {
             ConsoleHelper.writeMessage("\nОшибочка, повторите ввод.\n");
         }
     }
+
+
+
 
     // TEST
     public static void main(String[] args) {

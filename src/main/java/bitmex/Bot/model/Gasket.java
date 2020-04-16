@@ -17,8 +17,10 @@ public class Gasket {
     private static volatile boolean strategyOneSellFLAG = true;
     private static volatile boolean strategyOneBuyFLAG = true;
     private static volatile boolean strategyOneAllFLAG = true;
+    private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
     private static volatile boolean oneSellFLAG = true;
     private static volatile boolean oneBuyFLAG = true;
+    private static int useStopLevelOrNotStopTime = 10;              // сколько минут отслеживать сделку вышедшею за MIN уровни
     private static BitmexClient bitmexClient2Accounts;
     private static volatile BitmexQuote bitmex2Quote;   // для получения данных по насущной котировке.
     private static volatile double PROFIT_Sell = 0.0;   // профит по сделкам в селл
@@ -35,11 +37,11 @@ public class Gasket {
     private static String typeOrder = "Limit";          // тип первого открываемого ордера
     private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;
+    private static double priceActive = 3.0;    // цена тригер для стоп лимитов и тейк лимитов
     private static int strategyWorkOne = 2;     // количество стратегий одновременно работающих (можно еще допелить или убрать)
-    private static double rangeLivel = 8.0;     // диапазон в долларах для появления уровней
+    private static double rangeLevel = 8.0;     // диапазон в долларах для появления уровней
     private static int dateDifference = -3;     // разница в часовом поясе
     private static boolean trading = false;     // торговать - true нет - false
-    private static double priceActiv = 3.0;     // цена тригер для стоп лимитов и тейк лимитов
     private static double visible = 0.0;        // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
     private static double take = 15.0;          // тейк профит в долларах
     private static double stop = 30.0;          // стоп лосс в долларах
@@ -207,12 +209,12 @@ public class Gasket {
         Gasket.strategyWorkOne = strategyWorkOne;
     }
 
-    public static double getRangeLivel() {
-        return rangeLivel;
+    public static double getRangeLevel() {
+        return rangeLevel;
     }
 
-    public static void setRangeLivel(double rangeLivel) {
-        Gasket.rangeLivel = rangeLivel;
+    public static void setRangeLevel(double rangeLevel) {
+        Gasket.rangeLevel = rangeLevel;
     }
 
     public static boolean isStrategyOneBuyRangeFLAG() {
@@ -279,12 +281,12 @@ public class Gasket {
         Gasket.trading = trading;
     }
 
-    public static double getPriceActiv() {
-        return priceActiv;
+    public static double getPriceActive() {
+        return priceActive;
     }
 
-    public static void setPriceActiv(double priceActiv) {
-        Gasket.priceActiv = priceActiv;
+    public static void setPriceActive(double priceActive) {
+        Gasket.priceActive = priceActive;
     }
 
     public static double getVisible() {
@@ -513,5 +515,21 @@ public class Gasket {
 
     public static void setOne(boolean one) {
         Gasket.one = one;
+    }
+
+    public static boolean isUseStopLevelOrNotStop() {
+        return useStopLevelOrNotStop;
+    }
+
+    public static void setUseStopLevelOrNotStop(boolean useStopLevelOrNotStop) {
+        Gasket.useStopLevelOrNotStop = useStopLevelOrNotStop;
+    }
+
+    public static int getUseStopLevelOrNotStopTime() {
+        return useStopLevelOrNotStopTime;
+    }
+
+    public static void setUseStopLevelOrNotStopTime(int useStopLevelOrNotStopTime) {
+        Gasket.useStopLevelOrNotStopTime = useStopLevelOrNotStopTime;
     }
 }

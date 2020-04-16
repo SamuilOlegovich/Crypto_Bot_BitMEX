@@ -30,7 +30,7 @@ public class TradeBuy extends Thread {
     public TradeBuy(String id) {
         this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
         this.bitmexClient = Gasket.getBitmexClient();
-        this.priceActiv = Gasket.getPriceActiv();
+        this.priceActiv = Gasket.getPriceActive();
         this.typeOrder = Gasket.getTypeOrder();
         this.orderBuyOpen = new BitmexOrder();
         this.visible = Gasket.getVisible();

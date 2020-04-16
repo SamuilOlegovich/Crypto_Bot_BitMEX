@@ -1,20 +1,15 @@
 package bitmex.Bot.view;
 
 import bitmex.Bot.model.Gasket;
-import bitmex.Bot.model.bitMEX.client.BitmexClient;
-import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
-import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ConsoleHelper {
+
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) {
-        ConsoleHelper.printInfoSettings();
-    }
 
     public static void writeMessage(String string) {
         System.out.println(string);
@@ -52,9 +47,9 @@ public class ConsoleHelper {
                 + "rangePriceMIN === " + Gasket.getRangePriceMIN()
                 + " === диапазон в долларах от уровней для отмены ордера\n\n"
 
-                + "priceActiv === " + Gasket.getPriceActiv()
+                + "priceActiv === " + Gasket.getPriceActive()
                 + " === цена тригер для стоп лимитов и тейк лимитов\n"
-                + "rangeLivel === " + Gasket.getRangeLivel()
+                + "rangeLivel === " + Gasket.getRangeLevel()
                 + " === диапазон в долларах для появления уровней\n"
                 + "typeOrder === " + Gasket.getTypeOrder()
                 + " === тип первого открываемого ордера\n"
@@ -101,6 +96,11 @@ public class ConsoleHelper {
                 + "one === " + Gasket.isOne()
                 + " === включить выключить стратегию\n"
 
+                + "useStopLevelOrNotStopTime === " + Gasket.getUseStopLevelOrNotStopTime()
+                + " === сколько минут отслеживать сделку вышедшею за MIN уровни\n"
+                + "useStopLevelOrNotStop === " + Gasket.isUseStopLevelOrNotStop()
+                + " === отменять или не отменять сделку вышедшею за MIN уровни\n"
+
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
                 + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"
                 + "ПРИМЕР: lot=10.0\n");
@@ -123,5 +123,13 @@ public class ConsoleHelper {
                 + "OB_TAKE === " + Gasket.getObTake() + "\n"
                 + "OS_STOP === " + Gasket.getOsStop() + "\n"
                 + "OS_TAKE === " + Gasket.getOsTake() + "\n");
+    }
+
+
+
+
+    // TEST
+    public static void main(String[] args) {
+        ConsoleHelper.printInfoSettings();
     }
 }

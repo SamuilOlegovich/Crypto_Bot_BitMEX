@@ -1,8 +1,8 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
@@ -36,9 +36,13 @@ public class StrategyOneBuyThread extends Thread {
             double close = Gasket.getBitmexQuote().getAskPrice();
 
             if (close < min) {
-               flag();
-
-                ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА ---- " + getDate());
+                flag();
+                if (Gasket.isUseStopLevelOrNotStop()) {
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Бай ВЫШЛА ЗА уровень MIN ---- " + getDate());
+                    new StopBuyTime(ID, max, min);
+                } else {
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА ---- " + getDate());
+                }
                 return;
             }
 

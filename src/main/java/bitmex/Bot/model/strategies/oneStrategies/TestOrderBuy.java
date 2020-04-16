@@ -37,17 +37,17 @@ public class TestOrderBuy extends Thread {
     }
 
     private void setStop() {
-        if (ID.endsWith("SOBT")) Gasket.setSobTStop(Gasket.getSobTStop() + 1);
-        if (ID.endsWith("SOBR")) Gasket.setSobRStop(Gasket.getSobRStop() + 1);
-        if (ID.endsWith("SOB")) Gasket.setSobStop(Gasket.getSobStop() + 1);
-        if (ID.endsWith("OB")) Gasket.setObStop(Gasket.getObStop() + 1);
+        if (ID.endsWith("-SOBT")) Gasket.setSobTStop(Gasket.getSobTStop() + 1);
+        if (ID.endsWith("-SOBR")) Gasket.setSobRStop(Gasket.getSobRStop() + 1);
+        if (ID.endsWith("-SOB")) Gasket.setSobStop(Gasket.getSobStop() + 1);
+        if (ID.endsWith("-OB")) Gasket.setObStop(Gasket.getObStop() + 1);
     }
 
     private void setTake() {
-        if (ID.endsWith("SOBT")) Gasket.setSobTTake(Gasket.getSobTTake() + 1);
-        if (ID.endsWith("SOBR")) Gasket.setSobRTake(Gasket.getSobRTake() + 1);
-        if (ID.endsWith("SOB")) Gasket.setSobTake(Gasket.getSobTake() + 1);
-        if (ID.endsWith("OB")) Gasket.setObTake(Gasket.getObTake() + 1);
+        if (ID.endsWith("-SOBT")) Gasket.setSobTTake(Gasket.getSobTTake() + 1);
+        if (ID.endsWith("-SOBR")) Gasket.setSobRTake(Gasket.getSobRTake() + 1);
+        if (ID.endsWith("-SOB")) Gasket.setSobTake(Gasket.getSobTake() + 1);
+        if (ID.endsWith("-OB")) Gasket.setObTake(Gasket.getObTake() + 1);
     }
 
     @Override

@@ -10,14 +10,14 @@ import java.util.Date;
 
 
 // если цена опустилась за нижний предел минимум - то даем ей еще один шанс
-public class StopBuyTime extends Thread {
+public class StopBuyTimeThread extends Thread {
 
     private boolean flag;
     private double max;
     private double min;
     private String ID;
 
-    public StopBuyTime( String ID, double max, double min) {
+    public StopBuyTimeThread(String ID, double max, double min) {
         this.flag = false;
         this.max = max;
         this.min = min;
@@ -72,7 +72,7 @@ public class StopBuyTime extends Thread {
 
     private String getDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date dateN = new Date();
-        return dateFormat.format(dateN);
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

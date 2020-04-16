@@ -9,7 +9,6 @@ import bitmex.Bot.view.ConsoleHelper;
 
 public class Main {
 
-
     private static BitmexApiKey bitmexApiKey2Accounts;
     private static BitmexClient bitmexClient2Accounts;
     private static BitmexApiKey bitmexApiKey;

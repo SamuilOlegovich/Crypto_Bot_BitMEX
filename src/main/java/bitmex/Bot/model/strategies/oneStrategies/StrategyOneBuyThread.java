@@ -39,7 +39,7 @@ public class StrategyOneBuyThread extends Thread {
                 flag();
                 if (Gasket.isUseStopLevelOrNotStop()) {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Бай ВЫШЛА ЗА уровень MIN ---- " + getDate());
-                    new StopBuyTime(ID, max, min);
+                    new StopBuyTimeThread(ID, max, min);
                 } else {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА ---- " + getDate());
                 }
@@ -64,8 +64,8 @@ public class StrategyOneBuyThread extends Thread {
 
     private String getDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date dateN = new Date();
-        return dateFormat.format(dateN);
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     private void flag() {

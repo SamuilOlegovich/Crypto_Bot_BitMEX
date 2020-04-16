@@ -99,14 +99,20 @@ public class StrategyOneBuy {
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
-        double lowLevel = volume.getPrice() > bid.getPrice()
-                ? bid.getPrice() - Gasket.getRangeLevel() : volume.getPrice() - Gasket.getRangeLevel();
+//        double lowLevel = volume.getPrice() > bid.getPrice()
+//                ? bid.getPrice() - Gasket.getRangeLevel() : volume.getPrice() - Gasket.getRangeLevel();
+//
+//        return (maxOpenInterestMinus.getPrice() <= volume.getPrice() && maxOpenInterestMinus.getPrice() >= lowLevel)
+//                && (maxOpenInterestPlus.getPrice() <= volume.getPrice() && maxOpenInterestPlus.getPrice() >= lowLevel)
+//                && (openInterestMinus.getPrice() <= volume.getPrice() && openInterestMinus.getPrice() >= lowLevel)
+//                && (maxDeltaMinus.getPrice() <= volume.getPrice() && maxDeltaMinus.getPrice() >= lowLevel)
+//                && (deltaMinus.getPrice() <= volume.getPrice() && deltaMinus.getPrice() >= lowLevel);
 
-        return (maxOpenInterestMinus.getPrice() <= volume.getPrice() && maxOpenInterestMinus.getPrice() >= lowLevel)
-                && (maxOpenInterestPlus.getPrice() <= volume.getPrice() && maxOpenInterestPlus.getPrice() >= lowLevel)
-                && (openInterestMinus.getPrice() <= volume.getPrice() && openInterestMinus.getPrice() >= lowLevel)
-                && (maxDeltaMinus.getPrice() <= volume.getPrice() && maxDeltaMinus.getPrice() >= lowLevel)
-                && (deltaMinus.getPrice() <= volume.getPrice() && deltaMinus.getPrice() >= lowLevel);
+        return (maxOpenInterestMinus.getPrice() <= volume.getPrice())
+                && (maxOpenInterestPlus.getPrice() <= volume.getPrice())
+                && (openInterestMinus.getPrice() <= volume.getPrice())
+                && (maxDeltaMinus.getPrice() <= volume.getPrice())
+                && (deltaMinus.getPrice() <= volume.getPrice());
     }
 
     // проверяем нет ли тут предварительных уровней
@@ -118,20 +124,21 @@ public class StrategyOneBuy {
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
-        Date before = maxDeltaMinus.getTime();
-        Date after = volume.getTime();
-
-        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime()
-                && maxOpenInterestMinus.getTime().getTime() <= before.getTime())
-                && (maxOpenInterestPlus.getTime().getTime() >= after.getTime()
-                && maxOpenInterestPlus.getTime().getTime() <= before.getTime())
-                && (openInterestMinus.getTime().getTime() >= after.getTime()
-                && openInterestMinus.getTime().getTime() <= before.getTime())
-                && (maxDeltaMinus.getTime().getTime() >= after.getTime()
-                && maxDeltaMinus.getTime().getTime() <= before.getTime())
-                && (deltaMinus.getTime().getTime() >= after.getTime()
-                && deltaMinus.getTime().getTime() <= before.getTime())
-                && (bid.getTime().getTime() >= after.getTime()
-                && bid.getTime().getTime() <= before.getTime());
+//        Date before = maxDeltaMinus.getTime();
+//        Date after = volume.getTime();
+//
+//        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime()
+//                && maxOpenInterestMinus.getTime().getTime() <= before.getTime())
+//                && (maxOpenInterestPlus.getTime().getTime() >= after.getTime()
+//                && maxOpenInterestPlus.getTime().getTime() <= before.getTime())
+//                && (openInterestMinus.getTime().getTime() >= after.getTime()
+//                && openInterestMinus.getTime().getTime() <= before.getTime())
+//                && (maxDeltaMinus.getTime().getTime() >= after.getTime()
+//                && maxDeltaMinus.getTime().getTime() <= before.getTime())
+//                && (deltaMinus.getTime().getTime() >= after.getTime()
+//                && deltaMinus.getTime().getTime() <= before.getTime())
+//                && (bid.getTime().getTime() >= after.getTime()
+//                && bid.getTime().getTime() <= before.getTime());
+        return true;
     }
 }

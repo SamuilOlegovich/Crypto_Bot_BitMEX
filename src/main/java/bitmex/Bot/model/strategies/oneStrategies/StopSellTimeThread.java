@@ -7,14 +7,14 @@ import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class StopSellTime extends Thread {
+public class StopSellTimeThread extends Thread {
 
     private boolean flag;
     private double max;
     private double min;
     private String ID;
 
-    public StopSellTime( String ID, double max, double min) {
+    public StopSellTimeThread(String ID, double max, double min) {
         this.flag = false;
         this.max = max;
         this.min = min;
@@ -68,8 +68,8 @@ public class StopSellTime extends Thread {
 
     private String getDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date dateN = new Date();
-        return dateFormat.format(dateN);
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
 }

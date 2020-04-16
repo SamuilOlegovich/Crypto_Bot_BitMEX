@@ -25,6 +25,8 @@ public class OneBuy {
         return oneBuy;
     }
 
+
+
     public synchronized void setIInfoString(InfoIndicator iInfoIndicator) {
         switch (iInfoIndicator.getType()) {
             case OPEN_POS_MINUS_HL:
@@ -51,6 +53,7 @@ public class OneBuy {
         }
         makeADecision();
     }
+
 
     // принимаем решение
     private synchronized void makeADecision() {
@@ -84,6 +87,7 @@ public class OneBuy {
         }
     }
 
+
     private InfoIndicator getMin() {
         InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice() < maxOpenInterestPlus.getPrice()
                 ? maxOpenInterestMinus : maxOpenInterestPlus;
@@ -95,6 +99,7 @@ public class OneBuy {
                 ? infoIndicator : deltaMinus;
         return infoIndicator;
     }
+
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
@@ -115,12 +120,14 @@ public class OneBuy {
 
     }
 
+
     // проверяем нет ли тут предварительных уровней
     private boolean isReal() {
         return volume.getPreview() + bid.getPreview() + deltaMinus.getPreview() + openInterestMinus.getPreview()
                 + maxOpenInterestPlus.getPreview() + maxOpenInterestMinus.getPreview() +
                 maxDeltaMinus.getPreview() == 0;
     }
+
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {

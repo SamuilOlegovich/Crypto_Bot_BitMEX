@@ -22,34 +22,7 @@ public class TestOrderSell extends Thread {
     }
 
 
-    private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date dateN = new Date();
-        return dateFormat.format(dateN);
-    }
 
-    private void flag() {
-        if (Gasket.getStrategyWorkOne() == 1) Gasket.setStrategyOneAllFLAG(true);
-        else if (Gasket.getStrategyWorkOne() == 2) {
-            if (!Gasket.isStrategyOneBuyRangeFLAG()) Gasket.setStrategyOneBuyRangeFLAG(true);
-            if (!Gasket.isStrategyOneBuyFLAG()) Gasket.setStrategyOneBuyFLAG(true);
-            if (!Gasket.isOneBuyFLAG()) Gasket.setOneBuyFLAG(true);
-        }
-    }
-
-    private void setStop() {
-        if (ID.endsWith("-SOST")) Gasket.setSosTStop(Gasket.getSosTStop() + 1);
-        if (ID.endsWith("-SOSR")) Gasket.setSosRStop(Gasket.getSosRStop() + 1);
-        if (ID.endsWith("-SOS")) Gasket.setSosStop(Gasket.getSosStop() + 1);
-        if (ID.endsWith("-OS")) Gasket.setOsStop(Gasket.getOsStop() + 1);
-    }
-
-    private void setTake() {
-        if (ID.endsWith("-SOST")) Gasket.setSosTTake(Gasket.getSosTTake() + 1);
-        if (ID.endsWith("-SOSR")) Gasket.setSosRTake(Gasket.getSosRTake() + 1);
-        if (ID.endsWith("-SOS")) Gasket.setSosTake(Gasket.getSosTake() + 1);
-        if (ID.endsWith("-OS")) Gasket.setOsTake(Gasket.getOsTake() + 1);
-    }
 
 
 
@@ -90,5 +63,40 @@ public class TestOrderSell extends Thread {
             }
         }
         ConsoleHelper.printStatistics();
+    }
+
+
+
+    private String getDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        dateFormat.format(date);
+        date.setTime(Gasket.getDateDifference() > 0
+                ? date.getTime() + (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference()))
+                : date.getTime() - (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference())));
+        return dateFormat.format(date);
+    }
+
+    private void flag() {
+        if (Gasket.getStrategyWorkOne() == 1) Gasket.setStrategyOneAllFLAG(true);
+        else if (Gasket.getStrategyWorkOne() == 2) {
+            if (!Gasket.isStrategyOneBuyRangeFLAG()) Gasket.setStrategyOneBuyRangeFLAG(true);
+            if (!Gasket.isStrategyOneBuyFLAG()) Gasket.setStrategyOneBuyFLAG(true);
+            if (!Gasket.isOneBuyFLAG()) Gasket.setOneBuyFLAG(true);
+        }
+    }
+
+    private void setStop() {
+        if (ID.endsWith("-SOST")) Gasket.setSosTStop(Gasket.getSosTStop() + 1);
+        if (ID.endsWith("-SOSR")) Gasket.setSosRStop(Gasket.getSosRStop() + 1);
+        if (ID.endsWith("-SOS")) Gasket.setSosStop(Gasket.getSosStop() + 1);
+        if (ID.endsWith("-OS")) Gasket.setOsStop(Gasket.getOsStop() + 1);
+    }
+
+    private void setTake() {
+        if (ID.endsWith("-SOST")) Gasket.setSosTTake(Gasket.getSosTTake() + 1);
+        if (ID.endsWith("-SOSR")) Gasket.setSosRTake(Gasket.getSosRTake() + 1);
+        if (ID.endsWith("-SOS")) Gasket.setSosTake(Gasket.getSosTake() + 1);
+        if (ID.endsWith("-OS")) Gasket.setOsTake(Gasket.getOsTake() + 1);
     }
 }

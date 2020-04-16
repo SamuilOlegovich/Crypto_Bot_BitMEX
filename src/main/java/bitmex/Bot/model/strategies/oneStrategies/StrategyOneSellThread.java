@@ -36,11 +36,14 @@ public class StrategyOneSellThread extends Thread {
 
             double close = Gasket.getBitmexQuote().getBidPrice();
 
-
-
             if (close > min) {
                 flag();
-                ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА ---- " + getDate());
+                if (Gasket.isUseStopLevelOrNotStop()) {
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ВЫШЛА ЗА уровень MIN ---- " + getDate());
+                    new StopSellTimeThread(ID, max, min);
+                } else {
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА ---- " + getDate());
+                }
                 break;
             }
 
@@ -54,15 +57,20 @@ public class StrategyOneSellThread extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса Strategy One Sell.");
+                ConsoleHelper.writeMessage(ID
+                        + " --- Не смогли проснуться в методе RUN класса Strategy One Sell.");
                 e.printStackTrace();
             }
         }
     }
 
     private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
+        dateFormat.format(date);
+        date.setTime(Gasket.getDateDifference() > 0
+                ? date.getTime() + (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference()))
+                : date.getTime() - (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference())));
         return dateFormat.format(date);
     }
 

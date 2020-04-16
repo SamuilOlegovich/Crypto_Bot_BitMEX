@@ -71,8 +71,12 @@ public class StopBuyTimeThread extends Thread {
 
 
     private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
+        dateFormat.format(date);
+        date.setTime(Gasket.getDateDifference() > 0
+                ? date.getTime() + (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference()))
+                : date.getTime() - (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference())));
         return dateFormat.format(date);
     }
 }

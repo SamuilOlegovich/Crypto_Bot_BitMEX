@@ -23,9 +23,6 @@ public class TestOrderSell extends Thread {
 
 
 
-
-
-
     @Override
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN класса TestOrderSell начал считать --- " + getDate());

@@ -18,9 +18,11 @@ public class Main {
 
     public static void main(String[] args) {
         ticker = new Ticker("XBTUSD");
-        ControlConsoleSetting controlConsoleSetting = new ControlConsoleSetting();
+        ExecutorCommandos executorCommandos = new ExecutorCommandos();
+        ParserSetting parserSetting = new ParserSetting(executorCommandos);
         bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), Gasket.isUseRealOrNotReal());
         bitmexClient = new BitmexClient(Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName(), ApiKey.getApiKey());
+        ControlConsoleSetting controlConsoleSetting = new ControlConsoleSetting(executorCommandos);
         bitmexClient.subscribeQuotes(ticker, bitmexClient);
         Gasket.setBitmexClient(bitmexClient);
         Gasket.setGameDirection(true);

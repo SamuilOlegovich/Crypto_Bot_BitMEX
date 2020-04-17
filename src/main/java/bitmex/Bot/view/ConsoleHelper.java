@@ -5,15 +5,42 @@ import bitmex.Bot.model.Gasket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ConsoleHelper {
-
+    private static String path = "/Users/samuilolegovich/Desktop/bitmex-client-master/src/main/java/bitmex/Bot/Logs/";
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static boolean crateLogFile = true;
 
 
     public static void writeMessage(String string) {
-        System.out.println(string);
+        if (crateLogFile) {
+            crateLogFile = false;
+            getPathString();
+
+            try {
+                WriterAndReadFile.createNewFile(path);
+                try {
+                    WriterAndReadFile.writerFile(string, path, true);
+                } catch (Exception e) {
+                    System.out.println("Не удалось записать меседж в лог.");
+                }
+            } catch (Exception e) {
+                System.out.println("Не удалось создать Лог файл.");
+            }
+        } else {
+            try {
+                WriterAndReadFile.writerFile(string, path, true);
+            } catch (Exception e) {
+                System.out.println("Не удалось записать меседж в лог.");
+            }
+            System.out.println(string);
+        }
     }
+
+
 
     public static String readString() {
         try {
@@ -37,7 +64,7 @@ public class ConsoleHelper {
         ConsoleHelper.writeMessage("\n" + "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n\n"
                 + "timeBetweenOrders === " + Gasket.getTimeBetweenOrders()
                 + " === время в секундах между выставлениями ордеров по одной стратегии\n"
-                + "strategeWorkOne === " + Gasket.getStrategyWorkOne()
+                + "strategyWorkOne === " + Gasket.getStrategyWorkOne()
                 + " === количество стратегий одновременно работающих (можно еще допелить или убрать)\n"
                 + "dateDifference === " + Gasket.getDateDifference()
                 + " ==== разница в часовом поясе\n\n"
@@ -47,9 +74,9 @@ public class ConsoleHelper {
                 + "rangePriceMIN === " + Gasket.getRangePriceMIN()
                 + " === диапазон в долларах от уровней для отмены ордера\n\n"
 
-                + "priceActiv === " + Gasket.getPriceActive()
+                + "priceActive === " + Gasket.getPriceActive()
                 + " === цена тригер для стоп лимитов и тейк лимитов\n"
-                + "rangeLivel === " + Gasket.getRangeLevel()
+                + "rangeLevel === " + Gasket.getRangeLevel()
                 + " === диапазон в долларах для появления уровней\n"
                 + "typeOrder === " + Gasket.getTypeOrder()
                 + " === тип первого открываемого ордера\n"
@@ -94,7 +121,7 @@ public class ConsoleHelper {
                 + "strategyOne === " + Gasket.isStrategyOne()
                 + " === включить выключить стратегию\n"
                 + "one === " + Gasket.isOne()
-                + " === включить выключить стратегию\n"
+                + " === включить выключить стратегию\n\n"
 
                 + "useStopLevelOrNotStopTime === " + Gasket.getUseStopLevelOrNotStopTime()
                 + " === сколько минут отслеживать сделку вышедшею за MIN уровни\n"
@@ -123,6 +150,19 @@ public class ConsoleHelper {
                 + "OB_TAKE === " + Gasket.getObTake() + "\n"
                 + "OS_STOP === " + Gasket.getOsStop() + "\n"
                 + "OS_TAKE === " + Gasket.getOsTake() + "\n");
+    }
+
+
+    private static void getPathString() {
+        path = path + getDate() + "=Log.txt";
+    }
+
+
+    private static String getDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        dateFormat.format(date);
+        return dateFormat.format(date);
     }
 
 

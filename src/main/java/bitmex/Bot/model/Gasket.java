@@ -31,6 +31,7 @@ public class Gasket {
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
     private static boolean useRealOrNotReal = true;     // true - реальный счет
+    private static int timeCalculationLevel = 20;       // время за которое должны сформироваться уровни иначе все отменяется
     private static volatile double PROFIT = 0.0;        // итоговый профит
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
@@ -558,5 +559,13 @@ public class Gasket {
 
     public static void setPath(String path) {
         Gasket.path = path;
+    }
+
+    public static int getTimeCalculationLevel() {
+        return timeCalculationLevel;
+    }
+
+    public static void setTimeCalculationLevel(int timeCalculationLevel) {
+        Gasket.timeCalculationLevel = timeCalculationLevel;
     }
 }

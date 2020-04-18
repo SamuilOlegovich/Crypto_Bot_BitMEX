@@ -127,6 +127,8 @@ public class ConsoleHelper {
                 + " === сколько минут отслеживать сделку вышедшею за MIN уровни\n"
                 + "useStopLevelOrNotStop === " + Gasket.isUseStopLevelOrNotStop()
                 + " === отменять или не отменять сделку вышедшею за MIN уровни\n"
+                + "timeCalculationLevel === " + Gasket.getTimeCalculationLevel()
+                + " === время за которое должны сформироваться уровни иначе все отменяется\n"
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
                 + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"

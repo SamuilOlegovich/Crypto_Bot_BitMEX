@@ -30,6 +30,10 @@ public class ExecutorCommandos {
                     Gasket.setUseStopLevelOrNotStop(strings[1].equalsIgnoreCase("true"));
                     ConsoleHelper.writeMessage("useStopLevelOrNotStop === " + Gasket.isUseStopLevelOrNotStop() + "\n");
                     break;
+                case "timeCalculationLevel" :
+                    Gasket.setTimeCalculationLevel(Integer.parseInt(strings[1]));
+                    ConsoleHelper.writeMessage("timeCalculationLevel === " + Gasket.getTimeCalculationLevel() + "\n");
+                    break;
                 case "timeBetweenOrders":
                     Gasket.setTimeBetweenOrders(Integer.parseInt(strings[1]));
                     ConsoleHelper.writeMessage("timeBetweenOrders === " + Gasket.getTimeBetweenOrders() + "\n");

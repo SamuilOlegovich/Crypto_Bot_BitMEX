@@ -22,6 +22,7 @@ public class OneSell {
     private InfoIndicator ask2;
     private InfoIndicator ask;
 
+    private boolean isTimeNotOld;
     private int countDelta = 0;
 
 
@@ -65,8 +66,8 @@ public class OneSell {
         if (ask == null && ask2 == null) ask = infoIndicator;
         else if (ask != null && ask2 == null) ask2 = infoIndicator;
         else if (ask != null && ask2 != null) {
-            if (!isTimeNotOld()) setAsk(infoIndicator);
-            else {}
+            if (!isTimeNotOld() && !isTimeNotOld) setAsk(infoIndicator);
+            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
         }
     }
 
@@ -74,8 +75,8 @@ public class OneSell {
         if (deltaPlus == null && deltaPlus2 == null) deltaPlus = infoIndicator;
         else if (deltaPlus != null && deltaPlus2 == null) deltaPlus2 = infoIndicator;
         else if (deltaPlus != null && deltaPlus2 != null) {
-            if (!isTimeNotOld()) setDeltaPlus(infoIndicator);
-            else {}
+            if (!isTimeNotOld() && !isTimeNotOld) setDeltaPlus(infoIndicator);
+            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
         }
     }
 
@@ -83,8 +84,8 @@ public class OneSell {
         if (volume == null && volume2 == null) volume = infoIndicator;
         else if (volume != null && volume2 == null) volume2 = infoIndicator;
         else if (volume != null && volume2 != null) {
-            if (!isTimeNotOld()) setVolume(infoIndicator);
-            else {}
+            if (!isTimeNotOld() && !isTimeNotOld) setVolume(infoIndicator);
+            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
         }
     }
 
@@ -117,8 +118,11 @@ public class OneSell {
             maxDeltaMinus = null;
             maxDeltaPlus2 = null;
             maxDeltaPlus = null;
+            deltaPlus2 = null;
             deltaPlus = null;
+            volume2 = null;
             volume = null;
+            ask2 = null;
             ask = null;
         }
     }
@@ -126,33 +130,38 @@ public class OneSell {
 
     // не старый ли уровень
     private boolean isTimeNotOld() {
+        if (maxOpenInterestMinus != null && openInterestPlus != null && maxDeltaMinus != null
+                && maxDeltaPlus2 != null && maxDeltaPlus != null && deltaPlus != null) {
 
-        InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() < openInterestPlus.getTime().getTime()
-                ? maxOpenInterestMinus : openInterestPlus;
-        infoIndicator = infoIndicator.getTime().getTime() < maxDeltaMinus.getTime().getTime()
-                ? infoIndicator : maxDeltaMinus;
-        infoIndicator = infoIndicator.getTime().getTime() < maxDeltaPlus2.getTime().getTime()
-                ? infoIndicator : maxDeltaPlus2;
-        infoIndicator = infoIndicator.getTime().getTime() < maxDeltaPlus.getTime().getTime()
-                ? infoIndicator : maxDeltaPlus;
-        infoIndicator = infoIndicator.getTime().getTime() < deltaPlus.getTime().getTime()
-                ? infoIndicator : deltaPlus;
+            InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() < openInterestPlus.getTime().getTime()
+                    ? maxOpenInterestMinus : openInterestPlus;
+            infoIndicator = infoIndicator.getTime().getTime() < maxDeltaMinus.getTime().getTime()
+                    ? infoIndicator : maxDeltaMinus;
+            infoIndicator = infoIndicator.getTime().getTime() < maxDeltaPlus2.getTime().getTime()
+                    ? infoIndicator : maxDeltaPlus2;
+            infoIndicator = infoIndicator.getTime().getTime() < maxDeltaPlus.getTime().getTime()
+                    ? infoIndicator : maxDeltaPlus;
+            infoIndicator = infoIndicator.getTime().getTime() < deltaPlus.getTime().getTime()
+                    ? infoIndicator : deltaPlus;
 
 
-        if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
-                < (long)(1000 * 60 * getTimeCalculationLevel())) {
-            return true;
-        } else {
-            if (volume2 != null) {
-                volume = volume2;
-                volume2 = null;
-                isTimeNotOld();
+            if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
+                    < (long) (1000 * 60 * getTimeCalculationLevel())) {
+                return true;
             } else {
-                volume = null;
-                return false;
+                if (volume2 != null) {
+                    volume = volume2;
+                    volume2 = null;
+                    isTimeNotOld();
+                } else {
+                    volume = null;
+                    return false;
+                }
             }
+        } else {
+            isTimeNotOld = true;
         }
-        return false;
+            return false;
     }
 
     // находим найвысший элемен, это и будет точка минимум для села

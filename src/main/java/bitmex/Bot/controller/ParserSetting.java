@@ -57,7 +57,13 @@ public class ParserSetting {
         executorCommandos.setFlag(false);
     }
 
-
+    public void writeSettings() {
+        try {
+            WriterAndReadFile.writerFile(getStringWrite(), path, true);
+        } catch (Exception e) {
+            ConsoleHelper.writeMessage("Настройки не перезаписались после команды изменения.");
+        }
+    }
 
     public void stopAndRestart() {
         createNewFile = false;

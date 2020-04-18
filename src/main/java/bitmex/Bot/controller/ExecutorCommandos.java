@@ -141,6 +141,7 @@ public class ExecutorCommandos {
             } else
                 ConsoleHelper.writeMessage("\nОшибочка, повторите ввод.\n");
         }
+        //parserSetting.stopAndRestart();
     }
 
     public boolean isFlag() {

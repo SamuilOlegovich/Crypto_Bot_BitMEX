@@ -21,6 +21,8 @@ public class OneBuy {
     private InfoIndicator bid2;
     private InfoIndicator bid;
 
+    private boolean isTimeNotOld;
+
 
     private OneBuy() {
     }
@@ -65,8 +67,8 @@ public class OneBuy {
         if (bid == null && bid2 == null) bid = infoIndicator;
         else if (bid != null && bid2 == null) bid2 = infoIndicator;
         else if (bid != null && bid2 != null) {
-            if (!isTimeNotOld()) setBid(infoIndicator);
-            else {}
+            if (!isTimeNotOld() && !isTimeNotOld) setBid(infoIndicator);
+            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
         }
     }
 
@@ -74,8 +76,8 @@ public class OneBuy {
         if (deltaMinus == null && deltaMinus2 == null) deltaMinus = infoIndicator;
         else if (deltaMinus != null && deltaMinus2 == null) deltaMinus2 = infoIndicator;
         else if (deltaMinus != null && deltaMinus2 != null) {
-            if (!isTimeNotOld()) setDeltaMinus(infoIndicator);
-            else {}
+            if (!isTimeNotOld() && !isTimeNotOld) setDeltaMinus(infoIndicator);
+            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
         }
     }
 
@@ -83,8 +85,8 @@ public class OneBuy {
         if (volume == null && volume2 == null) volume = infoIndicator;
         else if (volume != null && volume2 == null) volume2 = infoIndicator;
         else if (volume != null && volume2 != null) {
-            if (!isTimeNotOld()) setVolume(infoIndicator);
-            else {}
+            if (!isTimeNotOld() && !isTimeNotOld) setVolume(infoIndicator);
+            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
         }
     }
 
@@ -116,8 +118,11 @@ public class OneBuy {
             maxOpenInterestPlus = null;
             openInterestMinus = null;
             maxDeltaMinus = null;
+            deltaMinus2 = null;
             deltaMinus = null;
+            volume2 = null;
             volume = null;
+            bid2 = null;
             bid = null;
         }
     }
@@ -140,29 +145,32 @@ public class OneBuy {
 
     // не старый ли уровень
     private boolean isTimeNotOld() {
+        if (maxOpenInterestMinus != null && maxOpenInterestPlus != null && openInterestMinus != null
+                && maxDeltaMinus != null && deltaMinus != null) {
 
-        InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() > maxOpenInterestPlus.getTime().getTime()
-                ? maxOpenInterestMinus : maxOpenInterestPlus;
-        infoIndicator = infoIndicator.getTime().getTime() > openInterestMinus.getTime().getTime()
-                ? infoIndicator : openInterestMinus;
-        infoIndicator = infoIndicator.getTime().getTime() > maxDeltaMinus.getTime().getTime()
-                ? infoIndicator : maxDeltaMinus;
-        infoIndicator = infoIndicator.getTime().getTime() > deltaMinus.getTime().getTime()
-                ? infoIndicator : deltaMinus;
+            InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() > maxOpenInterestPlus.getTime().getTime()
+                    ? maxOpenInterestMinus : maxOpenInterestPlus;
+            infoIndicator = infoIndicator.getTime().getTime() > openInterestMinus.getTime().getTime()
+                    ? infoIndicator : openInterestMinus;
+            infoIndicator = infoIndicator.getTime().getTime() > maxDeltaMinus.getTime().getTime()
+                    ? infoIndicator : maxDeltaMinus;
+            infoIndicator = infoIndicator.getTime().getTime() > deltaMinus.getTime().getTime()
+                    ? infoIndicator : deltaMinus;
 
-        if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
-                < (long)(1000 * 60 * getTimeCalculationLevel())) {
-            return true;
-        } else {
-            if (volume2 != null) {
-                volume = volume2;
-                volume2 = null;
-                isTimeNotOld();
+            if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
+                    < (long) (1000 * 60 * getTimeCalculationLevel())) {
+                return true;
             } else {
-                volume = null;
-                return false;
+                if (volume2 != null) {
+                    volume = volume2;
+                    volume2 = null;
+                    isTimeNotOld();
+                } else {
+                    volume = null;
+                    return false;
+                }
             }
-        }
+        } else isTimeNotOld = true;
         return false;
     }
 

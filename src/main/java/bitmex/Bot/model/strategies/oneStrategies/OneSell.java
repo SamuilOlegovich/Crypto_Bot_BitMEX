@@ -133,15 +133,15 @@ public class OneSell {
         if (maxOpenInterestMinus != null && openInterestPlus != null && maxDeltaMinus != null
                 && maxDeltaPlus2 != null && maxDeltaPlus != null && deltaPlus != null) {
 
-            InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() < openInterestPlus.getTime().getTime()
+            InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() > openInterestPlus.getTime().getTime()
                     ? maxOpenInterestMinus : openInterestPlus;
-            infoIndicator = infoIndicator.getTime().getTime() < maxDeltaMinus.getTime().getTime()
+            infoIndicator = infoIndicator.getTime().getTime() > maxDeltaMinus.getTime().getTime()
                     ? infoIndicator : maxDeltaMinus;
-            infoIndicator = infoIndicator.getTime().getTime() < maxDeltaPlus2.getTime().getTime()
+            infoIndicator = infoIndicator.getTime().getTime() > maxDeltaPlus2.getTime().getTime()
                     ? infoIndicator : maxDeltaPlus2;
-            infoIndicator = infoIndicator.getTime().getTime() < maxDeltaPlus.getTime().getTime()
+            infoIndicator = infoIndicator.getTime().getTime() > maxDeltaPlus.getTime().getTime()
                     ? infoIndicator : maxDeltaPlus;
-            infoIndicator = infoIndicator.getTime().getTime() < deltaPlus.getTime().getTime()
+            infoIndicator = infoIndicator.getTime().getTime() > deltaPlus.getTime().getTime()
                     ? infoIndicator : deltaPlus;
 
 

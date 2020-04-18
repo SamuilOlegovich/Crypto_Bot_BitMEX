@@ -13,7 +13,9 @@ public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static volatile boolean strategyOneSellRangeFLAG = true;
+    private static volatile boolean strategyOneSellTimeFLAG = true;
     private static volatile boolean strategyOneBuyRangeFLAG = true;
+    private static volatile boolean strategyOneBuyTimeFLAG = true;
     private static volatile boolean strategyOneSellFLAG = true;
     private static volatile boolean strategyOneBuyFLAG = true;
     private static volatile boolean strategyOneAllFLAG = true;
@@ -46,6 +48,7 @@ public class Gasket {
     private static double take = 15.0;          // тейк профит в долларах
     private static double stop = 30.0;          // стоп лосс в долларах
     private static double lot = 1.0;            // количество контрактов
+    private static String path = "";
     private static int PORT = 4444;             // порт подключения
 
         // включаем отключаем стратегии
@@ -531,5 +534,29 @@ public class Gasket {
 
     public static void setUseStopLevelOrNotStopTime(int useStopLevelOrNotStopTime) {
         Gasket.useStopLevelOrNotStopTime = useStopLevelOrNotStopTime;
+    }
+
+    public static boolean isStrategyOneSellTimeFLAG() {
+        return strategyOneSellTimeFLAG;
+    }
+
+    public static void setStrategyOneSellTimeFLAG(boolean strategyOneSellTimeFLAG) {
+        Gasket.strategyOneSellTimeFLAG = strategyOneSellTimeFLAG;
+    }
+
+    public static boolean isStrategyOneBuyTimeFLAG() {
+        return strategyOneBuyTimeFLAG;
+    }
+
+    public static void setStrategyOneBuyTimeFLAG(boolean strategyOneBuyTimeFLAG) {
+        Gasket.strategyOneBuyTimeFLAG = strategyOneBuyTimeFLAG;
+    }
+
+    public static String getPath() {
+        return path;
+    }
+
+    public static void setPath(String path) {
+        Gasket.path = path;
     }
 }

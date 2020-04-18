@@ -72,8 +72,8 @@ public class StrategyOneSellTime {
                             ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOST", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isStrategyOneSellFLAG()) {
-                    Gasket.setStrategyOneSellFLAG(false);
+                if (Gasket.isStrategyOneSellTimeFLAG()) {
+                    Gasket.setStrategyOneSellTimeFLAG(false);
                     new StrategyOneSellThread(
                             ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOST", volume, getMin());
                 }

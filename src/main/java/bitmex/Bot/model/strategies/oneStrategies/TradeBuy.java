@@ -96,8 +96,8 @@ public class TradeBuy extends Thread {
 
         orderStopLimitOpen = orderBuyOpen;
         orderStopLimitOpen.setText("Stop loss - " + orderBuyAnswer.getOrderID());
-        orderStopLimitOpen.setStopPx(price - priceActiv);
-        orderStopLimitOpen.setOrdType("StopLimit");
+        //orderStopLimitOpen.setStopPx(price - priceActiv);
+        orderStopLimitOpen.setOrdType("Stop");
         orderStopLimitOpen.setPrice(price - stop);
         orderStopLimitOpen.setSide("Sell");
         orderStopLimitOpen.setOrderID("");

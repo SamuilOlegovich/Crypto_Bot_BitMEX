@@ -5,6 +5,7 @@ import bitmex.Bot.model.enums.BidAsk;
 
 
 import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Date;
 
 public class InfoIndicator {
@@ -54,10 +55,11 @@ public class InfoIndicator {
 
     @Override
     public String toString() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.format(time);
 
         return "{\"period\": \"" + period + "\",\"preview\": \"" + preview + "\",\"time\": \""
-                + simpleDateFormat.format(time) + "\",\"price\": \""
+                + dateFormat.format(time) + "\",\"price\": \""
                 + price + "\",\"value\": \"" + value
                 + "\",\"type\": \"" + type + "\"}";
     }

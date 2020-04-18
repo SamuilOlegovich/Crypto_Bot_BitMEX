@@ -107,8 +107,8 @@ public class TradeSell extends Thread {
 
         orderStopLimitOpen = orderSellOpen;
         orderStopLimitOpen.setText("Stop loss - " + orderSellAnswer.getOrderID());
-        orderStopLimitOpen.setStopPx(price + priceActiv);
-        orderStopLimitOpen.setOrdType("StopLimit");
+        //orderStopLimitOpen.setStopPx(price + priceActiv);
+        orderStopLimitOpen.setOrdType("Stop");
         orderStopLimitOpen.setPrice(price + stop);
         orderStopLimitOpen.setSide("Sell");
         orderStopLimitOpen.setOrderID("");

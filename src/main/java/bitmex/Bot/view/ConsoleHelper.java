@@ -154,7 +154,12 @@ public class ConsoleHelper {
 
 
     private static void getPathString() {
-        path = path + getDate() + "=Log.txt";
+        try {
+            Thread.sleep(1000 * 3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        path = Gasket.getPath() + "Logs/" + getDate() + "=Log.txt";
     }
 
 

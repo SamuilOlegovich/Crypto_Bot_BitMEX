@@ -4,25 +4,28 @@ import bitmex.Bot.model.Gasket;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.view.WriterAndReadFile;
 
-import java.io.*;
 
 public class ParserSetting {
     private ExecutorCommandos executorCommandos;
     private boolean createNewFile = true;
     private boolean stopAndRestart;
-    String path = "/Users/samuilolegovich/Desktop/bitmex-client-master/src/main/java/bitmex/Bot/Logs/Settings.txt";
+    private String path;
+    // = "/Users/samuilolegovich/Desktop/bitmex-client-master/src/main/java/bitmex/Bot/Logs/Settings.txt";
+    //    /Users/samuilolegovich/Desktop/bitmex-client-master/target/classes/bitmex/Bot/Logs/2020-04-18 12:38:46=Log.txt
 
     public ParserSetting(ExecutorCommandos executorCommandos) {
+        String string = getClass().getResource("").getPath()
+                .replaceAll("target/classes", "src/main/java");
+        Gasket.setPath(string.replaceAll("controller/", ""));
+        this.path = Gasket.getPath() + "Logs/Settings.txt";
         this.executorCommandos = executorCommandos;
         readFileSettings();
     }
 
     private void readFileSettings() {
-        File file = new File(path);
         executorCommandos.setParserSetting(this);
         executorCommandos.setFlag(true);
         stopAndRestart = true;
-
 
         try {
             for (String string : WriterAndReadFile.readFile(path)) {
@@ -55,39 +58,12 @@ public class ParserSetting {
     }
 
 
+
     public void stopAndRestart() {
         createNewFile = false;
         readFileSettings();
     }
 
-
-//    public void createNewFile() {
-//        File file = new File(path);
-//
-//        if (createNewFile) {
-//            try {
-//                boolean newFile = file.createNewFile();
-//                ConsoleHelper.writeMessage("Новый файл Settings.txt успешно создан.");
-//                writerFile();
-//                readFileSettings();
-//            } catch (IOException ex) {
-//                ConsoleHelper.writeMessage("По-пытался создать новый файл, не получилось.");
-//                createNewFile = false;
-//            }
-//        }
-//    }
-
-
-//    private void writerFile() {
-//        File file = new File(path);
-//
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-//            writer.write(getStringWrite());
-//            writer.flush();
-//        } catch (Exception e) {
-//            ConsoleHelper.writeMessage("Ошибка в ЗАПИСИ файла Settings.txt .");
-//        }
-//    }
 
 
     private String getStringWrite() {

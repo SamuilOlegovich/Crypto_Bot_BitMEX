@@ -67,8 +67,8 @@ public class StrategyOneBuyTime {
                             ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOBT", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isStrategyOneBuyFLAG()) {
-                    Gasket.setStrategyOneBuyFLAG(false);
+                if (Gasket.isStrategyOneBuyTimeFLAG()) {
+                    Gasket.setStrategyOneBuyTimeFLAG(false);
                     new StrategyOneBuyThread(
                             ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOBT", volume, getMin());
                 }

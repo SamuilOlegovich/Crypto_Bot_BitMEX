@@ -46,35 +46,35 @@ public class OneSell {
                 maxDeltaMinus = iInfoIndicator;
                 break;
             case DELTA_ASK:
-                deltaPlus = iInfoIndicator;
+                setDeltaPlus(iInfoIndicator);
                 break;
             case DELTA_ASK_HL:
                 twoDelta(iInfoIndicator);
                 break;
             case VOLUME:
-                volume = iInfoIndicator;
+                setVolume(iInfoIndicator);
                 break;
             case ASK:
-                ask = iInfoIndicator;
+                setAsk(iInfoIndicator);
                 break;
         }
         makeADecision();
     }
 
-    private void setBid(InfoIndicator infoIndicator) {
+    private void setAsk(InfoIndicator infoIndicator) {
         if (ask == null && ask2 == null) ask = infoIndicator;
         else if (ask != null && ask2 == null) ask2 = infoIndicator;
         else if (ask != null && ask2 != null) {
-            if (!isTimeNotOld()) setDeltaMinus(infoIndicator);
+            if (!isTimeNotOld()) setAsk(infoIndicator);
             else {}
         }
     }
 
-    private void setDeltaMinus(InfoIndicator infoIndicator) {
+    private void setDeltaPlus(InfoIndicator infoIndicator) {
         if (deltaPlus == null && deltaPlus2 == null) deltaPlus = infoIndicator;
         else if (deltaPlus != null && deltaPlus2 == null) deltaPlus2 = infoIndicator;
         else if (deltaPlus != null && deltaPlus2 != null) {
-            if (!isTimeNotOld()) setDeltaMinus(infoIndicator);
+            if (!isTimeNotOld()) setDeltaPlus(infoIndicator);
             else {}
         }
     }
@@ -83,7 +83,7 @@ public class OneSell {
         if (volume == null && volume2 == null) volume = infoIndicator;
         else if (volume != null && volume2 == null) volume2 = infoIndicator;
         else if (volume != null && volume2 != null) {
-            if (!isTimeNotOld()) setDeltaMinus(infoIndicator);
+            if (!isTimeNotOld()) setVolume(infoIndicator);
             else {}
         }
     }

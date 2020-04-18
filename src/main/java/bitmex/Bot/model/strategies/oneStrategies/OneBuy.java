@@ -65,7 +65,7 @@ public class OneBuy {
         if (bid == null && bid2 == null) bid = infoIndicator;
         else if (bid != null && bid2 == null) bid2 = infoIndicator;
         else if (bid != null && bid2 != null) {
-            if (!isTimeNotOld()) setDeltaMinus(infoIndicator);
+            if (!isTimeNotOld()) setBid(infoIndicator);
             else {}
         }
     }
@@ -83,7 +83,7 @@ public class OneBuy {
         if (volume == null && volume2 == null) volume = infoIndicator;
         else if (volume != null && volume2 == null) volume2 = infoIndicator;
         else if (volume != null && volume2 != null) {
-            if (!isTimeNotOld()) setDeltaMinus(infoIndicator);
+            if (!isTimeNotOld()) setVolume(infoIndicator);
             else {}
         }
     }

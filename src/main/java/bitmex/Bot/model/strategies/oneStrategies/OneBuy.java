@@ -145,33 +145,20 @@ public class OneBuy {
 
     // не старый ли уровень
     private boolean isTimeNotOld() {
-        if (maxOpenInterestMinus != null && maxOpenInterestPlus != null && openInterestMinus != null
-                && maxDeltaMinus != null && deltaMinus != null) {
 
-            InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() > maxOpenInterestPlus.getTime().getTime()
-                    ? maxOpenInterestMinus : maxOpenInterestPlus;
-            infoIndicator = infoIndicator.getTime().getTime() > openInterestMinus.getTime().getTime()
-                    ? infoIndicator : openInterestMinus;
-            infoIndicator = infoIndicator.getTime().getTime() > maxDeltaMinus.getTime().getTime()
-                    ? infoIndicator : maxDeltaMinus;
-            infoIndicator = infoIndicator.getTime().getTime() > deltaMinus.getTime().getTime()
-                    ? infoIndicator : deltaMinus;
+        InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() > maxOpenInterestPlus.getTime().getTime()
+                ? maxOpenInterestMinus : maxOpenInterestPlus;
+        infoIndicator = infoIndicator.getTime().getTime() > openInterestMinus.getTime().getTime()
+                ? infoIndicator : openInterestMinus;
+        infoIndicator = infoIndicator.getTime().getTime() > maxDeltaMinus.getTime().getTime()
+                ? infoIndicator : maxDeltaMinus;
+        infoIndicator = infoIndicator.getTime().getTime() > deltaMinus.getTime().getTime()
+                ? infoIndicator : deltaMinus;
 
-            if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
-                    < (long) (1000 * 60 * getTimeCalculationLevel())) {
-                return true;
-            } else {
-                if (volume2 != null) {
-                    volume = volume2;
-                    volume2 = null;
-                    isTimeNotOld();
-                } else {
-                    volume = null;
-                    return false;
-                }
-            }
-        } else isTimeNotOld = true;
-        return false;
+        if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
+                < (long) (1000 * 60 * getTimeCalculationLevel())) {
+            return true;
+        } else return false;
     }
 
 

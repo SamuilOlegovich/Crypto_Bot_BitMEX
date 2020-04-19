@@ -130,8 +130,6 @@ public class OneSell {
 
     // не старый ли уровень
     private boolean isTimeNotOld() {
-        if (maxOpenInterestMinus != null && openInterestPlus != null && maxDeltaMinus != null
-                && maxDeltaPlus2 != null && maxDeltaPlus != null && deltaPlus != null) {
 
             InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() > openInterestPlus.getTime().getTime()
                     ? maxOpenInterestMinus : openInterestPlus;
@@ -144,24 +142,10 @@ public class OneSell {
             infoIndicator = infoIndicator.getTime().getTime() > deltaPlus.getTime().getTime()
                     ? infoIndicator : deltaPlus;
 
-
             if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
                     < (long) (1000 * 60 * getTimeCalculationLevel())) {
                 return true;
-            } else {
-                if (volume2 != null) {
-                    volume = volume2;
-                    volume2 = null;
-                    isTimeNotOld();
-                } else {
-                    volume = null;
-                    return false;
-                }
-            }
-        } else {
-            isTimeNotOld = true;
-        }
-            return false;
+            } else return false;
     }
 
     // находим найвысший элемен, это и будет точка минимум для села

@@ -87,7 +87,7 @@ public class OneBuy {
                 bid = bid2;
                 bid2 = null;
 
-                if (bid != null && bid2 == null)
+                if (bid != null && bid2 == null) {
                     if (bid.getPrice() > infoIndicator.getPrice()
                             && isRangeTimeLevel(bid, infoIndicator)
                             && (bid.getPeriod() == TimeFrame.M5
@@ -100,6 +100,7 @@ public class OneBuy {
                     } else {
                         bid2 = infoIndicator;
                     }
+                }
             } else {
 
                 if (bid2.getPrice() > infoIndicator.getPrice()
@@ -145,7 +146,7 @@ public class OneBuy {
                 deltaMinus = deltaMinus2;
                 deltaMinus2 = null;
 
-                if (deltaMinus != null && deltaMinus2 == null)
+                if (deltaMinus != null && deltaMinus2 == null) {
                     if (deltaMinus.getPrice() > infoIndicator.getPrice()
                             && isRangeTimeLevel(deltaMinus, infoIndicator)
                             && (deltaMinus.getPeriod() == TimeFrame.M5
@@ -158,6 +159,7 @@ public class OneBuy {
                     } else {
                         deltaMinus2 = infoIndicator;
                     }
+                }
             } else {
 
                 if (deltaMinus2.getPrice() > infoIndicator.getPrice()
@@ -204,7 +206,7 @@ public class OneBuy {
                 volume = volume2;
                 volume2 = null;
 
-                if (volume != null && volume2 == null)
+                if (volume != null && volume2 == null) {
                     if (volume.getPrice() > infoIndicator.getPrice()
                             && isRangeTimeLevel(volume, infoIndicator)
                             && (volume.getPeriod() == TimeFrame.M5
@@ -217,6 +219,7 @@ public class OneBuy {
                     } else {
                         volume2 = infoIndicator;
                     }
+                }
             } else {
 
                 if (volume2.getPrice() > infoIndicator.getPrice()

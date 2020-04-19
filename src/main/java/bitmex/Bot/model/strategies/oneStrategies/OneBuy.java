@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
+import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.Gasket;
 
@@ -65,28 +66,174 @@ public class OneBuy {
 
     private void setBid(InfoIndicator infoIndicator) {
         if (bid == null && bid2 == null) bid = infoIndicator;
-        else if (bid != null && bid2 == null) bid2 = infoIndicator;
-        else if (bid != null && bid2 != null) {
-            if (!isTimeNotOld() && !isTimeNotOld) setBid(infoIndicator);
-            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
+        else if (bid != null && bid2 == null) {
+            if (!isRangeTimeLevel(bid, infoIndicator)) {
+                bid = infoIndicator;
+            } else if (bid.getPrice() > infoIndicator.getPrice()
+                    && isRangeTimeLevel(bid, infoIndicator)
+                    && (bid.getPeriod() == TimeFrame.M5
+                    && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                bid = infoIndicator;
+            } else if (isRangeTimeLevel(bid, infoIndicator)
+                    && (bid.getPeriod() == TimeFrame.M5
+                    && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                bid = infoIndicator;
+            } else {
+                bid2 = infoIndicator;
+            }
+        } else if (bid != null && bid2 != null) {
+
+            if (!isRangeTimeLevel(bid, infoIndicator)) {
+                bid = bid2;
+                bid2 = null;
+
+                if (bid != null && bid2 == null)
+                    if (bid.getPrice() > infoIndicator.getPrice()
+                            && isRangeTimeLevel(bid, infoIndicator)
+                            && (bid.getPeriod() == TimeFrame.M5
+                            && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                        bid = infoIndicator;
+                    } else if (isRangeTimeLevel(bid, infoIndicator)
+                            && (bid.getPeriod() == TimeFrame.M5
+                            && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                        bid = infoIndicator;
+                    } else {
+                        bid2 = infoIndicator;
+                    }
+            } else {
+
+                if (bid2.getPrice() > infoIndicator.getPrice()
+                        && isRangeTimeLevel(bid, infoIndicator)
+                        && (bid2.getPeriod() == TimeFrame.M5
+                        && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                    bid = infoIndicator;
+                    bid2 = null;
+                } else if (isRangeTimeLevel(bid, infoIndicator)
+                        && (bid2.getPeriod() == TimeFrame.M5
+                        && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                    bid = infoIndicator;
+                    bid2 = null;
+                } else {
+                    bid2 = infoIndicator;
+                }
+            }
         }
     }
 
+
+
     private void setDeltaMinus(InfoIndicator infoIndicator) {
-        if (deltaMinus == null && deltaMinus2 == null) deltaMinus = infoIndicator;
-        else if (deltaMinus != null && deltaMinus2 == null) deltaMinus2 = infoIndicator;
-        else if (deltaMinus != null && deltaMinus2 != null) {
-            if (!isTimeNotOld() && !isTimeNotOld) setDeltaMinus(infoIndicator);
-            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
+        if (deltaMinus == null && deltaMinus2 == null) bid = infoIndicator;
+        else if (deltaMinus != null && deltaMinus2 == null) {
+            if (!isRangeTimeLevel(deltaMinus, infoIndicator)) {
+                deltaMinus = infoIndicator;
+            } else if (deltaMinus.getPrice() > infoIndicator.getPrice()
+                    && isRangeTimeLevel(deltaMinus, infoIndicator)
+                    && (deltaMinus.getPeriod() == TimeFrame.M5
+                    && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                deltaMinus = infoIndicator;
+            } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
+                    && (deltaMinus.getPeriod() == TimeFrame.M5
+                    && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                deltaMinus = infoIndicator;
+            } else {
+                deltaMinus2 = infoIndicator;
+            }
+        } else if (deltaMinus != null && deltaMinus2 != null) {
+
+            if (!isRangeTimeLevel(deltaMinus, infoIndicator)) {
+                deltaMinus = deltaMinus2;
+                deltaMinus2 = null;
+
+                if (deltaMinus != null && deltaMinus2 == null)
+                    if (deltaMinus.getPrice() > infoIndicator.getPrice()
+                            && isRangeTimeLevel(deltaMinus, infoIndicator)
+                            && (deltaMinus.getPeriod() == TimeFrame.M5
+                            && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                        deltaMinus = infoIndicator;
+                    } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
+                            && (deltaMinus.getPeriod() == TimeFrame.M5
+                            && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                        deltaMinus = infoIndicator;
+                    } else {
+                        deltaMinus2 = infoIndicator;
+                    }
+            } else {
+
+                if (deltaMinus2.getPrice() > infoIndicator.getPrice()
+                        && isRangeTimeLevel(deltaMinus, infoIndicator)
+                        && (deltaMinus2.getPeriod() == TimeFrame.M5
+                        && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                    deltaMinus = infoIndicator;
+                    deltaMinus2 = null;
+                } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
+                        && (deltaMinus2.getPeriod() == TimeFrame.M5
+                        && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                    deltaMinus = infoIndicator;
+                    deltaMinus2 = null;
+                } else {
+                    deltaMinus2 = infoIndicator;
+                }
+            }
         }
     }
+
 
     private void setVolume(InfoIndicator infoIndicator) {
         if (volume == null && volume2 == null) volume = infoIndicator;
-        else if (volume != null && volume2 == null) volume2 = infoIndicator;
-        else if (volume != null && volume2 != null) {
-            if (!isTimeNotOld() && !isTimeNotOld) setVolume(infoIndicator);
-            else if (!isTimeNotOld() && isTimeNotOld) isTimeNotOld = false;
+        else if (volume != null && volume2 == null) {
+
+            if (!isRangeTimeLevel(volume, infoIndicator)) {
+                volume = infoIndicator;
+            } else if (volume.getPrice() > infoIndicator.getPrice()
+                    && isRangeTimeLevel(volume, infoIndicator)
+                    && (volume.getPeriod() == TimeFrame.M5
+                    && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                volume = infoIndicator;
+            } else if (isRangeTimeLevel(volume, infoIndicator)
+                    && (volume.getPeriod() == TimeFrame.M5
+                    && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                volume = infoIndicator;
+            } else {
+                volume2 = infoIndicator;
+            }
+
+        } else if (volume != null && volume2 != null) {
+
+            if (!isRangeTimeLevel(volume, infoIndicator)) {
+                volume = volume2;
+                volume2 = null;
+
+                if (volume != null && volume2 == null)
+                    if (volume.getPrice() > infoIndicator.getPrice()
+                            && isRangeTimeLevel(volume, infoIndicator)
+                            && (volume.getPeriod() == TimeFrame.M5
+                            && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                        volume = infoIndicator;
+                    } else if (isRangeTimeLevel(volume, infoIndicator)
+                            && (volume.getPeriod() == TimeFrame.M5
+                            && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                        volume = infoIndicator;
+                    } else {
+                        volume2 = infoIndicator;
+                    }
+            } else {
+
+                if (volume2.getPrice() > infoIndicator.getPrice()
+                        && isRangeTimeLevel(volume, infoIndicator)
+                        && (volume2.getPeriod() == TimeFrame.M5
+                        && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                    volume = infoIndicator;
+                    volume2 = null;
+                } else if (isRangeTimeLevel(volume, infoIndicator)
+                        && (volume2.getPeriod() == TimeFrame.M5
+                        && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                    volume = infoIndicator;
+                    volume2 = null;
+                } else {
+                    volume2 = infoIndicator;
+                }
+            }
         }
     }
 
@@ -161,8 +308,6 @@ public class OneBuy {
         } else return false;
     }
 
-
-
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
         return (maxOpenInterestMinus.getPrice() <= volume.getPrice())
@@ -170,9 +315,16 @@ public class OneBuy {
                 && (openInterestMinus.getPrice() <= volume.getPrice())
                 && (maxDeltaMinus.getPrice() <= volume.getPrice())
                 && (deltaMinus.getPrice() <= volume.getPrice());
-
     }
 
+    private boolean isRangeTimeLevel(InfoIndicator one, InfoIndicator two) {
+        if ((two.getTime().getTime() - one.getTime().getTime())
+                < (long) (1000 * 60 * getTimeCalculationLevel())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     // проверяем нет ли тут предварительных уровней
     private boolean isReal() {

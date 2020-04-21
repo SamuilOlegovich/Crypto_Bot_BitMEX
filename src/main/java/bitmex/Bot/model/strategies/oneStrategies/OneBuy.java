@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.Gasket;
 
 import java.util.Date;
@@ -21,9 +21,6 @@ public class OneBuy {
     private InfoIndicator volume;
     private InfoIndicator bid2;
     private InfoIndicator bid;
-
-    private boolean isTimeNotOld;
-
 
     private OneBuy() {
     }
@@ -75,8 +72,7 @@ public class OneBuy {
                     && infoIndicator.getPeriod() == TimeFrame.M5)) {
                 bid = infoIndicator;
             } else if (isRangeTimeLevel(bid, infoIndicator)
-                    && (bid.getPeriod() == TimeFrame.M5
-                    && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                    && isBigTimeFrame(bid, infoIndicator)) {
                 bid = infoIndicator;
             } else {
                 bid2 = infoIndicator;
@@ -94,8 +90,7 @@ public class OneBuy {
                             && infoIndicator.getPeriod() == TimeFrame.M5)) {
                         bid = infoIndicator;
                     } else if (isRangeTimeLevel(bid, infoIndicator)
-                            && (bid.getPeriod() == TimeFrame.M5
-                            && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                            && isBigTimeFrame(bid, infoIndicator)) {
                         bid = infoIndicator;
                     } else {
                         bid2 = infoIndicator;
@@ -110,8 +105,7 @@ public class OneBuy {
                     bid = infoIndicator;
                     bid2 = null;
                 } else if (isRangeTimeLevel(bid, infoIndicator)
-                        && (bid2.getPeriod() == TimeFrame.M5
-                        && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                        && isBigTimeFrame(bid2, infoIndicator)) {
                     bid = infoIndicator;
                     bid2 = null;
                 } else {
@@ -134,8 +128,7 @@ public class OneBuy {
                     && infoIndicator.getPeriod() == TimeFrame.M5)) {
                 deltaMinus = infoIndicator;
             } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
-                    && (deltaMinus.getPeriod() == TimeFrame.M5
-                    && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                    && isBigTimeFrame(deltaMinus, infoIndicator)) {
                 deltaMinus = infoIndicator;
             } else {
                 deltaMinus2 = infoIndicator;
@@ -153,8 +146,7 @@ public class OneBuy {
                             && infoIndicator.getPeriod() == TimeFrame.M5)) {
                         deltaMinus = infoIndicator;
                     } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
-                            && (deltaMinus.getPeriod() == TimeFrame.M5
-                            && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                            && isBigTimeFrame(deltaMinus, infoIndicator)) {
                         deltaMinus = infoIndicator;
                     } else {
                         deltaMinus2 = infoIndicator;
@@ -169,8 +161,7 @@ public class OneBuy {
                     deltaMinus = infoIndicator;
                     deltaMinus2 = null;
                 } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
-                        && (deltaMinus2.getPeriod() == TimeFrame.M5
-                        && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                        && isBigTimeFrame(deltaMinus2, infoIndicator)) {
                     deltaMinus = infoIndicator;
                     deltaMinus2 = null;
                 } else {
@@ -193,8 +184,7 @@ public class OneBuy {
                     && infoIndicator.getPeriod() == TimeFrame.M5)) {
                 volume = infoIndicator;
             } else if (isRangeTimeLevel(volume, infoIndicator)
-                    && (volume.getPeriod() == TimeFrame.M5
-                    && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                    && isBigTimeFrame(volume, infoIndicator)) {
                 volume = infoIndicator;
             } else {
                 volume2 = infoIndicator;
@@ -213,8 +203,7 @@ public class OneBuy {
                             && infoIndicator.getPeriod() == TimeFrame.M5)) {
                         volume = infoIndicator;
                     } else if (isRangeTimeLevel(volume, infoIndicator)
-                            && (volume.getPeriod() == TimeFrame.M5
-                            && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                            && isBigTimeFrame(volume, infoIndicator)) {
                         volume = infoIndicator;
                     } else {
                         volume2 = infoIndicator;
@@ -229,8 +218,7 @@ public class OneBuy {
                     volume = infoIndicator;
                     volume2 = null;
                 } else if (isRangeTimeLevel(volume, infoIndicator)
-                        && (volume2.getPeriod() == TimeFrame.M5
-                        && infoIndicator.getPeriod() == TimeFrame.M15)) {
+                        && isBigTimeFrame(volume2, infoIndicator)) {
                     volume = infoIndicator;
                     volume2 = null;
                 } else {
@@ -240,6 +228,16 @@ public class OneBuy {
         }
     }
 
+
+    // проверяем больший ли траймфрейм у данного уровня или нет
+    private boolean isBigTimeFrame(InfoIndicator one, InfoIndicator two) {
+        return ((one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M15)
+                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M30)
+                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.H1)
+                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.M30)
+                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.H1)
+                || (one.getPeriod() == TimeFrame.M30 && two.getPeriod() == TimeFrame.H1));
+    }
 
 
     // принимаем решение
@@ -321,12 +319,13 @@ public class OneBuy {
     }
 
     private boolean isRangeTimeLevel(InfoIndicator one, InfoIndicator two) {
-        if ((two.getTime().getTime() - one.getTime().getTime())
-                < (long) (1000 * 60 * getTimeCalculationLevel())) {
-            return true;
-        } else {
-            return false;
-        }
+//        if ((two.getTime().getTime() - one.getTime().getTime())
+//                < (long) (1000 * 60 * getTimeCalculationLevel())) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+        return true;
     }
 
     // проверяем нет ли тут предварительных уровней

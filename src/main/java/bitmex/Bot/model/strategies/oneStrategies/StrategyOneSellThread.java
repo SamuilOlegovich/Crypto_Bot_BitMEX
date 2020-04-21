@@ -8,15 +8,19 @@ import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Date;
 
+import static bitmex.Bot.model.Gasket.getTimeCalculationCombinationLevel;
+
 public class StrategyOneSellThread extends Thread {
     private InfoIndicator volume;
     private InfoIndicator ask;
     private String ID;
+    private Date date;
 
     public StrategyOneSellThread(String id, InfoIndicator volume, InfoIndicator ask) {
-        this.ID = id;
+        this.date = new Date();
         this.volume = volume;
         this.ask = ask;
+        this.ID = id;
         start();
     }
 
@@ -36,9 +40,12 @@ public class StrategyOneSellThread extends Thread {
 
             double close = Gasket.getBitmexQuote().getBidPrice();
 
-            if (close > min) {
+            if (close > min || !isRelevantDate()) {
                 flag();
-                if (Gasket.isUseStopLevelOrNotStop()) {
+                if (!isRelevantDate()) {
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по дате комбинации---- " + getDate());
+                }
+                else if (Gasket.isUseStopLevelOrNotStop() && close > min) {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Селл ВЫШЛА ЗА уровень MIN ---- " + getDate());
                     new StopSellTimeThread(ID, max, min);
                 } else {
@@ -47,7 +54,7 @@ public class StrategyOneSellThread extends Thread {
                 break;
             }
 
-            if (close < max) {
+            if (close < max && isRelevantDate()) {
                 if (Gasket.isTrading()) new TradeSell(ID);
                 ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- " + getDate());
                 new TestOrderSell(ID, close).start();
@@ -81,5 +88,12 @@ public class StrategyOneSellThread extends Thread {
             if (!Gasket.isStrategyOneBuyFLAG()) Gasket.setStrategyOneBuyFLAG(true);
             if (!Gasket.isOneBuyFLAG()) Gasket.setOneBuyFLAG(true);
         }
+    }
+
+    private boolean isRelevantDate() {
+        Date dateNow = new Date();
+        if ((dateNow.getTime() - date.getTime()) < (long) (1000 * 60 * getTimeCalculationCombinationLevel())) {
+            return true;
+        } else return false;
     }
 }

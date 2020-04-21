@@ -19,6 +19,7 @@ public class Gasket {
     private static volatile boolean strategyOneSellFLAG = true;
     private static volatile boolean strategyOneBuyFLAG = true;
     private static volatile boolean strategyOneAllFLAG = true;
+    private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
     private static volatile boolean oneSellFLAG = true;
     private static volatile boolean oneBuyFLAG = true;
@@ -31,7 +32,7 @@ public class Gasket {
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
     private static boolean useRealOrNotReal = true;     // true - реальный счет
-    private static int timeCalculationLevel = 20;       // время за которое должны сформироваться уровни иначе все отменяется
+    private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
     private static volatile double PROFIT = 0.0;        // итоговый профит
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
@@ -567,5 +568,13 @@ public class Gasket {
 
     public static void setTimeCalculationLevel(int timeCalculationLevel) {
         Gasket.timeCalculationLevel = timeCalculationLevel;
+    }
+
+    public static int getTimeCalculationCombinationLevel() {
+        return timeCalculationCombinationLevel;
+    }
+
+    public static void setTimeCalculationCombinationLevel(int timeCalculationCombinationLevel) {
+        Gasket.timeCalculationCombinationLevel = timeCalculationCombinationLevel;
     }
 }

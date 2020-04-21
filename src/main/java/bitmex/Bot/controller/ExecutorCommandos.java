@@ -22,6 +22,10 @@ public class ExecutorCommandos {
 
         try {
             switch (strings[0]) {
+                case "timeCalculationCombinationLevel" :
+                    Gasket.setTimeCalculationCombinationLevel(Integer.parseInt(strings[1]));
+                    ConsoleHelper.writeMessage("timeCalculationCombinationLevel === " + Gasket.getTimeCalculationCombinationLevel() + "\n");
+                    break;
                 case "useStopLevelOrNotStopTime" :
                     Gasket.setUseStopLevelOrNotStopTime(Integer.parseInt(strings[1]));
                     ConsoleHelper.writeMessage("useStopLevelOrNotStopTime === " + Gasket.getUseStopLevelOrNotStopTime() + "\n");

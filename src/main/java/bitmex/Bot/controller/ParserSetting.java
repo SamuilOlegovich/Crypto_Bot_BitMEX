@@ -131,7 +131,11 @@ public class ParserSetting {
                 + "useStopLevelOrNotStopTime=" + Gasket.getUseStopLevelOrNotStopTime()
                 + " ===== сколько минут отслеживать сделку вышедшею за MIN уровни\n"
                 + "useStopLevelOrNotStop=" + Gasket.isUseStopLevelOrNotStop()
-                + " ===== отменять или не отменять сделку вышедшею за MIN уровни\n\n";
+                + " ===== отменять или не отменять сделку вышедшею за MIN уровни\n"
+                + "timeCalculationCombinationLevel=" + Gasket.getTimeCalculationCombinationLevel()
+                + " ===== когда уровни сформированы указываем время жизни данной комбинации\n"
+                + "timeCalculationLevel=" + Gasket.getTimeCalculationLevel()
+                + " ===== время за которое должны сформироваться уровни иначе все отменяется\n\n";
     }
 
 

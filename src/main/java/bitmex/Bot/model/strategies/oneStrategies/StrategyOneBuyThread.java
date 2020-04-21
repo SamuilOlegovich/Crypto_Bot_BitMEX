@@ -1,19 +1,23 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.Gasket;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.Gasket;
 
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Date;
 
+import static bitmex.Bot.model.Gasket.getTimeCalculationCombinationLevel;
+
 public class StrategyOneBuyThread extends Thread {
     private InfoIndicator volume;
     private InfoIndicator bid;
     private String ID;
+    private Date date;
 
     public StrategyOneBuyThread(String id, InfoIndicator volume, InfoIndicator bid) {
+        this.date = new Date();
         this.volume = volume;
         this.bid = bid;
         this.ID = id;
@@ -36,9 +40,11 @@ public class StrategyOneBuyThread extends Thread {
 
             double close = Gasket.getBitmexQuote().getAskPrice();
 
-            if (close < min) {
+            if (close < min || !isRelevantDate()) {
                 flag();
-                if (Gasket.isUseStopLevelOrNotStop()) {
+                if (!isRelevantDate()) {
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА по дате комбинации---- " + getDate());
+                } else if (Gasket.isUseStopLevelOrNotStop() && close < min) {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Бай ВЫШЛА ЗА уровень MIN ---- " + getDate());
                     new StopBuyTimeThread(ID, max, min);
                 } else {
@@ -47,7 +53,7 @@ public class StrategyOneBuyThread extends Thread {
                 return;
             }
 
-            if (close > max) {
+            if (close > max && isRelevantDate()) {
                 if (Gasket.isTrading()) new TradeBuy(ID);
                 ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + getDate());
                 new TestOrderBuy(ID, close).start();
@@ -81,6 +87,13 @@ public class StrategyOneBuyThread extends Thread {
             if (!Gasket.isStrategyOneBuyFLAG()) Gasket.setStrategyOneBuyFLAG(true);
             if (!Gasket.isOneBuyFLAG()) Gasket.setOneBuyFLAG(true);
         }
+    }
+
+    private boolean isRelevantDate() {
+        Date dateNow = new Date();
+        if ((dateNow.getTime() - date.getTime()) < (long) (1000 * 60 * getTimeCalculationCombinationLevel())) {
+            return true;
+        } else return false;
     }
 }
 

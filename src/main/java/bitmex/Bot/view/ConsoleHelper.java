@@ -129,6 +129,8 @@ public class ConsoleHelper {
                 + " === отменять или не отменять сделку вышедшею за MIN уровни\n"
                 + "timeCalculationLevel === " + Gasket.getTimeCalculationLevel()
                 + " === время за которое должны сформироваться уровни иначе все отменяется\n"
+                + "timeCalculationCombinationLevel === " + Gasket.getTimeCalculationCombinationLevel()
+                + " === когда уровни сформированы указываем время жизни данной комбинации\n\n"
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
                 + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"

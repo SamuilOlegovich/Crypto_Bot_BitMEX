@@ -1,12 +1,17 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
+import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.Gasket;
 
 import java.util.Date;
 
+import static bitmex.Bot.model.Gasket.getTimeCalculationLevel;
+
+
+// решил не удалять уровни, а так все также
 public class StrategyOneSellRange {
-    private static StrategyOneSellRange strategyOneSellRange;
+    private static StrategyOneSellRange oneSell;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator openInterestPlus;
@@ -19,14 +24,14 @@ public class StrategyOneSellRange {
 
     private int countDelta = 0;
 
-
     private StrategyOneSellRange() {
     }
 
     public static StrategyOneSellRange getInstance() {
-        if (strategyOneSellRange == null) strategyOneSellRange = new StrategyOneSellRange();
-        return strategyOneSellRange;
+        if (oneSell == null) oneSell = new StrategyOneSellRange();
+        return oneSell;
     }
+
 
     public void setIInfoString(InfoIndicator iInfoIndicator) {
         switch (iInfoIndicator.getType()) {
@@ -40,20 +45,76 @@ public class StrategyOneSellRange {
                 maxDeltaMinus = iInfoIndicator;
                 break;
             case DELTA_ASK:
-                deltaPlus = iInfoIndicator;
+                setDeltaPlus(iInfoIndicator);
                 break;
             case DELTA_ASK_HL:
                 twoDelta(iInfoIndicator);
                 break;
             case VOLUME:
-                volume = iInfoIndicator;
+                setVolume(iInfoIndicator);
                 break;
             case ASK:
-                ask = iInfoIndicator;
+                setAsk(iInfoIndicator);
                 break;
         }
         makeADecision();
     }
+
+
+
+    private void setAsk(InfoIndicator infoIndicator) {
+        if (ask == null) ask = infoIndicator;
+        else if (ask.getPrice() < infoIndicator.getPrice()
+                && isRangeTimeLevel(ask, infoIndicator)
+                && (ask.getPeriod() == TimeFrame.M5
+                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+            ask = infoIndicator;
+        } else if (isRangeTimeLevel(ask, infoIndicator)
+                && isBigTimeFrame(ask, infoIndicator)) {
+            ask = infoIndicator;
+        }
+    }
+
+
+    private void setDeltaPlus(InfoIndicator infoIndicator) {
+        if (deltaPlus == null) deltaPlus = infoIndicator;
+        else if (deltaPlus.getPrice() < infoIndicator.getPrice()
+                && isRangeTimeLevel(deltaPlus, infoIndicator)
+                && (deltaPlus.getPeriod() == TimeFrame.M5
+                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+            deltaPlus = infoIndicator;
+        } else if (isRangeTimeLevel(deltaPlus, infoIndicator)
+                && isBigTimeFrame(deltaPlus, infoIndicator)) {
+            deltaPlus = infoIndicator;
+        }
+    }
+
+
+    private void setVolume(InfoIndicator infoIndicator) {
+        if (volume == null) volume = infoIndicator;
+        else if (volume.getPrice() < infoIndicator.getPrice()
+                && isRangeTimeLevel(volume, infoIndicator)
+                && (volume.getPeriod() == TimeFrame.M5
+                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+            volume = infoIndicator;
+        } else if (isRangeTimeLevel(volume, infoIndicator)
+                && isBigTimeFrame(volume, infoIndicator)) {
+            volume = infoIndicator;
+        }
+    }
+
+
+    // проверяем больший ли траймфрейм у данного уровня или нет
+    private boolean isBigTimeFrame(InfoIndicator one, InfoIndicator two) {
+        return ((one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M15)
+                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M30)
+                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.H1)
+                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.M30)
+                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.H1)
+                || (one.getPeriod() == TimeFrame.M30 && two.getPeriod() == TimeFrame.H1));
+    }
+
+
 
     // принимаем решение
     private synchronized void makeADecision() {
@@ -63,7 +124,7 @@ public class StrategyOneSellRange {
             return;
         }
 
-        if (inTheRangePrice() && inTheRangeTime() /*&& isReal()*/) {
+        if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
             if (Gasket.getStrategyWorkOne() == 1) {
                 if (Gasket.isStrategyOneAllFLAG()) {
                     Gasket.setStrategyOneAllFLAG(false);
@@ -71,21 +132,42 @@ public class StrategyOneSellRange {
                             ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOSR", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isStrategyOneSellRangeFLAG()) {
-                    Gasket.setStrategyOneSellRangeFLAG(false);
+                if (Gasket.isOneSellFLAG()) {
+                    Gasket.setOneSellFLAG(false);
                     new StrategyOneSellThread(
                             ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOSR", volume, getMin());
                 }
             }
-            maxOpenInterestMinus = null;
-            openInterestPlus = null;
-            maxDeltaMinus = null;
-            maxDeltaPlus2 = null;
-            maxDeltaPlus = null;
-            deltaPlus = null;
-            volume = null;
-            ask = null;
+//            maxOpenInterestMinus = null;
+//            openInterestPlus = null;
+//            maxDeltaMinus = null;
+//            maxDeltaPlus2 = null;
+//            maxDeltaPlus = null;
+//            deltaPlus = null;
+//            volume = null;
+//            ask = null;
         }
+    }
+
+
+    // не старый ли уровень
+    private boolean isTimeNotOld() {
+
+        InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() > openInterestPlus.getTime().getTime()
+                ? maxOpenInterestMinus : openInterestPlus;
+        infoIndicator = infoIndicator.getTime().getTime() > maxDeltaMinus.getTime().getTime()
+                ? infoIndicator : maxDeltaMinus;
+        infoIndicator = infoIndicator.getTime().getTime() > maxDeltaPlus2.getTime().getTime()
+                ? infoIndicator : maxDeltaPlus2;
+        infoIndicator = infoIndicator.getTime().getTime() > maxDeltaPlus.getTime().getTime()
+                ? infoIndicator : maxDeltaPlus;
+        infoIndicator = infoIndicator.getTime().getTime() > deltaPlus.getTime().getTime()
+                ? infoIndicator : deltaPlus;
+
+        if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
+                < (long) (1000 * 60 * getTimeCalculationLevel())) {
+            return true;
+        } else return false;
     }
 
     // находим найвысший элемен, это и будет точка минимум для села
@@ -105,15 +187,23 @@ public class StrategyOneSellRange {
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
-        double topLevel = volume.getPrice() > ask.getPrice()
-                ? volume.getPrice() + Gasket.getRangeLevel() : ask.getPrice() + Gasket.getRangeLevel();
 
-        return (maxOpenInterestMinus.getPrice() >= volume.getPrice() && maxOpenInterestMinus.getPrice() <= topLevel)
-                && (openInterestPlus.getPrice() >= volume.getPrice() && openInterestPlus.getPrice() <= topLevel)
-                && (maxDeltaMinus.getPrice() >= volume.getPrice() && maxDeltaMinus.getPrice() <= topLevel)
-                && (maxDeltaPlus2.getPrice() >= volume.getPrice() && maxDeltaPlus2.getPrice() <= topLevel)
-                && (maxDeltaPlus.getPrice() >= volume.getPrice() && maxDeltaPlus.getPrice() <= topLevel)
-                && (deltaPlus.getPrice() >= volume.getPrice() && deltaPlus.getPrice() <= topLevel);
+        return (maxOpenInterestMinus.getPrice() >= volume.getPrice())
+                && (openInterestPlus.getPrice() >= volume.getPrice())
+                && (maxDeltaMinus.getPrice() >= volume.getPrice())
+                && (maxDeltaPlus2.getPrice() >= volume.getPrice())
+                && (maxDeltaPlus.getPrice() >= volume.getPrice())
+                && (deltaPlus.getPrice() >= volume.getPrice());
+    }
+
+    // не устарели ли уровни
+    private boolean isRangeTimeLevel(InfoIndicator one, InfoIndicator two) {
+        if ((two.getTime().getTime() - one.getTime().getTime())
+                < (long) (1000 * 60 * getTimeCalculationLevel())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // проверяем нет ли тут предварительных уровней
@@ -135,20 +225,14 @@ public class StrategyOneSellRange {
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
-        Date before = maxDeltaMinus.getTime();
         Date after = volume.getTime();
 
-        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime()
-                && maxOpenInterestMinus.getTime().getTime() <= before.getTime())
-                && (openInterestPlus.getTime().getTime() >= after.getTime()
-                && openInterestPlus.getTime().getTime() <= before.getTime())
-                && (maxDeltaPlus2.getTime().getTime() >= after.getTime()
-                && maxDeltaPlus2.getTime().getTime() <= before.getTime())
-                && (maxDeltaPlus.getTime().getTime() >= after.getTime()
-                && maxDeltaPlus.getTime().getTime() <= before.getTime())
-                && (deltaPlus.getTime().getTime() >= after.getTime()
-                && deltaPlus.getTime().getTime() <= before.getTime())
-                && (ask.getTime().getTime() >= after.getTime()
-                && ask.getTime().getTime() <= before.getTime());
+        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime())
+                && (openInterestPlus.getTime().getTime() >= after.getTime())
+                && (maxDeltaPlus2.getTime().getTime() >= after.getTime())
+                && (maxDeltaPlus.getTime().getTime() >= after.getTime())
+                && (deltaPlus.getTime().getTime() >= after.getTime())
+                && (ask.getTime().getTime() >= after.getTime());
     }
 }
+

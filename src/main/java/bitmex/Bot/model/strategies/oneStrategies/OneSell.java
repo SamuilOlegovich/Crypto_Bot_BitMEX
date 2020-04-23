@@ -48,11 +48,11 @@ public class OneSell {
             case DELTA_ASK:
                 setDeltaPlus(iInfoIndicator);
                 break;
-            case DELTA_ASK_HL:
-                twoDelta(iInfoIndicator);
-                break;
             case VOLUME:
                 setVolume(iInfoIndicator);
+                break;
+            case DELTA_ASK_HL:
+                twoDelta(iInfoIndicator);
                 break;
             case ASK:
                 setAsk(iInfoIndicator);
@@ -324,13 +324,12 @@ public class OneSell {
 
     // не устарели ли уровни
     private boolean isRangeTimeLevel(InfoIndicator one, InfoIndicator two) {
-//        if ((two.getTime().getTime() - one.getTime().getTime())
-//                < (long) (1000 * 60 * getTimeCalculationLevel())) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-        return true;
+        if ((two.getTime().getTime() - one.getTime().getTime())
+                < (long) (1000 * 60 * getTimeCalculationLevel())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // проверяем нет ли тут предварительных уровней

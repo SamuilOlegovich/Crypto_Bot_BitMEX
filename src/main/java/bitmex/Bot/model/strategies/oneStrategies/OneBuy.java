@@ -44,10 +44,10 @@ public class OneBuy {
                 openInterestMinus = iInfoIndicator;
                 break;
             case DELTA_BID_HL:
-                setDeltaMinus(iInfoIndicator);
+                maxDeltaMinus = iInfoIndicator;
                 break;
             case DELTA_BID:
-                deltaMinus = iInfoIndicator;
+                setDeltaMinus(iInfoIndicator);
                 break;
             case VOLUME:
                 setVolume(iInfoIndicator);
@@ -319,13 +319,12 @@ public class OneBuy {
     }
 
     private boolean isRangeTimeLevel(InfoIndicator one, InfoIndicator two) {
-//        if ((two.getTime().getTime() - one.getTime().getTime())
-//                < (long) (1000 * 60 * getTimeCalculationLevel())) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-        return true;
+        if ((two.getTime().getTime() - one.getTime().getTime())
+                < (long) (1000 * 60 * getTimeCalculationLevel())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // проверяем нет ли тут предварительных уровней

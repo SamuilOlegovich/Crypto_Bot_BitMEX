@@ -114,13 +114,13 @@ public class ConsoleHelper {
                 + "PROFIT === " + Gasket.getPROFIT()
                 + " === итоговый\n\n"
 
-                + "strategyOneRange === " + Gasket.isStrategyOneRange()
+                + "strategyOneRange === " + Gasket.isOb_3()
                 + " === включить выключить стратегию\n"
-                + "strategyOneTime === " + Gasket.isStrategyOneTime()
+                + "strategyOneTime === " + Gasket.isOb_4()
                 + " === включить выключить стратегию\n"
-                + "strategyOne === " + Gasket.isStrategyOne()
+                + "strategyOne === " + Gasket.isOb_2()
                 + " === включить выключить стратегию\n"
-                + "one === " + Gasket.isOne()
+                + "one === " + Gasket.isOb()
                 + " === включить выключить стратегию\n\n"
 
                 + "useStopLevelOrNotStopTime === " + Gasket.getUseStopLevelOrNotStopTime()
@@ -138,22 +138,23 @@ public class ConsoleHelper {
     }
 
     public static void printStatistics() {
-        ConsoleHelper.writeMessage("\n" + "SOS_R_STOP === " + Gasket.getSosRStop() + "\n"
-                + "SOS_R_TAKE === " + Gasket.getSosRTake() + "\n"
-                + "SOS_T_STOP === " + Gasket.getSosTStop() + "\n"
-                + "SOS_T_TAKE === " + Gasket.getSosTTake() + "\n"
-                + "SOB_R_STOP === " + Gasket.getSobRStop() + "\n"
-                + "SOB_R_TAKE === " + Gasket.getSobRTake() + "\n"
-                + "SOB_T_STOP === " + Gasket.getSobTStop() + "\n"
-                + "SOB_T_TAKE === " + Gasket.getSobTTake() + "\n"
-                + "SOS_STOP === " + Gasket.getSosStop() + "\n"
-                + "SOS_TAKE === " + Gasket.getSosTake() + "\n"
-                + "SOB_STOP === " + Gasket.getSobStop() + "\n"
-                + "SOB_TAKE === " + Gasket.getSobTake() + "\n"
-                + "OB_STOP === " + Gasket.getObStop() + "\n"
+        ConsoleHelper.writeMessage("\n"
+                + "OB_4_TAKE === " + Gasket.getOb4Take() + "\n"
+                + "OB_4_STOP === " + Gasket.getOb4Stop() + "\n"
+                + "OS_4_TAKE === " + Gasket.getOs4Take() + "\n"
+                + "OS_4_STOP === " + Gasket.getOs4Stop() + "\n"
+                + "OB_3_TAKE === " + Gasket.getOb3Take() + "\n"
+                + "OB_3_STOP === " + Gasket.getOb3Stop() + "\n"
+                + "OS_3_TAKE === " + Gasket.getOs3Take() + "\n"
+                + "OS_3_STOP === " + Gasket.getOs3Stop() + "\n"
+                + "OB_2_TAKE === " + Gasket.getOb2Take() + "\n"
+                + "OB_2_STOP === " + Gasket.getOb2Stop() + "\n"
+                + "OS_2_TAKE === " + Gasket.getOs2Take() + "\n"
+                + "OS_2_STOP === " + Gasket.getOs2Stop() + "\n"
                 + "OB_TAKE === " + Gasket.getObTake() + "\n"
-                + "OS_STOP === " + Gasket.getOsStop() + "\n"
-                + "OS_TAKE === " + Gasket.getOsTake() + "\n");
+                + "OB_STOP === " + Gasket.getObStop() + "\n"
+                + "OS_TAKE === " + Gasket.getOsTake() + "\n"
+                + "OS_STOP === " + Gasket.getOsStop() + "\n");
     }
 
 

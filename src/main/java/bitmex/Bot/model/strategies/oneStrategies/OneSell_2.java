@@ -6,8 +6,12 @@ import bitmex.Bot.model.Gasket;
 import java.util.Date;
 
 
-public class StrategyOneSell {
-    private static StrategyOneSell strategyOneSell;
+
+
+// плюс минус в такой комбинации стратегия работает надо изучать
+// ее статистику ну и потом можно что-то додумать и дополнить
+public class OneSell_2 {
+    private static OneSell_2 oneSell2;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator openInterestPlus;
@@ -22,12 +26,12 @@ public class StrategyOneSell {
 
 
 
-    private StrategyOneSell() {
+    private OneSell_2() {
     }
 
-    public static StrategyOneSell getInstance() {
-        if (strategyOneSell == null) strategyOneSell = new StrategyOneSell();
-        return strategyOneSell;
+    public static OneSell_2 getInstance() {
+        if (oneSell2 == null) oneSell2 = new OneSell_2();
+        return oneSell2;
     }
 
     public void setIInfoString(InfoIndicator iInfoIndicator) {
@@ -67,16 +71,18 @@ public class StrategyOneSell {
 
         if (inTheRangePrice() && inTheRangeTime() /*&& isReal()*/) {
             if (Gasket.getStrategyWorkOne() == 1) {
-                if (Gasket.isStrategyOneAllFLAG()) {
-                    Gasket.setStrategyOneAllFLAG(false);
+                if (Gasket.isOb_os_Flag()) {
+                    Gasket.setOb_os_Flag(false);
                     new StrategyOneSellThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-SOS", volume, getMin());
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39))
+                                    + "-OS_2", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isStrategyOneSellFLAG()) {
-                    Gasket.setStrategyOneSellFLAG(false);
+                if (Gasket.isOsFlag_2()) {
+                    Gasket.setOsFlag_2(false);
                     new StrategyOneSellThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOS", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OS_2", volume, getMin());
                 }
             }
             maxOpenInterestMinus = null;
@@ -145,7 +151,7 @@ public class StrategyOneSell {
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
 //        Date before = maxDeltaMinus.getTime();
-//        Date after = volume.getTime();
+        Date after = volume.getTime();
 //
 //        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime()
 //                && maxOpenInterestMinus.getTime().getTime() <= before.getTime())
@@ -160,6 +166,11 @@ public class StrategyOneSell {
 //                && (ask.getTime().getTime() >= after.getTime()
 //                && ask.getTime().getTime() <= before.getTime());
 
-        return true;
+        return (maxOpenInterestMinus.getTime().getTime() >= after.getTime())
+                && (openInterestPlus.getTime().getTime() >= after.getTime())
+                && (maxDeltaPlus2.getTime().getTime() >= after.getTime())
+                && (maxDeltaPlus.getTime().getTime() >= after.getTime())
+                && (deltaPlus.getTime().getTime() >= after.getTime())
+                && (ask.getTime().getTime() >= after.getTime());
     }
 }

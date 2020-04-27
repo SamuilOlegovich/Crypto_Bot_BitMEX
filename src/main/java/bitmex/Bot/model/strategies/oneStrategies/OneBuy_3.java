@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.Gasket;
 
 import java.util.Date;
@@ -10,8 +10,8 @@ import static bitmex.Bot.model.Gasket.getTimeCalculationLevel;
 
 
 // решил не удалять уровни, а так все также
-public class StrategyOneBuyRange {
-    private static StrategyOneBuyRange oneBuy;
+public class OneBuy_3 {
+    private static OneBuy_3 oneBuy;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator maxOpenInterestPlus;
@@ -21,11 +21,11 @@ public class StrategyOneBuyRange {
     private InfoIndicator volume;
     private InfoIndicator bid;
 
-    private StrategyOneBuyRange() {
+    private OneBuy_3() {
     }
 
-    public static StrategyOneBuyRange getInstance() {
-        if (oneBuy == null) oneBuy = new StrategyOneBuyRange();
+    public static OneBuy_3 getInstance() {
+        if (oneBuy == null) oneBuy = new OneBuy_3();
         return oneBuy;
     }
 
@@ -124,16 +124,18 @@ public class StrategyOneBuyRange {
 
         if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
             if (Gasket.getStrategyWorkOne() == 1) {
-                if (Gasket.isStrategyOneAllFLAG()) {
-                    Gasket.setStrategyOneAllFLAG(false);
+                if (Gasket.isOb_os_Flag()) {
+                    Gasket.setOb_os_Flag(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOBR", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OB_3", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isOneBuyFLAG()) {
-                    Gasket.setOneBuyFLAG(false);
+                if (Gasket.isObFlag_3()) {
+                    Gasket.setObFlag_3(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOBR", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OB_3", volume, getMin());
                 }
             }
 //            maxOpenInterestMinus = null;

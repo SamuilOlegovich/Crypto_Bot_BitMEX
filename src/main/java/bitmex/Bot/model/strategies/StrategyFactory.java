@@ -5,14 +5,16 @@ import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.strategies.oneStrategies.*;
 import bitmex.Bot.model.Gasket;
 
+
+
 public class StrategyFactory {
     private static StrategyFactory strategyFactory;
-    private StrategyOneSellRange strategyOneSellRange;
-    private StrategyOneBuyRange strategyOneBuyRange;
-    private StrategyOneSellTime strategyOneSellTime;
-    private StrategyOneBuyTime strategyOneBuyTime;
-    private StrategyOneSell strategyOneSell;
-    private StrategyOneBuy strategyOneBuy;
+    private OneSell_4 oneSell4;
+    private OneSell_3 oneSell3;
+    private OneSell_2 oneSell2;
+    private OneBuy_4 oneBuy4;
+    private OneBuy_3 oneBuy3;
+    private OneBuy_2 oneBuy2;
     private OneSell oneSell;
     private OneBuy oneBuy;
 
@@ -27,7 +29,7 @@ public class StrategyFactory {
 
 
     public void onOff(InfoIndicator infoIndicator) {
-        if (Gasket.isOne()) {
+        if (Gasket.isOb()) {
             if (oneBuy == null) {
                 oneBuy = OneBuy.getInstance();
                 oneBuy.setIInfoString(infoIndicator);
@@ -43,51 +45,51 @@ public class StrategyFactory {
             }
         }
 
-        if (Gasket.isStrategyOne()) {
-            if (strategyOneBuy == null) {
-                strategyOneBuy = StrategyOneBuy.getInstance();
-                strategyOneBuy.setIInfoString(infoIndicator);
+        if (Gasket.isOb_2()) {
+            if (oneBuy2 == null) {
+                oneBuy2 = OneBuy_2.getInstance();
+                oneBuy2.setIInfoString(infoIndicator);
             } else {
-                strategyOneBuy.setIInfoString(infoIndicator);
+                oneBuy2.setIInfoString(infoIndicator);
             }
 
-            if (strategyOneSell == null) {
-                strategyOneSell = StrategyOneSell.getInstance();
-                strategyOneSell.setIInfoString(infoIndicator);
+            if (oneSell2 == null) {
+                oneSell2 = OneSell_2.getInstance();
+                oneSell2.setIInfoString(infoIndicator);
             } else {
-                strategyOneSell.setIInfoString(infoIndicator);
-            }
-        }
-
-        if (Gasket.isStrategyOneRange()) {
-            if (strategyOneBuyRange == null) {
-                strategyOneBuyRange = StrategyOneBuyRange.getInstance();
-                strategyOneBuyRange.setIInfoString(infoIndicator);
-            } else {
-                strategyOneBuyRange.setIInfoString(infoIndicator);
-            }
-
-            if (strategyOneSellRange == null) {
-                strategyOneSellRange = StrategyOneSellRange.getInstance();
-                strategyOneSellRange.setIInfoString(infoIndicator);
-            } else {
-                strategyOneSellRange.setIInfoString(infoIndicator);
+                oneSell2.setIInfoString(infoIndicator);
             }
         }
 
-        if (Gasket.isStrategyOne()) {
-            if (strategyOneSellTime == null) {
-                strategyOneSellTime = StrategyOneSellTime.getInstance();
-                strategyOneSellTime.setIInfoString(infoIndicator);
+        if (Gasket.isOb_3()) {
+            if (oneBuy3 == null) {
+                oneBuy3 = OneBuy_3.getInstance();
+                oneBuy3.setIInfoString(infoIndicator);
             } else {
-                strategyOneSellTime.setIInfoString(infoIndicator);
+                oneBuy3.setIInfoString(infoIndicator);
             }
 
-            if (strategyOneBuyTime == null) {
-                strategyOneBuyTime = StrategyOneBuyTime.getInstance();
-                strategyOneBuyTime.setIInfoString(infoIndicator);
+            if (oneSell3 == null) {
+                oneSell3 = OneSell_3.getInstance();
+                oneSell3.setIInfoString(infoIndicator);
             } else {
-                strategyOneBuyTime.setIInfoString(infoIndicator);
+                oneSell3.setIInfoString(infoIndicator);
+            }
+        }
+
+        if (Gasket.isOb_2()) {
+            if (oneSell4 == null) {
+                oneSell4 = OneSell_4.getInstance();
+                oneSell4.setIInfoString(infoIndicator);
+            } else {
+                oneSell4.setIInfoString(infoIndicator);
+            }
+
+            if (oneBuy4 == null) {
+                oneBuy4 = OneBuy_4.getInstance();
+                oneBuy4.setIInfoString(infoIndicator);
+            } else {
+                oneBuy4.setIInfoString(infoIndicator);
             }
         }
     }

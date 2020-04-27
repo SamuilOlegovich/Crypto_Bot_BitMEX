@@ -82,11 +82,12 @@ public class StrategyOneSellThread extends Thread {
     }
 
     private void flag() {
-        if (Gasket.getStrategyWorkOne() == 1) Gasket.setStrategyOneAllFLAG(true);
+        if (Gasket.getStrategyWorkOne() == 1) Gasket.setOb_os_Flag(true);
         else if (Gasket.getStrategyWorkOne() == 2) {
-            if (!Gasket.isStrategyOneBuyRangeFLAG()) Gasket.setStrategyOneBuyRangeFLAG(true);
-            if (!Gasket.isStrategyOneBuyFLAG()) Gasket.setStrategyOneBuyFLAG(true);
-            if (!Gasket.isOneBuyFLAG()) Gasket.setOneBuyFLAG(true);
+            if (!Gasket.isOsFlag_4()) Gasket.setOsFlag_4(true);
+            if (!Gasket.isOsFlag_3()) Gasket.setOsFlag_3(true);
+            if (!Gasket.isOsFlag_2()) Gasket.setOsFlag_2(true);
+            if (!Gasket.isOsFlag()) Gasket.setOsFlag(true);
         }
     }
 

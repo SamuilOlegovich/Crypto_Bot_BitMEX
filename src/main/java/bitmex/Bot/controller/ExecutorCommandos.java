@@ -47,8 +47,8 @@ public class ExecutorCommandos {
                     ConsoleHelper.writeMessage("gameAllDirection === " + Gasket.isGameAllDirection() + "\n");
                     break;
                 case "strategyOneRange":
-                    Gasket.setStrategyOneRange(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("strategyOneRange === " + Gasket.isStrategyOneRange() + "\n");
+                    Gasket.setOb_3(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("strategyOneRange === " + Gasket.isOb_3() + "\n");
                     break;
                 case "useRealOrNotReal":
                     Gasket.setUseRealOrNotReal(strings[1].equalsIgnoreCase("true"));
@@ -59,8 +59,8 @@ public class ExecutorCommandos {
                     ConsoleHelper.writeMessage("strategyWorkOne === " + Gasket.getStrategyWorkOne() + "\n");
                     break;
                 case "strategyOneTime":
-                    Gasket.setStrategyOneTime(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("strategyOneTime === " + Gasket.isStrategyOneTime() + "\n");
+                    Gasket.setOb_4(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("strategyOneTime === " + Gasket.isOb_4() + "\n");
                     break;
                 case "dateDifference":
                     Gasket.setDateDifference(Integer.parseInt(strings[1]));
@@ -79,8 +79,8 @@ public class ExecutorCommandos {
                     ConsoleHelper.writeMessage("gameDirection === " + Gasket.isGameDirection() + "\n");
                     break;
                 case "strategyOne":
-                    Gasket.setStrategyOne(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("strategyOne === " + Gasket.isStrategyOne() + "\n");
+                    Gasket.setOb_2(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("strategyOne === " + Gasket.isOb_2() + "\n");
                     break;
                 case "twoAccounts":
                     Gasket.setTwoAccounts(strings[1].equalsIgnoreCase("true"));
@@ -123,8 +123,8 @@ public class ExecutorCommandos {
                     ConsoleHelper.writeMessage("lot === " + Gasket.getLot() + "\n");
                     break;
                 case "one":
-                    Gasket.setOne(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("one === " + Gasket.isOne() + "\n");
+                    Gasket.setOb(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("one === " + Gasket.isOb() + "\n");
                     break;
                 case "SETTINGS" :
                     if (strings[1].equals("RESTART")) parserSetting.stopAndRestart();

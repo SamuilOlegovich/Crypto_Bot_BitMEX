@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.Gasket;
 
 import java.util.Date;
@@ -10,8 +10,8 @@ import static bitmex.Bot.model.Gasket.getTimeCalculationLevel;
 
 
 // пробую упростить критерии отбора и убрать вторые ненужные уровни
-public class StrategyOneBuyTime {
-    private static StrategyOneBuyTime oneBuy;
+public class OneBuy_4 {
+    private static OneBuy_4 oneBuy;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator maxOpenInterestPlus;
@@ -21,11 +21,11 @@ public class StrategyOneBuyTime {
     private InfoIndicator volume;
     private InfoIndicator bid;
 
-    private StrategyOneBuyTime() {
+    private OneBuy_4() {
     }
 
-    public static StrategyOneBuyTime getInstance() {
-        if (oneBuy == null) oneBuy = new StrategyOneBuyTime();
+    public static OneBuy_4 getInstance() {
+        if (oneBuy == null) oneBuy = new OneBuy_4();
         return oneBuy;
     }
 
@@ -124,18 +124,21 @@ public class StrategyOneBuyTime {
 
         if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
             if (Gasket.getStrategyWorkOne() == 1) {
-                if (Gasket.isStrategyOneAllFLAG()) {
-                    Gasket.setStrategyOneAllFLAG(false);
+                if (Gasket.isOb_os_Flag()) {
+                    Gasket.setOb_os_Flag(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOBT", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OB_4", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isOneBuyFLAG()) {
-                    Gasket.setOneBuyFLAG(false);
+                if (Gasket.isObFlag_4()) {
+                    Gasket.setObFlag_4(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOBT", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OB_4", volume, getMin());
                 }
             }
+
             maxOpenInterestMinus = null;
             maxOpenInterestPlus = null;
             openInterestMinus = null;
@@ -151,7 +154,8 @@ public class StrategyOneBuyTime {
 
     // находим цену самого нижнего уровня
     private InfoIndicator getMin() {
-        InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice() < maxOpenInterestPlus.getPrice()
+        InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice()
+                < maxOpenInterestPlus.getPrice()
                 ? maxOpenInterestMinus : maxOpenInterestPlus;
         infoIndicator = infoIndicator.getPrice() < openInterestMinus.getPrice()
                 ? infoIndicator : openInterestMinus;
@@ -165,7 +169,8 @@ public class StrategyOneBuyTime {
     // не старый ли уровень
     private boolean isTimeNotOld() {
 
-        InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime() > maxOpenInterestPlus.getTime().getTime()
+        InfoIndicator infoIndicator = maxOpenInterestMinus.getTime().getTime()
+                > maxOpenInterestPlus.getTime().getTime()
                 ? maxOpenInterestMinus : maxOpenInterestPlus;
         infoIndicator = infoIndicator.getTime().getTime() > openInterestMinus.getTime().getTime()
                 ? infoIndicator : openInterestMinus;

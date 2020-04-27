@@ -75,25 +75,26 @@ public class TestOrderSell extends Thread {
     }
 
     private void flag() {
-        if (Gasket.getStrategyWorkOne() == 1) Gasket.setStrategyOneAllFLAG(true);
+        if (Gasket.getStrategyWorkOne() == 1) Gasket.setOb_os_Flag(true);
         else if (Gasket.getStrategyWorkOne() == 2) {
-            if (!Gasket.isStrategyOneBuyRangeFLAG()) Gasket.setStrategyOneBuyRangeFLAG(true);
-            if (!Gasket.isStrategyOneBuyFLAG()) Gasket.setStrategyOneBuyFLAG(true);
-            if (!Gasket.isOneBuyFLAG()) Gasket.setOneBuyFLAG(true);
+            if (!Gasket.isOsFlag_4()) Gasket.setOsFlag_4(true);
+            if (!Gasket.isOsFlag_3()) Gasket.setOsFlag_3(true);
+            if (!Gasket.isOsFlag_2()) Gasket.setOsFlag_2(true);
+            if (!Gasket.isOsFlag()) Gasket.setOsFlag(true);
         }
     }
 
     private void setStop() {
-        if (ID.endsWith("-SOST")) Gasket.setSosTStop(Gasket.getSosTStop() + 1);
-        if (ID.endsWith("-SOSR")) Gasket.setSosRStop(Gasket.getSosRStop() + 1);
-        if (ID.endsWith("-SOS")) Gasket.setSosStop(Gasket.getSosStop() + 1);
+        if (ID.endsWith("-OS_4")) Gasket.setOs4Stop(Gasket.getOs4Stop() + 1);
+        if (ID.endsWith("-OS_3")) Gasket.setOs3Stop(Gasket.getOs3Stop() + 1);
+        if (ID.endsWith("-OS_2")) Gasket.setOs2Stop(Gasket.getOs2Stop() + 1);
         if (ID.endsWith("-OS")) Gasket.setOsStop(Gasket.getOsStop() + 1);
     }
 
     private void setTake() {
-        if (ID.endsWith("-SOST")) Gasket.setSosTTake(Gasket.getSosTTake() + 1);
-        if (ID.endsWith("-SOSR")) Gasket.setSosRTake(Gasket.getSosRTake() + 1);
-        if (ID.endsWith("-SOS")) Gasket.setSosTake(Gasket.getSosTake() + 1);
+        if (ID.endsWith("-OS_4")) Gasket.setOs4Take(Gasket.getOs4Take() + 1);
+        if (ID.endsWith("-OS_3")) Gasket.setOs3Take(Gasket.getOs3Take() + 1);
+        if (ID.endsWith("-OS_2")) Gasket.setOs2Take(Gasket.getOs2Take() + 1);
         if (ID.endsWith("-OS")) Gasket.setOsTake(Gasket.getOsTake() + 1);
     }
 }

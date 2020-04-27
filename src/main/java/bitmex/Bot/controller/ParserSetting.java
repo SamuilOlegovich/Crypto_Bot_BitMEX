@@ -119,13 +119,13 @@ public class ParserSetting {
                 + "lot=" + Gasket.getLot()
                 + " ===== количество контрактов\n\n"
 
-                + "strategyOneRange=" + Gasket.isStrategyOneRange()
+                + "strategyOneRange=" + Gasket.isOb_3()
                 + " ===== включить выключить стратегию\n"
-                + "strategyOneTime=" + Gasket.isStrategyOneTime()
+                + "strategyOneTime=" + Gasket.isOb_4()
                 + " ===== включить выключить стратегию\n"
-                + "strategyOne=" + Gasket.isStrategyOne()
+                + "strategyOne=" + Gasket.isOb_2()
                 + " ===== включить выключить стратегию\n"
-                + "one=" + Gasket.isOne()
+                + "one=" + Gasket.isOb()
                 + " ===== включить выключить стратегию\n\n"
 
                 + "useStopLevelOrNotStopTime=" + Gasket.getUseStopLevelOrNotStopTime()

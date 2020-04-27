@@ -250,18 +250,21 @@ public class OneBuy {
 
         if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
             if (Gasket.getStrategyWorkOne() == 1) {
-                if (Gasket.isStrategyOneAllFLAG()) {
-                    Gasket.setStrategyOneAllFLAG(false);
+                if (Gasket.isOb_os_Flag()) {
+                    Gasket.setOb_os_Flag(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-OB", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OB", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isOneBuyFLAG()) {
-                    Gasket.setOneBuyFLAG(false);
+                if (Gasket.isObFlag()) {
+                    Gasket.setObFlag(false);
                     new StrategyOneBuyThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-OB", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OB", volume, getMin());
                 }
             }
+
             maxOpenInterestMinus = null;
             maxOpenInterestPlus = null;
             openInterestMinus = null;

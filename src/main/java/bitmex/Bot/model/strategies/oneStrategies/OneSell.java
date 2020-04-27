@@ -249,16 +249,18 @@ public class OneSell {
 
         if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
             if (Gasket.getStrategyWorkOne() == 1) {
-                if (Gasket.isStrategyOneAllFLAG()) {
-                    Gasket.setStrategyOneAllFLAG(false);
+                if (Gasket.isOb_os_Flag()) {
+                    Gasket.setOb_os_Flag(false);
                     new StrategyOneSellThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "-OS", volume, getMin());
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39))
+                                    + "-OS", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isOneSellFLAG()) {
-                    Gasket.setOneSellFLAG(false);
+                if (Gasket.isOsFlag()) {
+                    Gasket.setOsFlag(false);
                     new StrategyOneSellThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-OS", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OS", volume, getMin());
                 }
             }
             maxOpenInterestMinus = null;

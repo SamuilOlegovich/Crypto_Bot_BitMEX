@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.Gasket;
 
 import java.util.Date;
@@ -9,9 +9,9 @@ import java.util.Date;
 import static bitmex.Bot.model.Gasket.getTimeCalculationLevel;
 
 
-// пробую упростить критерии отбора и убрать вторые ненужные уровни
-public class StrategyOneSellTime {
-    private static StrategyOneSellTime oneSell;
+// решил не удалять уровни, а так все также
+public class OneSell_3 {
+    private static OneSell_3 oneSell;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator openInterestPlus;
@@ -24,11 +24,11 @@ public class StrategyOneSellTime {
 
     private int countDelta = 0;
 
-    private StrategyOneSellTime() {
+    private OneSell_3() {
     }
 
-    public static StrategyOneSellTime getInstance() {
-        if (oneSell == null) oneSell = new StrategyOneSellTime();
+    public static OneSell_3 getInstance() {
+        if (oneSell == null) oneSell = new OneSell_3();
         return oneSell;
     }
 
@@ -47,11 +47,11 @@ public class StrategyOneSellTime {
             case DELTA_ASK:
                 setDeltaPlus(iInfoIndicator);
                 break;
-            case VOLUME:
-                setVolume(iInfoIndicator);
-                break;
             case DELTA_ASK_HL:
                 twoDelta(iInfoIndicator);
+                break;
+            case VOLUME:
+                setVolume(iInfoIndicator);
                 break;
             case ASK:
                 setAsk(iInfoIndicator);
@@ -126,26 +126,28 @@ public class StrategyOneSellTime {
 
         if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
             if (Gasket.getStrategyWorkOne() == 1) {
-                if (Gasket.isStrategyOneAllFLAG()) {
-                    Gasket.setStrategyOneAllFLAG(false);
+                if (Gasket.isOb_os_Flag()) {
+                    Gasket.setOb_os_Flag(false);
                     new StrategyOneSellThread(
-                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39)) + "- SOST", volume, getMin());
+                            ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39))
+                                    + "-OS_3", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isOneSellFLAG()) {
-                    Gasket.setOneSellFLAG(false);
+                if (Gasket.isOsFlag_3()) {
+                    Gasket.setOsFlag_3(false);
                     new StrategyOneSellThread(
-                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39)) + "-SOST", volume, getMin());
+                            ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                                    + "-OS_3", volume, getMin());
                 }
             }
-            maxOpenInterestMinus = null;
-            openInterestPlus = null;
-            maxDeltaMinus = null;
-            maxDeltaPlus2 = null;
-            maxDeltaPlus = null;
-            deltaPlus = null;
-            volume = null;
-            ask = null;
+//            maxOpenInterestMinus = null;
+//            openInterestPlus = null;
+//            maxDeltaMinus = null;
+//            maxDeltaPlus2 = null;
+//            maxDeltaPlus = null;
+//            deltaPlus = null;
+//            volume = null;
+//            ask = null;
         }
     }
 
@@ -169,7 +171,6 @@ public class StrategyOneSellTime {
             return true;
         } else return false;
     }
-
 
     // находим найвысший элемен, это и будет точка минимум для села
     private InfoIndicator getMin() {
@@ -236,3 +237,4 @@ public class StrategyOneSellTime {
                 && (ask.getTime().getTime() >= after.getTime());
     }
 }
+

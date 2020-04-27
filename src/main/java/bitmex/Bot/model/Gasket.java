@@ -12,13 +12,7 @@ import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
 public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
-    private static volatile boolean strategyOneSellRangeFLAG = true;
-    private static volatile boolean strategyOneSellTimeFLAG = true;
-    private static volatile boolean strategyOneBuyRangeFLAG = true;
-    private static volatile boolean strategyOneBuyTimeFLAG = true;
-    private static volatile boolean strategyOneSellFLAG = true;
-    private static volatile boolean strategyOneBuyFLAG = true;
-    private static volatile boolean strategyOneAllFLAG = true;
+
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
     private static volatile boolean oneSellFLAG = true;
@@ -53,25 +47,36 @@ public class Gasket {
     private static String path = "";
     private static int PORT = 4444;             // порт подключения
 
+        // флаги
+    private static volatile boolean ob_os_Flag = true;
+    private static volatile boolean osFlag_4 = true;
+    private static volatile boolean obFlag_4 = true;
+    private static volatile boolean obFlag_3 = true;
+    private static volatile boolean osFlag_3 = true;
+    private static volatile boolean obFlag_2 = true;
+    private static volatile boolean osFlag_2 = true;
+    private static volatile boolean obFlag = true;
+    private static volatile boolean osFlag = true;
+
         // включаем отключаем стратегии
-    private static boolean strategyOneRange = true;
-    private static boolean strategyOneTime = true;
-    private static boolean strategyOne = true;
-    private static boolean one = true;
+    private static boolean ob_4 = true;
+    private static boolean ob_3 = true;
+    private static boolean ob_2 = true;
+    private static boolean ob = true;
 
             // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика)
-    private static int SOS_R_STOP = 0;
-    private static int SOS_R_TAKE = 0;
-    private static int SOS_T_STOP = 0;
-    private static int SOS_T_TAKE = 0;
-    private static int SOB_R_STOP = 0;
-    private static int SOB_R_TAKE = 0;
-    private static int SOB_T_STOP = 0;
-    private static int SOB_T_TAKE = 0;
-    private static int SOS_STOP = 0;
-    private static int SOS_TAKE = 0;
-    private static int SOB_STOP = 0;
-    private static int SOB_TAKE = 0;
+    private static int OB_4_TAKE = 0;
+    private static int OB_4_STOP = 0;
+    private static int OS_4_TAKE = 0;
+    private static int OS_4_STOP = 0;
+    private static int OB_3_TAKE = 0;
+    private static int OB_3_STOP = 0;
+    private static int OS_3_TAKE = 0;
+    private static int OS_3_STOP = 0;
+    private static int OB_2_TAKE = 0;
+    private static int OB_2_STOP = 0;
+    private static int OS_2_TAKE = 0;
+    private static int OS_2_STOP = 0;
     private static int OB_STOP = 0;
     private static int OB_TAKE = 0;
     private static int OS_STOP = 0;
@@ -100,22 +105,6 @@ public class Gasket {
 
     public static void setBitmexClient2Accounts(BitmexClient bitmexClient2Accounts) {
         Gasket.bitmexClient2Accounts = bitmexClient2Accounts;
-    }
-
-    public static synchronized boolean isStrategyOneSellFLAG() {
-        return strategyOneSellFLAG;
-    }
-
-    public static synchronized void setStrategyOneSellFLAG(boolean strategyOneSellFLAG) {
-        Gasket.strategyOneSellFLAG = strategyOneSellFLAG;
-    }
-
-    public static synchronized boolean isStrategyOneBuyFLAG() {
-        return Gasket.strategyOneBuyFLAG;
-    }
-
-    public static synchronized void setStrategyOneBuyFLAG(boolean strategyOneBuyFLAG) {
-        Gasket.strategyOneBuyFLAG = strategyOneBuyFLAG;
     }
 
     public static BitmexChartData getBitmexChartData() {
@@ -160,14 +149,6 @@ public class Gasket {
 
     public static Ticker getTicker() {
         return Gasket.ticker;
-    }
-
-    public static boolean isStrategyOneAllFLAG() {
-        return Gasket.strategyOneAllFLAG;
-    }
-
-    public static void setStrategyOneAllFLAG(boolean strategyOneAllFLAG) {
-        Gasket.strategyOneAllFLAG = strategyOneAllFLAG;
     }
 
     public static void setTicker(Ticker ticker) {
@@ -220,22 +201,6 @@ public class Gasket {
 
     public static void setRangeLevel(double rangeLevel) {
         Gasket.rangeLevel = rangeLevel;
-    }
-
-    public static boolean isStrategyOneBuyRangeFLAG() {
-        return strategyOneBuyRangeFLAG;
-    }
-
-    public static void setStrategyOneBuyRangeFLAG(boolean strategyOneBuyRangeFLAG) {
-        Gasket.strategyOneBuyRangeFLAG = strategyOneBuyRangeFLAG;
-    }
-
-    public static boolean isStrategyOneSellRangeFLAG() {
-        return strategyOneSellRangeFLAG;
-    }
-
-    public static void setStrategyOneSellRangeFLAG(boolean strategyOneSellRangeFLAG) {
-        Gasket.strategyOneSellRangeFLAG = strategyOneSellRangeFLAG;
     }
 
     public static int getDateDifference() {
@@ -328,100 +293,100 @@ public class Gasket {
 
 
 
-    public static int getSosRStop() {
-        return SOS_R_STOP;
+    public static int getOs3Stop() {
+        return OS_3_STOP;
     }
 
-    public static void setSosRStop(int sosRStop) {
-        SOS_R_STOP = sosRStop;
+    public static void setOs3Stop(int os3Stop) {
+        OS_3_STOP = os3Stop;
     }
 
-    public static int getSosRTake() {
-        return SOS_R_TAKE;
+    public static int getOs3Take() {
+        return OS_3_TAKE;
     }
 
-    public static void setSosRTake(int sosRTake) {
-        SOS_R_TAKE = sosRTake;
+    public static void setOs3Take(int os3Take) {
+        OS_3_TAKE = os3Take;
     }
 
-    public static int getSosTStop() {
-        return SOS_T_STOP;
+    public static int getOs4Stop() {
+        return OS_4_STOP;
     }
 
-    public static void setSosTStop(int sosTStop) {
-        SOS_T_STOP = sosTStop;
+    public static void setOs4Stop(int os4Stop) {
+        OS_4_STOP = os4Stop;
     }
 
-    public static int getSosTTake() {
-        return SOS_T_TAKE;
+    public static int getOs4Take() {
+        return OS_4_TAKE;
     }
 
-    public static void setSosTTake(int sosTTake) {
-        SOS_T_TAKE = sosTTake;
+    public static void setOs4Take(int os4Take) {
+        OS_4_TAKE = os4Take;
     }
 
-    public static int getSobRStop() {
-        return SOB_R_STOP;
+    public static int getOb3Stop() {
+        return OB_3_STOP;
     }
 
-    public static void setSobRStop(int sobRStop) {
-        SOB_R_STOP = sobRStop;
+    public static void setOb3Stop(int ob3Stop) {
+        OB_3_STOP = ob3Stop;
     }
 
-    public static int getSobRTake() {
-        return SOB_R_TAKE;
+    public static int getOb3Take() {
+        return OB_3_TAKE;
     }
 
-    public static void setSobRTake(int sobRTake) {
-        SOB_R_TAKE = sobRTake;
+    public static void setOb3Take(int ob3Take) {
+        OB_3_TAKE = ob3Take;
     }
 
-    public static int getSobTStop() {
-        return SOB_T_STOP;
+    public static int getOb4Stop() {
+        return OB_4_STOP;
     }
 
-    public static void setSobTStop(int sobTStop) {
-        SOB_T_STOP = sobTStop;
+    public static void setOb4Stop(int ob4Stop) {
+        OB_4_STOP = ob4Stop;
     }
 
-    public static int getSobTTake() {
-        return SOB_T_TAKE;
+    public static int getOb4Take() {
+        return OB_4_TAKE;
     }
 
-    public static void setSobTTake(int sobTTake) {
-        SOB_T_TAKE = sobTTake;
+    public static void setOb4Take(int ob4Take) {
+        OB_4_TAKE = ob4Take;
     }
 
-    public static int getSosStop() {
-        return SOS_STOP;
+    public static int getOs2Stop() {
+        return OS_2_STOP;
     }
 
-    public static void setSosStop(int sosStop) {
-        SOS_STOP = sosStop;
+    public static void setOs2Stop(int os2Stop) {
+        OS_2_STOP = os2Stop;
     }
 
-    public static int getSosTake() {
-        return SOS_TAKE;
+    public static int getOs2Take() {
+        return OS_2_TAKE;
     }
 
-    public static void setSosTake(int sosTake) {
-        SOS_TAKE = sosTake;
+    public static void setOs2Take(int os2Take) {
+        OS_2_TAKE = os2Take;
     }
 
-    public static int getSobStop() {
-        return SOB_STOP;
+    public static int getOb2Stop() {
+        return OB_2_STOP;
     }
 
-    public static void setSobStop(int sobStop) {
-        SOB_STOP = sobStop;
+    public static void setOb2Stop(int ob2Stop) {
+        OB_2_STOP = ob2Stop;
     }
 
-    public static int getSobTake() {
-        return SOB_TAKE;
+    public static int getOb2Take() {
+        return OB_2_TAKE;
     }
 
-    public static void setSobTake(int sobTake) {
-        SOB_TAKE = sobTake;
+    public static void setOb2Take(int ob2Take) {
+        OB_2_TAKE = ob2Take;
     }
 
     public static int getObStop() {
@@ -490,36 +455,36 @@ public class Gasket {
         Gasket.PORT = PORT;
     }
 
-    public static boolean isStrategyOneRange() {
-        return strategyOneRange;
+    public static boolean isOb_3() {
+        return ob_3;
     }
 
-    public static void setStrategyOneRange(boolean strategyOneRange) {
-        Gasket.strategyOneRange = strategyOneRange;
+    public static void setOb_3(boolean ob_3) {
+        Gasket.ob_3 = ob_3;
     }
 
-    public static boolean isStrategyOneTime() {
-        return strategyOneTime;
+    public static boolean isOb_4() {
+        return ob_4;
     }
 
-    public static void setStrategyOneTime(boolean strategyOneTime) {
-        Gasket.strategyOneTime = strategyOneTime;
+    public static void setOb_4(boolean ob_4) {
+        Gasket.ob_4 = ob_4;
     }
 
-    public static boolean isStrategyOne() {
-        return strategyOne;
+    public static boolean isOb_2() {
+        return ob_2;
     }
 
-    public static void setStrategyOne(boolean strategyOne) {
-        Gasket.strategyOne = strategyOne;
+    public static void setOb_2(boolean ob_2) {
+        Gasket.ob_2 = ob_2;
     }
 
-    public static boolean isOne() {
-        return one;
+    public static boolean isOb() {
+        return ob;
     }
 
-    public static void setOne(boolean one) {
-        Gasket.one = one;
+    public static void setOb(boolean ob) {
+        Gasket.ob = ob;
     }
 
     public static boolean isUseStopLevelOrNotStop() {
@@ -536,22 +501,6 @@ public class Gasket {
 
     public static void setUseStopLevelOrNotStopTime(int useStopLevelOrNotStopTime) {
         Gasket.useStopLevelOrNotStopTime = useStopLevelOrNotStopTime;
-    }
-
-    public static boolean isStrategyOneSellTimeFLAG() {
-        return strategyOneSellTimeFLAG;
-    }
-
-    public static void setStrategyOneSellTimeFLAG(boolean strategyOneSellTimeFLAG) {
-        Gasket.strategyOneSellTimeFLAG = strategyOneSellTimeFLAG;
-    }
-
-    public static boolean isStrategyOneBuyTimeFLAG() {
-        return strategyOneBuyTimeFLAG;
-    }
-
-    public static void setStrategyOneBuyTimeFLAG(boolean strategyOneBuyTimeFLAG) {
-        Gasket.strategyOneBuyTimeFLAG = strategyOneBuyTimeFLAG;
     }
 
     public static String getPath() {
@@ -576,5 +525,77 @@ public class Gasket {
 
     public static void setTimeCalculationCombinationLevel(int timeCalculationCombinationLevel) {
         Gasket.timeCalculationCombinationLevel = timeCalculationCombinationLevel;
+    }
+
+    public static boolean isOb_os_Flag() {
+        return ob_os_Flag;
+    }
+
+    public static void setOb_os_Flag(boolean ob_os_Flag) {
+        Gasket.ob_os_Flag = ob_os_Flag;
+    }
+
+    public static boolean isOsFlag_4() {
+        return osFlag_4;
+    }
+
+    public static void setOsFlag_4(boolean osFlag_4) {
+        Gasket.osFlag_4 = osFlag_4;
+    }
+
+    public static boolean isObFlag_4() {
+        return obFlag_4;
+    }
+
+    public static void setObFlag_4(boolean obFlag_4) {
+        Gasket.obFlag_4 = obFlag_4;
+    }
+
+    public static boolean isObFlag_3() {
+        return obFlag_3;
+    }
+
+    public static void setObFlag_3(boolean obFlag_3) {
+        Gasket.obFlag_3 = obFlag_3;
+    }
+
+    public static boolean isOsFlag_3() {
+        return osFlag_3;
+    }
+
+    public static void setOsFlag_3(boolean osFlag_3) {
+        Gasket.osFlag_3 = osFlag_3;
+    }
+
+    public static boolean isObFlag_2() {
+        return obFlag_2;
+    }
+
+    public static void setObFlag_2(boolean obFlag_2) {
+        Gasket.obFlag_2 = obFlag_2;
+    }
+
+    public static boolean isOsFlag_2() {
+        return osFlag_2;
+    }
+
+    public static void setOsFlag_2(boolean osFlag_2) {
+        Gasket.osFlag_2 = osFlag_2;
+    }
+
+    public static boolean isObFlag() {
+        return obFlag;
+    }
+
+    public static void setObFlag(boolean obFlag) {
+        Gasket.obFlag = obFlag;
+    }
+
+    public static boolean isOsFlag() {
+        return osFlag;
+    }
+
+    public static void setOsFlag(boolean osFlag) {
+        Gasket.osFlag = osFlag;
     }
 }

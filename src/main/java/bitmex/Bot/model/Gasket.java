@@ -10,9 +10,7 @@ import java.util.List;
 import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
 
 public class Gasket {
-
             // флаги для разных режимов работы стратегий (можно дорабоать)
-
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
     private static volatile boolean oneSellFLAG = true;
@@ -49,6 +47,8 @@ public class Gasket {
 
         // флаги
     private static volatile boolean ob_os_Flag = true;
+    private static volatile boolean osFlag_5 = true;
+    private static volatile boolean obFlag_5 = true;
     private static volatile boolean osFlag_4 = true;
     private static volatile boolean obFlag_4 = true;
     private static volatile boolean obFlag_3 = true;
@@ -59,12 +59,17 @@ public class Gasket {
     private static volatile boolean osFlag = true;
 
         // включаем отключаем стратегии
+    private static boolean ob_5 = true;
     private static boolean ob_4 = true;
     private static boolean ob_3 = true;
     private static boolean ob_2 = true;
     private static boolean ob = true;
 
             // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика)
+    private static int OB_5_TAKE = 0;
+    private static int OB_5_STOP = 0;
+    private static int OS_5_TAKE = 0;
+    private static int OS_5_STOP = 0;
     private static int OB_4_TAKE = 0;
     private static int OB_4_STOP = 0;
     private static int OS_4_TAKE = 0;
@@ -597,5 +602,61 @@ public class Gasket {
 
     public static void setOsFlag(boolean osFlag) {
         Gasket.osFlag = osFlag;
+    }
+
+    public static boolean isOb_5() {
+        return ob_5;
+    }
+
+    public static void setOb_5(boolean ob_5) {
+        Gasket.ob_5 = ob_5;
+    }
+
+    public static boolean isOsFlag_5() {
+        return osFlag_5;
+    }
+
+    public static void setOsFlag_5(boolean osFlag_5) {
+        Gasket.osFlag_5 = osFlag_5;
+    }
+
+    public static boolean isObFlag_5() {
+        return obFlag_5;
+    }
+
+    public static void setObFlag_5(boolean obFlag_5) {
+        Gasket.obFlag_5 = obFlag_5;
+    }
+
+    public static int getOb5Take() {
+        return OB_5_TAKE;
+    }
+
+    public static void setOb5Take(int ob5Take) {
+        OB_5_TAKE = ob5Take;
+    }
+
+    public static int getOb5Stop() {
+        return OB_5_STOP;
+    }
+
+    public static void setOb5Stop(int ob5Stop) {
+        OB_5_STOP = ob5Stop;
+    }
+
+    public static int getOs5Take() {
+        return OS_5_TAKE;
+    }
+
+    public static void setOs5Take(int os5Take) {
+        OS_5_TAKE = os5Take;
+    }
+
+    public static int getOs5Stop() {
+        return OS_5_STOP;
+    }
+
+    public static void setOs5Stop(int os5Stop) {
+        OS_5_STOP = os5Stop;
     }
 }

@@ -1,17 +1,16 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.serverAndParser.InfoIndicator;
 
 import java.util.Date;
 
 import static bitmex.Bot.model.Gasket.getTimeCalculationLevel;
 
 
-// пробую упростить критерии отбора и убрать вторые ненужные уровни
-public class OneBuy_4 {
-    private static OneBuy_4 oneBuy;
+// тоже самое что и OneBuy_4 только убраны setBid и setDeltaMinus
+public class OneBuy_5 {
+    private static OneBuy_5 oneBuy;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator maxOpenInterestPlus;
@@ -21,11 +20,11 @@ public class OneBuy_4 {
     private InfoIndicator volume;
     private InfoIndicator bid;
 
-    private OneBuy_4() {
+    private OneBuy_5() {
     }
 
-    public static OneBuy_4 getInstance() {
-        if (oneBuy == null) oneBuy = new OneBuy_4();
+    public static OneBuy_5 getInstance() {
+        if (oneBuy == null) oneBuy = new OneBuy_5();
         return oneBuy;
     }
 
@@ -46,13 +45,15 @@ public class OneBuy_4 {
                 maxDeltaMinus = iInfoIndicator;
                 break;
             case DELTA_BID:
-                setDeltaMinus(iInfoIndicator);
+//                setDeltaMinus(iInfoIndicator);
+                deltaMinus = iInfoIndicator;
                 break;
             case VOLUME:
                 setVolume(iInfoIndicator);
                 break;
             case BID:
-                setBid(iInfoIndicator);
+//                setBid(iInfoIndicator);
+                bid = iInfoIndicator;
                 break;
         }
         makeADecision();
@@ -60,58 +61,58 @@ public class OneBuy_4 {
 
 
 
-    private void setBid(InfoIndicator infoIndicator) {
-        if (bid == null || !isRangeTimeLevel(bid, infoIndicator)) {
-            bid = infoIndicator;
-        } else if (bid.getPrice() > infoIndicator.getPrice()
-                && isRangeTimeLevel(bid, infoIndicator)
-                && (bid.getPeriod() == infoIndicator.getPeriod())) {
-            bid = infoIndicator;
-        } else if (isRangeTimeLevel(bid, infoIndicator)
-                && isBigTimeFrame(bid, infoIndicator)) {
-                bid = infoIndicator;
-        } else if (isRangeTimeLevel(bid, infoIndicator)
-                && !isBigTimeFrame(bid, infoIndicator)
-                && bid.getPrice() < infoIndicator.getPrice()) {
-            bid = infoIndicator;
-        }
-    }
+//    private void setBid(InfoIndicator infoIndicator) {
+//        if (bid == null || !isRangeTimeLevel(bid, infoIndicator)) {
+//            bid = infoIndicator;
+//        } else if (bid.getPrice() > infoIndicator.getPrice()
+//                && isRangeTimeLevel(bid, infoIndicator)
+//                && (bid.getPeriod() == infoIndicator.getPeriod())) {
+//            bid = infoIndicator;
+//        } else if (isRangeTimeLevel(bid, infoIndicator)
+//                && isBigTimeFrame(bid, infoIndicator)) {
+//            bid = infoIndicator;
+//        } else if (isRangeTimeLevel(bid, infoIndicator)
+//                && !isBigTimeFrame(bid, infoIndicator)
+//                && bid.getPrice() < infoIndicator.getPrice()) {
+//            bid = infoIndicator;
+//        }
+//    }
 
 
 
-    private void setDeltaMinus(InfoIndicator infoIndicator) {
-        if (deltaMinus == null || !isRangeTimeLevel(deltaMinus, infoIndicator)) {
-            deltaMinus = infoIndicator;
-        } else if (deltaMinus.getPrice() > infoIndicator.getPrice()
-                && isRangeTimeLevel(deltaMinus, infoIndicator)
-                && (deltaMinus.getPeriod() == infoIndicator.getPeriod())) {
-            deltaMinus = infoIndicator;
-        } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
-                && isBigTimeFrame(deltaMinus, infoIndicator)) {
-            deltaMinus = infoIndicator;
-        } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
-                && !isBigTimeFrame(deltaMinus, infoIndicator)
-                && deltaMinus.getPrice() < infoIndicator.getPrice()) {
-            deltaMinus = infoIndicator;
-        }
-    }
+//    private void setDeltaMinus(InfoIndicator infoIndicator) {
+//        if (deltaMinus == null || !isRangeTimeLevel(deltaMinus, infoIndicator)) {
+//            deltaMinus = infoIndicator;
+//        } else if (deltaMinus.getPrice() > infoIndicator.getPrice()
+//                && isRangeTimeLevel(deltaMinus, infoIndicator)
+//                && (deltaMinus.getPeriod() == infoIndicator.getPeriod())) {
+//            deltaMinus = infoIndicator;
+//        } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
+//                && isBigTimeFrame(deltaMinus, infoIndicator)) {
+//            deltaMinus = infoIndicator;
+//        } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
+//                && !isBigTimeFrame(deltaMinus, infoIndicator)
+//                && deltaMinus.getPrice() < infoIndicator.getPrice()) {
+//            deltaMinus = infoIndicator;
+//        }
+//    }
 
 
     private void setVolume(InfoIndicator infoIndicator) {
         // если уровня нет или уровень просрочен назнааем его
         if (volume == null || !isRangeTimeLevel(volume, infoIndicator)) {
             volume = infoIndicator;
-        // уровень есть, но к нам пришел уровень того же таймфрейма - но ниже ценой - заменяем его
+            // уровень есть, но к нам пришел уровень того же таймфрейма - но ниже ценой - заменяем его
         } else if (volume.getPrice() > infoIndicator.getPrice()
                 && isRangeTimeLevel(volume, infoIndicator)
                 && (volume.getPeriod() == infoIndicator.getPeriod())) {
             volume = infoIndicator;
-        // уровень есть, но к нам пришел уровень большего таймфрейма - заменяем его
+            // уровень есть, но к нам пришел уровень большего таймфрейма - заменяем его
         } else if (isRangeTimeLevel(volume, infoIndicator)
                 && isBigTimeFrame(volume, infoIndicator)) {
             volume = infoIndicator;
-        // уровень есть, но к нам пришел уровень таймфрейма ниже, проверяем его цену и если он
-        // выше по цене уровня высшего таймфрейма то заменяем его
+            // уровень есть, но к нам пришел уровень таймфрейма ниже, проверяем его цену и если он
+            // выше по цене уровня высшего таймфрейма то заменяем его
         } else if (isRangeTimeLevel(volume, infoIndicator)
                 && !isBigTimeFrame(volume, infoIndicator)
                 && volume.getPrice() < infoIndicator.getPrice()) {
@@ -141,14 +142,14 @@ public class OneBuy_4 {
                     Gasket.setOb_os_Flag(false);
                     new StrategyOneBuyThread(
                             ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                                    + "-OB_4", volume, getMin());
+                                    + "-OB_5", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isObFlag_4()) {
-                    Gasket.setObFlag_4(false);
+                if (Gasket.isObFlag_5()) {
+                    Gasket.setObFlag_5(false);
                     new StrategyOneBuyThread(
                             ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                                    + "-OB_4", volume, getMin());
+                                    + "-OB_5", volume, getMin());
                 }
             }
 //            maxOpenInterestMinus = null;

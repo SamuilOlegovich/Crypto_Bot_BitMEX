@@ -58,7 +58,6 @@ public class OneBuy_2 {
 
     // принимаем решение
     private synchronized void makeADecision() {
-
         if (volume == null || bid == null || deltaMinus == null || openInterestMinus == null
                 || maxOpenInterestPlus == null || maxOpenInterestMinus == null
                 || maxDeltaMinus == null) {

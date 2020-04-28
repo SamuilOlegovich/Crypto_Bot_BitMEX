@@ -9,9 +9,11 @@ import bitmex.Bot.model.Gasket;
 
 public class StrategyFactory {
     private static StrategyFactory strategyFactory;
+    private OneSell_5 oneSell5;
     private OneSell_4 oneSell4;
     private OneSell_3 oneSell3;
     private OneSell_2 oneSell2;
+    private OneBuy_5 oneBuy5;
     private OneBuy_4 oneBuy4;
     private OneBuy_3 oneBuy3;
     private OneBuy_2 oneBuy2;
@@ -90,6 +92,22 @@ public class StrategyFactory {
                 oneBuy4.setIInfoString(infoIndicator);
             } else {
                 oneBuy4.setIInfoString(infoIndicator);
+            }
+        }
+
+        if (Gasket.isOb_5()) {
+            if (oneSell5 == null) {
+                oneSell5 = OneSell_5.getInstance();
+                oneSell5.setIInfoString(infoIndicator);
+            } else {
+                oneSell5.setIInfoString(infoIndicator);
+            }
+
+            if (oneBuy5 == null) {
+                oneBuy5 = OneBuy_5.getInstance();
+                oneBuy5.setIInfoString(infoIndicator);
+            } else {
+                oneBuy5.setIInfoString(infoIndicator);
             }
         }
     }

@@ -83,6 +83,7 @@ public class StrategyOneBuyThread extends Thread {
     private void flag() {
         if (Gasket.getStrategyWorkOne() == 1) Gasket.setOb_os_Flag(true);
         else if (Gasket.getStrategyWorkOne() == 2) {
+            if (!Gasket.isObFlag_5()) Gasket.setObFlag_5(true);
             if (!Gasket.isObFlag_4()) Gasket.setObFlag_4(true);
             if (!Gasket.isObFlag_3()) Gasket.setObFlag_3(true);
             if (!Gasket.isObFlag_2()) Gasket.setObFlag_2(true);

@@ -140,6 +140,10 @@ public class ConsoleHelper {
 
     public static void printStatistics() {
         ConsoleHelper.writeMessage("\n"
+                + "OB_5_TAKE === " + Gasket.getOb5Take() + "\n"
+                + "OB_5_STOP === " + Gasket.getOb5Stop() + "\n"
+                + "OS_5_TAKE === " + Gasket.getOs5Take() + "\n"
+                + "OS_5_STOP === " + Gasket.getOs5Stop() + "\n"
                 + "OB_4_TAKE === " + Gasket.getOb4Take() + "\n"
                 + "OB_4_STOP === " + Gasket.getOb4Stop() + "\n"
                 + "OS_4_TAKE === " + Gasket.getOs4Take() + "\n"
@@ -161,6 +165,8 @@ public class ConsoleHelper {
 
     public static void printFlag() {
         ConsoleHelper.writeMessage("\n"
+                + "OB_5 === " + Gasket.isObFlag_5() + "\n"
+                + "OS_5 === " + Gasket.isOsFlag_5() + "\n"
                 + "OB_4 === " + Gasket.isObFlag_4() + "\n"
                 + "OS_4 === " + Gasket.isOsFlag_4() + "\n"
                 + "OB_3 === " + Gasket.isObFlag_3() + "\n"

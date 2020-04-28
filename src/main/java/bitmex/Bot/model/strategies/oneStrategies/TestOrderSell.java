@@ -85,6 +85,7 @@ public class TestOrderSell extends Thread {
     }
 
     private void setStop() {
+        if (ID.endsWith("-OS_5")) Gasket.setOs5Stop(Gasket.getOs5Stop() + 1);
         if (ID.endsWith("-OS_4")) Gasket.setOs4Stop(Gasket.getOs4Stop() + 1);
         if (ID.endsWith("-OS_3")) Gasket.setOs3Stop(Gasket.getOs3Stop() + 1);
         if (ID.endsWith("-OS_2")) Gasket.setOs2Stop(Gasket.getOs2Stop() + 1);
@@ -92,6 +93,7 @@ public class TestOrderSell extends Thread {
     }
 
     private void setTake() {
+        if (ID.endsWith("-OS_5")) Gasket.setOs5Take(Gasket.getOs5Take() + 1);
         if (ID.endsWith("-OS_4")) Gasket.setOs4Take(Gasket.getOs4Take() + 1);
         if (ID.endsWith("-OS_3")) Gasket.setOs3Take(Gasket.getOs3Take() + 1);
         if (ID.endsWith("-OS_2")) Gasket.setOs2Take(Gasket.getOs2Take() + 1);

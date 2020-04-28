@@ -1,17 +1,14 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
-import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.serverAndParser.InfoIndicator;
 
 import java.util.Date;
 
 import static bitmex.Bot.model.Gasket.getTimeCalculationLevel;
 
-
-// пробую упростить критерии отбора и убрать вторые ненужные уровни
-public class OneSell_4 {
-    private static OneSell_4 oneSell;
+public class OneSell_5 {
+    private static OneSell_5 oneSell;
 
     private InfoIndicator maxOpenInterestMinus;
     private InfoIndicator openInterestPlus;
@@ -24,11 +21,11 @@ public class OneSell_4 {
 
     private int countDelta = 0;
 
-    private OneSell_4() {
+    private OneSell_5() {
     }
 
-    public static OneSell_4 getInstance() {
-        if (oneSell == null) oneSell = new OneSell_4();
+    public static OneSell_5 getInstance() {
+        if (oneSell == null) oneSell = new OneSell_5();
         return oneSell;
     }
 
@@ -45,7 +42,8 @@ public class OneSell_4 {
                 maxDeltaMinus = iInfoIndicator;
                 break;
             case DELTA_ASK:
-                setDeltaPlus(iInfoIndicator);
+//                setDeltaPlus(iInfoIndicator);
+                deltaPlus = iInfoIndicator;
                 break;
             case VOLUME:
                 setVolume(iInfoIndicator);
@@ -54,7 +52,8 @@ public class OneSell_4 {
                 twoDelta(iInfoIndicator);
                 break;
             case ASK:
-                setAsk(iInfoIndicator);
+//                setAsk(iInfoIndicator);
+                ask = iInfoIndicator;
                 break;
         }
         makeADecision();
@@ -62,40 +61,40 @@ public class OneSell_4 {
 
 
 
-    private void setAsk(InfoIndicator infoIndicator) {
-        if (ask == null || !isRangeTimeLevel(ask, infoIndicator)) {
-            ask = infoIndicator;
-        } else if (ask.getPrice() < infoIndicator.getPrice()
-                && isRangeTimeLevel(ask, infoIndicator)
-                && (ask.getPeriod() == infoIndicator.getPeriod())) {
-            ask = infoIndicator;
-        } else if (isRangeTimeLevel(ask, infoIndicator)
-                && isBigTimeFrame(ask, infoIndicator)) {
-            ask = infoIndicator;
-        } else if (isRangeTimeLevel(ask, infoIndicator)
-                && !isBigTimeFrame(ask, infoIndicator)
-                && ask.getPrice() > infoIndicator.getPrice()) {
-            ask = infoIndicator;
-        }
-    }
+//    private void setAsk(InfoIndicator infoIndicator) {
+//        if (ask == null || !isRangeTimeLevel(ask, infoIndicator)) {
+//            ask = infoIndicator;
+//        } else if (ask.getPrice() < infoIndicator.getPrice()
+//                && isRangeTimeLevel(ask, infoIndicator)
+//                && (ask.getPeriod() == infoIndicator.getPeriod())) {
+//            ask = infoIndicator;
+//        } else if (isRangeTimeLevel(ask, infoIndicator)
+//                && isBigTimeFrame(ask, infoIndicator)) {
+//            ask = infoIndicator;
+//        } else if (isRangeTimeLevel(ask, infoIndicator)
+//                && !isBigTimeFrame(ask, infoIndicator)
+//                && ask.getPrice() > infoIndicator.getPrice()) {
+//            ask = infoIndicator;
+//        }
+//    }
 
 
-    private void setDeltaPlus(InfoIndicator infoIndicator) {
-        if (deltaPlus == null || !isRangeTimeLevel(deltaPlus, infoIndicator)) {
-            deltaPlus = infoIndicator;
-        } else if (deltaPlus.getPrice() < infoIndicator.getPrice()
-                && isRangeTimeLevel(deltaPlus, infoIndicator)
-                && (deltaPlus.getPeriod() == infoIndicator.getPeriod())) {
-            deltaPlus = infoIndicator;
-        } else if (isRangeTimeLevel(deltaPlus, infoIndicator)
-                && isBigTimeFrame(deltaPlus, infoIndicator)) {
-            deltaPlus = infoIndicator;
-        } else if (isRangeTimeLevel(deltaPlus, infoIndicator)
-                && !isBigTimeFrame(deltaPlus, infoIndicator)
-                && deltaPlus.getPrice() > infoIndicator.getPrice()) {
-            deltaPlus = infoIndicator;
-        }
-    }
+//    private void setDeltaPlus(InfoIndicator infoIndicator) {
+//        if (deltaPlus == null || !isRangeTimeLevel(deltaPlus, infoIndicator)) {
+//            deltaPlus = infoIndicator;
+//        } else if (deltaPlus.getPrice() < infoIndicator.getPrice()
+//                && isRangeTimeLevel(deltaPlus, infoIndicator)
+//                && (deltaPlus.getPeriod() == infoIndicator.getPeriod())) {
+//            deltaPlus = infoIndicator;
+//        } else if (isRangeTimeLevel(deltaPlus, infoIndicator)
+//                && isBigTimeFrame(deltaPlus, infoIndicator)) {
+//            deltaPlus = infoIndicator;
+//        } else if (isRangeTimeLevel(deltaPlus, infoIndicator)
+//                && !isBigTimeFrame(deltaPlus, infoIndicator)
+//                && deltaPlus.getPrice() > infoIndicator.getPrice()) {
+//            deltaPlus = infoIndicator;
+//        }
+//    }
 
 
     private void setVolume(InfoIndicator infoIndicator) {
@@ -138,14 +137,14 @@ public class OneSell_4 {
                     Gasket.setOb_os_Flag(false);
                     new StrategyOneSellThread(
                             ((int)(Math.round(Math.abs(Math.random()*200 - 100)) * 39))
-                                    + "- OS_4", volume, getMin());
+                                    + "- OS_5", volume, getMin());
                 }
             } else if (Gasket.getStrategyWorkOne() == 2) {
-                if (Gasket.isOsFlag_4()) {
-                    Gasket.setOsFlag_4(false);
+                if (Gasket.isOsFlag_5()) {
+                    Gasket.setOsFlag_5(false);
                     new StrategyOneSellThread(
                             ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                                    + "-OS_4", volume, getMin());
+                                    + "-OS_5", volume, getMin());
                 }
             }
 //            maxOpenInterestMinus = null;
@@ -244,6 +243,7 @@ public class OneSell_4 {
                 && (maxDeltaMinus.getTime().getTime() >= after.getTime())
                 && (maxDeltaPlus.getTime().getTime() >= after.getTime())
                 && (deltaPlus.getTime().getTime() >= after.getTime());
-    }
 
+    }
 }
+

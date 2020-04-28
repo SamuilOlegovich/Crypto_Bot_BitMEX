@@ -66,8 +66,7 @@ public class OneSell_3 {
         if (ask == null) ask = infoIndicator;
         else if (ask.getPrice() < infoIndicator.getPrice()
                 && isRangeTimeLevel(ask, infoIndicator)
-                && (ask.getPeriod() == TimeFrame.M5
-                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                && (ask.getPeriod() == infoIndicator.getPeriod())) {
             ask = infoIndicator;
         } else if (isRangeTimeLevel(ask, infoIndicator)
                 && isBigTimeFrame(ask, infoIndicator)) {
@@ -80,8 +79,7 @@ public class OneSell_3 {
         if (deltaPlus == null) deltaPlus = infoIndicator;
         else if (deltaPlus.getPrice() < infoIndicator.getPrice()
                 && isRangeTimeLevel(deltaPlus, infoIndicator)
-                && (deltaPlus.getPeriod() == TimeFrame.M5
-                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                && (deltaPlus.getPeriod() == infoIndicator.getPeriod())) {
             deltaPlus = infoIndicator;
         } else if (isRangeTimeLevel(deltaPlus, infoIndicator)
                 && isBigTimeFrame(deltaPlus, infoIndicator)) {
@@ -94,8 +92,7 @@ public class OneSell_3 {
         if (volume == null) volume = infoIndicator;
         else if (volume.getPrice() < infoIndicator.getPrice()
                 && isRangeTimeLevel(volume, infoIndicator)
-                && (volume.getPeriod() == TimeFrame.M5
-                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                && (volume.getPeriod() == infoIndicator.getPeriod())) {
             volume = infoIndicator;
         } else if (isRangeTimeLevel(volume, infoIndicator)
                 && isBigTimeFrame(volume, infoIndicator)) {
@@ -106,12 +103,8 @@ public class OneSell_3 {
 
     // проверяем больший ли траймфрейм у данного уровня или нет
     private boolean isBigTimeFrame(InfoIndicator one, InfoIndicator two) {
-        return ((one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M15)
-                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M30)
-                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.H1)
-                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.M30)
-                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.H1)
-                || (one.getPeriod() == TimeFrame.M30 && two.getPeriod() == TimeFrame.H1));
+//       return one.getPeriod().ordinal() < two.getPeriod().ordinal();
+        return true;
     }
 
 
@@ -122,9 +115,9 @@ public class OneSell_3 {
                 || maxDeltaPlus == null || openInterestPlus == null || maxDeltaPlus2 == null
                 || maxDeltaMinus == null ) {
             return;
-        }
-
-        if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
+        } else if (!isTimeNotOld()) {
+            volume = null;
+        }else if (inTheRangePrice() && inTheRangeTime()) {
             if (Gasket.getStrategyWorkOne() == 1) {
                 if (Gasket.isOb_os_Flag()) {
                     Gasket.setOb_os_Flag(false);
@@ -146,7 +139,7 @@ public class OneSell_3 {
 //            maxDeltaPlus2 = null;
 //            maxDeltaPlus = null;
 //            deltaPlus = null;
-//            volume = null;
+            volume = null;
 //            ask = null;
         }
     }

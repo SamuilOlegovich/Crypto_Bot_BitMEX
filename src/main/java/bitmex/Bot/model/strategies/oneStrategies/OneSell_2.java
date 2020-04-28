@@ -25,7 +25,6 @@ public class OneSell_2 {
     private int countDelta = 0;
 
 
-
     private OneSell_2() {
     }
 
@@ -33,6 +32,8 @@ public class OneSell_2 {
         if (oneSell2 == null) oneSell2 = new OneSell_2();
         return oneSell2;
     }
+
+
 
     public void setIInfoString(InfoIndicator iInfoIndicator) {
         switch (iInfoIndicator.getType()) {
@@ -61,6 +62,7 @@ public class OneSell_2 {
         makeADecision();
     }
 
+
     // принимаем решение
     private synchronized void makeADecision() {
         if (volume == null || ask == null || deltaPlus == null || maxOpenInterestMinus == null
@@ -85,16 +87,17 @@ public class OneSell_2 {
                                     + "-OS_2", volume, getMin());
                 }
             }
-            maxOpenInterestMinus = null;
-            openInterestPlus = null;
-            maxDeltaMinus = null;
-            maxDeltaPlus2 = null;
-            maxDeltaPlus = null;
-            deltaPlus = null;
+//            maxOpenInterestMinus = null;
+//            openInterestPlus = null;
+//            maxDeltaMinus = null;
+//            maxDeltaPlus2 = null;
+//            maxDeltaPlus = null;
+//            deltaPlus = null;
             volume = null;
-            ask = null;
+//            ask = null;
         }
     }
+
 
     // находим найвысший элемен, это и будет точка минимум для села
     private InfoIndicator getMin() {
@@ -110,6 +113,7 @@ public class OneSell_2 {
                 ? infoIndicator : deltaPlus;
         return infoIndicator;
     }
+
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
@@ -131,14 +135,18 @@ public class OneSell_2 {
                 && (deltaPlus.getPrice() >= volume.getPrice());
     }
 
+
     // проверяем нет ли тут предварительных уровней
     private boolean isReal() {
+
         return volume.getPreview() + ask.getPreview() + maxOpenInterestMinus.getPreview() + openInterestPlus.getPreview()
                 + maxDeltaMinus.getPreview() + maxDeltaPlus.getPreview() + maxDeltaPlus2.getPreview()
                 + deltaPlus.getPreview() == 0;
     }
 
+
     private void twoDelta(InfoIndicator iInfoIndicator) {
+
         if (countDelta == 0) {
             maxDeltaPlus = iInfoIndicator;
             countDelta = 1;
@@ -147,6 +155,7 @@ public class OneSell_2 {
             countDelta = 0;
         }
     }
+
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
@@ -169,8 +178,8 @@ public class OneSell_2 {
         return (maxOpenInterestMinus.getTime().getTime() >= after.getTime())
                 && (openInterestPlus.getTime().getTime() >= after.getTime())
                 && (maxDeltaPlus2.getTime().getTime() >= after.getTime())
+                && (maxDeltaMinus.getTime().getTime() >= after.getTime())
                 && (maxDeltaPlus.getTime().getTime() >= after.getTime())
-                && (deltaPlus.getTime().getTime() >= after.getTime())
-                && (ask.getTime().getTime() >= after.getTime());
+                && (deltaPlus.getTime().getTime() >= after.getTime());
     }
 }

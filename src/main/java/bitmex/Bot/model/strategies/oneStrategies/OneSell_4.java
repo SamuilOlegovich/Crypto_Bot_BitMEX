@@ -63,42 +63,54 @@ public class OneSell_4 {
 
 
     private void setAsk(InfoIndicator infoIndicator) {
-        if (ask == null) ask = infoIndicator;
-        else if (ask.getPrice() < infoIndicator.getPrice()
+        if (ask == null || !isRangeTimeLevel(ask, infoIndicator)) {
+            ask = infoIndicator;
+        } else if (ask.getPrice() < infoIndicator.getPrice()
                 && isRangeTimeLevel(ask, infoIndicator)
-                && (ask.getPeriod() == TimeFrame.M5
-                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                && (ask.getPeriod() == infoIndicator.getPeriod())) {
             ask = infoIndicator;
         } else if (isRangeTimeLevel(ask, infoIndicator)
                 && isBigTimeFrame(ask, infoIndicator)) {
+            ask = infoIndicator;
+        } else if (isRangeTimeLevel(ask, infoIndicator)
+                && !isBigTimeFrame(ask, infoIndicator)
+                && ask.getPrice() > infoIndicator.getPrice()) {
             ask = infoIndicator;
         }
     }
 
 
     private void setDeltaPlus(InfoIndicator infoIndicator) {
-        if (deltaPlus == null) deltaPlus = infoIndicator;
-        else if (deltaPlus.getPrice() < infoIndicator.getPrice()
+        if (deltaPlus == null || !isRangeTimeLevel(deltaPlus, infoIndicator)) {
+            deltaPlus = infoIndicator;
+        } else if (deltaPlus.getPrice() < infoIndicator.getPrice()
                 && isRangeTimeLevel(deltaPlus, infoIndicator)
-                && (deltaPlus.getPeriod() == TimeFrame.M5
-                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                && (deltaPlus.getPeriod() == infoIndicator.getPeriod())) {
             deltaPlus = infoIndicator;
         } else if (isRangeTimeLevel(deltaPlus, infoIndicator)
                 && isBigTimeFrame(deltaPlus, infoIndicator)) {
+            deltaPlus = infoIndicator;
+        } else if (isRangeTimeLevel(deltaPlus, infoIndicator)
+                && !isBigTimeFrame(deltaPlus, infoIndicator)
+                && deltaPlus.getPrice() > infoIndicator.getPrice()) {
             deltaPlus = infoIndicator;
         }
     }
 
 
     private void setVolume(InfoIndicator infoIndicator) {
-        if (volume == null) volume = infoIndicator;
-        else if (volume.getPrice() < infoIndicator.getPrice()
+        if (volume == null || !isRangeTimeLevel(volume, infoIndicator)) {
+            volume = infoIndicator;
+        } else if (volume.getPrice() < infoIndicator.getPrice()
                 && isRangeTimeLevel(volume, infoIndicator)
-                && (volume.getPeriod() == TimeFrame.M5
-                && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                && (volume.getPeriod() == infoIndicator.getPeriod())) {
             volume = infoIndicator;
         } else if (isRangeTimeLevel(volume, infoIndicator)
                 && isBigTimeFrame(volume, infoIndicator)) {
+            volume = infoIndicator;
+        } else if (isRangeTimeLevel(volume, infoIndicator)
+                && !isBigTimeFrame(volume, infoIndicator)
+                && volume.getPrice() > infoIndicator.getPrice()) {
             volume = infoIndicator;
         }
     }
@@ -106,12 +118,8 @@ public class OneSell_4 {
 
     // проверяем больший ли траймфрейм у данного уровня или нет
     private boolean isBigTimeFrame(InfoIndicator one, InfoIndicator two) {
-        return ((one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M15)
-                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M30)
-                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.H1)
-                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.M30)
-                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.H1)
-                || (one.getPeriod() == TimeFrame.M30 && two.getPeriod() == TimeFrame.H1));
+        return one.getPeriod().ordinal() < two.getPeriod().ordinal();
+//        return true;
     }
 
 
@@ -122,9 +130,9 @@ public class OneSell_4 {
                 || maxDeltaPlus == null || openInterestPlus == null || maxDeltaPlus2 == null
                 || maxDeltaMinus == null ) {
             return;
-        }
-
-        if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
+        } else if (!isTimeNotOld()) {
+            volume = null;
+        } else if (inTheRangePrice() && inTheRangeTime()) {
             if (Gasket.getStrategyWorkOne() == 1) {
                 if (Gasket.isOb_os_Flag()) {
                     Gasket.setOb_os_Flag(false);
@@ -140,14 +148,14 @@ public class OneSell_4 {
                                     + "-OS_4", volume, getMin());
                 }
             }
-            maxOpenInterestMinus = null;
-            openInterestPlus = null;
-            maxDeltaMinus = null;
-            maxDeltaPlus2 = null;
-            maxDeltaPlus = null;
-            deltaPlus = null;
+//            maxOpenInterestMinus = null;
+//            openInterestPlus = null;
+//            maxDeltaMinus = null;
+//            maxDeltaPlus2 = null;
+//            maxDeltaPlus = null;
+//            deltaPlus = null;
             volume = null;
-            ask = null;
+//            ask = null;
         }
     }
 
@@ -190,7 +198,6 @@ public class OneSell_4 {
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
-
         return (maxOpenInterestMinus.getPrice() >= volume.getPrice())
                 && (openInterestPlus.getPrice() >= volume.getPrice())
                 && (maxDeltaMinus.getPrice() >= volume.getPrice())
@@ -211,8 +218,9 @@ public class OneSell_4 {
 
     // проверяем нет ли тут предварительных уровней
     private boolean isReal() {
-        return volume.getPreview() + ask.getPreview() + maxOpenInterestMinus.getPreview() + openInterestPlus.getPreview()
-                + maxDeltaMinus.getPreview() + maxDeltaPlus.getPreview() + maxDeltaPlus2.getPreview()
+        return volume.getPreview() + ask.getPreview() + maxOpenInterestMinus.getPreview()
+                + openInterestPlus.getPreview() + maxDeltaMinus.getPreview()
+                + maxDeltaPlus.getPreview() + maxDeltaPlus2.getPreview()
                 + deltaPlus.getPreview() == 0;
     }
 

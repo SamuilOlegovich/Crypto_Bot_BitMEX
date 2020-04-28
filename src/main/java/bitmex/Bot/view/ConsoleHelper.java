@@ -134,7 +134,8 @@ public class ConsoleHelper {
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
                 + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"
-                + "ПРИМЕР: lot=10.0\n");
+                + "ПРИМЕР: lot=10.0\n"
+                + "\n");
     }
 
     public static void printStatistics() {
@@ -154,7 +155,21 @@ public class ConsoleHelper {
                 + "OB_TAKE === " + Gasket.getObTake() + "\n"
                 + "OB_STOP === " + Gasket.getObStop() + "\n"
                 + "OS_TAKE === " + Gasket.getOsTake() + "\n"
-                + "OS_STOP === " + Gasket.getOsStop() + "\n");
+                + "OS_STOP === " + Gasket.getOsStop() + "\n"
+                + "\n");
+    }
+
+    public static void printFlag() {
+        ConsoleHelper.writeMessage("\n"
+                + "OB_4 === " + Gasket.isObFlag_4() + "\n"
+                + "OS_4 === " + Gasket.isOsFlag_4() + "\n"
+                + "OB_3 === " + Gasket.isObFlag_3() + "\n"
+                + "OS_3 === " + Gasket.isOsFlag_3() + "\n"
+                + "OB_2 === " + Gasket.isObFlag_2() + "\n"
+                + "OS_2 === " + Gasket.isOsFlag_2() + "\n"
+                + "OB === " + Gasket.isObFlag() + "\n"
+                + "OS === " + Gasket.isOsFlag() + "\n"
+                + "\n");
     }
 
 

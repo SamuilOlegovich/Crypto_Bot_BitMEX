@@ -55,7 +55,8 @@ public class TestOrderBuy extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса StrategyOneSell.");
+                ConsoleHelper.writeMessage(ID
+                        + " --- Не смогли проснуться в методе RUN класса StrategyOneSell.");
                 e.printStackTrace();
             }
         }

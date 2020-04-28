@@ -58,6 +58,7 @@ public class OneBuy_2 {
 
     // принимаем решение
     private synchronized void makeADecision() {
+
         if (volume == null || bid == null || deltaMinus == null || openInterestMinus == null
                 || maxOpenInterestPlus == null || maxOpenInterestMinus == null
                 || maxDeltaMinus == null) {
@@ -81,17 +82,19 @@ public class OneBuy_2 {
                 }
             }
 
-            maxOpenInterestMinus = null;
-            maxOpenInterestPlus = null;
-            openInterestMinus = null;
-            maxDeltaMinus = null;
-            deltaMinus = null;
+//            maxOpenInterestMinus = null;
+//            maxOpenInterestPlus = null;
+//            openInterestMinus = null;
+//            maxDeltaMinus = null;
+//            deltaMinus = null;
             volume = null;
-            bid = null;
+//            bid = null;
         }
     }
 
+
     private InfoIndicator getMin() {
+
         InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice() < maxOpenInterestPlus.getPrice()
                 ? maxOpenInterestMinus : maxOpenInterestPlus;
         infoIndicator = infoIndicator.getPrice() < openInterestMinus.getPrice()
@@ -102,6 +105,7 @@ public class OneBuy_2 {
                 ? infoIndicator : deltaMinus;
         return infoIndicator;
     }
+
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
@@ -121,12 +125,15 @@ public class OneBuy_2 {
                 && (deltaMinus.getPrice() <= volume.getPrice());
     }
 
+
     // проверяем нет ли тут предварительных уровней
     private boolean isReal() {
+
         return volume.getPreview() + bid.getPreview() + deltaMinus.getPreview() + openInterestMinus.getPreview()
                 + maxOpenInterestPlus.getPreview() + maxOpenInterestMinus.getPreview() +
                 maxDeltaMinus.getPreview() == 0;
     }
+
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
@@ -150,7 +157,6 @@ public class OneBuy_2 {
                 && (maxOpenInterestPlus.getTime().getTime() >= after.getTime())
                 && (openInterestMinus.getTime().getTime() >= after.getTime())
                 && (maxDeltaMinus.getTime().getTime() >= after.getTime())
-                && (deltaMinus.getTime().getTime() >= after.getTime())
-                && (bid.getTime().getTime() >= after.getTime());
+                && (deltaMinus.getTime().getTime() >= after.getTime());
     }
 }

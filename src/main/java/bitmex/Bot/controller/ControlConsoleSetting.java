@@ -15,8 +15,10 @@ public class ControlConsoleSetting extends Thread {
         while (true) {
             String string = ConsoleHelper.readString();
             if (string.length() > 3) {
-                if (string.trim().equals("info")) {
+                if (string.trim().equalsIgnoreCase("info")) {
                     ConsoleHelper.printInfoSettings();
+                } else if (string.trim().equalsIgnoreCase("flag")) {
+                    ConsoleHelper.printFlag();
                 } else {
                     executorCommandos.parserAndExecutor(string);
                 }

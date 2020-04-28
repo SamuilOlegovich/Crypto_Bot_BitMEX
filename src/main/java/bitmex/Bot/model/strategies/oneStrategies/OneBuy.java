@@ -68,8 +68,7 @@ public class OneBuy {
                 bid = infoIndicator;
             } else if (bid.getPrice() > infoIndicator.getPrice()
                     && isRangeTimeLevel(bid, infoIndicator)
-                    && (bid.getPeriod() == TimeFrame.M5
-                    && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                    && (bid.getPeriod() == infoIndicator.getPeriod())) {
                 bid = infoIndicator;
             } else if (isRangeTimeLevel(bid, infoIndicator)
                     && isBigTimeFrame(bid, infoIndicator)) {
@@ -86,8 +85,7 @@ public class OneBuy {
                 if (bid != null && bid2 == null) {
                     if (bid.getPrice() > infoIndicator.getPrice()
                             && isRangeTimeLevel(bid, infoIndicator)
-                            && (bid.getPeriod() == TimeFrame.M5
-                            && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                            && (bid.getPeriod() == infoIndicator.getPeriod())) {
                         bid = infoIndicator;
                     } else if (isRangeTimeLevel(bid, infoIndicator)
                             && isBigTimeFrame(bid, infoIndicator)) {
@@ -100,8 +98,7 @@ public class OneBuy {
 
                 if (bid2.getPrice() > infoIndicator.getPrice()
                         && isRangeTimeLevel(bid, infoIndicator)
-                        && (bid2.getPeriod() == TimeFrame.M5
-                        && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                        && (bid2.getPeriod() == infoIndicator.getPeriod())) {
                     bid = infoIndicator;
                     bid2 = null;
                 } else if (isRangeTimeLevel(bid, infoIndicator)
@@ -124,8 +121,7 @@ public class OneBuy {
                 deltaMinus = infoIndicator;
             } else if (deltaMinus.getPrice() > infoIndicator.getPrice()
                     && isRangeTimeLevel(deltaMinus, infoIndicator)
-                    && (deltaMinus.getPeriod() == TimeFrame.M5
-                    && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                    && (deltaMinus.getPeriod() == infoIndicator.getPeriod())) {
                 deltaMinus = infoIndicator;
             } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
                     && isBigTimeFrame(deltaMinus, infoIndicator)) {
@@ -142,8 +138,7 @@ public class OneBuy {
                 if (deltaMinus != null && deltaMinus2 == null) {
                     if (deltaMinus.getPrice() > infoIndicator.getPrice()
                             && isRangeTimeLevel(deltaMinus, infoIndicator)
-                            && (deltaMinus.getPeriod() == TimeFrame.M5
-                            && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                            && (deltaMinus.getPeriod() == infoIndicator.getPeriod())) {
                         deltaMinus = infoIndicator;
                     } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
                             && isBigTimeFrame(deltaMinus, infoIndicator)) {
@@ -156,8 +151,7 @@ public class OneBuy {
 
                 if (deltaMinus2.getPrice() > infoIndicator.getPrice()
                         && isRangeTimeLevel(deltaMinus, infoIndicator)
-                        && (deltaMinus2.getPeriod() == TimeFrame.M5
-                        && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                        && (deltaMinus2.getPeriod() == infoIndicator.getPeriod())) {
                     deltaMinus = infoIndicator;
                     deltaMinus2 = null;
                 } else if (isRangeTimeLevel(deltaMinus, infoIndicator)
@@ -173,54 +167,70 @@ public class OneBuy {
 
 
     private void setVolume(InfoIndicator infoIndicator) {
+        // если все уровни пусты - назначаем сразу
         if (volume == null && volume2 == null) volume = infoIndicator;
+        // иначе если первый не пуст, а второй пуст
         else if (volume != null && volume2 == null) {
-
+            // если первый уровень сдох по времени - томинуя второй присваиваем ему уровень
             if (!isRangeTimeLevel(volume, infoIndicator)) {
                 volume = infoIndicator;
+                // если же уровень по свежий, находится ниже предыдущего и имеет тот же таймфрейм
+                // то опять присваеваем его первому уровню
             } else if (volume.getPrice() > infoIndicator.getPrice()
                     && isRangeTimeLevel(volume, infoIndicator)
-                    && (volume.getPeriod() == TimeFrame.M5
-                    && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                    && (volume.getPeriod() == infoIndicator.getPeriod())) {
                 volume = infoIndicator;
+                // если же уровень свежий и имеет больший таймфрейм - то присваеваем его первому уровню
+                // (вот тут бы я поработал еще вставил какие-то варианты дополнительные варианты с уровнями
+                // большего таймфрейма, дополнительное какое-то сравнение)
             } else if (isRangeTimeLevel(volume, infoIndicator)
                     && isBigTimeFrame(volume, infoIndicator)) {
                 volume = infoIndicator;
             } else {
+                // если все не подошло то второму
                 volume2 = infoIndicator;
             }
-
+        // если два уровня не пустые
         } else if (volume != null && volume2 != null) {
-
+            // если первый уровень сдох по времени, сразу перекидываем в него второй уровень и дальше проверяем
             if (!isRangeTimeLevel(volume, infoIndicator)) {
                 volume = volume2;
                 volume2 = null;
-
+                // если же уровень по свежий, находится ниже предыдущего и имеет тот же таймфрейм
+                // то опять присваеваем его первому уровню
                 if (volume != null && volume2 == null) {
                     if (volume.getPrice() > infoIndicator.getPrice()
                             && isRangeTimeLevel(volume, infoIndicator)
-                            && (volume.getPeriod() == TimeFrame.M5
-                            && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                            && (volume.getPeriod() == infoIndicator.getPeriod())) {
                         volume = infoIndicator;
+                        // если же уровень свежий и имеет больший таймфрейм - то присваеваем его первому уровню
+                        // (вот тут бы я поработал еще вставил какие-то варианты дополнительные варианты с уровнями
+                        // большего таймфрейма, дополнительное какое-то сравнение)
                     } else if (isRangeTimeLevel(volume, infoIndicator)
                             && isBigTimeFrame(volume, infoIndicator)) {
                         volume = infoIndicator;
                     } else {
+                        // если все не подошло то второму
                         volume2 = infoIndicator;
                     }
                 }
+                // если же первый уровень не сдох по времени и у нас заполнены два уровня
             } else {
-
+                // если уровень два больше пришедшего уровня и и не сдох по времени и имеет тот же таймфрейм
+                // то входящий уровень ставим на первое место и стираем второй уровень
                 if (volume2.getPrice() > infoIndicator.getPrice()
                         && isRangeTimeLevel(volume, infoIndicator)
-                        && (volume2.getPeriod() == TimeFrame.M5
-                        && infoIndicator.getPeriod() == TimeFrame.M5)) {
+                        && (volume2.getPeriod() == infoIndicator.getPeriod())) {
                     volume = infoIndicator;
                     volume2 = null;
+                    // делаем тоже самое если уровень еще жив но пришел тайфремй больше чем стоит у нас в уровнях
+                    // (вот тут бы я поработал еще вставил какие-то варианты дополнительные варианты с уровнями
+                    // большего таймфрейма, дополнительное какое-то сравнение)
                 } else if (isRangeTimeLevel(volume, infoIndicator)
                         && isBigTimeFrame(volume2, infoIndicator)) {
                     volume = infoIndicator;
                     volume2 = null;
+                    // ну и если ничего из этого, то назначаем входящий уровень на второе место
                 } else {
                     volume2 = infoIndicator;
                 }
@@ -231,12 +241,8 @@ public class OneBuy {
 
     // проверяем больший ли траймфрейм у данного уровня или нет
     private boolean isBigTimeFrame(InfoIndicator one, InfoIndicator two) {
-        return ((one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M15)
-                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.M30)
-                || (one.getPeriod() == TimeFrame.M5 && two.getPeriod() == TimeFrame.H1)
-                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.M30)
-                || (one.getPeriod() == TimeFrame.M15 && two.getPeriod() == TimeFrame.H1)
-                || (one.getPeriod() == TimeFrame.M30 && two.getPeriod() == TimeFrame.H1));
+//        return one.getPeriod().ordinal() < two.getPeriod().ordinal();
+        return true;
     }
 
 
@@ -246,9 +252,9 @@ public class OneBuy {
                 || maxOpenInterestPlus == null || maxOpenInterestMinus == null
                 || maxDeltaMinus == null) {
             return;
-        }
-
-        if (inTheRangePrice() && inTheRangeTime() && isTimeNotOld()) {
+        } else if (!isTimeNotOld()) {
+            volume = null;
+        }else if (inTheRangePrice() && inTheRangeTime()) {
             if (Gasket.getStrategyWorkOne() == 1) {
                 if (Gasket.isOb_os_Flag()) {
                     Gasket.setOb_os_Flag(false);
@@ -280,9 +286,9 @@ public class OneBuy {
 
 
 
-
     // находим цену самого нижнего уровня
     private InfoIndicator getMin() {
+
         InfoIndicator infoIndicator = maxOpenInterestMinus.getPrice() < maxOpenInterestPlus.getPrice()
                 ? maxOpenInterestMinus : maxOpenInterestPlus;
         infoIndicator = infoIndicator.getPrice() < openInterestMinus.getPrice()
@@ -293,6 +299,7 @@ public class OneBuy {
                 ? infoIndicator : deltaMinus;
         return infoIndicator;
     }
+
 
     // не старый ли уровень
     private boolean isTimeNotOld() {
@@ -309,17 +316,22 @@ public class OneBuy {
         if ((infoIndicator.getTime().getTime() - volume.getTime().getTime())
                 < (long) (1000 * 60 * getTimeCalculationLevel())) {
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
+
 
     // проверяем вписываемся ли в диапазон цен
     private boolean inTheRangePrice() {
+
         return (maxOpenInterestMinus.getPrice() <= volume.getPrice())
                 && (maxOpenInterestPlus.getPrice() <= volume.getPrice())
                 && (openInterestMinus.getPrice() <= volume.getPrice())
                 && (maxDeltaMinus.getPrice() <= volume.getPrice())
                 && (deltaMinus.getPrice() <= volume.getPrice());
     }
+
 
     private boolean isRangeTimeLevel(InfoIndicator one, InfoIndicator two) {
         if ((two.getTime().getTime() - one.getTime().getTime())
@@ -330,8 +342,10 @@ public class OneBuy {
         }
     }
 
+
     // проверяем нет ли тут предварительных уровней
     private boolean isReal() {
+
         return volume.getPreview() + bid.getPreview() + deltaMinus.getPreview() + openInterestMinus.getPreview()
                 + maxOpenInterestPlus.getPreview() + maxOpenInterestMinus.getPreview() +
                 maxDeltaMinus.getPreview() == 0;
@@ -340,14 +354,14 @@ public class OneBuy {
 
     // проверяем входим ли в диапазон по датам событий
     private boolean inTheRangeTime() {
+
         Date after = volume.getTime();
 
         return (maxOpenInterestMinus.getTime().getTime() >= after.getTime())
                 && (maxOpenInterestPlus.getTime().getTime() >= after.getTime())
                 && (openInterestMinus.getTime().getTime() >= after.getTime())
                 && (maxDeltaMinus.getTime().getTime() >= after.getTime())
-                && (deltaMinus.getTime().getTime() >= after.getTime())
-                && (bid.getTime().getTime() >= after.getTime());
+                && (deltaMinus.getTime().getTime() >= after.getTime());
     }
 }
 

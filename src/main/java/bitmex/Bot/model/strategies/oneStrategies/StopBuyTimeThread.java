@@ -17,12 +17,12 @@ public class StopBuyTimeThread extends Thread {
     private double min;
     private String ID;
 
+
     public StopBuyTimeThread(String ID, double max, double min) {
         this.flag = false;
         this.max = max;
         this.min = min;
         this.ID = ID;
-        timer();
         start();
     }
 
@@ -32,6 +32,14 @@ public class StopBuyTimeThread extends Thread {
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN Strategy Stop Buy Time начал работать ---- " + getDate());
         ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
+        timer();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса StopSellTime.");
+            e.printStackTrace();
+        }
 
         while (true) {
             double close = Gasket.getBitmexQuote().getAskPrice();

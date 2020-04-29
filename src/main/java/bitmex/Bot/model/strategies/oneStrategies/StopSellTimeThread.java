@@ -14,12 +14,12 @@ public class StopSellTimeThread extends Thread {
     private double min;
     private String ID;
 
+
     public StopSellTimeThread(String ID, double max, double min) {
         this.flag = false;
         this.max = max;
         this.min = min;
         this.ID = ID;
-        timer();
         start();
     }
 
@@ -29,6 +29,14 @@ public class StopSellTimeThread extends Thread {
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN Strategy Stop Sell Time начал работать ---- " + getDate());
         ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
+        timer();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса StopSellTime.");
+            e.printStackTrace();
+        }
 
         while (true) {
             double close = Gasket.getBitmexQuote().getBidPrice();
@@ -66,6 +74,7 @@ public class StopSellTimeThread extends Thread {
         flag = true;
     }
 
+
     private String getDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
@@ -75,5 +84,4 @@ public class StopSellTimeThread extends Thread {
                 : date.getTime() - (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference())));
         return dateFormat.format(date);
     }
-
 }

@@ -59,11 +59,15 @@ public class StrategyOneBuyThread extends Thread {
             }
 
             if (close > max && isRelevantDate()) {
-//                if (Gasket.isTrading()) new TradeBuy(ID);
-//                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + DatesTimes.getDate());
-//                new TestOrderBuy(ID, close).start();
-                new RangeFlatBuyThread(ID, close);
-                return;
+                if (Gasket.isActiveNumberOfCandlesForAnalysis()) {
+                    new RangeFlatBuyThread(ID, close);
+                    return;
+                } else {
+                    if (Gasket.isTrading()) new TradeBuy(ID);
+                    ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + DatesTimes.getDate());
+                    new TestOrderBuy(ID, close);
+                    return;
+                }
             }
 
             try {

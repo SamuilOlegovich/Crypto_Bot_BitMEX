@@ -143,6 +143,8 @@ public class ConsoleHelper {
                 + " === количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку\n"
                 + "maxAndMinAverage === " + Gasket.isMaxAndMinAverage()
                 + " === при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false\n"
+                + "activeNumberOfCandlesForAnalysis === " + Gasket.isActiveNumberOfCandlesForAnalysis()
+                + " === включаем отклюаем отслеживания диапазона в котором находится цена true - включено\n"
                 + "\n"
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
@@ -173,6 +175,31 @@ public class ConsoleHelper {
                 + "OB_STOP === " + Gasket.getObStop() + "\n"
                 + "OS_TAKE === " + Gasket.getOsTake() + "\n"
                 + "OS_STOP === " + Gasket.getOsStop() + "\n"
+                + "\n");
+    }
+
+    public static void printStatisticsMr() {
+        ConsoleHelper.writeMessage("\n"
+                + "OB_5_TAKE_MR === " + Gasket.getOb5TakeMr() + "\n"
+                + "OB_5_STOP_MR === " + Gasket.getOb5StopMr() + "\n"
+                + "OS_5_TAKE_MR === " + Gasket.getOs5TakeMr() + "\n"
+                + "OS_5_STOP_MR === " + Gasket.getOs5StopMr() + "\n"
+                + "OB_4_TAKE_MR === " + Gasket.getOb4TakeMr() + "\n"
+                + "OB_4_STOP_MR === " + Gasket.getOb4StopMr() + "\n"
+                + "OS_4_TAKE_MR === " + Gasket.getOs4TakeMr() + "\n"
+                + "OS_4_STOP_MR === " + Gasket.getOs4StopMr() + "\n"
+                + "OB_3_TAKE_MR === " + Gasket.getOb3TakeMr() + "\n"
+                + "OB_3_STOP_MR === " + Gasket.getOb3StopMr() + "\n"
+                + "OS_3_TAKE_MR === " + Gasket.getOs3TakeMr() + "\n"
+                + "OS_3_STOP_MR === " + Gasket.getOs3StopMr() + "\n"
+                + "OB_2_TAKE_MR === " + Gasket.getOb2TakeMr() + "\n"
+                + "OB_2_STOP_MR === " + Gasket.getOb2StopMr() + "\n"
+                + "OS_2_TAKE_MR === " + Gasket.getOs2TakeMr() + "\n"
+                + "OS_2_STOP_MR === " + Gasket.getOs2StopMr() + "\n"
+                + "OB_TAKE_MR === " + Gasket.getObTakeMr() + "\n"
+                + "OB_STOP_MR === " + Gasket.getObStopMr() + "\n"
+                + "OS_TAKE_MR === " + Gasket.getOsTakeMr() + "\n"
+                + "OS_STOP_MR === " + Gasket.getOsStopMr() + "\n"
                 + "\n");
     }
 

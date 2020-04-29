@@ -47,11 +47,16 @@ public class StopSellTimeThread extends Thread {
             }
 
             if (close < max) {
-                if (Gasket.isTrading()) new TradeSell(ID);
-                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл по таймеру ---- "
-                        + DatesTimes.getDate());
-                new TestOrderSell(ID, close);
-                break;
+                if (Gasket.isActiveNumberOfCandlesForAnalysis()) {
+                    new RangeFlatSellThread(ID, close);
+                    return;
+                } else {
+                    if (Gasket.isTrading()) new TradeSell(ID);
+                    ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл по таймеру ---- "
+                            + DatesTimes.getDate());
+                    new TestOrderSell(ID, close);
+                    return;
+                }
             }
 
             try {

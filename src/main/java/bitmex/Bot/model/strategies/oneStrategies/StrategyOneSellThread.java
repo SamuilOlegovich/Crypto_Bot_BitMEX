@@ -59,11 +59,16 @@ public class StrategyOneSellThread extends Thread {
             }
 
             if (close < max && isRelevantDate()) {
-                if (Gasket.isTrading()) new TradeSell(ID);
-                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
-                        + DatesTimes.getDate());
-                new TestOrderSell(ID, close);
-                break;
+                if (Gasket.isActiveNumberOfCandlesForAnalysis()) {
+                    new RangeFlatSellThread(ID, close);
+                    return;
+                } else {
+                    if (Gasket.isTrading()) new TradeSell(ID);
+                    ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
+                            + DatesTimes.getDate());
+                    new TestOrderSell(ID, close);
+                    return;
+                }
             }
 
             try {
@@ -91,7 +96,8 @@ public class StrategyOneSellThread extends Thread {
 
     private boolean isRelevantDate() {
         Date dateNow = new Date();
-        if ((dateNow.getTime() - date.getTime()) < (long) (1000 * 60 * getTimeCalculationCombinationLevel())) {
+        if ((dateNow.getTime() - date.getTime())
+                < (long) (1000 * 60 * getTimeCalculationCombinationLevel())) {
             return true;
         } else return false;
     }

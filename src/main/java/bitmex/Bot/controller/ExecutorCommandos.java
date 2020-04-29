@@ -22,6 +22,10 @@ public class ExecutorCommandos {
 
         try {
             switch (strings[0]) {
+                case "activeNumberOfCandlesForAnalysis" :
+                    Gasket.setActiveNumberOfCandlesForAnalysis(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("activeNumberOfCandlesForAnalysis === " + Gasket.isActiveNumberOfCandlesForAnalysis() + "\n");
+                    break;
                 case "timeCalculationCombinationLevel" :
                     Gasket.setTimeCalculationCombinationLevel(Integer.parseInt(strings[1]));
                     ConsoleHelper.writeMessage("timeCalculationCombinationLevel === " + Gasket.getTimeCalculationCombinationLevel() + "\n");

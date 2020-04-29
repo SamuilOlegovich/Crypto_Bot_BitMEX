@@ -16,6 +16,7 @@ public class TestOrderBuy extends Thread {
     public TestOrderBuy(String id, double priseOpenOrder) {
         this.priseTakeOrder = priseOpenOrder + Gasket.getTake();
         this.priseStopOrder = priseOpenOrder - Gasket.getStop();
+        new TestOrderBuyMiniRevers(id, priseOpenOrder);
         this.priseOpenOrder = priseOpenOrder;
         this.ID =  id;
         start();

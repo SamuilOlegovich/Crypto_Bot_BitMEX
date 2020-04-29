@@ -49,12 +49,16 @@ public class StopBuyTimeThread extends Thread {
             }
 
             if (close > max) {
-//                if (Gasket.isTrading()) new TradeBuy(ID);
-//                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай по таймеру ---- "
-//                + DatesTimes.getDate());
-//                new TestOrderBuy(ID, close);
-                new RangeFlatBuyThread(ID, close);
-                return;
+                if (Gasket.isActiveNumberOfCandlesForAnalysis()) {
+                    new RangeFlatBuyThread(ID, close);
+                    return;
+                } else {
+                    if (Gasket.isTrading()) new TradeBuy(ID);
+                    ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай по таймеру ---- "
+                            + DatesTimes.getDate());
+                    new TestOrderBuy(ID, close);
+                    return;
+                }
             }
 
             try {

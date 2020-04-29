@@ -54,6 +54,10 @@ public class ExecutorCommandos {
                     Gasket.setUseRealOrNotReal(strings[1].equalsIgnoreCase("true"));
                     ConsoleHelper.writeMessage("useRealOrNotReal === " + Gasket.isUseRealOrNotReal() + "\n");
                     break;
+                case "maxAndMinAverage" :
+                    Gasket.setMaxAndMinAverage(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("maxAndMinAverage === " + Gasket.isMaxAndMinAverage() + "\n");
+                    break;
                 case "strategyWorkOne":
                     Gasket.setStrategyWorkOne(Integer.parseInt(strings[1]));
                     ConsoleHelper.writeMessage("strategyWorkOne === " + Gasket.getStrategyWorkOne() + "\n");

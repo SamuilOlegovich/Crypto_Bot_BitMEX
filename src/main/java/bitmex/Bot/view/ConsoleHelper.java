@@ -141,6 +141,8 @@ public class ConsoleHelper {
                 + " === когда уровни сформированы указываем время жизни данной комбинации\n"
                 + "numberOfCandlesForAnalysis === " + Gasket.getNumberOfCandlesForAnalysis()
                 + " === количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку\n"
+                + "maxAndMinAverage === " + Gasket.isMaxAndMinAverage()
+                + " === при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false\n"
                 + "\n"
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"

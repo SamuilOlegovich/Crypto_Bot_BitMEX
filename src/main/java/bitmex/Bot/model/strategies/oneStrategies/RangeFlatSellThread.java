@@ -27,20 +27,37 @@ public class RangeFlatSellThread extends Thread {
         List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
                 Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
         double take = Gasket.getTake();
+        double minAverage = 0.0;
         double min = 0.0;
 
         for (BitmexChartData biData : list) {
             min = Math.min(min, biData.getLow());
+            minAverage = minAverage + biData.getLow();
         }
 
-        if (close < min || (close > min && close > (min + (take * 2)))) {
-            if (Gasket.isTrading()) new TradeSell(ID);
-            ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
-                    + DatesTimes.getDate());
-            new TestOrderSell(ID, close);
+        minAverage = minAverage / list.size();
+        list.clear();
+
+        if (Gasket.isMaxAndMinAverage()) {
+            if (close < minAverage || (close > minAverage && close > (minAverage + (take * 2)))) {
+                if (Gasket.isTrading()) new TradeSell(ID);
+                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
+                        + DatesTimes.getDate());
+                new TestOrderSell(ID, close);
+            } else {
+                ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по диапазону ФЛЭТа ---- "
+                        + DatesTimes.getDate());
+            }
         } else {
-            ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по диапазону ФЛЭТа ---- "
-                    + DatesTimes.getDate());
+            if (close < min || (close > min && close > (min + (take * 2)))) {
+                if (Gasket.isTrading()) new TradeSell(ID);
+                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
+                        + DatesTimes.getDate());
+                new TestOrderSell(ID, close);
+            } else {
+                ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по диапазону ФЛЭТа ---- "
+                        + DatesTimes.getDate());
+            }
         }
     }
 

@@ -24,6 +24,7 @@ public class Gasket {
     private static boolean gameAllDirection = false;    // true - играть во все стороны на одном счету
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
+    private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
     private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
     private static volatile double PROFIT = 0.0;        // итоговый профит
@@ -667,5 +668,13 @@ public class Gasket {
 
     public static void setNumberOfCandlesForAnalysis(int numberOfCandlesForAnalysis) {
         Gasket.numberOfCandlesForAnalysis = numberOfCandlesForAnalysis;
+    }
+
+    public static boolean isMaxAndMinAverage() {
+        return maxAndMinAverage;
+    }
+
+    public static void setMaxAndMinAverage(boolean maxAndMinAverage) {
+        Gasket.maxAndMinAverage = maxAndMinAverage;
     }
 }

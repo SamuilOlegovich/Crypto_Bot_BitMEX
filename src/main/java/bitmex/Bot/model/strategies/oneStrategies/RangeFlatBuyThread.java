@@ -23,22 +23,40 @@ public class RangeFlatBuyThread extends Thread {
 
     @Override
     public void run() {
+        // тут мы получаем максимальные границы канала и смотрим где по отношению к ним находится цена сейчас
+        // можно конечно сделать среднюю границу канала (но это потом пока проверим так)
         List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
                 Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
         double take = Gasket.getTake();
+        double maxAverage = 0.0;
         double max = 0.0;
 
         for (BitmexChartData biData : list) {
             max = Math.max(max, biData.getHigh());
+            maxAverage = maxAverage + biData.getHigh();
         }
 
-        if (close > max || (close < max && close < (max - (take * 2)))) {
-            if (Gasket.isTrading()) new TradeBuy(ID);
-            ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + DatesTimes.getDate());
-            new TestOrderBuy(ID, close);
+        maxAverage = maxAverage / list.size();
+        list.clear();
+
+        if (Gasket.isMaxAndMinAverage()) {
+            if (close > maxAverage || (close < maxAverage && close < (maxAverage - (take * 2)))) {
+                if (Gasket.isTrading()) new TradeBuy(ID);
+                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + DatesTimes.getDate());
+                new TestOrderBuy(ID, close);
+            } else {
+                ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА по диапазону ФЛЭТа ---- "
+                        + DatesTimes.getDate());
+            }
         } else {
-            ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА по диапазону ФЛЭТа ---- "
-                    + DatesTimes.getDate());
+            if (close > max || (close < max && close < (max - (take * 2)))) {
+                if (Gasket.isTrading()) new TradeBuy(ID);
+                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + DatesTimes.getDate());
+                new TestOrderBuy(ID, close);
+            } else {
+                ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА по диапазону ФЛЭТа ---- "
+                        + DatesTimes.getDate());
+            }
         }
     }
 }

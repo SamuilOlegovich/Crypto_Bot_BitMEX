@@ -1,13 +1,12 @@
 package bitmex.Bot.view;
 
+import bitmex.Bot.model.strategies.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
+import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 public class ConsoleHelper {
     private static String path = "/Users/samuilolegovich/Desktop/bitmex-client-master/src/main/java/bitmex/Bot/Logs/";
@@ -61,18 +60,21 @@ public class ConsoleHelper {
     }
 
     public static void printInfoSettings() {
-        ConsoleHelper.writeMessage("\n" + "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n\n"
+        ConsoleHelper.writeMessage("\n" + "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n"
+                + "\n"
                 + "timeBetweenOrders === " + Gasket.getTimeBetweenOrders()
                 + " === время в секундах между выставлениями ордеров по одной стратегии\n"
                 + "strategyWorkOne === " + Gasket.getStrategyWorkOne()
                 + " === количество стратегий одновременно работающих (можно еще допелить или убрать)\n"
                 + "dateDifference === " + Gasket.getDateDifference()
-                + " ==== разница в часовом поясе\n\n"
+                + " ==== разница в часовом поясе\n"
+                + "\n"
 
                 + "rangePriceMAX === " + Gasket.getRangePriceMAX()
                 + " === диапазон в долларах от уровней для срабатывания ордера\n"
                 + "rangePriceMIN === " + Gasket.getRangePriceMIN()
-                + " === диапазон в долларах от уровней для отмены ордера\n\n"
+                + " === диапазон в долларах от уровней для отмены ордера\n"
+                + "\n"
 
                 + "priceActive === " + Gasket.getPriceActive()
                 + " === цена тригер для стоп лимитов и тейк лимитов\n"
@@ -81,7 +83,8 @@ public class ConsoleHelper {
                 + "typeOrder === " + Gasket.getTypeOrder()
                 + " === тип первого открываемого ордера\n"
                 + "visible === " + Gasket.getVisible()
-                + " === видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно\n\n"
+                + " === видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно\n"
+                + "\n"
 
 
                 + "useRealOrNotReal === " + Gasket.isUseRealOrNotReal()
@@ -95,24 +98,28 @@ public class ConsoleHelper {
                 + "twoAccounts === " + Gasket.isTwoAccounts()
                 + " === true - два счета, можно играть в две стороны, false - только в одну сторону\n"
                 + "trading === " + Gasket.isTrading()
-                + " === торговать - true нет - false\n\n"
+                + " === торговать - true нет - false\n"
+                + "\n"
 
                 + "PORT === " + Gasket.getPORT()
-                + " === порт подключения\n\n"
+                + " === порт подключения\n"
+                + "\n"
 
                 + "take === " + Gasket.getTake()
                 + " === тейк профит в долларах\n"
                 + "stop === " + Gasket.getStop()
                 + " === стоп лосс в долларах\n"
                 + "lot === " + Gasket.getLot()
-                + " === количество контрактов\n\n"
+                + " === количество контрактов\n"
+                + "\n"
 
                 + "PROFIT_Sell === " + Gasket.getPROFIT_Sell()
                 + " === профит по сделкам в селл\n"
                 + "PROFIT_Buy === " + Gasket.getPROFIT_Buy()
                 + " === профит по сделкам в бай\n"
                 + "PROFIT === " + Gasket.getPROFIT()
-                + " === итоговый\n\n"
+                + " === итоговый\n"
+                + "\n"
 
                 + "strategyOneRange === " + Gasket.isOb_3()
                 + " === включить выключить стратегию\n"
@@ -121,7 +128,8 @@ public class ConsoleHelper {
                 + "strategyOne === " + Gasket.isOb_2()
                 + " === включить выключить стратегию\n"
                 + "one === " + Gasket.isOb()
-                + " === включить выключить стратегию\n\n"
+                + " === включить выключить стратегию\n"
+                + "\n"
 
                 + "useStopLevelOrNotStopTime === " + Gasket.getUseStopLevelOrNotStopTime()
                 + " === сколько минут отслеживать сделку вышедшею за MIN уровни\n"
@@ -130,7 +138,10 @@ public class ConsoleHelper {
                 + "timeCalculationLevel === " + Gasket.getTimeCalculationLevel()
                 + " === время за которое должны сформироваться уровни иначе все отменяется\n"
                 + "timeCalculationCombinationLevel === " + Gasket.getTimeCalculationCombinationLevel()
-                + " === когда уровни сформированы указываем время жизни данной комбинации\n\n"
+                + " === когда уровни сформированы указываем время жизни данной комбинации\n"
+                + "numberOfCandlesForAnalysis === " + Gasket.getNumberOfCandlesForAnalysis()
+                + " === количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку\n"
+                + "\n"
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
                 + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"
@@ -185,17 +196,8 @@ public class ConsoleHelper {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        path = Gasket.getPath() + "Logs/" + getDate() + "=Log.txt";
+        path = Gasket.getPath() + "Logs/" + DatesTimes.getDate() + "=Log.txt";
     }
-
-
-    private static String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        dateFormat.format(date);
-        return dateFormat.format(date);
-    }
-
 
 
 

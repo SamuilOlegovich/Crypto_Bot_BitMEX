@@ -1,11 +1,11 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.strategies.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
+
 import java.util.Date;
 
 import static bitmex.Bot.model.Gasket.getTimeCalculationCombinationLevel;
@@ -33,7 +33,8 @@ public class StrategyOneSellThread extends Thread {
         double min = volume.getPrice() < ask.getPrice()
                 ? ask.getPrice() + Gasket.getRangePriceMIN() : volume.getPrice() + Gasket.getRangePriceMIN();
 
-        ConsoleHelper.writeMessage(ID + " --- RUN класса Strategy One Sell Thread начал работать ---- " + getDate());
+        ConsoleHelper.writeMessage(ID + " --- RUN класса Strategy One Sell Thread начал работать ---- "
+                + DatesTimes.getDate());
         ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
 
         while (true) {
@@ -43,21 +44,25 @@ public class StrategyOneSellThread extends Thread {
             if (close > min || !isRelevantDate()) {
                 flag();
                 if (!isRelevantDate()) {
-                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по дате комбинации---- " + getDate());
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по дате комбинации---- "
+                            + DatesTimes.getDate());
                 }
                 else if (Gasket.isUseStopLevelOrNotStop() && close > min) {
-                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ВЫШЛА ЗА уровень MIN ---- " + getDate());
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ВЫШЛА ЗА уровень MIN ---- "
+                            + DatesTimes.getDate());
                     new StopSellTimeThread(ID, max, min);
                 } else {
-                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА ---- " + getDate());
+                    ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА ---- "
+                            + DatesTimes.getDate());
                 }
                 break;
             }
 
             if (close < max && isRelevantDate()) {
                 if (Gasket.isTrading()) new TradeSell(ID);
-                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- " + getDate());
-                new TestOrderSell(ID, close).start();
+                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
+                        + DatesTimes.getDate());
+                new TestOrderSell(ID, close);
                 break;
             }
 
@@ -71,15 +76,7 @@ public class StrategyOneSellThread extends Thread {
         }
     }
 
-    private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        dateFormat.format(date);
-        date.setTime(Gasket.getDateDifference() > 0
-                ? date.getTime() + (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference()))
-                : date.getTime() - (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference())));
-        return dateFormat.format(date);
-    }
+
 
     private void flag() {
         if (Gasket.getStrategyWorkOne() == 1) Gasket.setOb_os_Flag(true);

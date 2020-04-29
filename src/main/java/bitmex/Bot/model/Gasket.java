@@ -13,6 +13,7 @@ public class Gasket {
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
+    private static int numberOfCandlesForAnalysis = 60;             // количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку
     private static volatile boolean oneSellFLAG = true;
     private static volatile boolean oneBuyFLAG = true;
     private static int useStopLevelOrNotStopTime = 10;              // сколько минут отслеживать сделку вышедшею за MIN уровни
@@ -658,5 +659,13 @@ public class Gasket {
 
     public static void setOs5Stop(int os5Stop) {
         OS_5_STOP = os5Stop;
+    }
+
+    public static int getNumberOfCandlesForAnalysis() {
+        return numberOfCandlesForAnalysis;
+    }
+
+    public static void setNumberOfCandlesForAnalysis(int numberOfCandlesForAnalysis) {
+        Gasket.numberOfCandlesForAnalysis = numberOfCandlesForAnalysis;
     }
 }

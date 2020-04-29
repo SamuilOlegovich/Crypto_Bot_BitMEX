@@ -1,12 +1,9 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 
+import bitmex.Bot.model.strategies.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
-
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
-import java.util.Date;
 
 
 // если цена опустилась за нижний предел минимум - то даем ей еще один шанс
@@ -30,7 +27,8 @@ public class StopBuyTimeThread extends Thread {
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(ID + " --- RUN Strategy Stop Buy Time начал работать ---- " + getDate());
+        ConsoleHelper.writeMessage(ID + " --- RUN Strategy Stop Buy Time начал работать ---- "
+                + DatesTimes.getDate());
         ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
         timer();
 
@@ -45,14 +43,17 @@ public class StopBuyTimeThread extends Thread {
             double close = Gasket.getBitmexQuote().getAskPrice();
 
             if (flag) {
-                ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА по таймеру ---- " + getDate());
+                ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА по таймеру ---- "
+                        + DatesTimes.getDate());
                 return;
             }
 
             if (close > max) {
-                if (Gasket.isTrading()) new TradeBuy(ID);
-                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай по таймеру ---- " + getDate());
-                new TestOrderBuy(ID, close).start();
+//                if (Gasket.isTrading()) new TradeBuy(ID);
+//                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай по таймеру ---- "
+//                + DatesTimes.getDate());
+//                new TestOrderBuy(ID, close);
+                new RangeFlatBuyThread(ID, close);
                 return;
             }
 
@@ -75,16 +76,5 @@ public class StopBuyTimeThread extends Thread {
             e.printStackTrace();
         }
         flag = true;
-    }
-
-
-    private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        dateFormat.format(date);
-        date.setTime(Gasket.getDateDifference() > 0
-                ? date.getTime() + (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference()))
-                : date.getTime() - (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference())));
-        return dateFormat.format(date);
     }
 }

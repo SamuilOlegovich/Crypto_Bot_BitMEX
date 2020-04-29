@@ -1,12 +1,11 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
+import bitmex.Bot.model.strategies.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
-import java.util.Date;
+
 
 public class TestOrderBuy extends Thread {
     private double priseTakeOrder;
@@ -19,13 +18,15 @@ public class TestOrderBuy extends Thread {
         this.priseStopOrder = priseOpenOrder - Gasket.getStop();
         this.priseOpenOrder = priseOpenOrder;
         this.ID =  id;
+        start();
     }
 
 
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(ID + " --- RUN класса TestOrderBuy начал считать --- " + getDate());
+        ConsoleHelper.writeMessage(ID + " --- RUN класса TestOrderBuy начал считать --- "
+                + DatesTimes.getDate());
 
         while (true) {
             BitmexQuote bitmexQuote = Gasket.getBitmexQuote();
@@ -36,7 +37,8 @@ public class TestOrderBuy extends Thread {
                 flag();
                 setStop();
 
-                ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС ---- " + getDate());
+                ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС ---- "
+                        + DatesTimes.getDate());
                 Gasket.setPROFIT_Buy(Gasket.getPROFIT_Buy() - Gasket.getStop());
                 ConsoleHelper.writeMessage(ID + " --- ИТОГО на счету БАЙ --- " + Gasket.getPROFIT_Buy());
                 break;
@@ -46,7 +48,8 @@ public class TestOrderBuy extends Thread {
                 flag();
                 setTake();
 
-                ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ ---- " + getDate());
+                ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ ---- "
+                        + DatesTimes.getDate());
                 Gasket.setPROFIT_Buy(Gasket.getPROFIT_Buy() + Gasket.getTake());
                 ConsoleHelper.writeMessage(ID + " --- ИТОГО на счету БАЙ --- " + Gasket.getPROFIT_Buy());
                 break;
@@ -65,15 +68,6 @@ public class TestOrderBuy extends Thread {
 
 
 
-    private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        dateFormat.format(date);
-        date.setTime(Gasket.getDateDifference() > 0
-                ? date.getTime() + (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference()))
-                : date.getTime() - (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference())));
-        return dateFormat.format(date);
-    }
 
     private void flag() {
         if (Gasket.getStrategyWorkOne() == 1) Gasket.setOb_os_Flag(true);

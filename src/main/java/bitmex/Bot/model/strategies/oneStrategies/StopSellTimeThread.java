@@ -1,11 +1,9 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
+import bitmex.Bot.model.strategies.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
-import java.util.Date;
 
 public class StopSellTimeThread extends Thread {
 
@@ -27,7 +25,8 @@ public class StopSellTimeThread extends Thread {
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(ID + " --- RUN Strategy Stop Sell Time начал работать ---- " + getDate());
+        ConsoleHelper.writeMessage(ID + " --- RUN Strategy Stop Sell Time начал работать ---- "
+                + DatesTimes.getDate());
         ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
         timer();
 
@@ -42,14 +41,16 @@ public class StopSellTimeThread extends Thread {
             double close = Gasket.getBitmexQuote().getBidPrice();
 
             if (flag) {
-                ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по таймеру ---- " + getDate());
+                ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по таймеру ---- "
+                        + DatesTimes.getDate());
                 break;
             }
 
             if (close < max) {
                 if (Gasket.isTrading()) new TradeSell(ID);
-                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл по таймеру ---- " + getDate());
-                new TestOrderSell(ID, close).start();
+                ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл по таймеру ---- "
+                        + DatesTimes.getDate());
+                new TestOrderSell(ID, close);
                 break;
             }
 
@@ -72,16 +73,5 @@ public class StopSellTimeThread extends Thread {
             e.printStackTrace();
         }
         flag = true;
-    }
-
-
-    private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        dateFormat.format(date);
-        date.setTime(Gasket.getDateDifference() > 0
-                ? date.getTime() + (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference()))
-                : date.getTime() - (1000 * 60 * 60 * Math.abs(Gasket.getDateDifference())));
-        return dateFormat.format(date);
     }
 }

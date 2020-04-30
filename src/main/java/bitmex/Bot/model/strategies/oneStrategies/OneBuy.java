@@ -254,7 +254,7 @@ public class OneBuy {
             return;
         } else if (!isTimeNotOld()) {
             volume = null;
-        }else if (inTheRangePrice() && inTheRangeTime()) {
+        } else if (inTheRangePrice() && inTheRangeTime()) {
             if (Gasket.getStrategyWorkOne() == 1) {
                 if (Gasket.isOb_os_Flag()) {
                     Gasket.setOb_os_Flag(false);

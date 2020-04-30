@@ -1,6 +1,7 @@
 package bitmex.Bot.controller;
 
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.view.ConsoleHelper;
 
 public class ControlConsoleSetting extends Thread {
@@ -19,6 +20,11 @@ public class ControlConsoleSetting extends Thread {
                     ConsoleHelper.printInfoSettings();
                 } else if (string.trim().equalsIgnoreCase("flag")) {
                     ConsoleHelper.printFlag();
+                } else if (string.trim().equalsIgnoreCase("price")) {
+                    ConsoleHelper.writeMessage("price now === " + Gasket.getBitmexQuote().getBidPrice());
+                } else if (string.trim().equalsIgnoreCase("chart")) {
+                    ConsoleHelper.writeMessage("chart === " + Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
+                            10, ChartDataBinSize.ONE_MINUTE));
                 } else {
                     executorCommandos.parserAndExecutor(string);
                 }

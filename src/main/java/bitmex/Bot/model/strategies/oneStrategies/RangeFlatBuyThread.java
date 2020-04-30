@@ -23,6 +23,8 @@ public class RangeFlatBuyThread extends Thread {
 
     @Override
     public void run() {
+        ConsoleHelper.writeMessage(ID + " --- RUN класса Range Flat Buy Thread начал работать ---- "
+                + DatesTimes.getDate());
         // тут мы получаем максимальные границы канала и смотрим где по отношению к ним находится цена сейчас
         // можно конечно сделать среднюю границу канала (но это потом пока проверим так)
         List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),

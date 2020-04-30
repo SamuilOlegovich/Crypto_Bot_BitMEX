@@ -3,9 +3,13 @@ package bitmex.Bot.controller;
 import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
+import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
+import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.model.serverAndParser.Server;
 import bitmex.Bot.view.ConsoleHelper;
+
+import java.util.List;
 
 public class Main {
 
@@ -57,5 +61,16 @@ public class Main {
         ConsoleHelper.writeMessage("ПРОГРАММА УСПЕШНО ЗАПУЩЕНА");
         ConsoleHelper.writeMessage("ОЖИДАЙТЕ РЕЗУЛЬТАТОВ");
         ConsoleHelper.writeMessage("");
+
+        List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
+                Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
+        double maxAverage = 0.0;
+        double max = 0.0;
+
+        for (BitmexChartData biData : list) {
+            max = Math.max(max, biData.getHigh());
+            maxAverage = maxAverage + biData.getHigh();
+            System.out.println(max + " ---- " + maxAverage);
+        }
     }
 }

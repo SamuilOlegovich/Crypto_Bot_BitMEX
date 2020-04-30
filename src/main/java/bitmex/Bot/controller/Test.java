@@ -4,16 +4,20 @@ package bitmex.Bot.controller;
 import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
+import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
+import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.model.serverAndParser.Server;
 import bitmex.Bot.view.ConsoleHelper;
+
+import java.util.List;
 
 public class Test {
 
 
 
-    private static boolean useProduction = false; // true - реальный счет
+    private static boolean useProduction = true; // true - реальный счет
     private static String apiKeyName = "80p470zA0Yl7hr3sIXRoW_CR";
     private static String apiKey = "ZzQSrzFmixcVr83JTYLPsrOuz1R1VsYgFkiQ9BtiGV0lr_yv";
 //    private static BitmexQuote bitmexQuote;
@@ -106,5 +110,16 @@ public class Test {
         }
 
         System.out.println("ВСЕ ГУДЕН ТАГ");
+
+        List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
+                Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
+        double maxAverage = 0.0;
+        double max = 0.0;
+
+        for (BitmexChartData biData : list) {
+            max = Math.max(max, biData.getHigh());
+            maxAverage = maxAverage + biData.getHigh();
+            System.out.println(max + " ---- " + maxAverage);
+        }
     }
 }

@@ -5,18 +5,17 @@ import bitmex.Bot.model.strategies.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
-
-public class TestOrderBuyMiniRevers extends Thread {
+public class TestOrderBuyRevers extends Thread {
     private double priseTakeOrder;
     private double priseStopOrder;
     private double priseOpenOrder;
     private String ID;
 
-    public TestOrderBuyMiniRevers(String id, double priseOpenOrder) {
-        this.priseTakeOrder = priseOpenOrder - Gasket.getTake();
+    public TestOrderBuyRevers(String id, double priseOpenOrder) {
+        this.priseTakeOrder = priseOpenOrder - Gasket.getStop() + 5;
         this.priseStopOrder = priseOpenOrder + Gasket.getTake();
         this.priseOpenOrder = priseOpenOrder;
-        this.ID = id + "-MR";
+        this.ID = id + "-R";
         start();
     }
 
@@ -24,7 +23,7 @@ public class TestOrderBuyMiniRevers extends Thread {
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(ID + " --- RUN класса TestOrderSellMiniRevers начал считать --- "
+        ConsoleHelper.writeMessage(ID + " --- RUN класса Test Order Buy Revers начал считать --- "
                 + DatesTimes.getDate());
 
         while (true) {
@@ -35,31 +34,29 @@ public class TestOrderBuyMiniRevers extends Thread {
             if (priceAsk >= priseStopOrder) {
                 flag();
                 setStop();
-
-                ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС MiniR ---- "
+                ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС R ---- "
                         + DatesTimes.getDate());
-                Gasket.setPROFIT_Buy_MR(Gasket.getPROFIT_Buy_MR() - Gasket.getTake());
+                Gasket.setPROFIT_Buy_R(Gasket.getPROFIT_Buy_R() - Gasket.getTake());
                 break;
             }
 
             if (priceBid <= priseTakeOrder) {
                 flag();
                 setTake();
-
-                ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ MiniR ---- "
+                ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ R ---- "
                         + DatesTimes.getDate());
-                Gasket.setPROFIT_Buy_MR(Gasket.getPROFIT_Buy_MR() + Gasket.getTake());
+                Gasket.setPROFIT_Buy_R(Gasket.getPROFIT_Buy_R() + Gasket.getStop() - 5);
                 break;
             }
 
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса TestOrderSellMiniRevers");
+                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса TestOrderBuyRevers");
                 e.printStackTrace();
             }
         }
-        ConsoleHelper.printStatisticsMr();
+        ConsoleHelper.printStatisticsR();
     }
 
 
@@ -77,19 +74,19 @@ public class TestOrderBuyMiniRevers extends Thread {
     }
 
     private void setStop() {
-        if (ID.endsWith("-OS_5-MR")) Gasket.setOs5StopMr(Gasket.getOs5StopMr() + 1);
-        if (ID.endsWith("-OS_4-MR")) Gasket.setOs4StopMr(Gasket.getOs4StopMr() + 1);
-        if (ID.endsWith("-OS_3-MR")) Gasket.setOs3StopMr(Gasket.getOs3StopMr() + 1);
-        if (ID.endsWith("-OS_2-MR")) Gasket.setOs2StopMr(Gasket.getOs2StopMr() + 1);
-        if (ID.endsWith("-OS-MR")) Gasket.setOsStopMr(Gasket.getOsStopMr() + 1);
+        if (ID.endsWith("-OS_5-R")) Gasket.setOs5StopMr(Gasket.getOs5StopMr() + 1);
+        if (ID.endsWith("-OS_4-R")) Gasket.setOs4StopMr(Gasket.getOs4StopMr() + 1);
+        if (ID.endsWith("-OS_3-R")) Gasket.setOs3StopMr(Gasket.getOs3StopMr() + 1);
+        if (ID.endsWith("-OS_2-R")) Gasket.setOs2StopMr(Gasket.getOs2StopMr() + 1);
+        if (ID.endsWith("-OS-R")) Gasket.setOsStopMr(Gasket.getOsStopMr() + 1);
     }
 
     private void setTake() {
-        if (ID.endsWith("-OS_5-MR")) Gasket.setOs5TakeMr(Gasket.getOs5TakeMr() + 1);
-        if (ID.endsWith("-OS_4-MR")) Gasket.setOs4TakeMr(Gasket.getOs4TakeMr() + 1);
-        if (ID.endsWith("-OS_3-MR")) Gasket.setOs3TakeMr(Gasket.getOs3TakeMr() + 1);
-        if (ID.endsWith("-OS_2-MR")) Gasket.setOs2TakeMr(Gasket.getOs2TakeMr() + 1);
-        if (ID.endsWith("-OS-MR")) Gasket.setOsTakeMr(Gasket.getOsTakeMr() + 1);
+        if (ID.endsWith("-OS_5-R")) Gasket.setOs5TakeMr(Gasket.getOs5TakeMr() + 1);
+        if (ID.endsWith("-OS_4-R")) Gasket.setOs4TakeMr(Gasket.getOs4TakeMr() + 1);
+        if (ID.endsWith("-OS_3-R")) Gasket.setOs3TakeMr(Gasket.getOs3TakeMr() + 1);
+        if (ID.endsWith("-OS_2-R")) Gasket.setOs2TakeMr(Gasket.getOs2TakeMr() + 1);
+        if (ID.endsWith("-OS-R")) Gasket.setOsTakeMr(Gasket.getOsTakeMr() + 1);
     }
 }
 

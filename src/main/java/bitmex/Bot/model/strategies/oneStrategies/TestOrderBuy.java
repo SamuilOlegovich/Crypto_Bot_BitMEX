@@ -17,6 +17,7 @@ public class TestOrderBuy extends Thread {
         this.priseTakeOrder = priseOpenOrder + Gasket.getTake();
         this.priseStopOrder = priseOpenOrder - Gasket.getStop();
         new TestOrderBuyMiniRevers(id, priseOpenOrder);
+        new TestOrderBuyRevers(id, priseOpenOrder);
         this.priseOpenOrder = priseOpenOrder;
         this.ID =  id;
         start();
@@ -41,7 +42,6 @@ public class TestOrderBuy extends Thread {
                 ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС ---- "
                         + DatesTimes.getDate());
                 Gasket.setPROFIT_Buy(Gasket.getPROFIT_Buy() - Gasket.getStop());
-                ConsoleHelper.writeMessage(ID + " --- ИТОГО на счету БАЙ --- " + Gasket.getPROFIT_Buy());
                 break;
             }
 
@@ -52,7 +52,6 @@ public class TestOrderBuy extends Thread {
                 ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ ---- "
                         + DatesTimes.getDate());
                 Gasket.setPROFIT_Buy(Gasket.getPROFIT_Buy() + Gasket.getTake());
-                ConsoleHelper.writeMessage(ID + " --- ИТОГО на счету БАЙ --- " + Gasket.getPROFIT_Buy());
                 break;
             }
 

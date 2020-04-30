@@ -75,7 +75,7 @@ public class StrategyOneSellThread extends Thread {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 ConsoleHelper.writeMessage(ID
-                        + " --- Не смогли проснуться в методе RUN класса Strategy One Sell.");
+                        + " --- Не смогли проснуться в методе RUN класса Strategy One Sell");
                 e.printStackTrace();
             }
         }

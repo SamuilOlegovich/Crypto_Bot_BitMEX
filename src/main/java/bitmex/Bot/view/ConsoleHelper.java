@@ -31,7 +31,7 @@ public class ConsoleHelper {
             }
         } else {
             try {
-                WriterAndReadFile.writerFile(string, path, true);
+//                WriterAndReadFile.writerFile(string, path, true);
             } catch (Exception e) {
                 System.out.println("Не удалось записать меседж в лог.");
             }
@@ -155,6 +155,8 @@ public class ConsoleHelper {
 
     public static void printStatistics() {
         ConsoleHelper.writeMessage("\n"
+                + " --- ИТОГО на счету CEЛЛ --- " + Gasket.getPROFIT_Sell() + "\n"
+                + " --- ИТОГО на счету БАЙ --- " + Gasket.getPROFIT_Buy() + "\n"
                 + "OB_5_TAKE === " + Gasket.getOb5Take() + "\n"
                 + "OB_5_STOP === " + Gasket.getOb5Stop() + "\n"
                 + "OS_5_TAKE === " + Gasket.getOs5Take() + "\n"
@@ -180,6 +182,8 @@ public class ConsoleHelper {
 
     public static void printStatisticsMr() {
         ConsoleHelper.writeMessage("\n"
+                + " --- ИТОГО на счету CEЛЛ MR --- " + Gasket.getPROFIT_Sell_MR() + "\n"
+                + " --- ИТОГО на счету БАЙ MR --- " + Gasket.getPROFIT_Buy_MR() + "\n"
                 + "OB_5_TAKE_MR === " + Gasket.getOb5TakeMr() + "\n"
                 + "OB_5_STOP_MR === " + Gasket.getOb5StopMr() + "\n"
                 + "OS_5_TAKE_MR === " + Gasket.getOs5TakeMr() + "\n"
@@ -202,6 +206,35 @@ public class ConsoleHelper {
                 + "OS_STOP_MR === " + Gasket.getOsStopMr() + "\n"
                 + "\n");
     }
+
+    public static void printStatisticsR() {
+        ConsoleHelper.writeMessage("\n"
+                + " --- ИТОГО на счету CEЛЛ R --- " + Gasket.getPROFIT_Sell_R() + "\n"
+                + " --- ИТОГО на счету БАЙ R --- " + Gasket.getPROFIT_Buy_R() + "\n"
+                + "OB_5_TAKE_R === " + Gasket.getOb5TakeR() + "\n"
+                + "OB_5_STOP_R === " + Gasket.getOb5StopR() + "\n"
+                + "OS_5_TAKE_R === " + Gasket.getOs5TakeR() + "\n"
+                + "OS_5_STOP_R === " + Gasket.getOs5StopR() + "\n"
+                + "OB_4_TAKE_R === " + Gasket.getOb4TakeR() + "\n"
+                + "OB_4_STOP_R === " + Gasket.getOb4StopR() + "\n"
+                + "OS_4_TAKE_R === " + Gasket.getOs4TakeR() + "\n"
+                + "OS_4_STOP_R === " + Gasket.getOs4StopR() + "\n"
+                + "OB_3_TAKE_R === " + Gasket.getOb3TakeR() + "\n"
+                + "OB_3_STOP_R === " + Gasket.getOb3StopR() + "\n"
+                + "OS_3_TAKE_R === " + Gasket.getOs3TakeR() + "\n"
+                + "OS_3_STOP_R === " + Gasket.getOs3StopR() + "\n"
+                + "OB_2_TAKE_R === " + Gasket.getOb2TakeR() + "\n"
+                + "OB_2_STOP_R === " + Gasket.getOb2StopR() + "\n"
+                + "OS_2_TAKE_R === " + Gasket.getOs2TakeR() + "\n"
+                + "OS_2_STOP_R === " + Gasket.getOs2StopR() + "\n"
+                + "OB_TAKE_R === " + Gasket.getObTakeR() + "\n"
+                + "OB_STOP_R === " + Gasket.getObStopR() + "\n"
+                + "OS_TAKE_R === " + Gasket.getOsTakeR() + "\n"
+                + "OS_STOP_R === " + Gasket.getOsStopR() + "\n"
+                + "\n");
+    }
+
+
 
     public static void printFlag() {
         ConsoleHelper.writeMessage("\n"

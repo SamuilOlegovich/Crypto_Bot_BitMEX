@@ -10,6 +10,7 @@ import java.util.List;
 import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
 
 public class Gasket {
+
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
@@ -45,8 +46,10 @@ public class Gasket {
     private static double lot = 1.0;            // количество контрактов
     private static String path = "";
     private static int PORT = 4444;             // порт подключения
+    private static Ticker ticker;
 
-        // флаги
+
+            // флаги
     private static volatile boolean ob_os_Flag = true;
     private static volatile boolean osFlag_5 = true;
     private static volatile boolean obFlag_5 = true;
@@ -59,12 +62,14 @@ public class Gasket {
     private static volatile boolean obFlag = true;
     private static volatile boolean osFlag = true;
 
-        // включаем отключаем стратегии
+
+            // включаем отключаем стратегии
     private static boolean ob_5 = true;
     private static boolean ob_4 = true;
     private static boolean ob_3 = true;
     private static boolean ob_2 = true;
     private static boolean ob = true;
+
 
             // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика)
     private static volatile double PROFIT_Sell = 0.0;   // профит по сделкам в селл
@@ -90,7 +95,8 @@ public class Gasket {
     private static int OS_STOP = 0;
     private static int OS_TAKE = 0;
 
-            // // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика) для MiniRevers
+
+            // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика) для MiniRevers
     private static volatile double PROFIT_Sell_MR = 0.0;            // профит по сделкам в селл _MR -- MiniRevers
     private static volatile double PROFIT_Buy_MR = 0.0;             // профит по сделкам в бай _MR -- MiniRevers
     private static int OB_5_TAKE_MR = 0;
@@ -115,13 +121,39 @@ public class Gasket {
     private static int OS_TAKE_MR = 0;
 
 
-    private static Ticker ticker;
+            // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика) для Revers
+    private static volatile double PROFIT_Sell_R = 0.0;            // профит по сделкам в селл _MR -- MiniRevers
+    private static volatile double PROFIT_Buy_R = 0.0;             // профит по сделкам в бай _MR -- MiniRevers
+    private static int OB_5_TAKE_R = 0;
+    private static int OB_5_STOP_R = 0;
+    private static int OS_5_TAKE_R = 0;
+    private static int OS_5_STOP_R = 0;
+    private static int OB_4_TAKE_R = 0;
+    private static int OB_4_STOP_R = 0;
+    private static int OS_4_TAKE_R = 0;
+    private static int OS_4_STOP_R = 0;
+    private static int OB_3_TAKE_R = 0;
+    private static int OB_3_STOP_R = 0;
+    private static int OS_3_TAKE_R = 0;
+    private static int OS_3_STOP_R = 0;
+    private static int OB_2_TAKE_R = 0;
+    private static int OB_2_STOP_R = 0;
+    private static int OS_2_TAKE_R = 0;
+    private static int OS_2_STOP_R = 0;
+    private static int OB_STOP_R = 0;
+    private static int OB_TAKE_R = 0;
+    private static int OS_STOP_R = 0;
+    private static int OS_TAKE_R = 0;
+
 
 
     public static BitmexChartData price(Ticker ticker) {
             List<BitmexChartData> list = bitmexClient.getChartData(ticker, 1, ONE_MINUTE);
             return bitmexChartData = list.get(0);
     }
+
+
+
 
     public static void setBitmexClient(BitmexClient bitmexClient) {
         Gasket.bitmexClient = bitmexClient;
@@ -885,5 +917,181 @@ public class Gasket {
 
     public static void setOsTakeMr(int osTakeMr) {
         OS_TAKE_MR = osTakeMr;
+    }
+
+    public static double getPROFIT_Sell_R() {
+        return PROFIT_Sell_R;
+    }
+
+    public static void setPROFIT_Sell_R(double PROFIT_Sell_R) {
+        Gasket.PROFIT_Sell_R = PROFIT_Sell_R;
+    }
+
+    public static double getPROFIT_Buy_R() {
+        return PROFIT_Buy_R;
+    }
+
+    public static void setPROFIT_Buy_R(double PROFIT_Buy_R) {
+        Gasket.PROFIT_Buy_R = PROFIT_Buy_R;
+    }
+
+    public static int getOb5TakeR() {
+        return OB_5_TAKE_R;
+    }
+
+    public static void setOb5TakeR(int ob5TakeR) {
+        OB_5_TAKE_R = ob5TakeR;
+    }
+
+    public static int getOb5StopR() {
+        return OB_5_STOP_R;
+    }
+
+    public static void setOb5StopR(int ob5StopR) {
+        OB_5_STOP_R = ob5StopR;
+    }
+
+    public static int getOs5TakeR() {
+        return OS_5_TAKE_R;
+    }
+
+    public static void setOs5TakeR(int os5TakeR) {
+        OS_5_TAKE_R = os5TakeR;
+    }
+
+    public static int getOs5StopR() {
+        return OS_5_STOP_R;
+    }
+
+    public static void setOs5StopR(int os5StopR) {
+        OS_5_STOP_R = os5StopR;
+    }
+
+    public static int getOb4TakeR() {
+        return OB_4_TAKE_R;
+    }
+
+    public static void setOb4TakeR(int ob4TakeR) {
+        OB_4_TAKE_R = ob4TakeR;
+    }
+
+    public static int getOb4StopR() {
+        return OB_4_STOP_R;
+    }
+
+    public static void setOb4StopR(int ob4StopR) {
+        OB_4_STOP_R = ob4StopR;
+    }
+
+    public static int getOs4TakeR() {
+        return OS_4_TAKE_R;
+    }
+
+    public static void setOs4TakeR(int os4TakeR) {
+        OS_4_TAKE_R = os4TakeR;
+    }
+
+    public static int getOs4StopR() {
+        return OS_4_STOP_R;
+    }
+
+    public static void setOs4StopR(int os4StopR) {
+        OS_4_STOP_R = os4StopR;
+    }
+
+    public static int getOb3TakeR() {
+        return OB_3_TAKE_R;
+    }
+
+    public static void setOb3TakeR(int ob3TakeR) {
+        OB_3_TAKE_R = ob3TakeR;
+    }
+
+    public static int getOb3StopR() {
+        return OB_3_STOP_R;
+    }
+
+    public static void setOb3StopR(int ob3StopR) {
+        OB_3_STOP_R = ob3StopR;
+    }
+
+    public static int getOs3TakeR() {
+        return OS_3_TAKE_R;
+    }
+
+    public static void setOs3TakeR(int os3TakeR) {
+        OS_3_TAKE_R = os3TakeR;
+    }
+
+    public static int getOs3StopR() {
+        return OS_3_STOP_R;
+    }
+
+    public static void setOs3StopR(int os3StopR) {
+        OS_3_STOP_R = os3StopR;
+    }
+
+    public static int getOb2TakeR() {
+        return OB_2_TAKE_R;
+    }
+
+    public static void setOb2TakeR(int ob2TakeR) {
+        OB_2_TAKE_R = ob2TakeR;
+    }
+
+    public static int getOb2StopR() {
+        return OB_2_STOP_R;
+    }
+
+    public static void setOb2StopR(int ob2StopR) {
+        OB_2_STOP_R = ob2StopR;
+    }
+
+    public static int getOs2TakeR() {
+        return OS_2_TAKE_R;
+    }
+
+    public static void setOs2TakeR(int os2TakeR) {
+        OS_2_TAKE_R = os2TakeR;
+    }
+
+    public static int getOs2StopR() {
+        return OS_2_STOP_R;
+    }
+
+    public static void setOs2StopR(int os2StopR) {
+        OS_2_STOP_R = os2StopR;
+    }
+
+    public static int getObStopR() {
+        return OB_STOP_R;
+    }
+
+    public static void setObStopR(int obStopR) {
+        OB_STOP_R = obStopR;
+    }
+
+    public static int getObTakeR() {
+        return OB_TAKE_R;
+    }
+
+    public static void setObTakeR(int obTakeR) {
+        OB_TAKE_R = obTakeR;
+    }
+
+    public static int getOsStopR() {
+        return OS_STOP_R;
+    }
+
+    public static void setOsStopR(int osStopR) {
+        OS_STOP_R = osStopR;
+    }
+
+    public static int getOsTakeR() {
+        return OS_TAKE_R;
+    }
+
+    public static void setOsTakeR(int osTakeR) {
+        OS_TAKE_R = osTakeR;
     }
 }

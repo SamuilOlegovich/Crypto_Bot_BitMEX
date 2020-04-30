@@ -17,6 +17,7 @@ public class TestOrderSell extends Thread {
         this.priseTakeOrder = priseOpenOrder - Gasket.getTake();
         this.priseStopOrder = priseOpenOrder + Gasket.getStop();
         new TestOrderSellMiniRevers(id, priseOpenOrder);
+        new TestOrderSellRevers(id, priseOpenOrder);
         this.priseOpenOrder = priseOpenOrder;
         this.ID = id;
         start();
@@ -41,7 +42,6 @@ public class TestOrderSell extends Thread {
                 ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС ---- "
                         + DatesTimes.getDate());
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() - Gasket.getStop());
-                ConsoleHelper.writeMessage(ID + " --- ИТОГО на счету СЕЛЛ --- " + Gasket.getPROFIT_Sell());
                 break;
             }
 
@@ -52,14 +52,13 @@ public class TestOrderSell extends Thread {
                 ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ ---- "
                         + DatesTimes.getDate());
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() + Gasket.getTake());
-                ConsoleHelper.writeMessage(ID + " --- ИТОГО на счету CEЛЛ --- " + Gasket.getPROFIT_Sell());
                 break;
             }
 
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса StrategyOneSell.");
+                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса StrategyOneSell");
                 e.printStackTrace();
             }
         }

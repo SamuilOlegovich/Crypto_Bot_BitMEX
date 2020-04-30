@@ -24,6 +24,8 @@ public class RangeFlatSellThread extends Thread {
 
     @Override
     public void run() {
+        ConsoleHelper.writeMessage(ID + " --- RUN класса Range Flat Sell Thread начал работать ---- "
+                + DatesTimes.getDate());
         List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
                 Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
         double take = Gasket.getTake();

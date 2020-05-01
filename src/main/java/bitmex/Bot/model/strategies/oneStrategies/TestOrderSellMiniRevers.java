@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
-import bitmex.Bot.model.strategies.DatesTimes;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -24,7 +24,7 @@ public class TestOrderSellMiniRevers extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN класса TestOrderBuyMiniRevers начал считать --- "
-                + DatesTimes.getDate());
+                + DatesTimes.getDateTerminal());
 
         while (true) {
             BitmexQuote bitmexQuote = Gasket.getBitmexQuote();
@@ -36,7 +36,7 @@ public class TestOrderSellMiniRevers extends Thread {
                 setStop();
 
                 ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС MiniR ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
                 Gasket.setPROFIT_Sell_MR(Gasket.getPROFIT_Sell_MR() - Gasket.getTake());
                 break;
             }
@@ -46,7 +46,7 @@ public class TestOrderSellMiniRevers extends Thread {
                 setTake();
 
                 ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ MiniR ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
                 Gasket.setPROFIT_Sell_MR(Gasket.getPROFIT_Sell_MR() + Gasket.getTake());
                 break;
             }

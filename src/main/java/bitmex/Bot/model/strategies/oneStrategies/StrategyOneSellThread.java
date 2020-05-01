@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.strategies.DatesTimes;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -34,7 +34,7 @@ public class StrategyOneSellThread extends Thread {
                 ? ask.getPrice() + Gasket.getRangePriceMIN() : volume.getPrice() + Gasket.getRangePriceMIN();
 
         ConsoleHelper.writeMessage(ID + " --- RUN класса Strategy One Sell Thread начал работать ---- "
-                + DatesTimes.getDate() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
+                + DatesTimes.getDateTerminal() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
 
         while (true) {
 
@@ -44,15 +44,15 @@ public class StrategyOneSellThread extends Thread {
                 flag();
                 if (!isRelevantDate()) {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по дате комбинации---- "
-                            + DatesTimes.getDate());
+                            + DatesTimes.getDateTerminal());
                 }
                 else if (Gasket.isUseStopLevelOrNotStop() && close > min) {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Селл ВЫШЛА ЗА уровень MIN ---- "
-                            + DatesTimes.getDate());
+                            + DatesTimes.getDateTerminal());
                     new StopSellTimeThread(ID, max, min);
                 } else {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА ---- "
-                            + DatesTimes.getDate());
+                            + DatesTimes.getDateTerminal());
                 }
                 break;
             }
@@ -64,7 +64,7 @@ public class StrategyOneSellThread extends Thread {
                 } else {
                     if (Gasket.isTrading()) new TradeSell(ID);
                     ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
-                            + DatesTimes.getDate());
+                            + DatesTimes.getDateTerminal());
                     new TestOrderSell(ID, close);
                     return;
                 }

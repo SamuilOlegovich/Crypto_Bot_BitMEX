@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.strategies.DatesTimes;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -35,7 +35,7 @@ public class StrategyOneBuyThread extends Thread {
                 ? bid.getPrice() - Gasket.getRangePriceMIN() : volume.getPrice() - Gasket.getRangePriceMIN();
 
         ConsoleHelper.writeMessage(ID + " --- RUN Strategy One Buy Thread начал работать ---- "
-                + DatesTimes.getDate() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
+                + DatesTimes.getDateTerminal() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
 
         while (true) {
 
@@ -45,14 +45,14 @@ public class StrategyOneBuyThread extends Thread {
                 flag();
                 if (!isRelevantDate()) {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА по дате комбинации---- "
-                            + DatesTimes.getDate());
+                            + DatesTimes.getDateTerminal());
                 } else if (Gasket.isUseStopLevelOrNotStop() && close < min) {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Бай ВЫШЛА ЗА уровень MIN ---- "
-                            + DatesTimes.getDate());
+                            + DatesTimes.getDateTerminal());
                     new StopBuyTimeThread(ID, max, min);
                 } else {
                     ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА ---- "
-                            + DatesTimes.getDate());
+                            + DatesTimes.getDateTerminal());
                 }
                 return;
             }
@@ -63,7 +63,7 @@ public class StrategyOneBuyThread extends Thread {
                     return;
                 } else {
                     if (Gasket.isTrading()) new TradeBuy(ID);
-                    ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + DatesTimes.getDate());
+                    ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + DatesTimes.getDateTerminal());
                     new TestOrderBuy(ID, close);
                     return;
                 }

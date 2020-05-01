@@ -1,6 +1,7 @@
 package bitmex.Bot.view;
 
-import bitmex.Bot.model.strategies.DatesTimes;
+import bitmex.Bot.model.DatesTimes;
+import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.Gasket;
 
 import java.io.InputStreamReader;
@@ -9,34 +10,34 @@ import java.io.IOException;
 
 
 public class ConsoleHelper {
-    private static String path = "/Users/samuilolegovich/Desktop/bitmex-client-master/src/main/java/bitmex/Bot/Logs/";
+//    private static String path = "/Users/samuilolegovich/Desktop/bitmex-client-master/src/main/java/bitmex/Bot/Logs/";
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    private static boolean crateLogFile = true;
+//    private static boolean crateLogFile = true;
 
 
     public static void writeMessage(String string) {
-        if (crateLogFile) {
-            crateLogFile = false;
-            getPathString();
+//        if (crateLogFile) {
+//            crateLogFile = false;
+//            getPathString();
 
-            try {
-                WriterAndReadFile.createNewFile(path);
-                try {
-                    WriterAndReadFile.writerFile(string, path, true);
-                } catch (Exception e) {
-                    System.out.println("Не удалось записать меседж в лог.");
-                }
-            } catch (Exception e) {
-                System.out.println("Не удалось создать Лог файл.");
-            }
-        } else {
-            try {
-//                WriterAndReadFile.writerFile(string, path, true);
-            } catch (Exception e) {
-                System.out.println("Не удалось записать меседж в лог.");
-            }
-            System.out.println(string);
-        }
+//            try {
+//                WriterAndReadFile.createNewFile(path);
+//                try {
+        WriterAndReadFile.writerFile(string, Gasket.getFilesAndPathCreator().getPathLogs(), true);
+//                } catch (Exception e) {
+//                    System.out.println("Не удалось записать меседж в лог.");
+//                }
+//            } catch (Exception e) {
+//                System.out.println("Не удалось создать Лог файл.");
+//            }
+//        } else {
+//            try {
+////                WriterAndReadFile.writerFile(string, path, true);
+//            } catch (Exception e) {
+//                System.out.println("Не удалось записать меседж в лог.");
+//            }
+        System.out.println(string);
+//        }
     }
 
 
@@ -252,19 +253,25 @@ public class ConsoleHelper {
     }
 
 
-    private static void getPathString() {
-        try {
-            Thread.sleep(1000 * 3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        path = Gasket.getPath() + "Logs/" + DatesTimes.getDate() + "=Log.txt";
-    }
+//    private static void getPathString() {
+//        try {
+//            Thread.sleep(1000 * 3);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        path = Gasket.getPath() + "Logs/" + DatesTimes.getDateTerminal() + "=Log.txt";
+//    }
 
 
 
     // TEST
     public static void main(String[] args) {
+        FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
+        try {
+            Thread.sleep(1000 * 3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ConsoleHelper.printInfoSettings();
     }
 }

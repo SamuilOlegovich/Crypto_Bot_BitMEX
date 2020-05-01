@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
-import bitmex.Bot.model.strategies.DatesTimes;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -24,7 +24,7 @@ public class TestOrderBuyRevers extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN класса Test Order Buy Revers начал считать --- "
-                + DatesTimes.getDate());
+                + DatesTimes.getDateTerminal());
 
         while (true) {
             BitmexQuote bitmexQuote = Gasket.getBitmexQuote();
@@ -35,7 +35,7 @@ public class TestOrderBuyRevers extends Thread {
                 flag();
                 setStop();
                 ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС R ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
                 Gasket.setPROFIT_Buy_R(Gasket.getPROFIT_Buy_R() - Gasket.getTake());
                 break;
             }
@@ -44,7 +44,7 @@ public class TestOrderBuyRevers extends Thread {
                 flag();
                 setTake();
                 ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ R ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
                 Gasket.setPROFIT_Buy_R(Gasket.getPROFIT_Buy_R() + Gasket.getStop() - 5);
                 break;
             }

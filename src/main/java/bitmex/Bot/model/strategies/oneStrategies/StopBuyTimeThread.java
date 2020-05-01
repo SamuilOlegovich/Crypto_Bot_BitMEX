@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 
-import bitmex.Bot.model.strategies.DatesTimes;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -28,7 +28,7 @@ public class StopBuyTimeThread extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN Strategy Stop Buy Time начал работать ---- "
-                + DatesTimes.getDate() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
+                + DatesTimes.getDateTerminal() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
         timer();
 
         try {
@@ -43,7 +43,7 @@ public class StopBuyTimeThread extends Thread {
 
             if (flag) {
                 ConsoleHelper.writeMessage(ID + " --- Сделка Бай ОТМЕНЕНА по таймеру ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
                 return;
             }
 
@@ -54,7 +54,7 @@ public class StopBuyTimeThread extends Thread {
                 } else {
                     if (Gasket.isTrading()) new TradeBuy(ID);
                     ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай по таймеру ---- "
-                            + DatesTimes.getDate());
+                            + DatesTimes.getDateTerminal());
                     new TestOrderBuy(ID, close);
                     return;
                 }

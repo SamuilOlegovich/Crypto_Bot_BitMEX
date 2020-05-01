@@ -1,5 +1,6 @@
 package bitmex.Bot.controller;
 
+import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
@@ -21,6 +22,8 @@ public class Main {
 
 
     public static void main(String[] args) {
+        FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
+        //  тут можно подождать пару секунд
         ticker = new Ticker("XBTUSD");
         ExecutorCommandos executorCommandos = new ExecutorCommandos();
         ParserSetting parserSetting = new ParserSetting(executorCommandos);

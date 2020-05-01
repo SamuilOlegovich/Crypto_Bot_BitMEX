@@ -2,7 +2,7 @@ package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
-import bitmex.Bot.model.strategies.DatesTimes;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -25,7 +25,7 @@ public class RangeFlatSellThread extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN класса Range Flat Sell Thread начал работать ---- "
-                + DatesTimes.getDate());
+                + DatesTimes.getDateTerminal());
         List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
                 Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
         double take = Gasket.getTake();
@@ -44,21 +44,21 @@ public class RangeFlatSellThread extends Thread {
             if (close < minAverage || (close > minAverage && close > (minAverage + (take * 2)))) {
                 if (Gasket.isTrading()) new TradeSell(ID);
                 ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
                 new TestOrderSell(ID, close);
             } else {
                 ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по диапазону ФЛЭТа ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
             }
         } else {
             if (close < min || (close > min && close > (min + (take * 2)))) {
                 if (Gasket.isTrading()) new TradeSell(ID);
                 ConsoleHelper.writeMessage(ID + " --- Сделал сделку Селл ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
                 new TestOrderSell(ID, close);
             } else {
                 ConsoleHelper.writeMessage(ID + " --- Сделка Селл ОТМЕНЕНА по диапазону ФЛЭТа ---- "
-                        + DatesTimes.getDate());
+                        + DatesTimes.getDateTerminal());
             }
         }
     }

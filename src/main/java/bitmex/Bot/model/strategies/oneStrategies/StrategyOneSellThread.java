@@ -34,8 +34,7 @@ public class StrategyOneSellThread extends Thread {
                 ? ask.getPrice() + Gasket.getRangePriceMIN() : volume.getPrice() + Gasket.getRangePriceMIN();
 
         ConsoleHelper.writeMessage(ID + " --- RUN класса Strategy One Sell Thread начал работать ---- "
-                + DatesTimes.getDate());
-        ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
+                + DatesTimes.getDate() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
 
         while (true) {
 

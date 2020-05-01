@@ -28,8 +28,7 @@ public class StopBuyTimeThread extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(ID + " --- RUN Strategy Stop Buy Time начал работать ---- "
-                + DatesTimes.getDate());
-        ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
+                + DatesTimes.getDate() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
         timer();
 
         try {

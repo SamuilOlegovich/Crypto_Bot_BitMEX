@@ -74,19 +74,19 @@ public class TestOrderBuyRevers extends Thread {
     }
 
     private void setStop() {
-        if (ID.endsWith("-OS_5-R")) Gasket.setOs5StopMr(Gasket.getOs5StopMr() + 1);
-        if (ID.endsWith("-OS_4-R")) Gasket.setOs4StopMr(Gasket.getOs4StopMr() + 1);
-        if (ID.endsWith("-OS_3-R")) Gasket.setOs3StopMr(Gasket.getOs3StopMr() + 1);
-        if (ID.endsWith("-OS_2-R")) Gasket.setOs2StopMr(Gasket.getOs2StopMr() + 1);
-        if (ID.endsWith("-OS-R")) Gasket.setOsStopMr(Gasket.getOsStopMr() + 1);
+        if (ID.endsWith("-OS_5-R")) Gasket.setOs5StopR(Gasket.getOs5StopR() + 1);
+        if (ID.endsWith("-OS_4-R")) Gasket.setOs4StopR(Gasket.getOs4StopR() + 1);
+        if (ID.endsWith("-OS_3-R")) Gasket.setOs3StopR(Gasket.getOs3StopR() + 1);
+        if (ID.endsWith("-OS_2-R")) Gasket.setOs2StopR(Gasket.getOs2StopR() + 1);
+        if (ID.endsWith("-OS-R")) Gasket.setOsStopR(Gasket.getOsStopR() + 1);
     }
 
     private void setTake() {
-        if (ID.endsWith("-OS_5-R")) Gasket.setOs5TakeMr(Gasket.getOs5TakeMr() + 1);
-        if (ID.endsWith("-OS_4-R")) Gasket.setOs4TakeMr(Gasket.getOs4TakeMr() + 1);
-        if (ID.endsWith("-OS_3-R")) Gasket.setOs3TakeMr(Gasket.getOs3TakeMr() + 1);
-        if (ID.endsWith("-OS_2-R")) Gasket.setOs2TakeMr(Gasket.getOs2TakeMr() + 1);
-        if (ID.endsWith("-OS-R")) Gasket.setOsTakeMr(Gasket.getOsTakeMr() + 1);
+        if (ID.endsWith("-OS_5-R")) Gasket.setOs5TakeR(Gasket.getOs5TakeR() + 1);
+        if (ID.endsWith("-OS_4-R")) Gasket.setOs4TakeR(Gasket.getOs4TakeR() + 1);
+        if (ID.endsWith("-OS_3-R")) Gasket.setOs3TakeR(Gasket.getOs3TakeR() + 1);
+        if (ID.endsWith("-OS_2-R")) Gasket.setOs2TakeR(Gasket.getOs2TakeR() + 1);
+        if (ID.endsWith("-OS-R")) Gasket.setOsTakeR(Gasket.getOsTakeR() + 1);
     }
 }
 

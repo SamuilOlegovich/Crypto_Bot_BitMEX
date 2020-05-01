@@ -14,6 +14,7 @@ public class Gasket {
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
+    private static FilesAndPathCreator filesAndPathCreator;
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
     private static int numberOfCandlesForAnalysis = 60;             // количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку
     private static volatile boolean oneSellFLAG = true;
@@ -1093,5 +1094,13 @@ public class Gasket {
 
     public static void setOsTakeR(int osTakeR) {
         OS_TAKE_R = osTakeR;
+    }
+
+    public static FilesAndPathCreator getFilesAndPathCreator() {
+        return filesAndPathCreator;
+    }
+
+    public static void setFilesAndPathCreator(FilesAndPathCreator filesAndPathCreator) {
+        Gasket.filesAndPathCreator = filesAndPathCreator;
     }
 }

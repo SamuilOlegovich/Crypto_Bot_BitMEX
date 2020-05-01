@@ -35,8 +35,7 @@ public class StrategyOneBuyThread extends Thread {
                 ? bid.getPrice() - Gasket.getRangePriceMIN() : volume.getPrice() - Gasket.getRangePriceMIN();
 
         ConsoleHelper.writeMessage(ID + " --- RUN Strategy One Buy Thread начал работать ---- "
-                + DatesTimes.getDate());
-        ConsoleHelper.writeMessage(ID + " --- MAX ---- " + max + " --- MIN --- " + min);
+                + DatesTimes.getDate() + "\n" + ID + " --- MAX ---- " + max + " --- MIN --- " + min);
 
         while (true) {
 

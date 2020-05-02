@@ -1,9 +1,14 @@
 package bitmex.Bot.model.strategies.II;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SavedPatterns {
+
+
+
+public class SavedPatterns implements Serializable {
     private static ArrayList<ArrayList<String>> listsPricePatterns = new ArrayList<>();
+    private static int maxArraySize = 0;
 
 
     public static ArrayList<ArrayList<String>> getListsPricePatterns() {
@@ -54,6 +59,7 @@ public class SavedPatterns {
 
         // если совпадение не было найдено - добавляем данный патерн в массив
         SavedPatterns.listsPricePatterns.add(arrayList);
+        maxArraySize = Math.max(arrayList.size(), maxArraySize);
 
     }
 
@@ -69,6 +75,28 @@ public class SavedPatterns {
         int buy = Integer.parseInt(strings1[1]) + Integer.parseInt(strings2[1]);
 
         // вернули итоговую инфо строку
-        return  strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell;
+        return  strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + "ID"
+                + "===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39));
+    }
+
+
+    // находим и отдаем массивы нужной длины - размера
+    public static ArrayList<ArrayList<String>> getListFoSize(int size) {
+        ArrayList<ArrayList<String>> listFoSize = new ArrayList<>();
+
+        for (ArrayList<String> list : listsPricePatterns) {
+            if (list.size() == size) {
+                listFoSize.add(list);
+            }
+        }
+        if (listFoSize.size() > 0) return listFoSize;
+        else return null;
+    }
+
+
+
+    // возвращаем самую большую длину имеющегося паттерна
+    public static int getMaxArraySize() {
+        return maxArraySize;
     }
 }

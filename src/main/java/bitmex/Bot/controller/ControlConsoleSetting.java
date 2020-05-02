@@ -1,8 +1,10 @@
 package bitmex.Bot.controller;
 
-import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.Gasket;
+
+
 
 public class ControlConsoleSetting extends Thread {
     private ExecutorCommandos executorCommandos;

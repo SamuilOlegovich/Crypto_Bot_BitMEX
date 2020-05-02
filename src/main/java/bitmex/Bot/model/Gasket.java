@@ -27,8 +27,10 @@ public class Gasket {
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
     private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
+    private static boolean tradingPatterns = false;     // включить по патернам патернов
     private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
     private static volatile double PROFIT = 0.0;        // итоговый профит
+    private static boolean savedPatterns = true;        // включить нахождение и запись патернов
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
     private static double rangePriceMAX = 4.0;          // диапазон в долларах от уровней для срабатывания ордера
@@ -1096,11 +1098,31 @@ public class Gasket {
         OS_TAKE_R = osTakeR;
     }
 
+
+
     public static FilesAndPathCreator getFilesAndPathCreator() {
         return filesAndPathCreator;
     }
 
     public static void setFilesAndPathCreator(FilesAndPathCreator filesAndPathCreator) {
         Gasket.filesAndPathCreator = filesAndPathCreator;
+    }
+
+
+
+    public static boolean isTradingPatterns() {
+        return tradingPatterns;
+    }
+
+    public static void setTradingPatterns(boolean tradingPatterns) {
+        Gasket.tradingPatterns = tradingPatterns;
+    }
+
+    public static boolean isSavedPatterns() {
+        return savedPatterns;
+    }
+
+    public static void setSavedPatterns(boolean savedPatterns) {
+        Gasket.savedPatterns = savedPatterns;
     }
 }

@@ -1,6 +1,8 @@
 package bitmex.Bot.model.strategies;
 
 
+import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
+import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.strategies.oneStrategies.*;
 import bitmex.Bot.model.Gasket;
@@ -9,6 +11,9 @@ import bitmex.Bot.model.Gasket;
 
 public class StrategyFactory {
     private static StrategyFactory strategyFactory;
+
+    private ListensLooksAndCompares listensLooksAndCompares;
+    private ListensToLooksAndFills listensToLooksAndFills;
     private OneSell_5 oneSell5;
     private OneSell_4 oneSell4;
     private OneSell_3 oneSell3;
@@ -108,6 +113,24 @@ public class StrategyFactory {
                 oneBuy5.setIInfoString(infoIndicator);
             } else {
                 oneBuy5.setIInfoString(infoIndicator);
+            }
+        }
+
+        if (Gasket.isSavedPatterns()) {
+            if (listensToLooksAndFills == null) {
+                listensToLooksAndFills = ListensToLooksAndFills.getInstance();
+                listensToLooksAndFills.setIInfoString(infoIndicator);
+            } else {
+                listensToLooksAndFills.setIInfoString(infoIndicator);
+            }
+        }
+
+        if (Gasket.isTradingPatterns()) {
+            if (listensLooksAndCompares == null) {
+                listensLooksAndCompares = ListensLooksAndCompares.getInstance();
+                listensLooksAndCompares.setIInfoString(infoIndicator);
+            } else {
+                listensLooksAndCompares.setIInfoString(infoIndicator);
             }
         }
     }

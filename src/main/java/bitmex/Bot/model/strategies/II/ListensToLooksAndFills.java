@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 
 public class ListensToLooksAndFills {
-    private ListensToLooksAndFills listensToLooksAndFills;
+    private static ListensToLooksAndFills listensToLooksAndFills;
+
     private ArrayList<InfoIndicator> listInfoIndicator;
     private ArrayList<String> listStringPriceSell;
     private ArrayList<String> listStringPriceBuy;
@@ -33,7 +34,7 @@ public class ListensToLooksAndFills {
         this.timeFlag = false;
     }
 
-    public ListensToLooksAndFills getInstance() {
+    public static ListensToLooksAndFills getInstance() {
         if (listensToLooksAndFills == null) listensToLooksAndFills = new ListensToLooksAndFills();
         return listensToLooksAndFills;
     }
@@ -88,6 +89,7 @@ public class ListensToLooksAndFills {
             sortPrice(true);
         }
 
+        // тоже самое только для комбиначии СЕЛЛ
         if (priceEndSell == 0) {
             priceEndSell = priceNow - priceTake;
         } else if (priceEndSell <= priceNow) {
@@ -103,13 +105,15 @@ public class ListensToLooksAndFills {
             }
             sortPrice(false);
         }
+        // очищаем лист входящих объектов
         listInfoIndicator.clear();
     }
 
 
+    // Cортируем и добавляем строки в листы направлений
     private void sortPrice(boolean buyOrSell) {
-        Comparator sortPrice = new SortPrice();
-        Collections.sort(listInfoIndicator, sortPrice);
+        Comparator sortPriceComparator = new SortPrice();
+        Collections.sort(listInfoIndicator, sortPriceComparator);
 
         if (buyOrSell) {
             for (InfoIndicator infoIndicator : listInfoIndicator) {
@@ -121,6 +125,7 @@ public class ListensToLooksAndFills {
             }
         }
     }
+
 
 
     private class SortPrice implements Comparator<InfoIndicator> {

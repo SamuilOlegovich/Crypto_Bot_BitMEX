@@ -138,6 +138,11 @@ public class ParserSetting {
                 + " ===== когда уровни сформированы указываем время жизни данной комбинации\n"
                 + "timeCalculationLevel=" + Gasket.getTimeCalculationLevel()
                 + " ===== время за которое должны сформироваться уровни иначе все отменяется\n"
+                + "tradingPatterns=" + Gasket.isTradingPatterns()
+                + " ===== включить по патернам патернов\n"
+                + "savedPatterns=" + Gasket.isSavedPatterns()
+                + " ===== включить нахождение и запись патернов\n"
+
                 + "\n"
                 + "END\n";
     }

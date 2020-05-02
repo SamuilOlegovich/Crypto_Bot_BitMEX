@@ -10,34 +10,12 @@ import java.io.IOException;
 
 
 public class ConsoleHelper {
-//    private static String path = "/Users/samuilolegovich/Desktop/bitmex-client-master/src/main/java/bitmex/Bot/Logs/";
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-//    private static boolean crateLogFile = true;
 
 
     public static void writeMessage(String string) {
-//        if (crateLogFile) {
-//            crateLogFile = false;
-//            getPathString();
-
-//            try {
-//                WriterAndReadFile.createNewFile(path);
-//                try {
         WriterAndReadFile.writerFile(string, Gasket.getFilesAndPathCreator().getPathLogs(), true);
-//                } catch (Exception e) {
-//                    System.out.println("Не удалось записать меседж в лог.");
-//                }
-//            } catch (Exception e) {
-//                System.out.println("Не удалось создать Лог файл.");
-//            }
-//        } else {
-//            try {
-////                WriterAndReadFile.writerFile(string, path, true);
-//            } catch (Exception e) {
-//                System.out.println("Не удалось записать меседж в лог.");
-//            }
         System.out.println(string);
-//        }
     }
 
 
@@ -146,6 +124,10 @@ public class ConsoleHelper {
                 + " === при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false\n"
                 + "activeNumberOfCandlesForAnalysis === " + Gasket.isActiveNumberOfCandlesForAnalysis()
                 + " === включаем отклюаем отслеживания диапазона в котором находится цена true - включено\n"
+                + "tradingPatterns === " + Gasket.isTradingPatterns()
+                + " === включить по патернам патернов\n"
+                + "savedPatterns === " + Gasket.isSavedPatterns()
+                + " === включить нахождение и запись патернов\n"
                 + "\n"
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"

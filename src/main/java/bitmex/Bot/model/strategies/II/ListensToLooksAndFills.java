@@ -40,35 +40,51 @@ public class ListensToLooksAndFills {
 
 
 
+    // принимаем объекты и если еще не запускали метод их обработки то запускаем его,
+    // если он уже запущен то просто кладем объекты в массив
+    // так же получаем текущую цену
     public synchronized void setIInfoString(InfoIndicator iInfoIndicator) {
         listInfoIndicator.add(iInfoIndicator);
         if (!timeFlag) {
-            priceNow = Gasket.getBitmexQuote().getBidPrice();
             timeFlag = true;
+            priceNow = Gasket.getBitmexQuote().getBidPrice();
             listSorter();
         }
     }
 
 
+    // отсыпаемся и начинаем работать
     private synchronized void listSorter() {
         if (timeFlag) {
             try {
                 Thread.sleep(1000 * 10);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage("Не смог проснуться в методе listSorter() класса ListensToLooksAndFills");
+                ConsoleHelper.writeMessage("Не смог проснуться в методе listSorter() "
+                        + "класса ListensToLooksAndFills");
                 e.printStackTrace();
             }
             timeFlag = false;
         }
 
+
+        // если цены финиша нет то назначаем ее
         if (priceEndBuy == 0) {
             priceEndBuy = priceNow + priceTake;
         } else if (priceEndBuy >= priceNow) {
+            // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
             priceEndBuy = priceNow + priceTake;
-            SavedPatterns.addListsPriceBuy(listStringPriceBuy);
+            // добавляем лист в стратегии,
+            SavedPatterns.addListsPricePatterns(listStringPriceBuy);
+            // стираем и добавляем в него новые данные
             listStringPriceBuy.clear();
+            // добавляем в начало листа метку что делать при совпадения патерна
+            listStringPriceBuy.add("BUY===1===SELL===0");
             sortPrice(true);
         } else {
+            // добавляем в конец листа метку что делать при совпадения патерна
+            if (listStringPriceBuy.size() == 0) {
+                listStringPriceBuy.add("BUY===1===SELL===0");
+            }
             sortPrice(true);
         }
 
@@ -76,14 +92,20 @@ public class ListensToLooksAndFills {
             priceEndSell = priceNow - priceTake;
         } else if (priceEndSell <= priceNow) {
             priceEndSell = priceNow - priceTake;
-            SavedPatterns.addListsPriceSell(listStringPriceSell);
+
+            SavedPatterns.addListsPricePatterns(listStringPriceSell);
             listStringPriceSell.clear();
+            listStringPriceSell.add("BUY===0===SELL===1");
             sortPrice(false);
         } else {
+            if (listStringPriceSell.size() == 0) {
+                listStringPriceSell.add("BUY===0===SELL===1");
+            }
             sortPrice(false);
         }
         listInfoIndicator.clear();
     }
+
 
     private void sortPrice(boolean buyOrSell) {
         Comparator sortPrice = new SortPrice();
@@ -99,6 +121,7 @@ public class ListensToLooksAndFills {
             }
         }
     }
+
 
     private class SortPrice implements Comparator<InfoIndicator> {
         @Override

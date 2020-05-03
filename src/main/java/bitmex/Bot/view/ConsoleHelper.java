@@ -217,6 +217,17 @@ public class ConsoleHelper {
                 + "\n");
     }
 
+    public static void printStatisticsPatterns() {
+        ConsoleHelper.writeMessage("\n"
+                + " --- ИТОГО на счету CEЛЛ ПАТТЕРН --- " + Gasket.getPROFIT_Sell_PAT() + "\n"
+                + " --- ИТОГО на счету БАЙ ПАТТЕРН --- " + Gasket.getPROFIT_Buy_PAT() + "\n"
+                + "OB_TAKE_PAT === " + Gasket.getObTakePat() + "\n"
+                + "OB_STOP_PAT === " + Gasket.getObStopPat() + "\n"
+                + "OS_TAKE_PAT === " + Gasket.getOsTakePat() + "\n"
+                + "OS_STOP_PAT === " + Gasket.getOsStopPat() + "\n"
+                + "\n");
+    }
+
 
 
     public static void printFlag() {

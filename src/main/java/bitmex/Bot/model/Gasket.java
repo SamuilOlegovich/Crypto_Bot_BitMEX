@@ -93,10 +93,10 @@ public class Gasket {
     private static int OB_2_STOP = 0;
     private static int OS_2_TAKE = 0;
     private static int OS_2_STOP = 0;
-    private static int OB_STOP = 0;
     private static int OB_TAKE = 0;
-    private static int OS_STOP = 0;
+    private static int OB_STOP = 0;
     private static int OS_TAKE = 0;
+    private static int OS_STOP = 0;
 
 
             // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика) для MiniRevers
@@ -118,10 +118,10 @@ public class Gasket {
     private static int OB_2_STOP_MR = 0;
     private static int OS_2_TAKE_MR = 0;
     private static int OS_2_STOP_MR = 0;
-    private static int OB_STOP_MR = 0;
     private static int OB_TAKE_MR = 0;
-    private static int OS_STOP_MR = 0;
+    private static int OB_STOP_MR = 0;
     private static int OS_TAKE_MR = 0;
+    private static int OS_STOP_MR = 0;
 
 
             // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика) для Revers
@@ -143,10 +143,19 @@ public class Gasket {
     private static int OB_2_STOP_R = 0;
     private static int OS_2_TAKE_R = 0;
     private static int OS_2_STOP_R = 0;
-    private static int OB_STOP_R = 0;
     private static int OB_TAKE_R = 0;
-    private static int OS_STOP_R = 0;
+    private static int OB_STOP_R = 0;
     private static int OS_TAKE_R = 0;
+    private static int OS_STOP_R = 0;
+
+
+            // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика) для ПАТТЕРН
+    private static volatile double PROFIT_Sell_PAT = 0.0;            // профит по сделкам в селл ПАТТЕРН
+    private static volatile double PROFIT_Buy_PAT = 0.0;             // профит по сделкам в бай ПАТТЕРН
+    private static int OB_TAKE_PAT = 0;
+    private static int OB_STOP_PAT = 0;
+    private static int OS_TAKE_PAT = 0;
+    private static int OS_STOP_PAT = 0;
 
 
 
@@ -1124,5 +1133,54 @@ public class Gasket {
 
     public static void setSavedPatterns(boolean savedPatterns) {
         Gasket.savedPatterns = savedPatterns;
+    }
+
+
+    public static double getPROFIT_Sell_PAT() {
+        return PROFIT_Sell_PAT;
+    }
+
+    public static void setPROFIT_Sell_PAT(double PROFIT_Sell_PAT) {
+        Gasket.PROFIT_Sell_PAT = PROFIT_Sell_PAT;
+    }
+
+    public static double getPROFIT_Buy_PAT() {
+        return PROFIT_Buy_PAT;
+    }
+
+    public static void setPROFIT_Buy_PAT(double PROFIT_Buy_PAT) {
+        Gasket.PROFIT_Buy_PAT = PROFIT_Buy_PAT;
+    }
+
+    public static int getObTakePat() {
+        return OB_TAKE_PAT;
+    }
+
+    public static void setObTakePat(int obTakePat) {
+        OB_TAKE_PAT = obTakePat;
+    }
+
+    public static int getObStopPat() {
+        return OB_STOP_PAT;
+    }
+
+    public static void setObStopPat(int obStopPat) {
+        OB_STOP_PAT = obStopPat;
+    }
+
+    public static int getOsTakePat() {
+        return OS_TAKE_PAT;
+    }
+
+    public static void setOsTakePat(int osTakePat) {
+        OS_TAKE_PAT = osTakePat;
+    }
+
+    public static int getOsStopPat() {
+        return OS_STOP_PAT;
+    }
+
+    public static void setOsStopPat(int osStopPat) {
+        OS_STOP_PAT = osStopPat;
     }
 }

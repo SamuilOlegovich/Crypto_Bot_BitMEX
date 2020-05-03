@@ -1,5 +1,8 @@
 package bitmex.Bot.model.strategies.II;
 
+import bitmex.Bot.model.DatesTimes;
+import bitmex.Bot.view.ConsoleHelper;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -24,6 +27,8 @@ public class SavedPatterns implements Serializable {
     // ищем есть ли такие патерны если нет то добавляем,
     // если есть то устанавливаем приоритет
     private static void isThereSuchCombination(ArrayList<String> arrayList) {
+        ConsoleHelper.writeMessage("Сравниваю ПАТТЕРН с имеющимися ---- "
+                + DatesTimes.getDateTerminal());
 
         // перебираем массив стратегий и сравниваем с пришедшим
         for (ArrayList<String> stringArrayList : SavedPatterns.listsPricePatterns) {
@@ -51,6 +56,8 @@ public class SavedPatterns implements Serializable {
                 // с учетом информации пришедшего паттерна
                 // а так же прекращаем процесс поиска и сравнения
                 if (result) {
+                    ConsoleHelper.writeMessage("ПАТТЕРН такой есть - обновляю информацию ---- "
+                            + DatesTimes.getDateTerminal());
                     stringArrayList.add(0, SavedPatterns.setPriority(stringArrayList.get(0), arrayList.get(0)));
                     return;
                 }
@@ -58,6 +65,8 @@ public class SavedPatterns implements Serializable {
         }
 
         // если совпадение не было найдено - добавляем данный патерн в массив
+        ConsoleHelper.writeMessage("Такого ПАТТЕРНА нет - ДОБАВЛЕН ---- "
+                + DatesTimes.getDateTerminal());
         SavedPatterns.listsPricePatterns.add(arrayList);
         maxArraySize = Math.max(arrayList.size(), maxArraySize);
 
@@ -73,10 +82,15 @@ public class SavedPatterns implements Serializable {
         // спарсили числа и прибавили их
         int sell = Integer.parseInt(strings1[3]) + Integer.parseInt(strings2[3]);
         int buy = Integer.parseInt(strings1[1]) + Integer.parseInt(strings2[1]);
+        // считаем среднюю цену отклонения в противоположную сторону
+        double average = (Double.parseDouble(strings1[5]) + Double.parseDouble(strings2[5])) / 2;
+        // обновляем максимальное отклонение
+        double max = Math.max(Double.parseDouble(strings1[7]), Double.parseDouble(strings2[7]));
 
         // вернули итоговую инфо строку
-        return  strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + "ID"
-                + "===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39));
+        return  strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4] + "==="
+                + average + "===" + strings1[6] + "===" + max + "===ID==="
+                + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39));
     }
 
 

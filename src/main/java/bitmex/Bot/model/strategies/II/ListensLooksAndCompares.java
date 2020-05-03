@@ -1,6 +1,7 @@
 package bitmex.Bot.model.strategies.II;
 
 
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.strategies.oneStrategies.TestOrderSell;
 import bitmex.Bot.model.strategies.oneStrategies.TestOrderBuy;
 import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
@@ -18,13 +19,15 @@ import java.util.ArrayList;
 public class ListensLooksAndCompares {
 
     private static ListensLooksAndCompares listensLooksAndCompares;
-    private ArrayList<InfoIndicator> listInfoIndicator;
     private ArrayList<ArrayList<String>> listInListString;
+    private ArrayList<InfoIndicator> listInfoIndicator;
     private boolean timeFlag;
 
 
 
     private ListensLooksAndCompares() {
+        ConsoleHelper.writeMessage("Класс ListensLooksAndCompares начал работать ---- "
+                + DatesTimes.getDateTerminal());
         this.listInfoIndicator = new ArrayList<>();
         this.listInListString = new ArrayList<>();
         this.timeFlag = false;
@@ -70,6 +73,8 @@ public class ListensLooksAndCompares {
         // удаляем ненужное
         removeUnnecessaryLists();
 
+        ConsoleHelper.writeMessage("Сравниваю рынок с ПАТТЕРНАМИ ---- "
+                + DatesTimes.getDateTerminal());
         // сравниваем оставшееся с патернами
         for (ArrayList<String> thisArrayListString : listInListString) {
             // получаем равные по размеру патерны
@@ -95,6 +100,8 @@ public class ListensLooksAndCompares {
                     }
 
                     if (result) {
+                        ConsoleHelper.writeMessage("Нашел совпадения в рынке с ПАТТЕРНАМИ передаю на сделку ---- "
+                                + DatesTimes.getDateTerminal());
                         makeDeal(inArrayListString.get(0));
                     }
                 }
@@ -105,13 +112,24 @@ public class ListensLooksAndCompares {
 
     // Определяем какую сделку сделать и даем команду на ее исполнение
     private void makeDeal(String string) {
+        ConsoleHelper.writeMessage("Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ ---- "
+                + DatesTimes.getDateTerminal());
         String[] strings = string.split("===");
+
         if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
-            if (Gasket.isTrading()) new TradeBuy(string);
-            new TestOrderBuy(string, Gasket.getBitmexQuote().getAskPrice());
+            String stringOut = string + "-PAT";
+
+            if (Gasket.isTrading()) new TradeBuy(stringOut);
+            new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
+            ConsoleHelper.writeMessage(stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ ---- "
+                    + DatesTimes.getDateTerminal());
         } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
-            if (Gasket.isTrading()) new TradeSell(string);
-            new TestOrderSell(string, Gasket.getBitmexQuote().getAskPrice());
+            String stringOut = string + "-PAT";
+
+            if (Gasket.isTrading()) new TradeSell(stringOut);
+            new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
+            ConsoleHelper.writeMessage(stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ ---- "
+                    + DatesTimes.getDateTerminal());
         }
     }
 

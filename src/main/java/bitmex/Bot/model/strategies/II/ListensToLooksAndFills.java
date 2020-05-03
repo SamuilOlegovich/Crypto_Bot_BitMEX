@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 
 public class ListensToLooksAndFills {
+
     private static ListensToLooksAndFills listensToLooksAndFills;
 
     private ArrayList<InfoIndicator> listInfoIndicator;

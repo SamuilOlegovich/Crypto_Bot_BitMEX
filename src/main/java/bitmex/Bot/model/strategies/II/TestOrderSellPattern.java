@@ -8,6 +8,7 @@ import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 public class TestOrderSellPattern extends Thread {
+
     private double priseTakeOrder;
     private double priseStopOrder;
     private double priseOpenOrder;
@@ -16,8 +17,8 @@ public class TestOrderSellPattern extends Thread {
     public TestOrderSellPattern(String id, double priseOpenOrder) {
         this.priseTakeOrder = priseOpenOrder - Gasket.getTake();
         this.priseStopOrder = priseOpenOrder + Gasket.getStop();
-        new TestOrderSellMiniRevers(id, priseOpenOrder);
-        new TestOrderSellRevers(id, priseOpenOrder);
+//        new TestOrderSellMiniRevers(id, priseOpenOrder);
+//        new TestOrderSellRevers(id, priseOpenOrder);
         this.priseOpenOrder = priseOpenOrder;
         this.ID = id;
         start();

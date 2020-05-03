@@ -1,7 +1,8 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.DatesTimes;
+
 
 import java.io.Serializable;
 import java.util.ArrayList;

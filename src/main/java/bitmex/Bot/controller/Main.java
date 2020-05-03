@@ -1,16 +1,19 @@
 package bitmex.Bot.controller;
 
-import bitmex.Bot.model.FilesAndPathCreator;
-import bitmex.Bot.model.Gasket;
-import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
-import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
+import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
+import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.serverAndParser.Server;
+import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.Gasket;
+
 
 import java.util.List;
+
+
 
 public class Main {
 

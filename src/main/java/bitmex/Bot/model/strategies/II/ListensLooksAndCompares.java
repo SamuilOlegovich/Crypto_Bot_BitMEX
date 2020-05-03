@@ -1,14 +1,13 @@
 package bitmex.Bot.model.strategies.II;
 
 
-import bitmex.Bot.model.DatesTimes;
-import bitmex.Bot.model.strategies.oneStrategies.TestOrderSell;
-import bitmex.Bot.model.strategies.oneStrategies.TestOrderBuy;
 import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
 import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+
 
 import java.util.Collections;
 import java.util.Comparator;

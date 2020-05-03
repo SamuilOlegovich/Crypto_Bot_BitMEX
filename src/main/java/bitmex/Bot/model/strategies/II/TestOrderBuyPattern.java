@@ -11,6 +11,7 @@ import bitmex.Bot.model.Gasket;
 
 
 public class TestOrderBuyPattern extends Thread{
+
     private double priseTakeOrder;
     private double priseStopOrder;
     private double priseOpenOrder;
@@ -19,8 +20,8 @@ public class TestOrderBuyPattern extends Thread{
     public TestOrderBuyPattern(String id, double priseOpenOrder) {
         this.priseTakeOrder = priseOpenOrder + Gasket.getTake();
         this.priseStopOrder = priseOpenOrder - Gasket.getStop();
-        new TestOrderBuyMiniRevers(id, priseOpenOrder);
-        new TestOrderBuyRevers(id, priseOpenOrder);
+//        new TestOrderBuyMiniRevers(id, priseOpenOrder);
+//        new TestOrderBuyRevers(id, priseOpenOrder);
         this.priseOpenOrder = priseOpenOrder;
         this.ID =  id;
         start();

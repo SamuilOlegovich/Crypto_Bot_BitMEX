@@ -59,8 +59,7 @@ public class InfoIndicator {
         dateFormat.format(time);
 
         return "{\"period\": \"" + period + "\",\"preview\": \"" + preview + "\",\"time\": \""
-                + dateFormat.format(time) + "\",\"price\": \""
-                + price + "\",\"value\": \"" + value
+                + dateFormat.format(time) + "\",\"price\": \"" + price + "\",\"value\": \"" + value
                 + "\",\"type\": \"" + type + "\"}";
     }
 }

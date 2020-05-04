@@ -14,7 +14,7 @@ public class ConsoleHelper {
 
 
     public static void writeMessage(String string) {
-        WriterAndReadFile.writerFile(string, Gasket.getFilesAndPathCreator().getPathLogs(), true);
+        WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
         System.out.println(string);
     }
 

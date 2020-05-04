@@ -25,6 +25,7 @@ public class FilesAndPathCreator {
 
 
     private void createdPath() {
+
         pathSettings = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
                 .replaceAll("model/", "") + "Logs/Settings.txt";
@@ -36,7 +37,21 @@ public class FilesAndPathCreator {
         pathLogs = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
                 .replaceAll("model/", "") + "Logs/"
-                + DatesTimes.getDate() + "=Log.txt";
+                + DatesTimes.getDateLogs() + "===Log.txt";
+
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            pathSettings = pathSettings
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+            ConsoleHelper.writeMessage(pathSettings);
+
+            pathPatterns = pathPatterns
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+            ConsoleHelper.writeMessage(pathPatterns);
+
+            pathLogs = pathLogs
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+            ConsoleHelper.writeMessage(pathLogs);
+        }
     }
 
     private void isTheFileInPlace() {

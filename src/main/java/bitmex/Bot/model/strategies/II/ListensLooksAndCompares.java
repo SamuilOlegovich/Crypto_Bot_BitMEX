@@ -20,6 +20,7 @@ public class ListensLooksAndCompares {
     private static ListensLooksAndCompares listensLooksAndCompares;
     private ArrayList<ArrayList<String>> listInListString;
     private ArrayList<InfoIndicator> listInfoIndicator;
+    private SavedPatterns savedPatterns;
     private boolean timeFlag;
 
 
@@ -27,6 +28,7 @@ public class ListensLooksAndCompares {
     private ListensLooksAndCompares() {
         ConsoleHelper.writeMessage("Класс ListensLooksAndCompares начал работать ---- "
                 + DatesTimes.getDateTerminal());
+        this.savedPatterns = Gasket.getSavedPatternsClass();
         this.listInfoIndicator = new ArrayList<>();
         this.listInListString = new ArrayList<>();
         this.timeFlag = false;
@@ -77,7 +79,7 @@ public class ListensLooksAndCompares {
         // сравниваем оставшееся с патернами
         for (ArrayList<String> thisArrayListString : listInListString) {
             // получаем равные по размеру патерны
-            ArrayList<ArrayList<String>> inListPatterns = SavedPatterns.getListFoSize(thisArrayListString.size());
+            ArrayList<ArrayList<String>> inListPatterns = savedPatterns.getListFoSize(thisArrayListString.size());
 
             // если равные патерны есть то начинаем сравнивать
             if (inListPatterns != null) {
@@ -86,8 +88,8 @@ public class ListensLooksAndCompares {
                     boolean result = true;
 
                     for (int i = 1; i < inArrayListString.size(); i++) {
-                        String[] arr1 = thisArrayListString.get(i).split("\"preview\": \"");
-                        String[] arr2 = inArrayListString.get(i).split("\"preview\": \"");
+                        String[] arr1 = thisArrayListString.get(i).split("\"type\": \"");
+                        String[] arr2 = inArrayListString.get(i).split("\"type\": \"");
                         String[] strings1 = arr1[1].split("\"");
                         String[] strings2 = arr2[1].split("\"");
 
@@ -136,7 +138,7 @@ public class ListensLooksAndCompares {
     // удаляем листы размеры которых длиннее паттернов
     private void removeUnnecessaryLists() {
         if (listInListString.size() > 0) {
-            int maxArraySize = SavedPatterns.getMaxArraySize();
+            int maxArraySize = savedPatterns.getMaxArraySize();
             ArrayList<Integer> lineNumbersToDelete = new ArrayList<>();
 
             for (int i = 0; i < listInListString.size(); i++) {

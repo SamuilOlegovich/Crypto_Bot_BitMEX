@@ -2,6 +2,7 @@ package bitmex.Bot.model;
 
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
+import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 
@@ -22,6 +23,7 @@ public class Gasket {
     private static int useStopLevelOrNotStopTime = 10;              // сколько минут отслеживать сделку вышедшею за MIN уровни
     private static BitmexClient bitmexClient2Accounts;
     private static volatile BitmexQuote bitmex2Quote;   // для получения данных по насущной котировке.
+    private static SavedPatterns savedPatternsClass;
     private static boolean gameAllDirection = false;    // true - играть во все стороны на одном счету
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
@@ -1182,5 +1184,15 @@ public class Gasket {
 
     public static void setOsStopPat(int osStopPat) {
         OS_STOP_PAT = osStopPat;
+    }
+
+
+    
+    public static SavedPatterns getSavedPatternsClass() {
+        return savedPatternsClass;
+    }
+
+    public static void setSavedPatternsClass(SavedPatterns savedPatternsClass) {
+        Gasket.savedPatternsClass = savedPatternsClass;
     }
 }

@@ -24,4 +24,11 @@ public class DatesTimes {
         dateFormat.format(date);
         return dateFormat.format(date);
     }
+
+    public static String getDateLogs() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        dateFormat.format(date);
+        return dateFormat.format(date);
+    }
 }

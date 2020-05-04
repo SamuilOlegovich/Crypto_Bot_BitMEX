@@ -1,8 +1,8 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 import java.util.Collections;
@@ -20,6 +20,7 @@ public class ListensToLooksAndFills {
     private ArrayList<Double> listPriceDeviationsBuy;
     private ArrayList<String> listStringPriceSell;
     private ArrayList<String> listStringPriceBuy;
+    private SavedPatterns savedPatterns;
     private double priceEndSell;
     private double priceEndBuy;
     private double priceTake;
@@ -33,6 +34,7 @@ public class ListensToLooksAndFills {
     private ListensToLooksAndFills() {
         ConsoleHelper.writeMessage("Начал работать класс сбора Паттернов ---- "
                 + DatesTimes.getDateTerminal());
+        this.savedPatterns = Gasket.getSavedPatternsClass();
         this.listPriceDeviationsSell = new ArrayList<>();
         this.listPriceDeviationsBuy = new ArrayList<>();
         this.listStringPriceSell = new ArrayList<>();
@@ -141,7 +143,7 @@ public class ListensToLooksAndFills {
                     + DatesTimes.getDateTerminal());
             listStringPriceBuy.add(0, listStringPriceBuy.get(0) + getAverageDeviations(true)
                     + "===MAX===" + getMaxDeviations(true));
-            SavedPatterns.addListsPricePatterns(listStringPriceBuy);
+            savedPatterns.addListsPricePatterns(listStringPriceBuy);
             // стираем данные из листа цен отклонения
             listPriceDeviationsBuy.clear();
             // стираем и добавляем в него новые данные
@@ -166,7 +168,7 @@ public class ListensToLooksAndFills {
                     + DatesTimes.getDateTerminal());
             listStringPriceSell.add(0, listStringPriceSell.get(0) + getAverageDeviations(false)
                     + "===MAX===" + getMaxDeviations(false));
-            SavedPatterns.addListsPricePatterns(listStringPriceSell);
+            savedPatterns.addListsPricePatterns(listStringPriceSell);
             listPriceDeviationsSell.clear();
             listStringPriceSell.clear();
             listStringPriceSell.add("BUY===0===SELL===1===AVERAGE===");

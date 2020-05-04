@@ -1,15 +1,16 @@
 package bitmex.Bot.model.serverAndParser;
 
 
-
-import bitmex.Bot.model.enums.BidAsk;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.strategies.StrategyFactory;
 import bitmex.Bot.model.enums.TimeFrame;
+import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.enums.BidAsk;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 
 
 public class ParserString {
@@ -18,11 +19,14 @@ public class ParserString {
 
 
     public ParserString() {
-        this.arrayList = new ArrayList<InfoIndicator>();
         this.strategyFactory = StrategyFactory.getInstance();
+        ConsoleHelper.writeMessage("ПАРСЕР ЗАПУЩЕН");
+        this.arrayList = new ArrayList<>();
+//        this.arrayListAllLevel = new ArrayList<>();
     }
 
     public synchronized void parserStringJson(String string) {
+//        showAllAvailableLevels(string);
         String in = string.replaceAll("\\{", "");
         in = in.replaceAll("}", "");
         in = in.replaceAll("\"", " ");
@@ -112,11 +116,46 @@ public class ParserString {
         return null;
     }
 
+
+
     public ArrayList<InfoIndicator> getList() {
         return arrayList;
     }
 
     public void setList(ArrayList list) {
         this.arrayList = list;
+    }
+
+
+
+
+
+    //TEST
+    private ArrayList<String> arrayListAllLevel;
+    private synchronized void showAllAvailableLevels(String string) {
+
+        if (arrayListAllLevel.size() < 1) arrayListAllLevel.add(string);
+        else {
+            for (String s : arrayListAllLevel) {
+
+                String[] arr1 = s.split("\"type\": \"");
+                String[] arr2 = string.split("\"type\": \"");
+                String[] strings1 = arr1[1].split("\"");
+                String[] strings2 = arr2[1].split("\"");
+
+                // если хоть один объект не равен то прирываем цикл
+                if (strings1[0].equals(strings2[0])) {
+                    return;
+                }
+            }
+
+            arrayListAllLevel.add(string);
+
+            if (arrayListAllLevel.size() == 23) {
+                for (String s : arrayListAllLevel) {
+                    System.out.println(s);
+                }
+            }
+        }
     }
 }

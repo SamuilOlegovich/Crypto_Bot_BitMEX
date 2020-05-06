@@ -1,6 +1,5 @@
 package bitmex.Bot.view;
 
-import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.Gasket;
 
@@ -100,13 +99,15 @@ public class ConsoleHelper {
                 + " === итоговый\n"
                 + "\n"
 
-                + "strategyOneRange === " + Gasket.isOb_3()
+                + "obs_5 === " + Gasket.isObs_5()
                 + " === включить выключить стратегию\n"
-                + "strategyOneTime === " + Gasket.isOb_4()
+                + "obs_4 === " + Gasket.isObs_4()
                 + " === включить выключить стратегию\n"
-                + "strategyOne === " + Gasket.isOb_2()
+                + "obs_3 === " + Gasket.isObs_3()
                 + " === включить выключить стратегию\n"
-                + "one === " + Gasket.isOb()
+                + "obs_2 === " + Gasket.isObs_2()
+                + " === включить выключить стратегию\n"
+                + "obs === " + Gasket.isObs()
                 + " === включить выключить стратегию\n"
                 + "\n"
 
@@ -125,6 +126,8 @@ public class ConsoleHelper {
                 + "activeNumberOfCandlesForAnalysis === " + Gasket.isActiveNumberOfCandlesForAnalysis()
                 + " === включаем отклюаем отслеживания диапазона в котором находится цена true - включено\n"
                 + "tradingPatterns === " + Gasket.isTradingPatterns()
+                + "\n"
+
                 + " === включить по патернам патернов\n"
                 + "savedPatterns === " + Gasket.isSavedPatterns()
                 + " === включить нахождение и запись патернов\n"

@@ -29,28 +29,28 @@ public class OneBuy_2 {
         return oneBuy2;
     }
 
-    public synchronized void setIInfoString(InfoIndicator iInfoIndicator) {
-        switch (iInfoIndicator.getType()) {
+    public synchronized void setInfoString(InfoIndicator infoIndicator) {
+        switch (infoIndicator.getType()) {
             case OPEN_POS_MINUS_HL:
-                maxOpenInterestMinus = iInfoIndicator;
+                maxOpenInterestMinus = infoIndicator;
                 break;
             case OPEN_POS_PLUS_HL:
-                maxOpenInterestPlus = iInfoIndicator;
+                maxOpenInterestPlus = infoIndicator;
                 break;
             case OPEN_POS_MINUS:
-                openInterestMinus = iInfoIndicator;
+                openInterestMinus = infoIndicator;
                 break;
             case DELTA_BID_HL:
-                maxDeltaMinus = iInfoIndicator;
+                maxDeltaMinus = infoIndicator;
                 break;
             case DELTA_BID:
-                deltaMinus = iInfoIndicator;
+                deltaMinus = infoIndicator;
                 break;
             case VOLUME:
-                volume = iInfoIndicator;
+                volume = infoIndicator;
                 break;
             case BID:
-                bid = iInfoIndicator;
+                bid = infoIndicator;
                 break;
         }
         makeADecision();

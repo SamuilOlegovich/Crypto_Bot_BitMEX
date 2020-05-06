@@ -35,28 +35,28 @@ public class OneSell_2 {
 
 
 
-    public void setIInfoString(InfoIndicator iInfoIndicator) {
-        switch (iInfoIndicator.getType()) {
+    public void setInfoString(InfoIndicator infoIndicator) {
+        switch (infoIndicator.getType()) {
             case OPEN_POS_MINUS_HL:
-                maxOpenInterestMinus = iInfoIndicator;
+                maxOpenInterestMinus = infoIndicator;
                 break;
             case OPEN_POS_PLUS:
-                openInterestPlus = iInfoIndicator;
+                openInterestPlus = infoIndicator;
                 break;
             case DELTA_BID_HL:
-                maxDeltaMinus = iInfoIndicator;
+                maxDeltaMinus = infoIndicator;
                 break;
             case DELTA_ASK:
-                deltaPlus = iInfoIndicator;
+                deltaPlus = infoIndicator;
                 break;
             case DELTA_ASK_HL:
-                twoDelta(iInfoIndicator);
+                twoDelta(infoIndicator);
                 break;
             case VOLUME:
-                volume = iInfoIndicator;
+                volume = infoIndicator;
                 break;
             case ASK:
-                ask = iInfoIndicator;
+                ask = infoIndicator;
                 break;
         }
         makeADecision();

@@ -37,7 +37,8 @@ public class ParserString {
         double price = getDouble(strings[3].trim().replaceAll("price : {2}", ""));
         long value = Long.parseLong(strings[4].trim().replaceAll("value : {2}", ""));
         BidAsk type = getType(strings[5].trim().replaceAll("type : {2}", ""));
-        InfoIndicator infoIndicator = new InfoIndicator(period, preview, time, price, value, type);
+        long avg = 0;
+        InfoIndicator infoIndicator = new InfoIndicator(period, preview, time, price, value, type, avg);
         strategyFactory.onOff(infoIndicator);
         arrayList.add(infoIndicator);
     }
@@ -84,24 +85,50 @@ public class ParserString {
         return null;
     }
 
-    private BidAsk getType(String string) {
+
+
+private BidAsk getType(String string) {
         switch (string) {
             case "DeltaMinVolBidHL" :
                 return BidAsk.DELTA_MIN_VOL_BID_HL;
             case "DeltaMinVolAskHL":
                 return BidAsk.DELTA_MIN_VOL_ASK_HL;
+            case "DeltaZSMinMinus" :
+                return BidAsk.DELTA_ZS_MIN_MINUS;
+            case "OpenPosAskMinus" :
+                return BidAsk.OPEN_POS_ASK_MINUS;
+            case "OpenPosBidMinus" :
+                return BidAsk.OPEN_POS_BID_MINUS;
+            case "OpenPosAskPlus" :
+                return BidAsk.OPEN_POS_ASK_PLUS;
+            case "DeltaZSMinPlus" :
+                return BidAsk.DELTA_ZS_MIN_PLUS;
+            case "OpenPosBidPlus" :
+                return BidAsk.OPEN_POS_BID_PLUS;
             case "OpenPosMinusHL" :
                 return BidAsk.OPEN_POS_MINUS_HL;
             case "OpenPosPlusHL" :
                 return BidAsk.OPEN_POS_PLUS_HL;
+            case "OIZSMinMinus" :
+                return BidAsk.OI_ZS_MIN_MINUS;
+            case "DeltaZSMinus" :
+                return BidAsk.DELTA_ZS_MINUS;
+            case "OIZSMinPlus" :
+                return BidAsk.OI_ZS_MIN_PLUS;
             case "OpenPosMinus" :
                 return BidAsk.OPEN_POS_MINUS;
             case "OpenPosPlus" :
                 return BidAsk.OPEN_POS_PLUS;
+            case "DeltaZSPlus" :
+                return BidAsk.DELTA_ZS_PLUS;
             case "DeltaBidHL":
                 return BidAsk.DELTA_BID_HL;
             case "DeltaAskHL":
                 return BidAsk.DELTA_ASK_HL;
+            case "OIZSMinus" :
+                return BidAsk.OI_ZS_MINUS;
+            case  "OIZSPlus" :
+                return BidAsk.OI_ZS_PLUS;
             case "DeltaAsk" :
                 return BidAsk.DELTA_ASK;
             case "DeltaBid" :

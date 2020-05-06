@@ -45,8 +45,8 @@ public class ListensLooksAndCompares {
     // принимаем объекты и если еще не запускали метод их обработки то запускаем его,
     // если он уже запущен то просто кладем объекты в массив
     // так же получаем текущую цену
-    public synchronized void setIInfoString(InfoIndicator iInfoIndicator) {
-        listInfoIndicator.add(iInfoIndicator);
+    public synchronized void setInfoString(InfoIndicator infoIndicator) {
+        listInfoIndicator.add(infoIndicator);
         if (!timeFlag) {
             timeFlag = true;
             //priceNow = Gasket.getBitmexQuote().getBidPrice();

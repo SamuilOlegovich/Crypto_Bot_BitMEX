@@ -30,30 +30,30 @@ public class OneBuy_5 {
 
 
 
-    public synchronized void setIInfoString(InfoIndicator iInfoIndicator) {
-        switch (iInfoIndicator.getType()) {
+    public synchronized void setInfoString(InfoIndicator infoIndicator) {
+        switch (infoIndicator.getType()) {
             case OPEN_POS_MINUS_HL:
-                maxOpenInterestMinus = iInfoIndicator;
+                maxOpenInterestMinus = infoIndicator;
                 break;
             case OPEN_POS_PLUS_HL:
-                maxOpenInterestPlus = iInfoIndicator;
+                maxOpenInterestPlus = infoIndicator;
                 break;
             case OPEN_POS_MINUS:
-                openInterestMinus = iInfoIndicator;
+                openInterestMinus = infoIndicator;
                 break;
             case DELTA_BID_HL:
-                maxDeltaMinus = iInfoIndicator;
+                maxDeltaMinus = infoIndicator;
                 break;
             case DELTA_BID:
-//                setDeltaMinus(iInfoIndicator);
-                deltaMinus = iInfoIndicator;
+//                setDeltaMinus(infoIndicator);
+                deltaMinus = infoIndicator;
                 break;
             case VOLUME:
-                setVolume(iInfoIndicator);
+                setVolume(infoIndicator);
                 break;
             case BID:
-//                setBid(iInfoIndicator);
-                bid = iInfoIndicator;
+//                setBid(infoIndicator);
+                bid = infoIndicator;
                 break;
         }
         makeADecision();

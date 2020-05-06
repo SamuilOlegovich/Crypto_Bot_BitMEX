@@ -36,102 +36,65 @@ public class StrategyFactory {
 
 
     public void onOff(InfoIndicator infoIndicator) {
-        if (Gasket.isOb()) {
-            if (oneBuy == null) {
-                oneBuy = OneBuy.getInstance();
-                oneBuy.setIInfoString(infoIndicator);
-            } else {
-                oneBuy.setIInfoString(infoIndicator);
-            }
 
-            if (oneSell == null) {
-                oneSell = OneSell.getInstance();
-                oneSell.setIInfoString(infoIndicator);
-            } else {
-                oneSell.setIInfoString(infoIndicator);
-            }
+        if (Gasket.isObs()) {
+            if (oneBuy == null) oneBuy = OneBuy.getInstance();
+            oneBuy.setInfoString(infoIndicator);
+
+            if (oneSell == null) oneSell = OneSell.getInstance();
+            oneSell.setInfoString(infoIndicator);
         }
 
-        if (Gasket.isOb_2()) {
-            if (oneBuy2 == null) {
-                oneBuy2 = OneBuy_2.getInstance();
-                oneBuy2.setIInfoString(infoIndicator);
-            } else {
-                oneBuy2.setIInfoString(infoIndicator);
-            }
 
-            if (oneSell2 == null) {
-                oneSell2 = OneSell_2.getInstance();
-                oneSell2.setIInfoString(infoIndicator);
-            } else {
-                oneSell2.setIInfoString(infoIndicator);
-            }
+
+        if (Gasket.isObs_2()) {
+            if (oneBuy2 == null) oneBuy2 = OneBuy_2.getInstance();
+            oneBuy2.setInfoString(infoIndicator);
+
+            if (oneSell2 == null) oneSell2 = OneSell_2.getInstance();
+            oneSell2.setInfoString(infoIndicator);
         }
 
-        if (Gasket.isOb_3()) {
-            if (oneBuy3 == null) {
-                oneBuy3 = OneBuy_3.getInstance();
-                oneBuy3.setIInfoString(infoIndicator);
-            } else {
-                oneBuy3.setIInfoString(infoIndicator);
-            }
 
-            if (oneSell3 == null) {
-                oneSell3 = OneSell_3.getInstance();
-                oneSell3.setIInfoString(infoIndicator);
-            } else {
-                oneSell3.setIInfoString(infoIndicator);
-            }
+
+        if (Gasket.isObs_3()) {
+            if (oneBuy3 == null) oneBuy3 = OneBuy_3.getInstance();
+            oneBuy3.setInfoString(infoIndicator);
+
+            if (oneSell3 == null) oneSell3 = OneSell_3.getInstance();
+            oneSell3.setInfoString(infoIndicator);
         }
 
-        if (Gasket.isOb_2()) {
-            if (oneSell4 == null) {
-                oneSell4 = OneSell_4.getInstance();
-                oneSell4.setIInfoString(infoIndicator);
-            } else {
-                oneSell4.setIInfoString(infoIndicator);
-            }
 
-            if (oneBuy4 == null) {
-                oneBuy4 = OneBuy_4.getInstance();
-                oneBuy4.setIInfoString(infoIndicator);
-            } else {
-                oneBuy4.setIInfoString(infoIndicator);
-            }
+
+        if (Gasket.isObs_2()) {
+            if (oneSell4 == null) oneSell4 = OneSell_4.getInstance();
+            oneSell4.setInfoString(infoIndicator);
+
+            if (oneBuy4 == null) oneBuy4 = OneBuy_4.getInstance();
+            oneBuy4.setInfoString(infoIndicator);
         }
 
-        if (Gasket.isOb_5()) {
-            if (oneSell5 == null) {
-                oneSell5 = OneSell_5.getInstance();
-                oneSell5.setIInfoString(infoIndicator);
-            } else {
-                oneSell5.setIInfoString(infoIndicator);
-            }
 
-            if (oneBuy5 == null) {
-                oneBuy5 = OneBuy_5.getInstance();
-                oneBuy5.setIInfoString(infoIndicator);
-            } else {
-                oneBuy5.setIInfoString(infoIndicator);
-            }
+
+        if (Gasket.isObs_5()) {
+            if (oneSell5 == null) oneSell5 = OneSell_5.getInstance();
+            oneSell5.setInfoString(infoIndicator);
+
+            if (oneBuy5 == null) oneBuy5 = OneBuy_5.getInstance();
+            oneBuy5.setInfoString(infoIndicator);
         }
+
+
 
         if (Gasket.isSavedPatterns()) {
-            if (listensToLooksAndFills == null) {
-                listensToLooksAndFills = ListensToLooksAndFills.getInstance();
-                listensToLooksAndFills.setIInfoString(infoIndicator);
-            } else {
-                listensToLooksAndFills.setIInfoString(infoIndicator);
-            }
+            if (listensToLooksAndFills == null) listensToLooksAndFills = ListensToLooksAndFills.getInstance();
+            listensToLooksAndFills.setInfoString(infoIndicator);
         }
 
         if (Gasket.isTradingPatterns()) {
-            if (listensLooksAndCompares == null) {
-                listensLooksAndCompares = ListensLooksAndCompares.getInstance();
-                listensLooksAndCompares.setIInfoString(infoIndicator);
-            } else {
-                listensLooksAndCompares.setIInfoString(infoIndicator);
-            }
+            if (listensLooksAndCompares == null) listensLooksAndCompares = ListensLooksAndCompares.getInstance();
+            listensLooksAndCompares.setInfoString(infoIndicator);
         }
     }
 }

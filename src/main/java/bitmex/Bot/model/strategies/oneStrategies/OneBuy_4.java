@@ -31,28 +31,28 @@ public class OneBuy_4 {
 
 
 
-    public synchronized void setIInfoString(InfoIndicator iInfoIndicator) {
-        switch (iInfoIndicator.getType()) {
+    public synchronized void setInfoString(InfoIndicator infoIndicator) {
+        switch (infoIndicator.getType()) {
             case OPEN_POS_MINUS_HL:
-                maxOpenInterestMinus = iInfoIndicator;
+                maxOpenInterestMinus = infoIndicator;
                 break;
             case OPEN_POS_PLUS_HL:
-                maxOpenInterestPlus = iInfoIndicator;
+                maxOpenInterestPlus = infoIndicator;
                 break;
             case OPEN_POS_MINUS:
-                openInterestMinus = iInfoIndicator;
+                openInterestMinus = infoIndicator;
                 break;
             case DELTA_BID_HL:
-                maxDeltaMinus = iInfoIndicator;
+                maxDeltaMinus = infoIndicator;
                 break;
             case DELTA_BID:
-                setDeltaMinus(iInfoIndicator);
+                setDeltaMinus(infoIndicator);
                 break;
             case VOLUME:
-                setVolume(iInfoIndicator);
+                setVolume(infoIndicator);
                 break;
             case BID:
-                setBid(iInfoIndicator);
+                setBid(infoIndicator);
                 break;
         }
         makeADecision();

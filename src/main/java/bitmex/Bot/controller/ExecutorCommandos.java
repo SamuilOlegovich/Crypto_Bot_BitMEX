@@ -4,12 +4,12 @@ import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
 
-
 public class ExecutorCommandos {
     private ParserSetting parserSetting;
     private boolean flag;
 
     public ExecutorCommandos() {
+        this.flag = false;
     }
 
     public synchronized void parserAndExecutor(String string) {
@@ -102,17 +102,23 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("trading === "
                                 + Gasket.isTrading() + "\n");
                     break;
-                case "strategyOne":
-                    Gasket.setOb_2(strings[1].equalsIgnoreCase("true"));
+                case "obs_2":
+                    Gasket.setObs_2(strings[1].equalsIgnoreCase("true"));
                     if (!flag)
                         ConsoleHelper.writeMessage("strategyOne === "
-                                + Gasket.isOb_2() + "\n");
+                                + Gasket.isObs_2() + "\n");
                     break;
-                case "strategyOneTime":
-                    Gasket.setOb_4(strings[1].equalsIgnoreCase("true"));
+                case "obs_4":
+                    Gasket.setObs_4(strings[1].equalsIgnoreCase("true"));
                     if (!flag)
                         ConsoleHelper.writeMessage("strategyOneTime === "
-                                + Gasket.isOb_4() + "\n");
+                                + Gasket.isObs_4() + "\n");
+                    break;
+                case "obs_5":
+                    Gasket.setObs_5(strings[1].equalsIgnoreCase("true"));
+                    if (!flag)
+                        ConsoleHelper.writeMessage("strategyOneTime === "
+                                + Gasket.isObs_5() + "\n");
                     break;
                 case "timeCalculationLevel" :
                     Gasket.setTimeCalculationLevel(Integer.parseInt(strings[1]));
@@ -126,17 +132,17 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("timeBetweenOrders === "
                                 + Gasket.getTimeBetweenOrders() + "\n");
                     break;
-                case "strategyOneRange":
-                    Gasket.setOb_3(strings[1].equalsIgnoreCase("true"));
+                case "obs_3":
+                    Gasket.setObs_3(strings[1].equalsIgnoreCase("true"));
                     if (!flag)
                         ConsoleHelper.writeMessage("strategyOneRange === "
-                                + Gasket.isOb_3() + "\n");
+                                + Gasket.isObs_3() + "\n");
                     break;
-                case "one":
-                    Gasket.setOb(strings[1].equalsIgnoreCase("true"));
+                case "obs":
+                    Gasket.setObs(strings[1].equalsIgnoreCase("true"));
                     if (!flag)
                         ConsoleHelper.writeMessage("one === "
-                                + Gasket.isOb() + "\n");
+                                + Gasket.isObs() + "\n");
                     break;
                 case "strategyWorkOne":
                     Gasket.setStrategyWorkOne(Integer.parseInt(strings[1]));

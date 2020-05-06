@@ -69,11 +69,11 @@ public class Gasket {
 
 
             // включаем отключаем стратегии
-    private static boolean ob_5 = true;
-    private static boolean ob_4 = true;
-    private static boolean ob_3 = true;
-    private static boolean ob_2 = true;
-    private static boolean ob = true;
+    private static boolean obs_5 = true;
+    private static boolean obs_4 = true;
+    private static boolean obs_3 = true;
+    private static boolean obs_2 = true;
+    private static boolean obs = true;
 
 
             // Данные сколько раз какие стратегиисработают по стопам или по тейкам (статистика)
@@ -533,37 +533,43 @@ public class Gasket {
         Gasket.PORT = PORT;
     }
 
-    public static boolean isOb_3() {
-        return ob_3;
+
+
+
+    public static boolean isObs_3() {
+        return obs_3;
     }
 
-    public static void setOb_3(boolean ob_3) {
-        Gasket.ob_3 = ob_3;
+    public static void setObs_3(boolean obs_3) {
+        Gasket.obs_3 = obs_3;
     }
 
-    public static boolean isOb_4() {
-        return ob_4;
+    public static boolean isObs_4() {
+        return obs_4;
     }
 
-    public static void setOb_4(boolean ob_4) {
-        Gasket.ob_4 = ob_4;
+    public static void setObs_4(boolean obs_4) {
+        Gasket.obs_4 = obs_4;
     }
 
-    public static boolean isOb_2() {
-        return ob_2;
+    public static boolean isObs_2() {
+        return obs_2;
     }
 
-    public static void setOb_2(boolean ob_2) {
-        Gasket.ob_2 = ob_2;
+    public static void setObs_2(boolean obs_2) {
+        Gasket.obs_2 = obs_2;
     }
 
-    public static boolean isOb() {
-        return ob;
+    public static boolean isObs() {
+        return obs;
     }
 
-    public static void setOb(boolean ob) {
-        Gasket.ob = ob;
+    public static void setObs(boolean obs) {
+        Gasket.obs = obs;
     }
+
+
+
 
     public static boolean isUseStopLevelOrNotStop() {
         return useStopLevelOrNotStop;
@@ -677,12 +683,12 @@ public class Gasket {
         Gasket.osFlag = osFlag;
     }
 
-    public static boolean isOb_5() {
-        return ob_5;
+    public static boolean isObs_5() {
+        return obs_5;
     }
 
-    public static void setOb_5(boolean ob_5) {
-        Gasket.ob_5 = ob_5;
+    public static void setObs_5(boolean obs_5) {
+        Gasket.obs_5 = obs_5;
     }
 
     public static boolean isOsFlag_5() {
@@ -700,6 +706,9 @@ public class Gasket {
     public static void setObFlag_5(boolean obFlag_5) {
         Gasket.obFlag_5 = obFlag_5;
     }
+
+
+
 
     public static int getOb5Take() {
         return OB_5_TAKE;
@@ -733,6 +742,9 @@ public class Gasket {
         OS_5_STOP = os5Stop;
     }
 
+
+
+
     public static int getNumberOfCandlesForAnalysis() {
         return numberOfCandlesForAnalysis;
     }
@@ -757,6 +769,9 @@ public class Gasket {
         Gasket.activeNumberOfCandlesForAnalysis = activeNumberOfCandlesForAnalysis;
     }
 
+
+
+
     public static double getPROFIT_Sell_MR() {
         return PROFIT_Sell_MR;
     }
@@ -772,6 +787,9 @@ public class Gasket {
     public static void setPROFIT_Buy_MR(double PROFIT_Buy_MR) {
         Gasket.PROFIT_Buy_MR = PROFIT_Buy_MR;
     }
+
+
+
 
     public static int getOb5TakeMr() {
         return OB_5_TAKE_MR;
@@ -933,6 +951,9 @@ public class Gasket {
         OS_TAKE_MR = osTakeMr;
     }
 
+
+
+
     public static double getPROFIT_Sell_R() {
         return PROFIT_Sell_R;
     }
@@ -948,6 +969,9 @@ public class Gasket {
     public static void setPROFIT_Buy_R(double PROFIT_Buy_R) {
         Gasket.PROFIT_Buy_R = PROFIT_Buy_R;
     }
+
+
+
 
     public static int getOb5TakeR() {
         return OB_5_TAKE_R;

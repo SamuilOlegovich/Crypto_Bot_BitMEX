@@ -16,15 +16,17 @@ public class InfoIndicator {
     private int preview;
     private long value;
     private Date time;
+    private long avg;
 
 
-    public InfoIndicator(TimeFrame period, int preview, Date time, double price, long value, BidAsk type) {
+    public InfoIndicator(TimeFrame period, int preview, Date time, double price, long value, BidAsk type, long avg) {
         this.preview = preview;
         this.period = period;
         this.value = value;
         this.price = price;
         this.type = type;
         this.time = time;
+        this.avg = avg;
     }
 
 
@@ -60,6 +62,6 @@ public class InfoIndicator {
 
         return "{\"period\": \"" + period + "\",\"preview\": \"" + preview + "\",\"time\": \""
                 + dateFormat.format(time) + "\",\"price\": \"" + price + "\",\"value\": \"" + value
-                + "\",\"type\": \"" + type + "\"}";
+                + "\",\"type\": \"" + type + "\",\"type\": \"" + avg + "\"}";
     }
 }

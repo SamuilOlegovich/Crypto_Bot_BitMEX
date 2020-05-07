@@ -34,7 +34,7 @@ public class ParserSetting {
                 try {
                     ConsoleHelper.writeMessage("Настроек в файле Settings.txt необнаружено " +
                             "- включены и вписаны настройки по умолчанию.");
-                    WriterAndReadFile.writerFile(getStringWrite(), path, true);
+                    WriterAndReadFile.writerFile(getStringWrite(), path, false);
                 } catch (Exception ex) {
                     ConsoleHelper.writeMessage("Ошибка в ЗАПИСИ файла Settings.txt .");
                 }
@@ -61,7 +61,7 @@ public class ParserSetting {
 
     public void writeSettings() {
         try {
-            WriterAndReadFile.writerFile(getStringWrite(), path, true);
+            WriterAndReadFile.writerFile(getStringWrite(), path, false);
         } catch (Exception e) {
             ConsoleHelper.writeMessage("Настройки не перезаписались после команды изменения.");
         }

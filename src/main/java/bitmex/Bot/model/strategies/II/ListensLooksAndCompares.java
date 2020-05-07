@@ -49,7 +49,6 @@ public class ListensLooksAndCompares {
         listInfoIndicator.add(infoIndicator);
         if (!timeFlag) {
             timeFlag = true;
-            //priceNow = Gasket.getBitmexQuote().getBidPrice();
             listSortedAndCompares();
         }
     }

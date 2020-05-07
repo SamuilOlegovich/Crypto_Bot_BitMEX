@@ -31,14 +31,14 @@ public class SavedPatterns implements Serializable {
     }
 
 
-    public void addListsPricePatterns(ArrayList<String> listsPricePatterns) {
+    public synchronized void addListsPricePatterns(ArrayList<String> listsPricePatterns) {
         isThereSuchCombination(listsPricePatterns);
     }
 
 
     // ищем есть ли такие патерны если нет то добавляем,
     // если есть то устанавливаем приоритет
-    private void isThereSuchCombination(ArrayList<String> arrayList) {
+    private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
         ConsoleHelper.writeMessage("Сравниваю ПАТТЕРН с имеющимися ---- "
                 + DatesTimes.getDateTerminal());
 
@@ -142,61 +142,66 @@ public class SavedPatterns implements Serializable {
     public static void main(String[] args) {
 
         FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();//
-
-        ArrayList<String> arrayList = new ArrayList<>();//
-        arrayList.add("BUY===1===SELL===0===AVERAGE===8.0===MAX===19");//
-        arrayList.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
-        arrayList.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-                + "\"value\": \"728\",\"type\": \"Bid\"}\n");//
-
-        ArrayList<String> arrayList2 = new ArrayList<>();//
-        arrayList2.add("BUY===1===SELL===0===AVERAGE===10.0===MAX===20");//
-        arrayList2.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
-        arrayList2.add("{\"period\": \"M30\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-                + "\"value\": \"728\",\"type\": \"Ask\"}\n");//
-
-        ArrayList<String> arrayList3 = new ArrayList<>();//
-        arrayList3.add("BUY===1===SELL===0===AVERAGE===8.0===MAX===19");
-        arrayList3.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
-        arrayList3.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-                + "\"value\": \"728\",\"type\": \"Bid\"}\n");//
-
-        System.out.println(arrayList);//
-        System.out.println(arrayList2);//
-        System.out.println(arrayList3);//
-
         SavedPatterns savedPatterns = new SavedPatterns();
+//
+//
+//        ArrayList<String> arrayList = new ArrayList<>();//
+//        arrayList.add("BUY===1===SELL===0===AVERAGE===8.0===MAX===19");//
+//        arrayList.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+//                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
+//        arrayList.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+//                + "\"value\": \"728\",\"type\": \"Bid\"}\n");//
+//
+//        ArrayList<String> arrayList2 = new ArrayList<>();//
+//        arrayList2.add("BUY===1===SELL===0===AVERAGE===10.0===MAX===20");//
+//        arrayList2.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+//                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
+//        arrayList2.add("{\"period\": \"M30\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+//                + "\"value\": \"728\",\"type\": \"Ask\"}\n");//
+//
+//        ArrayList<String> arrayList3 = new ArrayList<>();//
+//        arrayList3.add("BUY===1===SELL===0===AVERAGE===8.0===MAX===19");
+//        arrayList3.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+//                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
+//        arrayList3.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+//                + "\"value\": \"728\",\"type\": \"Bid\"}\n");//
+//
+//        System.out.println(arrayList);//
+//        System.out.println(arrayList2);//
+//        System.out.println(arrayList3);//
+//
+//
+//        savedPatterns.addListsPricePatterns(arrayList); //
+//        savedPatterns.addListsPricePatterns(arrayList2);//
+//        savedPatterns.addListsPricePatterns(arrayList3);//
 
-        savedPatterns.addListsPricePatterns(arrayList); //
-        savedPatterns.addListsPricePatterns(arrayList2);//
-        savedPatterns.addListsPricePatterns(arrayList3);//
 
-
-        // сер
-        try {
-            FileOutputStream outputStream = new FileOutputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(savedPatterns);
-            objectOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(savedPatterns.listsPricePatterns);//
-        savedPatterns.listsPricePatterns.clear();
-        System.out.println(savedPatterns.listsPricePatterns.size());//
-        System.out.println();//
+//        // сер
+//        try {
+//            FileOutputStream outputStream = new FileOutputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
+//            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+//            objectOutputStream.writeObject(savedPatterns);
+//            objectOutputStream.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println(savedPatterns.listsPricePatterns);//
+//        savedPatterns.listsPricePatterns.clear();
+//        System.out.println(savedPatterns.listsPricePatterns.size());//
+//        System.out.println();//
 
 
         // десер
         try {
             FileInputStream fileInputStream = new FileInputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
+            System.out.println(1);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            System.out.println(2);
             savedPatterns = (SavedPatterns) objectInputStream.readObject();
+            System.out.println(3);
             fileInputStream.close();
+            System.out.println(4);
         } catch (ClassNotFoundException | IOException e) {
             System.out.println("Файл с ПАТТЕРНАМИ пуст или в нем есть ошибка");
             e.printStackTrace();

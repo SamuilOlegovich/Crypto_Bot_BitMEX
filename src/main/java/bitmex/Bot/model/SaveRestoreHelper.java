@@ -7,11 +7,12 @@ import java.io.*;
 
 public class SaveRestoreHelper {
 
-    public static void saveSavedPatternsClass() {
+    public synchronized static void saveSavedPatternsClass() {
         try {
             FileOutputStream outputStream = new FileOutputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(Gasket.getSavedPatternsClass());
+            objectOutputStream.flush();
             objectOutputStream.close();
             ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- SavedPatterns сохранен");
         } catch (IOException e) {
@@ -21,7 +22,7 @@ public class SaveRestoreHelper {
         }
     }
 
-    public static void restoreSavedPatternsClass() {
+    public synchronized static void restoreSavedPatternsClass() {
 
         try {
             FileInputStream fileInputStream = new FileInputStream(Gasket.getFilesAndPathCreator().getPathPatterns());

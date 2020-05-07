@@ -62,6 +62,7 @@ public class InfoIndicator {
 
         return "{\"period\": \"" + period + "\",\"preview\": \"" + preview + "\",\"time\": \""
                 + dateFormat.format(time) + "\",\"price\": \"" + price + "\",\"value\": \"" + value
-                + "\",\"type\": \"" + type + "\",\"type\": \"" + avg + "\"}";
+                + "\",\"type\": \"" + type + "\",\"avg\": \"" + avg + "\"}"
+                + "\n";
     }
 }

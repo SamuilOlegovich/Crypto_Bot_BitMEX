@@ -70,7 +70,8 @@ public class SavedPatterns implements Serializable {
                 if (result) {
                     ConsoleHelper.writeMessage("ПАТТЕРН такой есть - обновляю информацию ---- "
                             + DatesTimes.getDateTerminal());
-                    stringArrayList.set(0, setPriority(stringArrayList.get(0), arrayList.get(0)));
+                    String stringZero = setPriority(stringArrayList.get(0), arrayList.get(0));
+                    stringArrayList.set(0, stringZero);
                     ReadAndSavePatterns.saveSavedPatterns();
                     return;
                 }
@@ -80,9 +81,10 @@ public class SavedPatterns implements Serializable {
         // если совпадение не было найдено - добавляем данный патерн в массив
         ConsoleHelper.writeMessage("Такого ПАТТЕРНА нет - ДОБАВЛЕН ---- "
                 + DatesTimes.getDateTerminal());
-        arrayList.set(0, ("\n" + arrayList.get(0) + "===ID==="
+        String stringZero = arrayList.get(0) + "===ID==="
                 + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                + "\n"));
+                + "\n";
+        arrayList.set(0, stringZero);
         listsPricePatterns.add(arrayList);
         maxArraySize = Math.max(arrayList.size(), maxArraySize);
         ReadAndSavePatterns.saveSavedPatterns();
@@ -99,15 +101,20 @@ public class SavedPatterns implements Serializable {
         int sell = Integer.parseInt(strings1[3]) + Integer.parseInt(strings2[3]);
         int buy = Integer.parseInt(strings1[1]) + Integer.parseInt(strings2[1]);
         // считаем среднюю цену отклонения в противоположную сторону
-        double average = (Double.parseDouble(strings1[5]) + Double.parseDouble(strings2[5])) / 2;
+        double average = (Double.parseDouble(strings1[5]) + Double.parseDouble(strings2[5])) / 2.0;
         // обновляем максимальное отклонение
-        double max = Math.max(Double.parseDouble(strings1[7]), Double.parseDouble(strings2[7]));
+//        double max = Math.max(Double.parseDouble(strings1[7]), Double.parseDouble(strings2[7]));
+        double max = 0.0;
+        try {
+            max = Math.max(Double.parseDouble(strings1[7]), Double.parseDouble(strings2[7]));///////////////////////////
+        } catch (NumberFormatException e) {
+            ConsoleHelper.writeMessage("NumberFormatException");
+        }
 
         // вернули итоговую инфо строку
-        return  "\n" + strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4] + "==="
+        return  strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4] + "==="
                 + average + "===" + strings1[6] + "===" + max
-                + "===" + strings2[8] + "===" + strings2[9]
-                + "\n";
+                + "===" + strings1[8] + "===" + strings1[9];
     }
 
 
@@ -126,7 +133,6 @@ public class SavedPatterns implements Serializable {
     }
 
 
-
     // возвращаем самую большую длину имеющегося паттерна
     public int getMaxArraySize() {
         return maxArraySize;
@@ -143,37 +149,50 @@ public class SavedPatterns implements Serializable {
 
         FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();//
         SavedPatterns savedPatterns = new SavedPatterns();
-//
-//
-//        ArrayList<String> arrayList = new ArrayList<>();//
-//        arrayList.add("BUY===1===SELL===0===AVERAGE===8.0===MAX===19");//
-//        arrayList.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-//                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
-//        arrayList.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-//                + "\"value\": \"728\",\"type\": \"Bid\"}\n");//
-//
-//        ArrayList<String> arrayList2 = new ArrayList<>();//
-//        arrayList2.add("BUY===1===SELL===0===AVERAGE===10.0===MAX===20");//
-//        arrayList2.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-//                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
-//        arrayList2.add("{\"period\": \"M30\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-//                + "\"value\": \"728\",\"type\": \"Ask\"}\n");//
-//
-//        ArrayList<String> arrayList3 = new ArrayList<>();//
-//        arrayList3.add("BUY===1===SELL===0===AVERAGE===8.0===MAX===19");
-//        arrayList3.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-//                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
-//        arrayList3.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
-//                + "\"value\": \"728\",\"type\": \"Bid\"}\n");//
-//
-//        System.out.println(arrayList);//
-//        System.out.println(arrayList2);//
-//        System.out.println(arrayList3);//
-//
-//
-//        savedPatterns.addListsPricePatterns(arrayList); //
-//        savedPatterns.addListsPricePatterns(arrayList2);//
-//        savedPatterns.addListsPricePatterns(arrayList3);//
+
+
+        ArrayList<String> arrayList = new ArrayList<>();//
+        arrayList.add("BUY===1===SELL===0===AVERAGE===8.0===MAX===19");//
+        arrayList.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
+        arrayList.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+                + "\"value\": \"728\",\"type\": \"Bid\"}\n");//
+
+        ArrayList<String> arrayList2 = new ArrayList<>();//
+        arrayList2.add("BUY===1===SELL===0===AVERAGE===10.0===MAX===20");//
+        arrayList2.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
+        arrayList2.add("{\"period\": \"M30\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+                + "\"value\": \"728\",\"type\": \"Ask\"}\n");//
+
+        ArrayList<String> arrayList3 = new ArrayList<>();//
+        arrayList3.add("BUY===1===SELL===0===AVERAGE===8.0===MAX===19");
+        arrayList3.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+                + "\"value\": \"721\",\"type\": \"Ask\"}\n");//
+        arrayList3.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"19.03.2020 19:21:00\",\"price\": \"25,87\","
+                + "\"value\": \"728\",\"type\": \"Bid\"}\n");//
+
+        System.out.println(arrayList);//
+        System.out.println(arrayList2);//
+        System.out.println(arrayList3);//
+
+
+        savedPatterns.addListsPricePatterns(arrayList); //
+        savedPatterns.addListsPricePatterns(arrayList2);//
+        savedPatterns.addListsPricePatterns(arrayList3);//
+
+        System.out.println();
+        System.out.println(savedPatterns.listsPricePatterns);
+        System.out.println();
+        System.out.println("START");
+        for (ArrayList<String> arr : savedPatterns.listsPricePatterns) {
+            for (String s : arr)
+            System.out.print(s);
+            System.out.println("NEXT" + "\n");
+        }
+            System.out.println("END" + "\n");
+
+
 
 
 //        // сер
@@ -192,24 +211,24 @@ public class SavedPatterns implements Serializable {
 //        System.out.println();//
 
 
-        // десер
-        try {
-            FileInputStream fileInputStream = new FileInputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
-            System.out.println(1);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            System.out.println(2);
-            savedPatterns = (SavedPatterns) objectInputStream.readObject();
-            System.out.println(3);
-            fileInputStream.close();
-            System.out.println(4);
-        } catch (ClassNotFoundException | IOException e) {
-            System.out.println("Файл с ПАТТЕРНАМИ пуст или в нем есть ошибка");
-            e.printStackTrace();
-        }
-
-        if (savedPatterns != null) {
-            System.out.println(savedPatterns.listsPricePatterns);
-        }
+//        // десер
+//        try {
+//            FileInputStream fileInputStream = new FileInputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
+//            System.out.println(1);
+//            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+//            System.out.println(2);
+//            savedPatterns = (SavedPatterns) objectInputStream.readObject();
+//            System.out.println(3);
+//            fileInputStream.close();
+//            System.out.println(4);
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.out.println("Файл с ПАТТЕРНАМИ пуст или в нем есть ошибка");
+//            e.printStackTrace();
+//        }
+//
+//        if (savedPatterns != null) {
+//            System.out.println(savedPatterns.listsPricePatterns);
+//        }
 
     }
 }

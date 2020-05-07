@@ -74,6 +74,18 @@ public class ListensToLooksAndFills {
         averageFlagSell = false;
         averageFlagBuy = false;
 
+        Comparator sortPriceComparator = new SortPrice();
+        Collections.sort(listInfoIndicator, sortPriceComparator);
+
+
+        //////////////////////////////////////////////////////////
+        String string = "";
+        for (InfoIndicator infoIndicator : listInfoIndicator) {
+            string = string + infoIndicator.toString();
+        }
+        System.out.println(string);
+        ///////////////////////////////////////////////////////////
+
 
         // если цены финиша нет то назначаем ее
         if (priceEndBuy == 0) {
@@ -130,25 +142,14 @@ public class ListensToLooksAndFills {
         listInfoIndicator.clear();
         averageFlagSell = true;
         averageFlagBuy = true;
+        ConsoleHelper.writeMessage(listInfoIndicator.size() + "");
     }
 
 
     // Cортируем и добавляем строки в листы направлений
     private void sortPrice(boolean buyOrSell) {
-        ConsoleHelper.writeMessage("Cортируем и добавляем строки в листы направлений - "
+        ConsoleHelper.writeMessage("Добавляем строки в листы направлений - "
                 + DatesTimes.getDateTerminal());
-        Comparator sortPriceComparator = new SortPrice();
-        Collections.sort(listInfoIndicator, sortPriceComparator);
-
-
-
-        //////////////////////////////////////////////////////////
-        String string = "";
-        for (InfoIndicator infoIndicator : listInfoIndicator) {
-            string = string + infoIndicator.toString();
-        }
-        System.out.println(string);
-        ///////////////////////////////////////////////////////////
 
         if (buyOrSell) {
             for (InfoIndicator infoIndicator : listInfoIndicator) {

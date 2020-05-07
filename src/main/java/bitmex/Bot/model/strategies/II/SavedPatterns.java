@@ -106,7 +106,7 @@ public class SavedPatterns implements Serializable {
         // вернули итоговую инфо строку
         return  "\n" + strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4] + "==="
                 + average + "===" + strings1[6] + "===" + max
-                + "===" + strings1[8] + "===" + strings1[9]
+                + "===" + strings2[8] + "===" + strings2[9]
                 + "\n";
     }
 

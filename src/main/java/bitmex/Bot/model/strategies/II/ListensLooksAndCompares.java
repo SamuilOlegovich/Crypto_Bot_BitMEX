@@ -194,4 +194,50 @@ public class ListensLooksAndCompares {
             else return 0;
         }
     }
+
+
+
+
+
+
+
+//    // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
+//    private class KeepsTrackOfFillingListInfoIndicator extends Thread {
+//        public KeepsTrackOfFillingListInfoIndicator() {
+//            ConsoleHelper.writeMessage("Начал свою работу класс KeepsTrackOfFillingListInfoIndicator"
+//                    + " ---- " + DatesTimes.getDateTerminal());
+//            start();
+//        }
+//
+//        @Override
+//        public void run() {
+//
+//            int previousValue = 0;
+//
+//            while (true) {
+//                int size = listInfoIndicator.size();
+//                int sleep = 3;
+//
+//                if (size > 0) {
+//                    if (previousValue == listInfoIndicator.size()) {
+//                        priceNow = Gasket.getBitmexQuote().getBidPrice();
+//                        previousValue = 0;
+//                        listSorter();
+//                        sleep = 60;
+//                    } else {
+//                        previousValue = size;
+//                    }
+//                }
+//
+//                try {
+//                    Thread.sleep(1000 * sleep);
+//                } catch (InterruptedException e) {
+//                    ConsoleHelper.writeMessage("Не смог проснуться во внутреннем классе "
+//                            + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
+//                            + " sleep = " + sleep + " ---- " + DatesTimes.getDateTerminal());
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 }

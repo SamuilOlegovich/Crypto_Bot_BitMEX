@@ -23,7 +23,6 @@ public class SaveRestoreHelper {
     }
 
     public synchronized static void restoreSavedPatternsClass() {
-
         try {
             FileInputStream fileInputStream = new FileInputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);

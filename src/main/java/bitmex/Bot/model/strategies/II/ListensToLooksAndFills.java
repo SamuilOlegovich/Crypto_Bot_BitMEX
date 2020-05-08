@@ -21,7 +21,8 @@ public class ListensToLooksAndFills {
     private ArrayList<String> listStringPriceBuy;
     private SavedPatterns savedPatterns;
 
-    private volatile double priceStartOrder;
+    private volatile double priceStartOrderSell;
+    private volatile double priceStartOrderBuy;
     private volatile double priceEndSell;
     private volatile double priceEndBuy;
     private volatile double priceTake;
@@ -41,7 +42,8 @@ public class ListensToLooksAndFills {
         this.listStringPriceBuy = new ArrayList<>();
         this.listInfoIndicator = new ArrayList<>();
         new KeepsTrackOfFillingListInfoIndicator();
-        this.priceStartOrder = 00.0;
+        this.priceStartOrderSell = 00.0;
+        this.priceStartOrderBuy = 00.0;
         this.averageFlagSell = true;
         this.averageFlagBuy = true;
         this.priceEndSell = 00.0;
@@ -75,23 +77,30 @@ public class ListensToLooksAndFills {
         averageFlagSell = false;
         averageFlagBuy = false;
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+
+        }
+
         Comparator sortPriceComparator = new SortPrice();
         Collections.sort(listInfoIndicator, sortPriceComparator);
 
 
         //////////////////////////////////////////////////////////
-        String string = "";
+        StringBuilder string = new StringBuilder();
         for (InfoIndicator infoIndicator : listInfoIndicator) {
-            string = string + infoIndicator.toString();
+            string.append(infoIndicator.toString());
         }
-        System.out.println(string);
+        System.out.println("\n" + DatesTimes.getDateTerminal() + " --- Пришел массив длиной - " + listInfoIndicator.size());
+        System.out.println(string.toString() + "\n" + "\n");
         ///////////////////////////////////////////////////////////
-
 
         // если цены финиша нет то назначаем ее
         if (priceEndBuy == 0) {
             priceEndBuy = priceNow + priceTake;
-            priceStartOrder = priceNow;
+            priceStartOrderSell = priceNow;
+            priceStartOrderBuy = priceNow;
 
             if (listStringPriceBuy.size() == 0) {
                 listStringPriceBuy.add("BUY===1===SELL===0===AVERAGE===");
@@ -102,14 +111,14 @@ public class ListensToLooksAndFills {
             }
         } else if (priceEndBuy <= priceNow) {
             // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
-            priceEndBuy = priceNow + priceTake;
             // добавляем лист в стратегии,
             ConsoleHelper.writeMessage("Добавляю лист в ПАТТЕРН Бай ---- "
                     + DatesTimes.getDateTerminal());
             String stringZero = listStringPriceBuy.get(0) + getAverageDeviations(true)
                     + "===MAX===" + getMaxDeviations(true);
-            ConsoleHelper.writeMessage(stringZero);
+            ConsoleHelper.writeMessage(stringZero + " ===SIZE=== " + listStringPriceBuy.size());
             listStringPriceBuy.set(0, stringZero);
+            ConsoleHelper.writeMessage("Отправил лист длиной - " + listStringPriceBuy.size());
             savedPatterns.addListsPricePatterns(listStringPriceBuy);
             // стираем данные из листа цен отклонения
             listPriceDeviationsBuy.clear();
@@ -118,18 +127,19 @@ public class ListensToLooksAndFills {
             // добавляем в начало листа метку что делать при совпадения патерна
             listStringPriceBuy.add("BUY===1===SELL===0===AVERAGE===");
             sortPrice(true);
-            priceStartOrder = priceNow;
+            priceStartOrderBuy = priceNow;
+            priceEndBuy = priceNow + priceTake;
+        } else {
+            // добавляем в лист метку что делать при совпадения патерна
+            ConsoleHelper.writeMessage("Добавляю в лист нулевую строку - "
+                    + DatesTimes.getDateTerminal());
+            if (listStringPriceBuy.size() == 0) {
+                listStringPriceBuy.add("BUY===1===SELL===0===AVERAGE===");
+            }
+            priceStartOrderBuy = priceNow;
+            priceEndBuy = priceNow + priceTake;
+            sortPrice(true);
         }
-//        else {
-//            // добавляем в лист метку что делать при совпадения патерна
-//            ConsoleHelper.writeMessage("Добавляю в лист нулевую строку - "
-//                    + DatesTimes.getDateTerminal());
-//            if (listStringPriceBuy.size() == 0) {
-//                listStringPriceBuy.add("BUY===1===SELL===0===AVERAGE===");
-//            }
-//            priceStartOrder = priceNow;
-//            sortPrice(true);
-//        }
 
         // тоже самое только для комбиначии СЕЛЛ
         if (priceEndSell == 0) {
@@ -139,7 +149,7 @@ public class ListensToLooksAndFills {
                     + DatesTimes.getDateTerminal());
             String stringZero = listStringPriceSell.get(0) + getAverageDeviations(false)
                     + "===MAX===" + getMaxDeviations(false);
-            ConsoleHelper.writeMessage(stringZero);
+            ConsoleHelper.writeMessage(stringZero + " ===SIZE=== " + listPriceDeviationsSell.size());
             listStringPriceSell.set(0, stringZero);
             savedPatterns.addListsPricePatterns(listStringPriceSell);
             listPriceDeviationsSell.clear();
@@ -147,22 +157,22 @@ public class ListensToLooksAndFills {
             listStringPriceSell.add("BUY===0===SELL===1===AVERAGE===");
             sortPrice(false);
             averageFlagSell = true;
+            priceStartOrderSell = priceNow;
             priceEndSell = priceNow - priceTake;
-            priceStartOrder = priceNow;
+        } else {
+            if (listStringPriceSell.size() == 0) {
+                listStringPriceSell.add("BUY===0===SELL===1===AVERAGE===");
+            }
+            priceStartOrderSell = priceNow;
+            priceEndSell = priceNow - priceTake;
+            sortPrice(false);
         }
-//        else {
-//            if (listStringPriceSell.size() == 0) {
-//                listStringPriceSell.add("BUY===0===SELL===1===AVERAGE===");
-//            }
-//            priceStartOrder = priceNow;
-//            sortPrice(false);
-//        }
 
         // очищаем лист входящих объектов
         listInfoIndicator.clear();
         averageFlagSell = true;
         averageFlagBuy = true;
-        ConsoleHelper.writeMessage(listInfoIndicator.size() + "");
+        ConsoleHelper.writeMessage(listInfoIndicator.size() + "--- listInfoIndicator");
     }
 
 
@@ -193,12 +203,26 @@ public class ListensToLooksAndFills {
             for (Double d : listPriceDeviationsBuy) {
                 result = Math.min(result, d);
             }
-            return priceStartOrder - result;
+
+            if (result == 0) {
+                System.out.println(priceStartOrderBuy + " - " + result + " = " + (priceStartOrderBuy - result));
+                return 0;
+            } else {
+                System.out.println(priceStartOrderBuy + " - " + result + " = " + (priceStartOrderBuy - result));
+                return priceStartOrderBuy - result; // проверить что не то с результатом он равен нулю постоянно
+            }
         } else {
             for (Double d : listPriceDeviationsSell) {
-                result = Math.min(result, d);
+                result = Math.max(result, d);
             }
-            return result - priceStartOrder;
+
+            if (result == 0) {
+                System.out.println(result + " - " + priceStartOrderSell + " = " + (result - priceStartOrderSell)); //тут тоже резулт иногда ноль
+                return 0;
+            } else {
+                System.out.println(result + " - " + priceStartOrderSell + " = " + (result - priceStartOrderSell)); //тут тоже резулт иногда ноль
+                return result - priceStartOrderSell;
+            }
         }
     }
 
@@ -207,18 +231,35 @@ public class ListensToLooksAndFills {
     private double getAverageDeviations(boolean b) {
         ConsoleHelper.writeMessage("находим среднюю просадку - "
                 + DatesTimes.getDateTerminal());
-        double result = 0;
+        double result = 0.0;
+        int count = 0;
 
         if (b) {
             for (Double d : listPriceDeviationsBuy) {
                 result = result + d;
+                count++;
             }
-            return result / listPriceDeviationsBuy.size() - 1;
+
+            if (result == 0) {
+                System.out.println(result/count);
+                return 0;
+            } else {
+                System.out.println(result/count);
+                return result / count; // резулт иногда ноль как итог вылетает НАН
+            }
         } else {
             for (Double d : listPriceDeviationsSell) {
                 result = result + d;
+                count++;
             }
-            return result / listPriceDeviationsSell.size() - 1;
+
+            if (result == 0) {
+                System.out.println(result / count);
+                return 0;
+            } else {
+                System.out.println(result / count);
+                return result / count; // резулт иногда ноль как итог вылетает НАН
+            }
         }
     }
 
@@ -249,11 +290,10 @@ public class ListensToLooksAndFills {
 
             while (true) {
                 if (averageFlagBuy) {
-                    if (priceEndBuy != 0 && priceNow != 0) {
+                    if (priceEndBuy != 0 && priceStartOrderBuy != 0) {
                         double price = Gasket.getBitmexQuote().getBidPrice();
 
-                        if (price < priceNow) {
-                            System.out.println(8.4);
+                        if (price < priceStartOrderBuy) {
                             listPriceDeviationsBuy.add(price);
                         }
                     }
@@ -284,10 +324,10 @@ public class ListensToLooksAndFills {
 
             while (true) {
                 if (averageFlagSell) {
-                    if (priceEndSell != 0 && priceNow != 0) {
+                    if (priceEndSell != 0 && priceStartOrderSell != 0) {
                         double price = Gasket.getBitmexQuote().getBidPrice();
 
-                        if (price > priceNow) {
+                        if (price > priceStartOrderSell) {
                             listPriceDeviationsSell.add(price);
                         }
                     }

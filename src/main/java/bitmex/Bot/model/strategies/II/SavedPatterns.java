@@ -1,14 +1,13 @@
 package bitmex.Bot.model.strategies.II;
 
 import bitmex.Bot.model.FilesAndPathCreator;
-import bitmex.Bot.model.SaveRestoreHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 
-import java.io.*;
 import java.util.ArrayList;
+import java.io.*;
 
 
 
@@ -41,6 +40,19 @@ public class SavedPatterns implements Serializable {
     private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
         ConsoleHelper.writeMessage("Сравниваю ПАТТЕРН с имеющимися ---- "
                 + DatesTimes.getDateTerminal());
+
+
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\n").append(DatesTimes.getDateTerminal())
+                .append(" - Размер входящего листа == ").append(arrayList.size()).append("\n");
+        for (String s : arrayList) {
+            stringBuilder.append(s);
+        }
+        stringBuilder.append("\n\n");
+        ConsoleHelper.writeMessage(stringBuilder.toString());
+
+
 
         // перебираем массив стратегий и сравниваем с пришедшим
         for (ArrayList<String> stringArrayList : listsPricePatterns) {
@@ -85,8 +97,14 @@ public class SavedPatterns implements Serializable {
                 + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
                 + "\n";
         arrayList.set(0, stringZero);
+
+        ConsoleHelper.writeMessage(stringZero +  " -- SIZE -- " + arrayList.size());
+
         listsPricePatterns.add(arrayList);
         maxArraySize = Math.max(arrayList.size(), maxArraySize);
+
+        ConsoleHelper.writeMessage("Включаю СОХХРАНЕНИЕ ПАТТЕРНОВ");
+
         ReadAndSavePatterns.saveSavedPatterns();
     }
 
@@ -111,10 +129,31 @@ public class SavedPatterns implements Serializable {
             ConsoleHelper.writeMessage("NumberFormatException");
         }
 
+        System.out.println("\n");
+        for (String a : strings1) {
+            System.out.println(a);
+        }
+        System.out.println();
+        for (String a : strings2) {
+            System.out.println(a);
+        }
+        System.out.println("\n");
+
+
         // вернули итоговую инфо строку
-        return  strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4] + "==="
-                + average + "===" + strings1[6] + "===" + max
-                + "===" + strings1[8] + "===" + strings1[9];
+        if (strings1.length <= 8) {
+
+            System.out.println("\n" + s1 + "\n" + s2 + "\n");
+
+            return strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4]
+                    + "===" + average + "===" + strings1[6] + "===" + max + "===ID==="
+                    + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "\n";
+        } else {
+            return strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4] + "==="
+                    + average + "===" + strings1[6] + "===" + max
+                    + "===" + strings1[8] + "===" + strings1[9];
+        }
     }
 
 
@@ -139,6 +178,16 @@ public class SavedPatterns implements Serializable {
     }
 
 
+    public ArrayList<ArrayList<String>> getListsPricePatterns() {
+        return listsPricePatterns;
+    }
+
+    public void setPatternsInListsPricePatterns(ArrayList<String> arrayList) {
+        listsPricePatterns.add(arrayList);
+        maxArraySize = Math.max(arrayList.size(), maxArraySize);
+    }
+
+
 
 
 
@@ -149,6 +198,7 @@ public class SavedPatterns implements Serializable {
 
         FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();//
         SavedPatterns savedPatterns = new SavedPatterns();
+        Gasket.setSavedPatternsClass(savedPatterns);
 
 
         ArrayList<String> arrayList = new ArrayList<>();//
@@ -192,6 +242,9 @@ public class SavedPatterns implements Serializable {
         }
             System.out.println("END" + "\n");
 
+
+
+        ReadAndSavePatterns.saveSavedPatterns();
 
 
 

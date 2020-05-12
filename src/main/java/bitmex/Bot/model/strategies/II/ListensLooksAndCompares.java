@@ -26,8 +26,8 @@ public class ListensLooksAndCompares {
 
 
     private ListensLooksAndCompares() {
-        ConsoleHelper.writeMessage("Класс ListensLooksAndCompares начал работать ---- "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + "Класс ListensLooksAndCompares начал работать");
         this.savedPatterns = Gasket.getSavedPatternsClass();
         this.listInfoIndicator = new ArrayList<>();
         this.listInListString = new ArrayList<>();
@@ -61,9 +61,9 @@ public class ListensLooksAndCompares {
             try {
                 Thread.sleep(1000 * 5);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage("Не смог проснуться в методе listSorter() "
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                        + "Не смог проснуться в методе listSorter() "
                         + "класса ListensToLooksAndFills");
-                e.printStackTrace();
             }
             timeFlag = false;
         }
@@ -73,8 +73,8 @@ public class ListensLooksAndCompares {
         // удаляем ненужное
         removeUnnecessaryLists();
 
-        ConsoleHelper.writeMessage("Сравниваю рынок с ПАТТЕРНАМИ ---- "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + "Сравниваю рынок с ПАТТЕРНАМИ");
         // сравниваем оставшееся с патернами
         for (ArrayList<String> thisArrayListString : listInListString) {
             // получаем равные по размеру патерны
@@ -100,8 +100,8 @@ public class ListensLooksAndCompares {
                     }
 
                     if (result) {
-                        ConsoleHelper.writeMessage("Нашел совпадения в рынке с ПАТТЕРНАМИ передаю на сделку ---- "
-                                + DatesTimes.getDateTerminal());
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                                + "Нашел совпадения в рынке с ПАТТЕРНАМИ передаю на сделку");
                         makeDeal(inArrayListString.get(0));
                     }
                 }
@@ -112,8 +112,8 @@ public class ListensLooksAndCompares {
 
     // Определяем какую сделку сделать и даем команду на ее исполнение
     private void makeDeal(String string) {
-        ConsoleHelper.writeMessage("Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ ---- "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + "Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ");
         String[] strings = string.split("===");
 
         if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
@@ -121,15 +121,15 @@ public class ListensLooksAndCompares {
 
             if (Gasket.isTrading()) new TradeBuy(stringOut);
             new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
-            ConsoleHelper.writeMessage(stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ ---- "
-                    + DatesTimes.getDateTerminal());
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ");
         } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
             String stringOut = string + "-PAT";
 
             if (Gasket.isTrading()) new TradeSell(stringOut);
             new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
-            ConsoleHelper.writeMessage(stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ ---- "
-                    + DatesTimes.getDateTerminal());
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ");
         }
     }
 

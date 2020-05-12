@@ -1,17 +1,19 @@
 package bitmex.Bot.model.strategies.II;
 
+import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.io.*;
 
 
-
 public class SavedPatterns implements Serializable {
+
     private static final long serialVersionUID = 908198101052020L;
     private static SavedPatterns savedPatterns;
 
@@ -23,6 +25,7 @@ public class SavedPatterns implements Serializable {
         this.listsPricePatterns = new ArrayList<>();
         this.maxArraySize = 0;
     }
+
 
     public static SavedPatterns getInstance() {
         if (savedPatterns == null) savedPatterns = new SavedPatterns();
@@ -44,17 +47,16 @@ public class SavedPatterns implements Serializable {
         ArrayList<String> inArrayList = new ArrayList<>(arrayList);
 
 
-        //////////////////////////////////////////////////////////////////////////////
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n").append(DatesTimes.getDateTerminal())
-                .append(" - Размер входящего листа == ").append(inArrayList.size()).append("\n");
-        for (String s : inArrayList) {
-            stringBuilder.append(s);
-        }
-        stringBuilder.append("\n\n");
-        ConsoleHelper.writeMessage(stringBuilder.toString());
-        ////////////////////////////////////////////////////////////////////////////
-
+//        //////////////////////////////////////////////////////////////////////////////
+//        StringBuilder stringBuilder = new StringBuilder();
+//        stringBuilder.append("\n").append(DatesTimes.getDateTerminal())
+//                .append(" - Размер входящего листа == ").append(inArrayList.size()).append("\n");
+//        for (String s : inArrayList) {
+//            stringBuilder.append(s);
+//        }
+//        stringBuilder.append("\n\n");
+//        ConsoleHelper.writeMessage(stringBuilder.toString());
+//        ////////////////////////////////////////////////////////////////////////////
 
 
         // перебираем массив стратегий и сравниваем с пришедшим
@@ -83,8 +85,8 @@ public class SavedPatterns implements Serializable {
                 // с учетом информации пришедшего паттерна
                 // а так же прекращаем процесс поиска и сравнения
                 if (result) {
-                    ConsoleHelper.writeMessage("ПАТТЕРН такой есть - обновляю информацию ---- "
-                            + DatesTimes.getDateTerminal());
+                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            + " --- ПАТТЕРН такой есть - обновляю информацию");
                     String stringZero = setPriority(stringArrayList.get(0), inArrayList.get(0));
                     stringArrayList.set(0, stringZero);
                     ReadAndSavePatterns.saveSavedPatterns();
@@ -94,13 +96,17 @@ public class SavedPatterns implements Serializable {
         }
 
         // если совпадение не было найдено - добавляем данный патерн в массив
-        ConsoleHelper.writeMessage("Такого ПАТТЕРНА нет - ДОБАВЛЕН ---- "
-                + DatesTimes.getDateTerminal() + " -- SIZE -- " + inArrayList.size());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Такого ПАТТЕРНА нет - ДОБАВЛЕН --- "
+                +  "SIZE --- " + inArrayList.size());
+
+        // проверяю есть ли такой айди и если есть меняю его на другой
+        inArrayList.set(0, checkingID(inArrayList.get(0)));
 
         listsPricePatterns.add(0, inArrayList);
         maxArraySize = Math.max(inArrayList.size(), maxArraySize);
 
-        ConsoleHelper.writeMessage("Включаю СОХХРАНЕНИЕ ПАТТЕРНОВ");
+        SortSize sortSize = new SortSize();
+        listsPricePatterns.sort(sortSize);
 
         ReadAndSavePatterns.saveSavedPatterns();
     }
@@ -118,39 +124,11 @@ public class SavedPatterns implements Serializable {
         // считаем среднюю цену отклонения в противоположную сторону
         double average = (Double.parseDouble(strings1[5]) + Double.parseDouble(strings2[5])) / 2.0;
         // обновляем максимальное отклонение
-//        double max = Math.max(Double.parseDouble(strings1[7]), Double.parseDouble(strings2[7]));
-        double max = 0.0;
-        try {
-            max = Math.max(Double.parseDouble(strings1[7]), Double.parseDouble(strings2[7]));///////////////////////////
-        } catch (NumberFormatException e) {
-            ConsoleHelper.writeMessage("NumberFormatException");
-        }
+        double max = Math.max(Double.parseDouble(strings1[7]), Double.parseDouble(strings2[7]));
 
-//        System.out.println("\n");
-//        for (String a : strings1) {
-//            System.out.println(a);
-//        }
-//        System.out.println();
-//        for (String a : strings2) {
-//            System.out.println(a);
-//        }
-//        System.out.println("\n");
-
-
-        // вернули итоговую инфо строку
-//        if (strings1.length <= 8) {
-//
-//            System.out.println("\n" + s1 + "\n" + s2 + "\n");
-//
-//            return strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4]
-//                    + "===" + average + "===" + strings1[6] + "===" + max + "===ID==="
-//                    + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-//                    + "\n";
-//        } else {
-            return strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4] + "==="
-                    + average + "===" + strings1[6] + "===" + max
-                    + "===" + strings1[8] + "===" + strings1[9];
-//        }
+        return strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4]
+                + "===" + average + "===" + strings1[6] + "===" + max + "===" + strings1[8]
+                + "===" + strings1[9] + "===" + strings1[10] + "===" + strings1[11];
     }
 
 
@@ -180,10 +158,56 @@ public class SavedPatterns implements Serializable {
     }
 
     public void setPatternsInListsPricePatterns(ArrayList<String> arrayList) {
-        listsPricePatterns.add(arrayList);
-        maxArraySize = Math.max(arrayList.size(), maxArraySize);
+        ArrayList<String> strings = new ArrayList<>(arrayList);
+        listsPricePatterns.add(strings);
+        maxArraySize = Math.max(strings.size(), maxArraySize);
     }
 
+
+    private String checkingID(String string) {
+        StringBuilder stringOut = new StringBuilder(string);
+        String[] strings = stringOut.toString().split("===");
+
+        for (ArrayList<String> stringArrayList : listsPricePatterns) {
+            if (strings[11].equals(stringArrayList.get(0))) {
+                stringOut.append((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39));
+            }
+        }
+        return stringOut.toString();
+    }
+
+
+    private class SortSize implements Comparator<ArrayList<String>> {
+        @Override
+        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+            double result = o1.size() - o2.size();
+            if (result > 0) return 1;
+            else if (result < 0) return -1;
+            else return 0;
+        }
+    }
+
+
+
+    public void seeLists() {
+        ConsoleHelper.writeMessage("\n"
+                + "Востановленный лист патернов имеет размер --- "
+                + listsPricePatterns.size());
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (ArrayList<String> arrayList : listsPricePatterns) {
+            ConsoleHelper.writeMessage("\n"
+                    + "Размер паттерна --- " + arrayList.size()
+                    + "\n");
+            for (String string : arrayList) {
+                stringBuilder.delete(0, stringBuilder.length());
+                stringBuilder.append(string).delete(stringBuilder.length() - "\n".length(), stringBuilder.length());
+                ConsoleHelper.writeMessage(stringBuilder.toString());
+            }
+        }
+        ConsoleHelper.writeMessage("");
+    }
 
 
 

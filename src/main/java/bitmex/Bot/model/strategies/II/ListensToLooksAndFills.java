@@ -34,8 +34,9 @@ public class ListensToLooksAndFills {
 
 
     private ListensToLooksAndFills() {
-        ConsoleHelper.writeMessage("Начал работать класс сбора Паттернов ---- "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + "Начал работать класс сбора Паттернов");
+
         this.savedPatterns = Gasket.getSavedPatternsClass();
         this.listPriceDeviationsSell = new ArrayList<>();
         this.listPriceDeviationsBuy = new ArrayList<>();
@@ -72,8 +73,8 @@ public class ListensToLooksAndFills {
 
     // отсыпаемся и начинаем работать
     private synchronized void listSorter() {
-        ConsoleHelper.writeMessage("listSorter() - работает - "
-                    + DatesTimes.getDateTerminal());
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+//                + "listSorter() - работает");
 
         averageFlagSell = false;
         averageFlagBuy = false;
@@ -89,34 +90,40 @@ public class ListensToLooksAndFills {
         listInfoIndicator.sort(sortPriceComparator);
 
 
-        //////////////////////////////////////////////////////////
-        StringBuilder string = new StringBuilder();
-        for (InfoIndicator infoIndicator : listInfoIndicator) {
-            string.append(infoIndicator.toString());
-        }
-        System.out.println("\n" + DatesTimes.getDateTerminal() + " --- Пришел массив длиной - " + listInfoIndicator.size());
-        System.out.println(string.toString() + "\n" + "\n");
-        ///////////////////////////////////////////////////////////
+//        //////////////////////////////////////////////////////////
+//        StringBuilder string = new StringBuilder();
+//        for (InfoIndicator infoIndicator : listInfoIndicator) {
+//            string.append(infoIndicator.toString());
+//        }
+//        System.out.println("\n" + DatesTimes.getDateTerminal() + " --- Пришел массив длиной - "
+//                + listInfoIndicator.size());
+//        System.out.println(string.toString() + "\n" + "\n");
+//        ///////////////////////////////////////////////////////////
 
         // если цены финиша нет то назначаем ее
-        if (priceEndBuy == 0) {
-            priceEndBuy = NaN;
-            priceStartOrderBuy = NaN;
-            ConsoleHelper.writeMessage("Установил NaN");
-        }
-
-        if (priceEndBuy <= priceNow) {
+        if (Double.isNaN(priceEndBuy)) {
+            priceStartOrderBuy = priceNow;
+            priceEndBuy = priceNow + priceTake;
+            sortPrice(true);
+//            priceEndBuy = NaN;
+//            priceStartOrderBuy = NaN;
+//            ConsoleHelper.writeMessage("Установил NaN");
+        } else if (priceEndBuy <= priceNow) {
             // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
             // добавляем лист в стратегии,
-            ConsoleHelper.writeMessage("Добавляю лист в ПАТТЕРН Бай ---- "
-                    + DatesTimes.getDateTerminal());
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Добавляю лист в ПАТТЕРН Бай");
+
             String stringZero = "BUY===1===SELL===0===AVERAGE===" + getAverageDeviations(true)
-                    + "===MAX===" + getMaxDeviations(true)  + "===ID===" +
-                    + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                    + "\n";;
-            ConsoleHelper.writeMessage(stringZero + " ===SIZE=== " + listStringPriceBuy.size());
+                    + "===MAX===" + getMaxDeviations(true)
+                    + "===SIZE===" + listStringPriceBuy.size()
+                    + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "\n";
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+//                    + stringZero + " ===SIZE=== " + listStringPriceBuy.size());
             listStringPriceBuy.add(0, stringZero);
-            ConsoleHelper.writeMessage("Отправил лист длиной - " + listStringPriceBuy.size());
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+//                    + "Отправил лист длиной - " + listStringPriceBuy.size());
             savedPatterns.addListsPricePatterns(listStringPriceBuy);
             // стираем данные из листа цен отклонения
             listPriceDeviationsBuy.clear();
@@ -128,25 +135,31 @@ public class ListensToLooksAndFills {
         } else {
             priceStartOrderBuy = priceNow;
             priceEndBuy = priceNow + priceTake;
+            listPriceDeviationsBuy.clear();
             sortPrice(true);
-            ConsoleHelper.writeMessage("добавил еще строки в массив БАЙ, теперь его разинр  - "
-                    + listStringPriceBuy.size());
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+//                    + "добавил еще строки в массив БАЙ, теперь его разинр  - "
+//                    + listStringPriceBuy.size());
         }
 
         // тоже самое только для комбиначии СЕЛЛ
-        if (priceEndSell == 0) {
-            priceStartOrderSell = NaN;
-            priceEndSell = NaN;
-        }
+        if (Double.isNaN(priceEndSell)) {
+            priceStartOrderSell = priceNow;
+            priceEndSell = priceNow - priceTake;
+            sortPrice(false);
+//            priceStartOrderSell = NaN;
+//            priceEndSell = NaN;
+        } else if (priceEndSell >= priceNow) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Добавляю лист в ПАТТЕРН Селл");
 
-        if (priceEndSell >= priceNow) {
-            ConsoleHelper.writeMessage("Добавляю лист в ПАТТЕРН Селл ---- "
-                    + DatesTimes.getDateTerminal());
             String stringZero = "BUY===0===SELL===1===AVERAGE===" + getAverageDeviations(false)
-                    + "===MAX===" + getMaxDeviations(false) + "===ID==="
-                    + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                    + "\n";;
-            ConsoleHelper.writeMessage(stringZero + " ===SIZE=== " + listStringPriceSell.size());
+                    + "===MAX===" + getMaxDeviations(false)
+                    + "===SIZE===" + listStringPriceSell.size()
+                    + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "\n";
+
+//            ConsoleHelper.writeMessage(stringZero + " ===SIZE=== " + listStringPriceSell.size());
             listStringPriceSell.add(0, stringZero);
             savedPatterns.addListsPricePatterns(listStringPriceSell);
             listPriceDeviationsSell.clear();
@@ -157,6 +170,7 @@ public class ListensToLooksAndFills {
         } else {
             priceStartOrderSell = priceNow;
             priceEndSell = priceNow - priceTake;
+            listPriceDeviationsSell.clear();
             sortPrice(false);
         }
 
@@ -169,8 +183,8 @@ public class ListensToLooksAndFills {
 
     // Cортируем и добавляем строки в листы направлений
     private void sortPrice(boolean buyOrSell) {
-        ConsoleHelper.writeMessage("Добавляем строки в листы направлений - "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                + " --- Добавляем строки в листы направлений");
 
         if (buyOrSell) {
             for (InfoIndicator infoIndicator : listInfoIndicator) {
@@ -186,8 +200,8 @@ public class ListensToLooksAndFills {
 
     // находим максимальную просадку
     private double getMaxDeviations(boolean b) {
-        ConsoleHelper.writeMessage("находим максимальную просадку - "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                + " --- находим максимальную просадку");
         double result = 0;
         int count = 0;
 
@@ -201,10 +215,12 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-                System.out.println(priceStartOrderBuy + " - " + result + " = " + (priceStartOrderBuy - result));
+                System.out.println(priceStartOrderBuy + " - " + result
+                        + " = " + (priceStartOrderBuy - result));
                 return 0;
             } else {
-                System.out.println(priceStartOrderBuy + " - " + result + " = " + (priceStartOrderBuy - result));
+                System.out.println(priceStartOrderBuy + " - " + result
+                        + " = " + (priceStartOrderBuy - result));
                 return priceStartOrderBuy - result; // проверить что не то с результатом он равен нулю постоянно
             }
 
@@ -233,36 +249,36 @@ public class ListensToLooksAndFills {
 
     // находим среднюю просадку
     private double getAverageDeviations(boolean b) {
-        ConsoleHelper.writeMessage("находим среднюю просадку - "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                + " --- находим среднюю просадку");
         double result = 0;
-        int count = 0;
+//        int count = 0;
 
         if (b) {
             for (Double d : listPriceDeviationsBuy) {
                 result = result + d;
-                count++;
+//                count++;
             }
 
             if (result == 0) {
-                System.out.println(result/count);
+                System.out.println(priceStartOrderBuy - (result / listPriceDeviationsBuy.size()) + "---result==0");
                 return 0;
             } else {
-                System.out.println(result/count);
-                return priceStartOrderBuy - (result / count); // резулт иногда ноль как итог вылетает НАН
+                System.out.println(priceStartOrderBuy - (result / listPriceDeviationsBuy.size()));
+                return priceStartOrderBuy - (result / listPriceDeviationsBuy.size()); // резулт иногда ноль как итог вылетает НАН
             }
         } else {
             for (Double d : listPriceDeviationsSell) {
                 result = result + d;
-                count++;
+//                count++;
             }
 
             if (result == 0) {
-                System.out.println(result / count);
+                System.out.println((result / listPriceDeviationsSell.size()) - priceStartOrderSell + "---result==0");
                 return 0;
             } else {
-                System.out.println(result / count);
-                return (result / count) - priceStartOrderSell; // резулт иногда ноль как итог вылетает НАН
+                System.out.println((result / listPriceDeviationsSell.size()) - priceStartOrderSell);
+                return (result / listPriceDeviationsSell.size()) - priceStartOrderSell; // резулт иногда ноль как итог вылетает НАН
             }
         }
     }
@@ -289,8 +305,8 @@ public class ListensToLooksAndFills {
 
         @Override
         public void run() {
-            ConsoleHelper.writeMessage("Начал фиксировать цену отклонения Бай ---- "
-                    + DatesTimes.getDateTerminal());
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Начал фиксировать цену отклонения Бай");
 
             while (true) {
                 if (averageFlagBuy) {
@@ -302,7 +318,8 @@ public class ListensToLooksAndFills {
                                 listPriceDeviationsBuy.add(price);
                             }
                         }
-                    } else {
+                    }
+                    else {
                         ConsoleHelper.writeMessage("Работает NaN");
                     }
                 }
@@ -310,8 +327,9 @@ public class ListensToLooksAndFills {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    ConsoleHelper.writeMessage("Не смог проснуться в методе countPriseBuy() "
-                            + "сласса ListensToLooksAndFills ---- " + DatesTimes.getDateTerminal());
+                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            + " --- Не смог проснуться в методе countPriseBuy() "
+                            + "сласса ListensToLooksAndFills");
                 }
             }
         }
@@ -327,8 +345,8 @@ public class ListensToLooksAndFills {
 
         @Override
         public void run() {
-            ConsoleHelper.writeMessage("Начал фиксировать цену отклонения Селл ---- "
-                    + DatesTimes.getDateTerminal());
+            ConsoleHelper.writeMessage( DatesTimes.getDateTerminal()
+                    + " --- Начал фиксировать цену отклонения Селл");
 
             while (true) {
                 if (averageFlagSell) {
@@ -346,8 +364,9 @@ public class ListensToLooksAndFills {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    ConsoleHelper.writeMessage("Не смог проснуться в методе countPriseSell() "
-                            + "сласса ListensToLooksAndFills ---- " + DatesTimes.getDateTerminal());
+                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            + " --- Не смог проснуться в методе countPriseSell() "
+                            + "сласса ListensToLooksAndFills");
                 }
             }
         }
@@ -357,8 +376,8 @@ public class ListensToLooksAndFills {
     // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
     private class KeepsTrackOfFillingListInfoIndicator extends Thread {
         public KeepsTrackOfFillingListInfoIndicator() {
-            ConsoleHelper.writeMessage("Начал свою работу класс KeepsTrackOfFillingListInfoIndicator"
-                    + " ---- " + DatesTimes.getDateTerminal());
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                    + " --- Начал свою работу класс KeepsTrackOfFillingListInfoIndicator");
             start();
         }
 
@@ -385,9 +404,10 @@ public class ListensToLooksAndFills {
                 try {
                     Thread.sleep(1000 * sleep);
                 } catch (InterruptedException e) {
-                    ConsoleHelper.writeMessage("Не смог проснуться во внутреннем классе "
+                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            + " --- Не смог проснуться во внутреннем классе "
                             + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
-                            + " sleep = " + sleep + " ---- " + DatesTimes.getDateTerminal());
+                            + " sleep = " + sleep);
                     e.printStackTrace();
                 }
             }

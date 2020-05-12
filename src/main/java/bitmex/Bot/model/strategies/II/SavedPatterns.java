@@ -35,22 +35,25 @@ public class SavedPatterns implements Serializable {
     }
 
 
+
     // ищем есть ли такие патерны если нет то добавляем,
     // если есть то устанавливаем приоритет
     private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
         ConsoleHelper.writeMessage("Сравниваю ПАТТЕРН с имеющимися ---- "
                 + DatesTimes.getDateTerminal());
+        ArrayList<String> inArrayList = new ArrayList<>(arrayList);
 
 
-
+        //////////////////////////////////////////////////////////////////////////////
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n").append(DatesTimes.getDateTerminal())
-                .append(" - Размер входящего листа == ").append(arrayList.size()).append("\n");
-        for (String s : arrayList) {
+                .append(" - Размер входящего листа == ").append(inArrayList.size()).append("\n");
+        for (String s : inArrayList) {
             stringBuilder.append(s);
         }
         stringBuilder.append("\n\n");
         ConsoleHelper.writeMessage(stringBuilder.toString());
+        ////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -59,13 +62,13 @@ public class SavedPatterns implements Serializable {
             boolean result = true;
 
             // проверяем совпадает ли их размер
-            if (stringArrayList.size() == arrayList.size()) {
+            if (stringArrayList.size() == inArrayList.size()) {
 
                 // если размер совпал то начинаем сравнивать построчно
                 // не считая 0-вой строки так как там инфа о паттерне
-                for (int i = 1; i < arrayList.size(); i++) {
+                for (int i = 1; i < inArrayList.size(); i++) {
                     String[] arr1 = stringArrayList.get(i).split("\"type\": \"");
-                    String[] arr2 = arrayList.get(i).split("\"type\": \"");
+                    String[] arr2 = inArrayList.get(i).split("\"type\": \"");
                     String[] strings1 = arr1[1].split("\"");
                     String[] strings2 = arr2[1].split("\"");
 
@@ -82,7 +85,7 @@ public class SavedPatterns implements Serializable {
                 if (result) {
                     ConsoleHelper.writeMessage("ПАТТЕРН такой есть - обновляю информацию ---- "
                             + DatesTimes.getDateTerminal());
-                    String stringZero = setPriority(stringArrayList.get(0), arrayList.get(0));
+                    String stringZero = setPriority(stringArrayList.get(0), inArrayList.get(0));
                     stringArrayList.set(0, stringZero);
                     ReadAndSavePatterns.saveSavedPatterns();
                     return;
@@ -92,16 +95,10 @@ public class SavedPatterns implements Serializable {
 
         // если совпадение не было найдено - добавляем данный патерн в массив
         ConsoleHelper.writeMessage("Такого ПАТТЕРНА нет - ДОБАВЛЕН ---- "
-                + DatesTimes.getDateTerminal());
-        String stringZero = arrayList.get(0) + "===ID==="
-                + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                + "\n";
-        arrayList.set(0, stringZero);
+                + DatesTimes.getDateTerminal() + " -- SIZE -- " + inArrayList.size());
 
-        ConsoleHelper.writeMessage(stringZero +  " -- SIZE -- " + arrayList.size());
-
-        listsPricePatterns.add(arrayList);
-        maxArraySize = Math.max(arrayList.size(), maxArraySize);
+        listsPricePatterns.add(0, inArrayList);
+        maxArraySize = Math.max(inArrayList.size(), maxArraySize);
 
         ConsoleHelper.writeMessage("Включаю СОХХРАНЕНИЕ ПАТТЕРНОВ");
 
@@ -129,31 +126,31 @@ public class SavedPatterns implements Serializable {
             ConsoleHelper.writeMessage("NumberFormatException");
         }
 
-        System.out.println("\n");
-        for (String a : strings1) {
-            System.out.println(a);
-        }
-        System.out.println();
-        for (String a : strings2) {
-            System.out.println(a);
-        }
-        System.out.println("\n");
+//        System.out.println("\n");
+//        for (String a : strings1) {
+//            System.out.println(a);
+//        }
+//        System.out.println();
+//        for (String a : strings2) {
+//            System.out.println(a);
+//        }
+//        System.out.println("\n");
 
 
         // вернули итоговую инфо строку
-        if (strings1.length <= 8) {
-
-            System.out.println("\n" + s1 + "\n" + s2 + "\n");
-
-            return strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4]
-                    + "===" + average + "===" + strings1[6] + "===" + max + "===ID==="
-                    + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                    + "\n";
-        } else {
+//        if (strings1.length <= 8) {
+//
+//            System.out.println("\n" + s1 + "\n" + s2 + "\n");
+//
+//            return strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4]
+//                    + "===" + average + "===" + strings1[6] + "===" + max + "===ID==="
+//                    + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+//                    + "\n";
+//        } else {
             return strings1[0] + "===" + buy + "===" + strings1[2] + "===" + sell + "===" + strings1[4] + "==="
                     + average + "===" + strings1[6] + "===" + max
                     + "===" + strings1[8] + "===" + strings1[9];
-        }
+//        }
     }
 
 
@@ -248,40 +245,40 @@ public class SavedPatterns implements Serializable {
 
 
 
-//        // сер
-//        try {
-//            FileOutputStream outputStream = new FileOutputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
-//            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-//            objectOutputStream.writeObject(savedPatterns);
-//            objectOutputStream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        System.out.println(savedPatterns.listsPricePatterns);//
-//        savedPatterns.listsPricePatterns.clear();
-//        System.out.println(savedPatterns.listsPricePatterns.size());//
-//        System.out.println();//
+        // сер
+        try {
+            FileOutputStream outputStream = new FileOutputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(savedPatterns);
+            objectOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(savedPatterns.listsPricePatterns);//
+        savedPatterns.listsPricePatterns.clear();
+        System.out.println(savedPatterns.listsPricePatterns.size());//
+        System.out.println();//
 
 
-//        // десер
-//        try {
-//            FileInputStream fileInputStream = new FileInputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
-//            System.out.println(1);
-//            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-//            System.out.println(2);
-//            savedPatterns = (SavedPatterns) objectInputStream.readObject();
-//            System.out.println(3);
-//            fileInputStream.close();
-//            System.out.println(4);
-//        } catch (ClassNotFoundException | IOException e) {
-//            System.out.println("Файл с ПАТТЕРНАМИ пуст или в нем есть ошибка");
-//            e.printStackTrace();
-//        }
-//
-//        if (savedPatterns != null) {
-//            System.out.println(savedPatterns.listsPricePatterns);
-//        }
+        // десер
+        try {
+            FileInputStream fileInputStream = new FileInputStream(Gasket.getFilesAndPathCreator().getPathPatterns());
+            System.out.println(1);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            System.out.println(2);
+            savedPatterns = (SavedPatterns) objectInputStream.readObject();
+            System.out.println(3);
+            fileInputStream.close();
+            System.out.println(4);
+        } catch (ClassNotFoundException | IOException e) {
+            System.out.println("Файл с ПАТТЕРНАМИ пуст или в нем есть ошибка");
+            e.printStackTrace();
+        }
+
+        if (savedPatterns != null) {
+            System.out.println(savedPatterns.listsPricePatterns);
+        }
 
     }
 }

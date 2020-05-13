@@ -147,6 +147,10 @@ public class ParserSetting {
                 + "savedPatterns=" + Gasket.isSavedPatterns()
                 + " ===== включить нахождение и запись патернов\n"
 
+                + "takeForCollectingPatterns=" + Gasket.getTakeForCollectingPatterns()
+                + " ===== тейк для сбора и накопления паттернов\n"
+
+
                 + "\n"
                 + "END\n";
     }

@@ -126,7 +126,9 @@ public class ConsoleHelper {
                 + "activeNumberOfCandlesForAnalysis === " + Gasket.isActiveNumberOfCandlesForAnalysis()
                 + " === включаем отклюаем отслеживания диапазона в котором находится цена true - включено\n"
                 + "tradingPatterns === " + Gasket.isTradingPatterns()
-                + "\n"
+                + " === включить торговлю по патернам патернов\n"
+                + "takeForCollectingPatterns === " + Gasket.getTakeForCollectingPatterns()
+                + " === тейк для сбора и накопления паттернов\n"
 
                 + " === включить по патернам патернов\n"
                 + "savedPatterns === " + Gasket.isSavedPatterns()

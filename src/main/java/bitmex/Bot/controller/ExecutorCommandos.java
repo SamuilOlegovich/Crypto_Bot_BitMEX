@@ -84,6 +84,12 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("twoAccounts === "
                                 + Gasket.isTwoAccounts() + "\n");
                     break;
+                case "takeForCollectingPatterns" :
+                    Gasket.setTakeForCollectingPatterns(Double.parseDouble(strings[1]));
+                    if (!flag)
+                        ConsoleHelper.writeMessage("takeForCollectingPatterns === "
+                                + Gasket.getTakeForCollectingPatterns() + "\n");
+                    break;
                 case "numberOfCandlesForAnalysis" :
                     Gasket.setNumberOfCandlesForAnalysis(Integer.parseInt(strings[1]));
                     if (!flag)

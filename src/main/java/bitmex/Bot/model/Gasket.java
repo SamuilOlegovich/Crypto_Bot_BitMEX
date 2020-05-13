@@ -16,6 +16,7 @@ public class Gasket {
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
     private static FilesAndPathCreator filesAndPathCreator;
+    private static double takeForCollectingPatterns = 20;           // тейк для сбора и накопления паттернов
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
     private static int numberOfCandlesForAnalysis = 60;             // количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку
     private static volatile boolean oneSellFLAG = true;
@@ -1218,5 +1219,14 @@ public class Gasket {
 
     public static void setSavedPatternsClass(SavedPatterns savedPatternsClass) {
         Gasket.savedPatternsClass = savedPatternsClass;
+    }
+
+
+    public static double getTakeForCollectingPatterns() {
+        return takeForCollectingPatterns;
+    }
+
+    public static void setTakeForCollectingPatterns(double takeForCollectingPatterns) {
+        Gasket.takeForCollectingPatterns = takeForCollectingPatterns;
     }
 }

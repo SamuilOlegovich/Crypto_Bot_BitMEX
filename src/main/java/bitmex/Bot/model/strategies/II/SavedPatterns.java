@@ -44,20 +44,8 @@ public class SavedPatterns implements Serializable {
     private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
         ConsoleHelper.writeMessage("Сравниваю ПАТТЕРН с имеющимися ---- "
                 + DatesTimes.getDateTerminal());
+
         ArrayList<String> inArrayList = new ArrayList<>(arrayList);
-
-
-//        //////////////////////////////////////////////////////////////////////////////
-//        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append("\n").append(DatesTimes.getDateTerminal())
-//                .append(" - Размер входящего листа == ").append(inArrayList.size()).append("\n");
-//        for (String s : inArrayList) {
-//            stringBuilder.append(s);
-//        }
-//        stringBuilder.append("\n\n");
-//        ConsoleHelper.writeMessage(stringBuilder.toString());
-//        ////////////////////////////////////////////////////////////////////////////
-
 
         // перебираем массив стратегий и сравниваем с пришедшим
         for (ArrayList<String> stringArrayList : listsPricePatterns) {
@@ -69,15 +57,39 @@ public class SavedPatterns implements Serializable {
                 // если размер совпал то начинаем сравнивать построчно
                 // не считая 0-вой строки так как там инфа о паттерне
                 for (int i = 1; i < inArrayList.size(); i++) {
-                    String[] arr1 = stringArrayList.get(i).split("\"type\": \"");
-                    String[] arr2 = inArrayList.get(i).split("\"type\": \"");
-                    String[] strings1 = arr1[1].split("\"");
-                    String[] strings2 = arr2[1].split("\"");
+                    String[] strings1;
+                    String[] strings2;
+                    String[] arr1;
+                    String[] arr2;
 
-                    // если хоть один объект не равен то прирываем цикл
-                    if (!strings1[0].equals(strings2[0])) {
+                    // Тут мы так же определяем не строка ли это направления и сравниваем либо ее либо строки уровней
+                    // BIAS===BUY===10===AVERAGE===3===MAX===5   <----- строка направления
+                    if (inArrayList.get(i).startsWith("BIAS") && stringArrayList.get(i).startsWith("BIAS")) {
+                        arr1 = stringArrayList.get(i).split("===");
+                        arr2 = inArrayList.get(i).split("===");
+
+                        // если хоть один объект не равен то прирываем цикл
+                        if (!arr1[1].equals(arr2[1])) {
+                            result = false;
+                            break;
+                        }
+
+                    } else if ((inArrayList.get(i).startsWith("BIAS") && !stringArrayList.get(i).startsWith("BIAS"))
+                            || (!inArrayList.get(i).startsWith("BIAS") && stringArrayList.get(i).startsWith("BIAS"))) {
+                        // если под одним и тем же номером находятся разные по значимости строки то прирываем цикл
                         result = false;
                         break;
+                    } else if (!inArrayList.get(i).startsWith("BIAS") && !stringArrayList.get(i).startsWith("BIAS")) {
+                        arr1 = stringArrayList.get(i).split("\"type\": \"");
+                        arr2 = inArrayList.get(i).split("\"type\": \"");
+                        strings1 = arr1[1].split("\"");
+                        strings2 = arr2[1].split("\"");
+
+                        // если хоть один объект не равен то прирываем цикл
+                        if (!strings1[0].equals(strings2[0])) {
+                            result = false;
+                            break;
+                        }
                     }
                 }
 
@@ -177,18 +189,6 @@ public class SavedPatterns implements Serializable {
     }
 
 
-    private class SortSize implements Comparator<ArrayList<String>> {
-        @Override
-        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
-            double result = o1.size() - o2.size();
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
     public void seeLists() {
         ConsoleHelper.writeMessage("\n"
                 + "Востановленный лист патернов имеет размер --- "
@@ -208,6 +208,23 @@ public class SavedPatterns implements Serializable {
         }
         ConsoleHelper.writeMessage("");
     }
+
+
+
+    /// === INNER CLASSES === ///
+
+
+
+    private class SortSize implements Comparator<ArrayList<String>> {
+        @Override
+        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+            double result = o1.size() - o2.size();
+            if (result > 0) return 1;
+            else if (result < 0) return -1;
+            else return 0;
+        }
+    }
+
 
 
 

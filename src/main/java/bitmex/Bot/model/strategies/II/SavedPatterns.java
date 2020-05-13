@@ -1,6 +1,5 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -16,6 +15,7 @@ public class SavedPatterns implements Serializable {
 
     private static final long serialVersionUID = 908198101052020L;
     private static SavedPatterns savedPatterns;
+    private SortSize sortSize;
 
     private ArrayList<ArrayList<String>> listsPricePatterns;
     private int maxArraySize;
@@ -23,6 +23,7 @@ public class SavedPatterns implements Serializable {
 
     private SavedPatterns() {
         this.listsPricePatterns = new ArrayList<>();
+        this.sortSize = new SortSize();
         this.maxArraySize = 0;
     }
 
@@ -117,7 +118,6 @@ public class SavedPatterns implements Serializable {
         listsPricePatterns.add(0, inArrayList);
         maxArraySize = Math.max(inArrayList.size(), maxArraySize);
 
-        SortSize sortSize = new SortSize();
         listsPricePatterns.sort(sortSize);
 
         ReadAndSavePatterns.saveSavedPatterns();
@@ -280,11 +280,7 @@ public class SavedPatterns implements Serializable {
         }
             System.out.println("END" + "\n");
 
-
-
         ReadAndSavePatterns.saveSavedPatterns();
-
-
 
         // сер
         try {

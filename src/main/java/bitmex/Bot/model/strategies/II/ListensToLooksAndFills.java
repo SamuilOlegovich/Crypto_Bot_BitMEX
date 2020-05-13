@@ -30,17 +30,23 @@ public class ListensToLooksAndFills {
     private volatile double priceEndBuy;                // цена к которой должна прийти цена для фиксации паттерна
     private volatile double priceNow;                   // цена в данный момент
 
+    private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
+    private CountPriseSell countPriseSell;
+    private CountPriseBuy countPriseBuy;
     private SavedPatterns savedPatterns;
     private BitmexQuote bitmexQuote;
+    private SortPrice sortPrice;
 
     private volatile boolean averageFlagSell;           // флаг для подсчета средней цены отклонения и максимального отклонения
     private volatile boolean averageFlagBuy;            // флаг для подсчета средней цены отклонения и максимального отклонения
+    private boolean oneStartFlag;
 
 
     private ListensToLooksAndFills() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Начал работать класс сбора Паттернов");
 
+        this.keepsTrackOfFillingListInfoIndicator = new KeepsTrackOfFillingListInfoIndicator();
         this.savedPatterns = Gasket.getSavedPatternsClass();
         this.listPriceDeviationsSell = new ArrayList<>();
         this.listPriceDeviationsBuy = new ArrayList<>();
@@ -48,13 +54,16 @@ public class ListensToLooksAndFills {
         this.listStringPriceBuy = new ArrayList<>();
         this.listInfoIndicator = new ArrayList<>();
         this.bitmexQuote = Gasket.getBitmexQuote();
-        new KeepsTrackOfFillingListInfoIndicator();
+        this.countPriseSell = new CountPriseSell();
         this.priceNow = bitmexQuote.getBidPrice();
+        this.countPriseBuy = new CountPriseBuy();
+        this.sortPrice = new SortPrice();
         this.priceStartOrderSell = NaN;
         this.priceStartOrderBuy = NaN;
         this.averageFlagSell = true;
         this.priceStartOrder = NaN;
         this.averageFlagBuy = true;
+        this.oneStartFlag = true;
         this.priceEndSell = NaN;
         this.priceEndBuy = NaN;
         new CountPriseSell();
@@ -72,6 +81,11 @@ public class ListensToLooksAndFills {
     // если он уже запущен то просто кладем объекты в массив
     // так же получаем текущую цену
     public synchronized void setInfoString(InfoIndicator infoIndicator) {
+        if (oneStartFlag) {
+//            countPriseSell.setPriceStartSell(bitmexQuote.getBidPrice());
+//            countPriseBuy.setPriceStartBuy(bitmexQuote.getAskPrice());
+//            oneStartFlag = false;
+        }
         listInfoIndicator.add(infoIndicator);
     }
 
@@ -89,8 +103,7 @@ public class ListensToLooksAndFills {
 
         }
 
-        Comparator sortPriceComparator = new SortPrice();
-        listInfoIndicator.sort(sortPriceComparator);
+        listInfoIndicator.sort(sortPrice);
 
         // сразу запоминаем цену для дальнейшего просчета отклонения
         if (Double.isNaN(priceStartOrder)) {
@@ -294,6 +307,105 @@ public class ListensToLooksAndFills {
     }
 
 
+
+//    // находим максимальную просадку
+//    private double getMaxDeviations(boolean b) {
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- находим максимальную просадку");
+//        double result = 0;
+//        int count = 0;
+//
+//        if (b) {
+//            ArrayList<Double> arrayList = new ArrayList<>(countPriseBuy.getArrayListBuy());
+//
+//            for (Double d : arrayList) {
+//                if (count == 0) {
+//                    result = d;
+//                    count++;
+//                }
+//                result = Math.min(result, d);
+//            }
+//
+//            if (result == 0) {
+//                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
+//                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
+//
+//                return 0;
+//            } else {
+//                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
+//                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
+//
+//                return countPriseBuy.getPriceStartBuy() - result; // проверить что не то с результатом он равен нулю постоянно
+//            }
+//
+//        } else {
+//            ArrayList<Double> arrayList = new ArrayList<>(countPriseSell.getArrayListSell());
+//
+//            for (Double d : arrayList) {
+//                if (count == 0) {
+//                    result = d;
+//                    count++;
+//                }
+//                result = Math.max(result, d);
+//            }
+//
+//            if (result == 0) {
+//                System.out.println(result + " - " + countPriseSell.getPriceStartSell()
+//                        + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
+//
+//                return 0;
+//            } else {
+//                System.out.println(result + " - "
+//                        + countPriseSell.getPriceStartSell() + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
+//                return result - countPriseSell.getPriceStartSell();
+//            }
+//        }
+//    }
+//
+//
+//    // находим среднюю просадку
+//    private double getAverageDeviations(boolean b) {
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- находим среднюю просадку");
+//
+//        double result = 0;
+////        int count = 0;
+//
+//        if (b) {
+//            ArrayList<Double> arrayList = countPriseBuy.getArrayListBuy();
+//
+//            for (Double d : arrayList) {
+//                result = result + d;
+////                count++;
+//            }
+//
+//            if (result == 0) {
+//                System.out.println("---result==0");
+//                return 0;
+//            } else {
+//                System.out.println(countPriseBuy.getPriceStartBuy() - (result / arrayList.size()));
+//                return countPriseBuy.getPriceStartBuy() - (result / arrayList.size()); // резулт иногда ноль как итог вылетает НАН
+//            }
+//        } else {
+//            ArrayList<Double> arrayList = countPriseSell.getArrayListSell();
+//
+//            for (Double d : arrayList) {
+//                result = result + d;
+////                count++;
+//            }
+//
+//            if (result == 0) {
+//                System.out.println((result / arrayList.size()) - countPriseSell.getPriceStartSell() + "---result==0");
+//                return 0;
+//            } else {
+//                System.out.println((result / arrayList.size()) - countPriseSell.getPriceStartSell() + "---result==0");
+//                return (result / arrayList.size()) - countPriseSell.getPriceStartSell(); // резулт иногда ноль как итог вылетает НАН
+//            }
+//        }
+//    }
+
+
+
     // находим куда сместилась цена и другие данные
     private String getBias() {
         double bias = priceNow - priceStartOrder;
@@ -308,6 +420,27 @@ public class ListensToLooksAndFills {
         }
         return stringOut;
     }
+
+
+//    // находим куда сместилась цена и другие данные
+//    private String getBias(boolean b) {
+//        String stringOut = "";
+//        double bias;
+//        if (b) {
+//            bias = priceNow - countPriseBuy.getPriceStartBuy();
+//        } else {
+//            bias = priceNow - countPriseSell.getPriceStartSell();
+//        }
+//
+//        if (bias > 0) {
+//            stringOut = "BUY===" + bias;
+//        } else if (bias < 0) {
+//            stringOut = "SELL===" + bias;
+//        } else {
+//            stringOut = "NULL===0";
+//        }
+//        return stringOut;
+//    }
 
 
     /// === INNER CLASSES === ///
@@ -438,4 +571,177 @@ public class ListensToLooksAndFills {
             }
         }
     }
+
+
+
+
+
+
+//    // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
+//    private class KeepsTrackOfFillingListInfoIndicator extends Thread {
+//        private int previousValue;
+//
+//
+//        public KeepsTrackOfFillingListInfoIndicator() {
+//            this.previousValue = 0;
+//            start();
+//        }
+//
+//        @Override
+//        public void run() {
+//
+//            while (true) {
+//                int size = listInfoIndicator.size();
+//                int sleep = 3;
+//
+//                if (size > 0) {
+//                    if (previousValue == listInfoIndicator.size()) {
+//                        priceNow = bitmexQuote.getBidPrice();
+//                        previousValue = 0;
+//                        listSortedAndCompares();
+//                        sleep = 10;
+//                    } else {
+//                        previousValue = size;
+//                    }
+//                }
+//
+//                try {
+//                    Thread.sleep(1000 * sleep);
+//                } catch (InterruptedException e) {
+//                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                            + " --- Не смог проснуться во внутреннем классе "
+//                            + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
+//                            + " sleep = " + sleep);
+//                }
+//            }
+//        }
+//    }
+//
+//
+//
+//    // Фиксируем цену отклонения
+//    private class CountPriseBuy extends Thread {
+//        private ArrayList<Double> arrayListBuy;
+//        private ArrayList<Double> arrayListOut;
+//        private volatile boolean flag;
+//        private double priceStartBuy;
+//
+//        public CountPriseBuy() {
+//            this.arrayListOut = new ArrayList<>();
+//            this.arrayListBuy = new ArrayList<>();
+//            this.flag = false;
+//            start();
+//        }
+//
+//        @Override
+//        public void run() {
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                    + " --- Начал фиксировать цену отклонения Бай");
+//
+//            while (true) {
+//                if (flag) {
+//                    double price = bitmexQuote.getBidPrice();
+//
+//                    if (price < priceStartBuy) {
+//                        arrayListBuy.add(price);
+//                    }
+//                }
+//
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                            + " --- Не смог проснуться в методе countPriseBuy() "
+//                            + "сласса ListensToLooksAndFills");
+//                }
+//            }
+//        }
+//
+//        private void setPriceStartBuy(double priceStartBuy) {
+//            this.priceStartBuy = priceStartBuy;
+//            flag = true;
+//        }
+//
+//        private ArrayList<Double> getArrayListBuy() {
+//            flag = false;
+//            arrayListOut.addAll(arrayListBuy);
+//            priceStartBuy = bitmexQuote.getAskPrice();
+//            arrayListBuy.clear();
+//            flag = true;
+//            return arrayListOut;
+//        }
+//
+//        private void clearList() {
+//            priceStartBuy = bitmexQuote.getAskPrice();
+//            arrayListOut.clear();
+//        }
+//
+//        private double getPriceStartBuy() {
+//            return priceStartBuy;
+//        }
+//    }
+//
+//
+//    // Фиксируем цену отклонения
+//    private class CountPriseSell extends Thread {
+//        private ArrayList<Double> arrayListSell;
+//        private ArrayList<Double> arrayListOut;
+//        private double priceStartSell;
+//        private boolean flag;
+//
+//        public CountPriseSell() {
+//            this.arrayListSell = new ArrayList<>();
+//            this.arrayListOut = new ArrayList<>();
+//            this.flag = false;
+//            start();
+//        }
+//
+//        @Override
+//        public void run() {
+//            ConsoleHelper.writeMessage( DatesTimes.getDateTerminal()
+//                    + " --- Начал фиксировать цену отклонения Селл");
+//
+//            while (true) {
+//                if (flag) {
+//                    double price = bitmexQuote.getBidPrice();
+//
+//                    if (price > priceStartSell) {
+//                        arrayListSell.add(price);
+//                    }
+//                }
+//
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                            + " --- Не смог проснуться в методе countPriseSell() "
+//                            + "сласса ListensToLooksAndFills");
+//                }
+//            }
+//        }
+//
+//        private void setPriceStartSell(double priceStartBuy) {
+//            this.priceStartSell = priceStartBuy;
+//            flag = true;
+//        }
+//
+//        private ArrayList<Double> getArrayListSell() {
+//            flag = false;
+//            arrayListOut.addAll(arrayListSell);
+//            priceStartSell = bitmexQuote.getAskPrice();
+//            arrayListSell.clear();
+//            flag = true;
+//            return arrayListOut;
+//        }
+//
+//        private void clearList() {
+//            priceStartSell = bitmexQuote.getBidPrice();
+//            arrayListOut.clear();
+//        }
+//
+//        private double getPriceStartSell() {
+//            return priceStartSell;
+//        }
+//    }
+
 }

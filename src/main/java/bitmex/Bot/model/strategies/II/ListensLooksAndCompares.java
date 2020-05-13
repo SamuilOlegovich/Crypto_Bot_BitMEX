@@ -4,6 +4,7 @@ package bitmex.Bot.model.strategies.II;
 import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
 import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -13,25 +14,40 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
 
+import static java.lang.Double.NaN;
 
 
 public class ListensLooksAndCompares {
-
     private static ListensLooksAndCompares listensLooksAndCompares;
+
     private ArrayList<ArrayList<String>> listInListString;
     private ArrayList<InfoIndicator> listInfoIndicator;
+
+    private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
     private SavedPatterns savedPatterns;
+    private BitmexQuote bitmexQuote;
+    private SortSize sortSize;
+
+    private boolean oneStartFlag;
     private boolean timeFlag;
 
+    private double priceStart;
+    private double priceNow;
 
 
     private ListensLooksAndCompares() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Класс ListensLooksAndCompares начал работать");
+
+        this.keepsTrackOfFillingListInfoIndicator = new KeepsTrackOfFillingListInfoIndicator();
         this.savedPatterns = Gasket.getSavedPatternsClass();
+        this.bitmexQuote = Gasket.getBitmexQuote();
         this.listInfoIndicator = new ArrayList<>();
         this.listInListString = new ArrayList<>();
+        this.sortSize = new SortSize();
+        this.oneStartFlag = true;
         this.timeFlag = false;
+        this.priceNow = NaN;
     }
 
 
@@ -46,26 +62,22 @@ public class ListensLooksAndCompares {
     // если он уже запущен то просто кладем объекты в массив
     // так же получаем текущую цену
     public synchronized void setInfoString(InfoIndicator infoIndicator) {
-        listInfoIndicator.add(infoIndicator);
-        if (!timeFlag) {
-            timeFlag = true;
-            listSortedAndCompares();
+        if (oneStartFlag) {
+            priceStart = bitmexQuote.getBidPrice();
         }
+        listInfoIndicator.add(infoIndicator);
     }
 
 
 
     // отсыпаемся и начинаем работать
     private synchronized void listSortedAndCompares() {
-        if (timeFlag) {
-            try {
-                Thread.sleep(1000 * 5);
-            } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + "Не смог проснуться в методе listSorter() "
-                        + "класса ListensToLooksAndFills");
-            }
-            timeFlag = false;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не смог проснуться в методе listSorter() "
+                    + "класса ListensToLooksAndFills");
         }
 
         // сортируем и добавляем
@@ -75,34 +87,77 @@ public class ListensLooksAndCompares {
 
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Сравниваю рынок с ПАТТЕРНАМИ");
+
         // сравниваем оставшееся с патернами
         for (ArrayList<String> thisArrayListString : listInListString) {
             // получаем равные по размеру патерны
             ArrayList<ArrayList<String>> inListPatterns = savedPatterns.getListFoSize(thisArrayListString.size());
 
-            // если равные патерны есть то начинаем сравнивать
+            // если равные по размеру патерны есть то начинаем сравнивать
             if (inListPatterns != null) {
 
                 for (ArrayList<String> inArrayListString : inListPatterns) {
                     boolean result = true;
 
                     for (int i = 1; i < inArrayListString.size(); i++) {
-                        String[] arr1 = thisArrayListString.get(i).split("\"type\": \"");
-                        String[] arr2 = inArrayListString.get(i).split("\"type\": \"");
-                        String[] strings1 = arr1[1].split("\"");
-                        String[] strings2 = arr2[1].split("\"");
+                        String[] strings1;
+                        String[] strings2;
+                        String[] arr1;
+                        String[] arr2;
 
-                        // если хоть один объект не равен то прирываем цикл
-                        if (!strings1[0].equals(strings2[0])) {
+                        // Тут мы так же определяем не строка ли это направления и сравниваем либо ее либо строки уровней
+                        // BIAS===BUY===10===AVERAGE===3===MAX===5   <----- строка направления
+                        if (inArrayListString.get(i).startsWith("BIAS")
+                                && thisArrayListString.get(i).startsWith("BIAS")) {
+
+                            arr1 = thisArrayListString.get(i).split("===");
+                            arr2 = inArrayListString.get(i).split("===");
+
+                            // если хоть один объект не равен то прирываем цикл
+                            if (!arr1[1].equals(arr2[1])) {
+                                result = false;
+                                break;
+                            }
+
+                        } else if ((inArrayListString.get(i).startsWith("BIAS")
+                                && !thisArrayListString.get(i).startsWith("BIAS"))
+                                || (!inArrayListString.get(i).startsWith("BIAS")
+                                && thisArrayListString.get(i).startsWith("BIAS"))) {
+                            // если под одним и тем же номером находятся разные по значимости строки то прирываем цикл
                             result = false;
                             break;
+                        } else if (!inArrayListString.get(i).startsWith("BIAS")
+                                && !thisArrayListString.get(i).startsWith("BIAS")) {
+
+                            arr1 = thisArrayListString.get(i).split("\"type\": \"");
+                            arr2 = inArrayListString.get(i).split("\"type\": \"");
+                            strings1 = arr1[1].split("\"");
+                            strings2 = arr2[1].split("\"");
+
+                            // если хоть один объект не равен то прирываем цикл
+                            if (!strings1[0].equals(strings2[0])) {
+                                result = false;
+                                break;
+                            }
                         }
+
+//                        String[] arr1 = thisArrayListString.get(i).split("\"type\": \"");
+//                        String[] arr2 = inArrayListString.get(i).split("\"type\": \"");
+//                        String[] strings1 = arr1[1].split("\"");
+//                        String[] strings2 = arr2[1].split("\"");
+//
+//                        // если хоть один объект не равен то прирываем цикл
+//                        if (!strings1[0].equals(strings2[0])) {
+//                            result = false;
+//                            break;
+//                        }
                     }
 
                     if (result) {
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                                 + "Нашел совпадения в рынке с ПАТТЕРНАМИ передаю на сделку");
                         makeDeal(inArrayListString.get(0));
+                        // возможно тут надо поставить return
                     }
                 }
             }
@@ -159,23 +214,38 @@ public class ListensLooksAndCompares {
     // очищаем лист входящих объектов
     private void sortPrice() {
         Comparator sortPriceComparator = new ListensLooksAndCompares.SortPrice();
-        Collections.sort(listInfoIndicator, sortPriceComparator);
+        listInfoIndicator.sort(sortPriceComparator);
+        oneStartFlag = false;
 
         if (listInListString.size() > 0) {
             for (ArrayList<String> arrayListString : listInListString) {
+                String stringBias = "BIAS===" + getBias();
+                arrayListString.add(stringBias);
                 arrayListString.addAll(getListString());
             }
+            ArrayList<String> arrayList = new ArrayList<>(getListString());
+            arrayList.add(0, "0");
+            listInListString.add(arrayList);
+            priceStart = bitmexQuote.getAskPrice();
+        } else if (listInListString.size() == 0 && oneStartFlag == false) {
+            ArrayList<String> arrayList = new ArrayList<>(getListString());
+            arrayList.add(0, "0");
+            listInListString.add(arrayList);
+            priceStart = bitmexQuote.getAskPrice();
         } else {
-            listInListString.add(getListString());
+            ArrayList<String> arrayList = new ArrayList<>(getListString());
+            arrayList.add(0, "0");
+            listInListString.add(arrayList);
+
         }
         listInfoIndicator.clear();
+        listInListString.sort(sortSize);
     }
 
 
-    // добавляем нулевую строку для ровности списка и далее добавляем остальные строки
+    // объекты преобразовываем в строки
     private ArrayList<String> getListString() {
         ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("0");
 
         for (InfoIndicator infoIndicator : listInfoIndicator) {
             arrayList.add(infoIndicator.toString());
@@ -183,6 +253,28 @@ public class ListensLooksAndCompares {
 
         return arrayList;
     }
+
+
+    // находим куда сместилась цена и другие данные
+    private String getBias() {
+        String stringOut;
+        double bias = priceNow - priceStart;
+
+        if (bias > 0) {
+            stringOut = "BUY===" + bias;
+        } else if (bias < 0) {
+            stringOut = "SELL===" + bias;
+        } else {
+            stringOut = "NULL===0";
+        }
+        return stringOut;
+    }
+
+
+
+
+    /// === INNER CLASSES === ///
+
 
 
     private class SortPrice implements Comparator<InfoIndicator> {
@@ -196,48 +288,55 @@ public class ListensLooksAndCompares {
     }
 
 
+    private class SortSize implements Comparator<ArrayList<String>> {
+        @Override
+        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+            double result = o1.size() - o2.size();
+            if (result > 0) return 1;
+            else if (result < 0) return -1;
+            else return 0;
+        }
+    }
 
 
 
+    // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
+    private class KeepsTrackOfFillingListInfoIndicator extends Thread {
+        private int previousValue;
 
 
-//    // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
-//    private class KeepsTrackOfFillingListInfoIndicator extends Thread {
-//        public KeepsTrackOfFillingListInfoIndicator() {
-//            ConsoleHelper.writeMessage("Начал свою работу класс KeepsTrackOfFillingListInfoIndicator"
-//                    + " ---- " + DatesTimes.getDateTerminal());
-//            start();
-//        }
-//
-//        @Override
-//        public void run() {
-//
-//            int previousValue = 0;
-//
-//            while (true) {
-//                int size = listInfoIndicator.size();
-//                int sleep = 3;
-//
-//                if (size > 0) {
-//                    if (previousValue == listInfoIndicator.size()) {
-//                        priceNow = Gasket.getBitmexQuote().getBidPrice();
-//                        previousValue = 0;
-//                        listSorter();
-//                        sleep = 60;
-//                    } else {
-//                        previousValue = size;
-//                    }
-//                }
-//
-//                try {
-//                    Thread.sleep(1000 * sleep);
-//                } catch (InterruptedException e) {
-//                    ConsoleHelper.writeMessage("Не смог проснуться во внутреннем классе "
-//                            + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
-//                            + " sleep = " + sleep + " ---- " + DatesTimes.getDateTerminal());
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
+        public KeepsTrackOfFillingListInfoIndicator() {
+            this.previousValue = 0;
+            start();
+        }
+
+        @Override
+        public void run() {
+
+            while (true) {
+                int size = listInfoIndicator.size();
+                int sleep = 3;
+
+                if (size > 0) {
+                    if (previousValue == listInfoIndicator.size()) {
+                        priceNow = bitmexQuote.getBidPrice();
+                        previousValue = 0;
+                        listSortedAndCompares();
+                        sleep = 10;
+                    } else {
+                        previousValue = size;
+                    }
+                }
+
+                try {
+                    Thread.sleep(1000 * sleep);
+                } catch (InterruptedException e) {
+                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            + " --- Не смог проснуться во внутреннем классе "
+                            + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
+                            + " sleep = " + sleep);
+                }
+            }
+        }
+    }
 }

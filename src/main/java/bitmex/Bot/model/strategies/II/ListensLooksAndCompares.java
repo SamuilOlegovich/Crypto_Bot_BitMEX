@@ -4,7 +4,6 @@ package bitmex.Bot.model.strategies.II;
 import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
 import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -25,7 +24,6 @@ public class ListensLooksAndCompares {
 
     private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
     private SavedPatterns savedPatterns;
-    private BitmexQuote bitmexQuote;
     private SortSize sortSize;
 
     private boolean oneStartFlag;
@@ -41,7 +39,6 @@ public class ListensLooksAndCompares {
 
         this.keepsTrackOfFillingListInfoIndicator = new KeepsTrackOfFillingListInfoIndicator();
         this.savedPatterns = Gasket.getSavedPatternsClass();
-        this.bitmexQuote = Gasket.getBitmexQuote();
         this.listInfoIndicator = new ArrayList<>();
         this.listInListString = new ArrayList<>();
         this.sortSize = new SortSize();
@@ -63,7 +60,7 @@ public class ListensLooksAndCompares {
     // так же получаем текущую цену
     public synchronized void setInfoString(InfoIndicator infoIndicator) {
         if (oneStartFlag) {
-            priceStart = bitmexQuote.getBidPrice();
+            priceStart = Gasket.getBitmexQuote().getBidPrice();
         }
         listInfoIndicator.add(infoIndicator);
     }
@@ -140,17 +137,6 @@ public class ListensLooksAndCompares {
                                 break;
                             }
                         }
-
-//                        String[] arr1 = thisArrayListString.get(i).split("\"type\": \"");
-//                        String[] arr2 = inArrayListString.get(i).split("\"type\": \"");
-//                        String[] strings1 = arr1[1].split("\"");
-//                        String[] strings2 = arr2[1].split("\"");
-//
-//                        // если хоть один объект не равен то прирываем цикл
-//                        if (!strings1[0].equals(strings2[0])) {
-//                            result = false;
-//                            break;
-//                        }
                     }
 
                     if (result) {
@@ -182,7 +168,7 @@ public class ListensLooksAndCompares {
             String stringOut = string + "-PAT";
 
             if (Gasket.isTrading()) new TradeSell(stringOut);
-            new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
+            new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getBidPrice());
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ");
         }
@@ -219,22 +205,22 @@ public class ListensLooksAndCompares {
 
         if (listInListString.size() > 0) {
             for (ArrayList<String> arrayListString : listInListString) {
-                String stringBias = "BIAS===" + getBias();
+                String stringBias = "BIAS===" + getBias() + "\n";
                 arrayListString.add(stringBias);
                 arrayListString.addAll(getListString());
             }
             ArrayList<String> arrayList = new ArrayList<>(getListString());
-            arrayList.add(0, "0");
+            arrayList.add(0, "0\n");
             listInListString.add(arrayList);
-            priceStart = bitmexQuote.getAskPrice();
+            priceStart = Gasket.getBitmexQuote().getBidPrice();
         } else if (listInListString.size() == 0 && oneStartFlag == false) {
             ArrayList<String> arrayList = new ArrayList<>(getListString());
-            arrayList.add(0, "0");
+            arrayList.add(0, "0\n");
             listInListString.add(arrayList);
-            priceStart = bitmexQuote.getAskPrice();
+            priceStart = Gasket.getBitmexQuote().getBidPrice();
         } else {
             ArrayList<String> arrayList = new ArrayList<>(getListString());
-            arrayList.add(0, "0");
+            arrayList.add(0, "0\n");
             listInListString.add(arrayList);
 
         }
@@ -319,7 +305,7 @@ public class ListensLooksAndCompares {
 
                 if (size > 0) {
                     if (previousValue == listInfoIndicator.size()) {
-                        priceNow = bitmexQuote.getBidPrice();
+                        priceNow = Gasket.getBitmexQuote().getBidPrice();
                         previousValue = 0;
                         listSortedAndCompares();
                         sleep = 10;

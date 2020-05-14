@@ -27,7 +27,6 @@ public class ListensLooksAndCompares {
     private SortSize sortSize;
 
     private boolean oneStartFlag;
-    private boolean timeFlag;
 
     private double priceStart;
     private double priceNow;
@@ -43,7 +42,6 @@ public class ListensLooksAndCompares {
         this.listInListString = new ArrayList<>();
         this.sortSize = new SortSize();
         this.oneStartFlag = true;
-        this.timeFlag = false;
         this.priceNow = NaN;
     }
 

@@ -10,6 +10,8 @@ import java.io.File;
 
 
 public class FilesAndPathCreator {
+    private String pathPatternsTemporary;
+    private String pathPatternsDelete;
     private String pathSettings;
     private String pathPatterns;
     private String pathLogs;
@@ -25,6 +27,13 @@ public class FilesAndPathCreator {
 
 
     private void createdPath() {
+        pathPatternsTemporary = getClass().getResource("").getPath()
+                .replaceAll("target/classes", "src/main/java")
+                .replaceAll("model/", "") + "Logs/TemporaryPatterns.txt";
+
+        pathPatternsDelete = getClass().getResource("").getPath()
+                .replaceAll("target/classes", "src/main/java")
+                .replaceAll("model/", "") + "Logs/TemporaryDelete.txt";
 
         pathSettings = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
@@ -40,21 +49,38 @@ public class FilesAndPathCreator {
                 + DatesTimes.getDateLogs() + "===Log.txt";
 
         if (System.getProperty("os.name").startsWith("Windows")) {
+            pathPatternsTemporary = pathPatternsTemporary
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
+            pathPatternsDelete = pathPatternsDelete
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
             pathSettings = pathSettings
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
-            ConsoleHelper.writeMessage(pathSettings);
 
             pathPatterns = pathPatterns
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
-            ConsoleHelper.writeMessage(pathPatterns);
 
             pathLogs = pathLogs
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
-            ConsoleHelper.writeMessage(pathLogs);
         }
+
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporary);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsDelete);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathSettings);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatterns);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathLogs);
     }
 
     private void isTheFileInPlace() {
+        if (!Files.exists(Paths.get(pathPatternsTemporary))) {
+            createdFileTemporaryPatterns();
+        }
+
+        if (!Files.exists(Paths.get(pathPatternsDelete))) {
+            createdFileDeletePatterns();
+        }
+
         if (!Files.exists(Paths.get(pathSettings))) {
             createdFileSettings();
         }
@@ -68,9 +94,11 @@ public class FilesAndPathCreator {
         File file = new File(pathSettings);
         try {
             boolean newFile = file.createNewFile();
-            ConsoleHelper.writeMessage("Новый файл Настроек успешно создан.");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл Настроек успешно создан.");
         } catch (IOException ex) {
-            ConsoleHelper.writeMessage("Не удалось создать файл Настроек.");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл Настроек.");
         }
     }
 
@@ -78,9 +106,35 @@ public class FilesAndPathCreator {
         File file = new File(pathPatterns);
         try {
             boolean newFile = file.createNewFile();
-            ConsoleHelper.writeMessage("Новый файл для Паттернов успешно создан.");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл для Паттернов успешно создан.");
         } catch (IOException ex) {
-            ConsoleHelper.writeMessage("Не удалось создать файл Петтернов.");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл Петтернов.");
+        }
+    }
+
+    private void createdFileDeletePatterns() {
+        File file = new File(pathPatternsDelete);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл для Удаленных Паттернов успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл Удаленных Петтернов.");
+        }
+    }
+
+    private void createdFileTemporaryPatterns() {
+        File file = new File(pathPatternsTemporary);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл для Временных Паттернов успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл Временных Петтернов.");
         }
     }
 
@@ -88,12 +142,22 @@ public class FilesAndPathCreator {
         File file = new File(pathLogs);
         try {
             boolean newFile = file.createNewFile();
-            ConsoleHelper.writeMessage("Новый Лог файл успешно создан.");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый Лог файл успешно создан.");
         } catch (IOException ex) {
-            ConsoleHelper.writeMessage("Не удалось создать Лог файл.");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать Лог файл.");
         }
     }
 
+
+    public String getPathPatternsTemporary() {
+        return pathPatternsTemporary;
+    }
+
+    public String getPathPatternsDelete() {
+        return pathPatternsDelete;
+    }
 
     public String getPathSettings() {
         return pathSettings;

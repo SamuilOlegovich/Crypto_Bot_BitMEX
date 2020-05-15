@@ -79,6 +79,8 @@ public class ListensLooksAndCompares {
         sortPrice();
         // удаляем ненужное
         removeUnnecessaryLists();
+        // сохраняю те патерны которые еще актуальны на данный момент
+        ReadAndSavePatterns.saveTemporarySavedPatterns(listInListString);
 
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Сравниваю рынок с ПАТТЕРНАМИ");
@@ -90,6 +92,8 @@ public class ListensLooksAndCompares {
 
             // если равные по размеру патерны есть то начинаем сравнивать
             if (inListPatterns != null) {
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Есть - "
+                        + inListPatterns.size() + " - паттерна по размеру");
 
                 for (ArrayList<String> inArrayListString : inListPatterns) {
                     boolean result = true;
@@ -144,6 +148,8 @@ public class ListensLooksAndCompares {
                         // возможно тут надо поставить return
                     }
                 }
+            }  else {
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Паттернов равных по размеру нет");
             }
         }
     }
@@ -178,14 +184,20 @@ public class ListensLooksAndCompares {
         if (listInListString.size() > 0) {
             int maxArraySize = savedPatterns.getMaxArraySize();
             ArrayList<Integer> lineNumbersToDelete = new ArrayList<>();
+            ArrayList<ArrayList<String>> arrayListArrayList = new ArrayList<>();
 
             for (int i = 0; i < listInListString.size(); i++) {
                 if (listInListString.get(i).size() > maxArraySize) {
+                    arrayListArrayList.add(listInListString.get(i));
                     lineNumbersToDelete.add(i);
                 }
             }
 
             Collections.reverse(lineNumbersToDelete);
+            // сохраняю удаленные патерны
+            ReadAndSavePatterns.saveSavedPatternsDelete(arrayListArrayList);
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Удалил - "
+                    + lineNumbersToDelete.size() + " - паттерна большего размера");
 
             for (Integer integer : lineNumbersToDelete) {
                 listInListString.remove((int) integer);
@@ -224,6 +236,10 @@ public class ListensLooksAndCompares {
         }
         listInfoIndicator.clear();
         listInListString.sort(sortSize);
+
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                + " --- В листе для сравнения уже - "
+                + listInListString.size() + " - паттернов");
     }
 
 
@@ -241,8 +257,8 @@ public class ListensLooksAndCompares {
 
     // находим куда сместилась цена и другие данные
     private String getBias() {
-        String stringOut;
         double bias = priceNow - priceStart;
+        String stringOut;
 
         if (bias > 0) {
             stringOut = "BUY===" + bias;
@@ -253,6 +269,8 @@ public class ListensLooksAndCompares {
         }
         return stringOut;
     }
+
+
 
 
 
@@ -290,6 +308,8 @@ public class ListensLooksAndCompares {
 
 
         public KeepsTrackOfFillingListInfoIndicator() {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicator начал работать");
             this.previousValue = 0;
             start();
         }

@@ -28,20 +28,19 @@ public class TestOrderSellPattern extends Thread {
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(ID + " --- RUN класса TestOrderSellPattern начал считать --- "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + ID + " --- RUN класса TestOrderSellPattern начал считать");
 
         while (true) {
-            BitmexQuote bitmexQuote = Gasket.getBitmexQuote();
-            double priceAsk = bitmexQuote.getAskPrice();
-            double priceBid = bitmexQuote.getAskPrice();
+            double priceAsk = Gasket.getBitmexQuote().getAskPrice();
+            double priceBid = Gasket.getBitmexQuote().getBidPrice();
 
             if (priceAsk >= priseStopOrder) {
                 flag();
                 setStop();
 
-                ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС ---- "
-                        + DatesTimes.getDateTerminal());
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                        + ID + " --- Сработал СТОП ЛОСС");
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() - Gasket.getStop());
                 break;
             }
@@ -50,8 +49,8 @@ public class TestOrderSellPattern extends Thread {
                 flag();
                 setTake();
 
-                ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ ---- "
-                        + DatesTimes.getDateTerminal());
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                        + ID + " --- Сработал ТЕЙК ПРОФИТ");
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() + Gasket.getTake());
                 break;
             }
@@ -59,8 +58,8 @@ public class TestOrderSellPattern extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса TestOrderSellPattern");
-                e.printStackTrace();
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                        + ID + " --- Не смогли проснуться в методе RUN класса TestOrderSellPattern");
             }
         }
         ConsoleHelper.printStatisticsPatterns();

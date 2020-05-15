@@ -31,20 +31,19 @@ public class TestOrderBuyPattern extends Thread{
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(ID + " --- RUN класса TestOrderBuyPattern начал считать --- "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage( DatesTimes.getDateTerminal() + " --- "
+                + ID + " --- RUN класса TestOrderBuyPattern начал считать");
 
         while (true) {
-            BitmexQuote bitmexQuote = Gasket.getBitmexQuote();
-            double priceAsk = bitmexQuote.getAskPrice();
-            double priceBid = bitmexQuote.getAskPrice();
+            double priceAsk = Gasket.getBitmexQuote().getAskPrice();
+            double priceBid = Gasket.getBitmexQuote().getBidPrice();
 
             if (priceBid <= priseStopOrder) {
                 flag();
                 setStop();
 
-                ConsoleHelper.writeMessage(ID + " --- Сработал СТОП ЛОСС ---- "
-                        + DatesTimes.getDateTerminal());
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                        + ID + " --- Сработал СТОП ЛОСС");
                 Gasket.setPROFIT_Buy(Gasket.getPROFIT_Buy() - Gasket.getStop());
                 break;
             }
@@ -53,8 +52,8 @@ public class TestOrderBuyPattern extends Thread{
                 flag();
                 setTake();
 
-                ConsoleHelper.writeMessage(ID + " --- Сработал ТЕЙК ПРОФИТ ---- "
-                        + DatesTimes.getDateTerminal());
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                        + ID + " --- Сработал ТЕЙК ПРОФИТ");
                 Gasket.setPROFIT_Buy(Gasket.getPROFIT_Buy() + Gasket.getTake());
                 break;
             }
@@ -62,9 +61,8 @@ public class TestOrderBuyPattern extends Thread{
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID
-                        + " --- Не смогли проснуться в методе RUN класса StrategyOneSell.");
-                e.printStackTrace();
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                        + ID + " --- Не смогли проснуться в методе RUN класса StrategyOneSell");
             }
         }
         ConsoleHelper.printStatisticsPatterns();

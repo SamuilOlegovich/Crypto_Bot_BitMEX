@@ -43,8 +43,7 @@ public class SavedPatterns implements Serializable {
     // ищем есть ли такие патерны если нет то добавляем,
     // если есть то устанавливаем приоритет
     private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
-        ConsoleHelper.writeMessage("Сравниваю ПАТТЕРН с имеющимися ---- "
-                + DatesTimes.getDateTerminal());
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Сравниваю ПАТТЕРН с имеющимися");
 
         ArrayList<String> inArrayList = new ArrayList<>(arrayList);
 

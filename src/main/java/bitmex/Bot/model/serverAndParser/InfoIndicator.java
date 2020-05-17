@@ -55,6 +55,16 @@ public class InfoIndicator {
     }
 
 
+    public String toStringUser() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.format(time);
+
+        return "period===" + period.toString() + "===preview===" + preview + "===value===" + value
+                + "===type===" + type.toString() + "===avg===" + avg
+                + "\n";
+    }
+
+
     @Override
     public String toString() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

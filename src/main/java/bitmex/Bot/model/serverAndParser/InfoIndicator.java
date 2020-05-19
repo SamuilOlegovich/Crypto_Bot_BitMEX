@@ -15,18 +15,30 @@ public class InfoIndicator {
     private BidAsk type;
     private int preview;
     private long value;
+    private long close;
     private Date time;
+    private long high;
+    private long open;
+    private long low;
     private long avg;
+    private int dir;
 
 
-    public InfoIndicator(TimeFrame period, int preview, Date time, double price, long value, BidAsk type, long avg) {
+
+    public InfoIndicator(TimeFrame period, int preview, Date time, double price, long value,
+                         BidAsk type, long avg, int dir, long open, long close, long high, long low) {
         this.preview = preview;
         this.period = period;
         this.value = value;
         this.price = price;
+        this.close = close;
         this.type = type;
         this.time = time;
+        this.open = open;
+        this.high = high;
         this.avg = avg;
+        this.dir = dir;
+        this.low = low;
     }
 
 
@@ -54,13 +66,40 @@ public class InfoIndicator {
         return time;
     }
 
+    public long getClose() {
+        return close;
+    }
+
+    public long getHigh() {
+        return high;
+    }
+
+    public long getOpen() {
+        return open;
+    }
+
+    public long getLow() {
+        return low;
+    }
+
+    public long getAvg() {
+        return avg;
+    }
+
+    public int getDir() {
+        return dir;
+    }
+
+
 
     public String toStringUser() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.format(time);
 
         return "period===" + period.toString() + "===preview===" + preview + "===value===" + value
-                + "===type===" + type.toString() + "===avg===" + avg
+                + "===type===" + type.toString() + "===avg===" + avg + "===dir===" + dir
+                + "===open===" + open + "===close===" + close + "===high===" + high
+                + "===low===" + low
                 + "\n";
     }
 
@@ -72,7 +111,10 @@ public class InfoIndicator {
 
         return "{\"period\": \"" + period + "\",\"preview\": \"" + preview + "\",\"time\": \""
                 + dateFormat.format(time) + "\",\"price\": \"" + price + "\",\"value\": \"" + value
-                + "\",\"type\": \"" + type + "\",\"avg\": \"" + avg + "\"}"
+                + "\",\"type\": \"" + type + "\",\"avg\": \"" + avg + "\",\"dir\": \"" + dir
+                + "\",\"open\": \"" + open + "\",\"close\": \"" + close
+                + "\",\"high\": \"" + high + "\",\"low\": \"" + low
+                + "\"}"
                 + "\n";
     }
 }

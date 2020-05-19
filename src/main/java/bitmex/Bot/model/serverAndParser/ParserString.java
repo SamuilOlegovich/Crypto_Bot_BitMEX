@@ -14,14 +14,14 @@ import java.util.Date;
 
 
 public class ParserString {
-    private ArrayList<InfoIndicator> arrayList;
+    //private ArrayList<InfoIndicator> arrayList;
     private StrategyFactory strategyFactory;
 
 
     public ParserString() {
         this.strategyFactory = StrategyFactory.getInstance();
         ConsoleHelper.writeMessage("ПАРСЕР ЗАПУЩЕН");
-        this.arrayList = new ArrayList<>();
+        //this.arrayList = new ArrayList<>();
 //        this.arrayListAllLevel = new ArrayList<>();
     }
 
@@ -37,10 +37,17 @@ public class ParserString {
         double price = getDouble(strings[3].trim().replaceAll("price : {2}", ""));
         long value = Long.parseLong(strings[4].trim().replaceAll("value : {2}", ""));
         BidAsk type = getType(strings[5].trim().replaceAll("type : {2}", ""));
-        long avg = 0;
-        InfoIndicator infoIndicator = new InfoIndicator(period, preview, time, price, value, type, avg);
+        long avg = Long.parseLong(strings[6].trim().replaceAll("avg : {2}", ""));
+        int dir = Integer.parseInt(strings[7].trim().replaceAll("dir : {2}", ""));
+        long open = Long.parseLong(strings[8].trim().replaceAll("open : {2}", ""));
+        long close = Long.parseLong(strings[9].trim().replaceAll("close : {2}", ""));
+        long high = Long.parseLong(strings[10].trim().replaceAll("high : {2}", ""));
+        long low = Long.parseLong(strings[11].trim().replaceAll("low : {2}", ""));
+
+        InfoIndicator infoIndicator =
+                new InfoIndicator(period, preview, time, price, value, type, avg, dir, open, close, high, low);
         strategyFactory.onOff(infoIndicator);
-        arrayList.add(infoIndicator);
+//        arrayList.add(infoIndicator);
     }
 
     private Date getDate(String string) {
@@ -89,10 +96,22 @@ public class ParserString {
 
 private BidAsk getType(String string) {
         switch (string) {
+            case "OpenPosBidMinusSmall" :
+                return BidAsk.OPEN_POS_BID_MINUS_SMALL;
+            case "OpenPosAskMinusSmall" :
+                return BidAsk.OPEN_POS_ASK_MINUS_SMALL;
+            case "OpenPosAskPlusSmall" :
+                return BidAsk.OPEN_POS_ASK_PLUS_SMALL;
+            case "OpenPosBidPlusSmall" :
+                return BidAsk.OPEN_POS_BID_PLUS_SMALL;
             case "DeltaMinVolBidHL" :
                 return BidAsk.DELTA_MIN_VOL_BID_HL;
-            case "DeltaMinVolAskHL":
+            case "DeltaMinVolAskHL" :
                 return BidAsk.DELTA_MIN_VOL_ASK_HL;
+            case "OpenPosMinusSmall" :
+                return BidAsk.OPEN_POS_MINUS_SMALL;
+            case "OpenPosPlusSmall" :
+                return BidAsk.OPEN_POS_PLUS_SMALL;
             case "DeltaZSMinMinus" :
                 return BidAsk.DELTA_ZS_MIN_MINUS;
             case "OpenPosAskMinus" :
@@ -111,6 +130,10 @@ private BidAsk getType(String string) {
                 return BidAsk.OPEN_POS_PLUS_HL;
             case "OIZSMinMinus" :
                 return BidAsk.OI_ZS_MIN_MINUS;
+            case "DeltaBidSmall" :
+                return BidAsk.DELTA_BID_SMALL;
+            case "DeltaAskSmall" :
+                return BidAsk.DELTA_ASK_SMALL;
             case "DeltaZSMinus" :
                 return BidAsk.DELTA_ZS_MINUS;
             case "OIZSMinPlus" :
@@ -121,10 +144,12 @@ private BidAsk getType(String string) {
                 return BidAsk.OPEN_POS_PLUS;
             case "DeltaZSPlus" :
                 return BidAsk.DELTA_ZS_PLUS;
-            case "DeltaBidHL":
+            case "DeltaBidHL" :
                 return BidAsk.DELTA_BID_HL;
-            case "DeltaAskHL":
+            case "DeltaAskHL" :
                 return BidAsk.DELTA_ASK_HL;
+            case "VolumeSmall" :
+                return BidAsk.VOLUME_SMALL;
             case "OIZSMinus" :
                 return BidAsk.OI_ZS_MINUS;
             case  "OIZSPlus" :
@@ -133,11 +158,15 @@ private BidAsk getType(String string) {
                 return BidAsk.DELTA_ASK;
             case "DeltaBid" :
                 return BidAsk.DELTA_BID;
-            case "Volume":
+            case "AskSmall" :
+                return BidAsk.ASK_SMALL;
+            case "BidSmall" :
+                return BidAsk.BID_SMALL;
+            case "Volume" :
                 return BidAsk.VOLUME;
-            case "Bid":
+            case "Bid" :
                 return BidAsk.BID;
-            case "Ask":
+            case "Ask" :
                 return BidAsk.ASK;
         }
         return null;
@@ -145,13 +174,13 @@ private BidAsk getType(String string) {
 
 
 
-    public ArrayList<InfoIndicator> getList() {
-        return arrayList;
-    }
+//    public ArrayList<InfoIndicator> getList() {
+//        return arrayList;
+//    }
 
-    public void setList(ArrayList list) {
-        this.arrayList = list;
-    }
+//    public void setList(ArrayList list) {
+//        this.arrayList = list;
+//    }
 
 
 

@@ -72,6 +72,7 @@ public class ListensToLooksAndFills {
     // отсыпаемся и начинаем работать
     private synchronized void listSorter() {
         listInfoIndicator.sort(sortPrice);
+        boolean flag = isTime();
 
         if (priceEndBuy <= priceNow && !oneStartFlag) {
             // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
@@ -91,15 +92,22 @@ public class ListensToLooksAndFills {
             listStringPriceBuy.clear();
         } else {
             // добавляем строку данных о поведении цены в промежутке между поступлениями уровней
-            if (!oneStartFlag) {
+            if (!oneStartFlag && flag) {
                 String stringBias = "BIAS===" + getBias(true) + "===AVERAGE===" + getAverageDeviations(true)
                         + "===MAX===" + getMaxDeviations(true);
                 listStringPriceBuy.add(stringBias);
             }
         }
-        priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+
+        if (flag) {
+            priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+            countPriseBuy.clearList();
+        }
+
+        if (oneStartFlag) {
+            priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+        }
         addStringsInListDirections(true);
-        countPriseBuy.clearList();
 
         // тоже самое только для комбиначии СЕЛЛ
         if (priceEndSell >= priceNow && !oneStartFlag) {
@@ -116,7 +124,7 @@ public class ListensToLooksAndFills {
             savedPatterns.addListsPricePatterns(listStringPriceSell);
             listStringPriceSell.clear();
         } else {
-            if (!oneStartFlag) {
+            if (!oneStartFlag && flag) {
                 String stringBias = "BIAS===" + getBias(false) + "===AVERAGE===" + getAverageDeviations(false)
                         + "===MAX===" + getMaxDeviations(false);
                 listStringPriceSell.add(stringBias);
@@ -124,9 +132,15 @@ public class ListensToLooksAndFills {
             }
         }
 
-        priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+        if (flag) {
+            priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+            countPriseSell.clearList();
+        }
+
+        if (oneStartFlag) {
+            priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+        }
         addStringsInListDirections(false);
-        countPriseSell.clearList();
 
         // очищаем лист входящих объектов
         listInfoIndicator.clear();
@@ -275,6 +289,45 @@ public class ListensToLooksAndFills {
 
 
 
+    // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
+    private boolean isTime() {
+        String string = DatesTimes.getDateTerminal();
+        String[] strings = string.split(":");
+        double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
+
+        if (seconds > 0.05 && seconds < 4.98) {
+            return false;
+        } else if (seconds > 5.20 && seconds < 9.98) {
+            return false;
+        } else if (seconds > 10.20 && seconds < 14.98) {
+            return false;
+        } else if (seconds > 15.20 && seconds < 19.98) {
+            return false;
+        } else if (seconds > 20.20 && seconds < 24.98) {
+            return false;
+        } else if (seconds > 25.20 && seconds < 29.98) {
+            return false;
+        } else if (seconds > 30.20 && seconds < 34.98) {
+            return false;
+        } else if (seconds > 35.20 && seconds < 39.98) {
+            return false;
+        } else if (seconds > 40.20 && seconds < 44.98) {
+            return false;
+        } else if (seconds > 45.20 && seconds < 49.98) {
+            return false;
+        } else if (seconds > 50.20 && seconds < 54.98) {
+            return false;
+        } else if (seconds > 55.20 && seconds < 59.98) {
+            return false;
+        } else {
+            keepsTrackOfFillingListInfoIndicator.setSleep();
+            return true;
+        }
+    }
+
+
+
+
     /// === INNER CLASSES === ///
 
 
@@ -294,6 +347,7 @@ public class ListensToLooksAndFills {
     // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
     private class KeepsTrackOfFillingListInfoIndicator extends Thread {
         private int previousValue;
+        private int sleep = 2;
 
         public KeepsTrackOfFillingListInfoIndicator() {
             this.previousValue = 0;
@@ -305,16 +359,16 @@ public class ListensToLooksAndFills {
 
             while (true) {
                 int size = listInfoIndicator.size();
-                int sleep = 3;
 
                 if (size > 0) {
-                    if (previousValue == listInfoIndicator.size() && isTime()) {
+                    if (previousValue == listInfoIndicator.size()) { // && isTime()) {
                         priceNow = Gasket.getBitmexQuote().getBidPrice();
                         previousValue = 0;
                         listSorter();
-                        sleep = 10;
+//                        sleep = 10;
                     } else {
                         previousValue = size;
+                        sleep = 2;
                     }
                 }
 
@@ -330,39 +384,45 @@ public class ListensToLooksAndFills {
         }
 
 
-        // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
-        private boolean isTime() {
-            String string = DatesTimes.getDateTerminal();
-            String[] strings = string.split(":");
-
-            if (strings[1].equals("00")) {
-                return true;
-            } else if (strings[1].equals("05")) {
-                return true;
-            } else if (strings[1].equals("10")) {
-                return true;
-            } else if (strings[1].equals("15")) {
-                return true;
-            } else if (strings[1].equals("20")) {
-                return true;
-            } else if (strings[1].equals("25")) {
-                return true;
-            } else if (strings[1].equals("30")) {
-                return true;
-            } else if (strings[1].equals("35")) {
-                return true;
-            } else if (strings[1].equals("40")) {
-                return true;
-            } else if (strings[1].equals("45")) {
-                return true;
-            } else if (strings[1].equals("50")) {
-                return true;
-            } else if (strings[1].equals("55")) {
-                return true;
-            } else {
-                return false;
-            }
+        private void setSleep() {
+            sleep = Gasket.getSecondsSleepTime();
         }
+
+
+//        // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
+//        private boolean isTime() {
+//            String string = DatesTimes.getDateTerminal();
+//            String[] strings = string.split(":");
+//            int seconds = Integer.parseInt(strings[2]);
+//
+//            if (strings[1].equals("00") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("05") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("10") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("15") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("20") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("25") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("30") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("35") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("40") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("45") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("50") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else if (strings[1].equals("55") && seconds > Gasket.getSecondsSleepTime()) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        }
     }
 
 

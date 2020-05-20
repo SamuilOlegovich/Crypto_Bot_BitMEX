@@ -43,17 +43,18 @@ public class Gasket {
     private static String typeOrder = "Limit";          // тип первого открываемого ордера
     private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;
-    private static double priceActive = 3.0;    // цена тригер для стоп лимитов и тейк лимитов
-    private static int strategyWorkOne = 2;     // количество стратегий одновременно работающих (можно еще допелить или убрать)
-    private static double rangeLevel = 8.0;     // диапазон в долларах для появления уровней
-    private static int dateDifference = -3;     // разница в часовом поясе
-    private static boolean trading = false;     // торговать - true нет - false
-    private static double visible = 0.0;        // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
-    private static double take = 15.0;          // тейк профит в долларах
-    private static double stop = 30.0;          // стоп лосс в долларах
-    private static double lot = 1.0;            // количество контрактов
+    private static int secondsSleepTime = 11;        // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
+    private static double priceActive = 3.0;        // цена тригер для стоп лимитов и тейк лимитов
+    private static int strategyWorkOne = 2;         // количество стратегий одновременно работающих (можно еще допелить или убрать)
+    private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
+    private static int dateDifference = -3;         // разница в часовом поясе
+    private static boolean trading = false;         // торговать - true нет - false
+    private static double visible = 0.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
+    private static double take = 15.0;              // тейк профит в долларах
+    private static double stop = 30.0;              // стоп лосс в долларах
+    private static double lot = 1.0;                // количество контрактов
     private static String path = "";
-    private static int PORT = 4444;             // порт подключения
+    private static int PORT = 4444;                 // порт подключения
     private static Ticker ticker;
 
 
@@ -1235,11 +1236,21 @@ public class Gasket {
     }
 
 
+
     public static SavedPatternsUser getSavedPatternsUserClass() {
         return savedPatternsUserClass;
     }
 
     public static void setSavedPatternsUserClass(SavedPatternsUser savedPatternsUserClass) {
         Gasket.savedPatternsUserClass = savedPatternsUserClass;
+    }
+
+
+    public static int getSecondsSleepTime() {
+        return secondsSleepTime;
+    }
+
+    public static void setSecondsSleepTime(int secondsSleepTime) {
+        Gasket.secondsSleepTime = secondsSleepTime;
     }
 }

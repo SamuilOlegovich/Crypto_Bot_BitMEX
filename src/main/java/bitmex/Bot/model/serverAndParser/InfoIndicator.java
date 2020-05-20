@@ -98,8 +98,8 @@ public class InfoIndicator {
 
         return "period===" + period.toString() + "===preview===" + preview + "===value===" + value
                 + "===type===" + type.toString() + "===avg===" + avg + "===dir===" + dir
-//                + "===open===" + open + "===close===" + close + "===high===" + high
-//                + "===low===" + low
+                + "===open===" + open + "===close===" + close + "===high===" + high
+                + "===low===" + low
                 + "\n";
     }
 

@@ -39,10 +39,11 @@ public class ParserString {
         BidAsk type = getType(strings[5].trim().replaceAll("type : {2}", ""));
         long avg = Long.parseLong(strings[6].trim().replaceAll("avg : {2}", ""));
         int dir = Integer.parseInt(strings[7].trim().replaceAll("dir : {2}", ""));
-        long open = Long.parseLong(strings[8].trim().replaceAll("open : {2}", ""));
-        long close = Long.parseLong(strings[9].trim().replaceAll("close : {2}", ""));
-        long high = Long.parseLong(strings[10].trim().replaceAll("high : {2}", ""));
-        long low = Long.parseLong(strings[11].trim().replaceAll("low : {2}", ""));
+        double open = getDouble(strings[8].trim().replaceAll("open : {2}", ""));
+        double close = getDouble(strings[9].trim().replaceAll("close : {2}", ""));
+        double high = getDouble(strings[10].trim().replaceAll("high : {2}", ""));
+        double low = getDouble(strings[11].trim().replaceAll("low : {2}", ""));
+
 
         InfoIndicator infoIndicator =
                 new InfoIndicator(period, preview, time, price, value, type, avg, dir, open, close, high, low);

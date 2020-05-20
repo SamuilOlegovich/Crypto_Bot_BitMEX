@@ -9,6 +9,8 @@ import bitmex.Bot.model.serverAndParser.Server;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
+import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
+import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -28,10 +30,13 @@ public class Main {
 
     public static void main(String[] args) {
         FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
+        SavedPatternsUser savedPatternsUser = SavedPatternsUser.getInstance();
         SavedPatterns savedPatterns = SavedPatterns.getInstance();
+        Gasket.setSavedPatternsUserClass(savedPatternsUser);
+        ReadAndSavePatternsUser.createSavedPatternsUser();
         Gasket.setSavedPatternsClass(savedPatterns);
-        //  тут можно подождать пару секунд
         ReadAndSavePatterns.createSavedPatterns();
+        //  тут можно подождать пару секунд
         //  тут можно подождать пару секунд
         ticker = new Ticker("XBTUSD");
         ExecutorCommandos executorCommandos = new ExecutorCommandos();

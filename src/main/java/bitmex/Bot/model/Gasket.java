@@ -5,6 +5,7 @@ import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
+import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class Gasket {
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
+    private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
     private static double takeForCollectingPatterns = 20;           // тейк для сбора и накопления паттернов
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
@@ -1163,6 +1165,7 @@ public class Gasket {
     }
 
 
+
     public static double getPROFIT_Sell_PAT() {
         return PROFIT_Sell_PAT;
     }
@@ -1222,11 +1225,21 @@ public class Gasket {
     }
 
 
+
     public static double getTakeForCollectingPatterns() {
         return takeForCollectingPatterns;
     }
 
     public static void setTakeForCollectingPatterns(double takeForCollectingPatterns) {
         Gasket.takeForCollectingPatterns = takeForCollectingPatterns;
+    }
+
+
+    public static SavedPatternsUser getSavedPatternsUserClass() {
+        return savedPatternsUserClass;
+    }
+
+    public static void setSavedPatternsUserClass(SavedPatternsUser savedPatternsUserClass) {
+        Gasket.savedPatternsUserClass = savedPatternsUserClass;
     }
 }

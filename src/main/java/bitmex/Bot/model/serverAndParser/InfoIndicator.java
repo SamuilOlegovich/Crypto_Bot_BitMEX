@@ -10,23 +10,23 @@ import java.util.Date;
 
 public class InfoIndicator {
 
-    private TimeFrame period;
-    private double price;
-    private BidAsk type;
-    private int preview;
-    private long value;
-    private long close;
-    private Date time;
-    private long high;
-    private long open;
-    private long low;
+    private TimeFrame period;       // таймфрейм
+    private double price;           // цена
+    private double close;           // цена закрытия свечи
+    private BidAsk type;            // тип уровня
+    private double high;            // максимальная цена свечи
+    private double open;            // цена открытия свечи
+    private int preview;            // предварительный или реальный уровень 0 - реальный, 1 - предварительный
+    private long value;             // объём
+    private double low;             // минимальная цена свечи
+    private Date time;              // Дата свечи на которой находится данный уровень
     private long avg;
-    private int dir;
+    private int dir;                // направление свечи 1 - бай, -1 - селл
 
 
 
     public InfoIndicator(TimeFrame period, int preview, Date time, double price, long value,
-                         BidAsk type, long avg, int dir, long open, long close, long high, long low) {
+                         BidAsk type, long avg, int dir, double open, double close, double high, double low) {
         this.preview = preview;
         this.period = period;
         this.value = value;
@@ -66,19 +66,19 @@ public class InfoIndicator {
         return time;
     }
 
-    public long getClose() {
+    public double getClose() {
         return close;
     }
 
-    public long getHigh() {
+    public double getHigh() {
         return high;
     }
 
-    public long getOpen() {
+    public double getOpen() {
         return open;
     }
 
-    public long getLow() {
+    public double getLow() {
         return low;
     }
 
@@ -98,8 +98,8 @@ public class InfoIndicator {
 
         return "period===" + period.toString() + "===preview===" + preview + "===value===" + value
                 + "===type===" + type.toString() + "===avg===" + avg + "===dir===" + dir
-                + "===open===" + open + "===close===" + close + "===high===" + high
-                + "===low===" + low
+//                + "===open===" + open + "===close===" + close + "===high===" + high
+//                + "===low===" + low
                 + "\n";
     }
 

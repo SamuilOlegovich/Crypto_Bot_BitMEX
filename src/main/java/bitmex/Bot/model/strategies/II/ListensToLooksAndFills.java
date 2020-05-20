@@ -308,7 +308,7 @@ public class ListensToLooksAndFills {
                 int sleep = 3;
 
                 if (size > 0) {
-                    if (previousValue == listInfoIndicator.size()) {
+                    if (previousValue == listInfoIndicator.size() && isTime()) {
                         priceNow = Gasket.getBitmexQuote().getBidPrice();
                         previousValue = 0;
                         listSorter();
@@ -326,6 +326,41 @@ public class ListensToLooksAndFills {
                             + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
                             + " sleep = " + sleep);
                 }
+            }
+        }
+
+
+        // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
+        private boolean isTime() {
+            String string = DatesTimes.getDateTerminal();
+            String[] strings = string.split(":");
+
+            if (strings[1].equals("00")) {
+                return true;
+            } else if (strings[1].equals("05")) {
+                return true;
+            } else if (strings[1].equals("10")) {
+                return true;
+            } else if (strings[1].equals("15")) {
+                return true;
+            } else if (strings[1].equals("20")) {
+                return true;
+            } else if (strings[1].equals("25")) {
+                return true;
+            } else if (strings[1].equals("30")) {
+                return true;
+            } else if (strings[1].equals("35")) {
+                return true;
+            } else if (strings[1].equals("40")) {
+                return true;
+            } else if (strings[1].equals("45")) {
+                return true;
+            } else if (strings[1].equals("50")) {
+                return true;
+            } else if (strings[1].equals("55")) {
+                return true;
+            } else {
+                return false;
             }
         }
     }

@@ -212,10 +212,12 @@ public class ListensToLooksAndFills {
                     String[] stringsIn = infoIndicator.toString().split(",");
                     String[] stringsThis = listStringPriceBuy.get(j).split(",");
 
-                    if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-                            && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
-                        listStringPriceBuy.set(j, infoIndicator.toString());
-                        arrayList.remove(i);
+                    if (stringsIn.length == stringsThis.length) {
+                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+                            listStringPriceBuy.set(j, infoIndicator.toString());
+                            arrayList.remove(i);
+                        }
                     }
                 }
             }
@@ -239,10 +241,12 @@ public class ListensToLooksAndFills {
                     String[] stringsIn = infoIndicator.toString().split(",");
                     String[] stringsThis = listStringPriceSell.get(j).split(",");
 
-                    if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-                            && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
-                        listStringPriceSell.set(j, infoIndicator.toString());
-                        arrayList.remove(i);
+                    if (stringsIn.length == stringsThis.length) {
+                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+                            listStringPriceSell.set(j, infoIndicator.toString());
+                            arrayList.remove(i);
+                        }
                     }
                 }
             }
@@ -428,8 +432,8 @@ public class ListensToLooksAndFills {
 
     // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
     private class KeepsTrackOfFillingListInfoIndicator extends Thread {
+        private volatile int sleep = 2;
         private int previousValue;
-        private int sleep = 2;
 
         public KeepsTrackOfFillingListInfoIndicator() {
             this.previousValue = 0;

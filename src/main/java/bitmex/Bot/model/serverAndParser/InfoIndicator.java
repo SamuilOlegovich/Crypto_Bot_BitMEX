@@ -50,7 +50,7 @@ public class InfoIndicator {
     }
 
 
-    
+
     public TimeFrame getPeriod() {
         return period;
     }
@@ -105,9 +105,10 @@ public class InfoIndicator {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.format(time);
 
-        return "period===" + period.toString() + "===preview===" + preview + "===value===" + value
-                + "===type===" + type.toString() + "===avg===" + avg + "===dir===" + dir
-                + "===open===" + open + "===close===" + close + "===high===" + high
+        return "period===" + period.toString() + "===preview===" + preview + "===time===" + dateFormat.format(time)
+                + "===price===" + price + "===value===" + value + "===type===" + type.toString()
+                + "===avg===" + avg + "===dir===" + dir + "===open===" + open
+                + "===close===" + close + "===high===" + high
                 + "===low===" + low
                 + "\n";
     }

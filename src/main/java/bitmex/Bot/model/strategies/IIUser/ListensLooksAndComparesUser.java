@@ -222,16 +222,16 @@ public class ListensLooksAndComparesUser {
                     arrayListString.add(stringBias);
                     flag = true;
                 }
-                arrayListString.addAll(getListString());
+                arrayListString.addAll(getListString(arrayListString));
             }
             if (flag) {
-                ArrayList<String> arrayList = new ArrayList<>(getListString());
+                ArrayList<String> arrayList = new ArrayList<>(getListString(null));
                 arrayList.add(0, "0\n");
                 listInListString.add(arrayList);
                 priceStart = Gasket.getBitmexQuote().getBidPrice();
             }
         } else {
-            ArrayList<String> arrayList = new ArrayList<>(getListString());
+            ArrayList<String> arrayList = new ArrayList<>(getListString(null));
             arrayList.add(0, "0\n");
             listInListString.add(arrayList);
             priceStart = Gasket.getBitmexQuote().getBidPrice();
@@ -252,16 +252,81 @@ public class ListensLooksAndComparesUser {
     }
 
 
-    // объекты преобразовываем в строки
-    private ArrayList<String> getListString() {
+    // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
+    // если есть то удаляем их из входящего листа и меняем их в листе направлений
+    private ArrayList<String> getListString(ArrayList<String> arrayListIn) {
+        ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicator);
         ArrayList<String> arrayList = new ArrayList<>();
+        int count = 0;
+        long time;
 
-        for (InfoIndicator infoIndicator : listInfoIndicator) {
-            arrayList.add(infoIndicator.toStringUser());
+        if (arrayListIn != null) {
+            for (String s : arrayListIn) {
+                if (s.startsWith("BIAS")) count++;
+            }
+
+            if (count != 0) time = DatesTimes.getDateTerminalLong() - (1000 * 60 * count);
+            else time = DatesTimes.getDateTerminalLong();
+
+            for (int i = infoIndicatorArrayList.size() - 1; i > -1; i--) {
+                InfoIndicator infoIndicator = infoIndicatorArrayList.get(i);
+
+                if (infoIndicator.getTime().getTime() <= time) {
+                    infoIndicatorArrayList.remove(i);
+                    break;
+                }
+
+                for (int j = arrayListIn.size() - 1; j > -1; j--) {
+                    String[] stringsIn = infoIndicator.toStringUser().split("===");
+                    String[] stringsThis = arrayListIn.get(j).split("===");
+
+                    if (stringsIn.length == stringsThis.length) {
+                        if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
+                                && stringsIn[11].equals(stringsThis[11]) && stringsIn[15].equals(stringsThis[15])) {
+                            arrayListIn.set(j, infoIndicator.toString());
+                            infoIndicatorArrayList.remove(i);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (infoIndicatorArrayList.size() != 0) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
+                arrayList.add(infoIndicator.toStringUser());
+            }
         }
 
         return arrayList;
     }
+
+
+    /*
+    0 period
+    1 period.toString()
+    2 ===preview=== +
+    3 preview +
+    4 "===time===" +
+    5 dateFormat.format(time)
+    6 "===price===" +
+    7 price
+    8 "===value===" +
+    9 value +
+    10 "===type===" +
+    11 type.toString() +
+    12 "===avg===" +
+    13 avg
+    14 "===dir===" +
+    15 dir + "
+    16 ===open===" +
+    17 open + "
+    18 ===close===" +
+    19 close + "
+    20 ===high===" +
+    21 high
+    22 ===low===" +
+    23 low
+                */
 
 
     // находим куда сместилась цена и другие данные
@@ -350,8 +415,8 @@ public class ListensLooksAndComparesUser {
 
     // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
     private class KeepsTrackOfFillingListInfoIndicatorUser extends Thread {
+        private volatile int sleep = 2;
         private int previousValue;
-        private int sleep = 2;
 
 
         public KeepsTrackOfFillingListInfoIndicatorUser() {

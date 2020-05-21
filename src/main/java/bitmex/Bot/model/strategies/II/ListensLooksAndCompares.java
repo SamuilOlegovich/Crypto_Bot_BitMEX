@@ -23,6 +23,7 @@ public class ListensLooksAndCompares {
     private ArrayList<InfoIndicator> listInfoIndicator;
 
     private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
+    private SortPrice sortPriceComparator;
     private SavedPatterns savedPatterns;
     private SortSize sortSize;
 
@@ -38,6 +39,7 @@ public class ListensLooksAndCompares {
 
         this.keepsTrackOfFillingListInfoIndicator = new KeepsTrackOfFillingListInfoIndicator();
         this.savedPatterns = Gasket.getSavedPatternsClass();
+        this.sortPriceComparator = new SortPrice();
         this.listInfoIndicator = new ArrayList<>();
         this.listInListString = new ArrayList<>();
         this.sortSize = new SortSize();
@@ -209,7 +211,6 @@ public class ListensLooksAndCompares {
     // сортируем и наполняем лист сравнений листами строк
     // очищаем лист входящих объектов
     private void sortPrice() {
-        Comparator sortPriceComparator = new ListensLooksAndCompares.SortPrice();
         listInfoIndicator.sort(sortPriceComparator);
         boolean flag = isTime();
 
@@ -384,8 +385,8 @@ public class ListensLooksAndCompares {
 
     // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
     private class KeepsTrackOfFillingListInfoIndicator extends Thread {
+        private volatile int sleep = 3;
         private int previousValue;
-        private int sleep = 3;
 
 
         public KeepsTrackOfFillingListInfoIndicator() {

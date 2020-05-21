@@ -39,9 +39,18 @@ public class InfoIndicator {
         this.avg = avg;
         this.dir = dir;
         this.low = low;
+        whatLevelIsIt();
     }
 
 
+    private void whatLevelIsIt() {
+        if (price > high || price < low) {
+            price = (high + low) / 2.0;
+        }
+    }
+
+
+    
     public TimeFrame getPeriod() {
         return period;
     }

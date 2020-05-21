@@ -94,7 +94,8 @@ public class ListensToLooksAndFills {
             // добавляем строку данных о поведении цены в промежутке между поступлениями уровней
             if (!oneStartFlag && flag) {
                 String stringBias = "BIAS===" + getBias(true) + "===AVERAGE===" + getAverageDeviations(true)
-                        + "===MAX===" + getMaxDeviations(true);
+                        + "===MAX===" + getMaxDeviations(true)
+                        + "\n";
                 listStringPriceBuy.add(stringBias);
             }
         }
@@ -126,7 +127,8 @@ public class ListensToLooksAndFills {
         } else {
             if (!oneStartFlag && flag) {
                 String stringBias = "BIAS===" + getBias(false) + "===AVERAGE===" + getAverageDeviations(false)
-                        + "===MAX===" + getMaxDeviations(false);
+                        + "===MAX===" + getMaxDeviations(false)
+                        + "\n";
                 listStringPriceSell.add(stringBias);
                 countPriseSell.clearList();
             }

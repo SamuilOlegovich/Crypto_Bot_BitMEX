@@ -221,17 +221,17 @@ public class ListensLooksAndCompares {
                     arrayListString.add(stringBias);
                     flag = true;
                 }
-                arrayListString.addAll(getListString());
+                arrayListString.addAll(getListString(arrayListString));
             }
 
             if (flag) {
-                ArrayList<String> arrayList = new ArrayList<>(getListString());
+                ArrayList<String> arrayList = new ArrayList<>(getListString(null));
                 arrayList.add(0, "0\n");
                 listInListString.add(arrayList);
                 priceStart = Gasket.getBitmexQuote().getBidPrice();
             }
         } else {
-            ArrayList<String> arrayList = new ArrayList<>(getListString());
+            ArrayList<String> arrayList = new ArrayList<>(getListString(null));
             arrayList.add(0, "0\n");
             listInListString.add(arrayList);
             priceStart = Gasket.getBitmexQuote().getBidPrice();
@@ -250,12 +250,47 @@ public class ListensLooksAndCompares {
     }
 
 
-    // объекты преобразовываем в строки
-    private ArrayList<String> getListString() {
+    // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
+    // если есть то удаляем их из входящего листа и меняем их в листе направлений
+    private ArrayList<String> getListString(ArrayList<String> arrayListIn) {
+        ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicator);
         ArrayList<String> arrayList = new ArrayList<>();
+        int count = 0;
+        long time;
 
-        for (InfoIndicator infoIndicator : listInfoIndicator) {
-            arrayList.add(infoIndicator.toString());
+        if (arrayListIn != null) {
+            for (String s : arrayListIn) {
+                if (s.startsWith("BIAS")) count++;
+            }
+
+            if (count != 0) time = DatesTimes.getDateTerminalLong() - (1000 * 60 * count);
+            else time = DatesTimes.getDateTerminalLong();
+
+            for (int i = infoIndicatorArrayList.size() - 1; i > -1; i--) {
+                InfoIndicator infoIndicator = infoIndicatorArrayList.get(i);
+
+                if (infoIndicator.getTime().getTime() <= time) {
+                    infoIndicatorArrayList.remove(i);
+                    break;
+                }
+
+                for (int j = arrayListIn.size() - 1; j > -1; j--) {
+                    String[] stringsIn = infoIndicator.toString().split(",");
+                    String[] stringsThis = arrayListIn.get(j).split(",");
+
+                    if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                            && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+                        arrayListIn.set(j, infoIndicator.toString());
+                        infoIndicatorArrayList.remove(i);
+                    }
+                }
+            }
+        }
+
+        if (infoIndicatorArrayList.size() != 0) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
+                arrayList.add(infoIndicator.toString());
+            }
         }
 
         return arrayList;
@@ -392,41 +427,5 @@ public class ListensLooksAndCompares {
         private void setSleep() {
             sleep = Gasket.getSecondsSleepTime();
         }
-
-
-//        // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
-//        private boolean isTime() {
-//            String string = DatesTimes.getDateTerminal();
-//            String[] strings = string.split(":");
-//            int seconds = Integer.parseInt(strings[2]);
-//
-//            if (strings[1].equals("00") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("05") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("10") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("15") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("20") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("25") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("30") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("35") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("40") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("45") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("50") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("55") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        }
     }
 }

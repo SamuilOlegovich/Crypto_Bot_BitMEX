@@ -152,22 +152,102 @@ public class ListensToLooksAndFills {
 
     // добавляем строки в листы направлений
     private void addStringsInListDirections(boolean buyOrSell) {
+        ArrayList<InfoIndicator> arrayList = new ArrayList<>(checkIfThereAreSuchLevels(buyOrSell));
 
-        if (buyOrSell) {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Добавляем строки в листы направлений Бай");
+        if (arrayList.size() != 0) {
+            if (buyOrSell) {
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        + " --- Добавляем строки в листы направлений Бай");
 
-            for (InfoIndicator infoIndicator : listInfoIndicator) {
-                listStringPriceBuy.add(infoIndicator.toString());
-            }
-        } else {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Добавляем строки в листы направлений Селл");
+                for (InfoIndicator infoIndicator : arrayList) {
+                    listStringPriceBuy.add(infoIndicator.toString());
+                }
+            } else {
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        + " --- Добавляем строки в листы направлений Селл");
 
-            for (InfoIndicator infoIndicator : listInfoIndicator) {
-                listStringPriceSell.add(infoIndicator.toString());
+                for (InfoIndicator infoIndicator : arrayList) {
+                    listStringPriceSell.add(infoIndicator.toString());
+                }
             }
         }
+    }
+
+    /*
+               0 {"period": "M5",
+                1       "preview": "1",
+                 2      "time": "20.05.2020 21:19:00",
+                  3     "price": "9554,5",
+                   4    "value": "5465914",
+                    5   "type": "Volume",
+                     6  "avg": "7410290",
+                      7 "dir": "-1",
+                       8 "open": "9560,5",
+                       9 "close": "9549,0",
+                       10 "high": "9561,0",
+                       11 "low": "9548,5"}*/
+    // проверяем есть ли такие уровни, если есть то удаляем их из входящего листа и меняем их в листе направлений
+    private ArrayList<InfoIndicator> checkIfThereAreSuchLevels(boolean buyOrSell) {
+        ArrayList<InfoIndicator> arrayList = new ArrayList<>(listInfoIndicator);
+        int count = 0;
+        long time;
+
+        if (buyOrSell) {
+            for (String s : listStringPriceBuy) {
+                if (s.startsWith("BIAS")) count++;
+            }
+
+            if (count != 0) time = DatesTimes.getDateTerminalLong() - (1000 * 60 * count);
+            else time = DatesTimes.getDateTerminalLong();
+
+            for (int i = arrayList.size() - 1; i > -1; i--) {
+                InfoIndicator infoIndicator = arrayList.get(i);
+
+                if (infoIndicator.getTime().getTime() <= time) {
+                    arrayList.remove(i);
+                    break;
+                }
+
+                for (int j = listStringPriceBuy.size() - 1; j > -1; j--) {
+                    String[] stringsIn = infoIndicator.toString().split(",");
+                    String[] stringsThis = listStringPriceBuy.get(j).split(",");
+
+                    if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                            && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+                        listStringPriceBuy.set(j, infoIndicator.toString());
+                        arrayList.remove(i);
+                    }
+                }
+            }
+        } else {
+            for (String s : listStringPriceSell) {
+                if (s.startsWith("BIAS")) count++;
+            }
+
+            if (count != 0) time = DatesTimes.getDateTerminalLong() - (1000 * 60 * count);
+            else time = DatesTimes.getDateTerminalLong();
+
+            for (int i = arrayList.size() - 1; i > -1; i--) {
+                InfoIndicator infoIndicator = arrayList.get(i);
+
+                if (infoIndicator.getTime().getTime() <= time) {
+                    arrayList.remove(i);
+                    break;
+                }
+
+                for (int j = listStringPriceSell.size() - 1; j > -1; j--) {
+                    String[] stringsIn = infoIndicator.toString().split(",");
+                    String[] stringsThis = listStringPriceSell.get(j).split(",");
+
+                    if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                            && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+                        listStringPriceSell.set(j, infoIndicator.toString());
+                        arrayList.remove(i);
+                    }
+                }
+            }
+        }
+        return arrayList;
     }
 
 
@@ -389,42 +469,6 @@ public class ListensToLooksAndFills {
         private void setSleep() {
             sleep = Gasket.getSecondsSleepTime();
         }
-
-
-//        // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
-//        private boolean isTime() {
-//            String string = DatesTimes.getDateTerminal();
-//            String[] strings = string.split(":");
-//            int seconds = Integer.parseInt(strings[2]);
-//
-//            if (strings[1].equals("00") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("05") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("10") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("15") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("20") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("25") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("30") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("35") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("40") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("45") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("50") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else if (strings[1].equals("55") && seconds > Gasket.getSecondsSleepTime()) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        }
     }
 
 

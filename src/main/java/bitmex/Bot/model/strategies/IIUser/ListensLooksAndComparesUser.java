@@ -217,6 +217,29 @@ public class ListensLooksAndComparesUser {
 
         if (listInListString.size() > 0) {
             for (ArrayList<String> arrayListString : listInListString) {
+                if (arrayListString.get(0).equals("0")) {
+                    int indexOneBias = 0;
+                    int countBias = 0;
+
+                    for (String string : arrayListString) {
+                        if (string.startsWith("BIAS")) {
+                            if (countBias == 0) {
+                                indexOneBias = arrayListString.indexOf(string);
+                            }
+                            countBias++;
+                        }
+                    }
+
+                    if (countBias > 0) {
+                        for (int i = indexOneBias; i > 0; i--) {
+                            arrayListString.remove(i);
+                        }
+                        arrayListString.set(0, "DEL");
+                    }
+                }
+            }
+
+            for (ArrayList<String> arrayListString : listInListString) {
                 if (flag) {
                     String stringBias = "BIAS===" + getBias() + "\n";
                     arrayListString.add(stringBias);

@@ -50,11 +50,12 @@ public class SavedPatterns implements Serializable {
         int indexBias = 0;
 
         for (String string : inArrayList) {
-            if (string.startsWith("BIAS"))
+            if (string.startsWith("BIAS")) {
                 if (indexBias == 0) {
                     indexBias = inArrayList.indexOf(string);
                 }
                 countBias++;
+            }
         }
 
         if (countBias > 0) {

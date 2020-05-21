@@ -399,7 +399,7 @@ public class ListensToLooksAndFills {
         String[] strings = string.split(":");
         double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
 
-        if (seconds > 0.05 && seconds < 4.98) {
+        if (seconds > 00.20 && seconds < 4.98) {
             return false;
         } else if (seconds > 5.20 && seconds < 9.98) {
             return false;

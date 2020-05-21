@@ -307,10 +307,12 @@ public class ListensLooksAndCompares {
                     String[] stringsIn = infoIndicator.toString().split(",");
                     String[] stringsThis = arrayListIn.get(j).split(",");
 
-                    if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-                            && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
-                        arrayListIn.set(j, infoIndicator.toString());
-                        infoIndicatorArrayList.remove(i);
+                    if (stringsIn.length == stringsThis.length) {
+                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+                            arrayListIn.set(j, infoIndicator.toString());
+                            infoIndicatorArrayList.remove(i);
+                        }
                     }
                 }
             }
@@ -352,7 +354,7 @@ public class ListensLooksAndCompares {
         String[] strings = string.split(":");
         double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
 
-        if (seconds > 0.05 && seconds < 4.98) {
+        if (seconds > 00.20 && seconds < 4.98) {
             return false;
         } else if (seconds > 5.20 && seconds < 9.98) {
             return false;

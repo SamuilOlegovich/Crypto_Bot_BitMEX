@@ -257,6 +257,7 @@ public class ListensLooksAndComparesUser {
     private ArrayList<String> getListString(ArrayList<String> arrayListIn) {
         ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicator);
         ArrayList<String> arrayList = new ArrayList<>();
+        long timeNow = DatesTimes.getDateTerminalLong();
         int count = 0;
         long time;
 
@@ -265,13 +266,16 @@ public class ListensLooksAndComparesUser {
                 if (s.startsWith("BIAS")) count++;
             }
 
-            if (count != 0) time = DatesTimes.getDateTerminalLong() - (1000 * 60 * count);
-            else time = DatesTimes.getDateTerminalLong();
+            if (count != 0) {
+                time = timeNow - (1000 * 60 * count);
+            } else {
+                time = timeNow - (1000 * 60 * 5);
+            }
 
             for (int i = infoIndicatorArrayList.size() - 1; i > -1; i--) {
                 InfoIndicator infoIndicator = infoIndicatorArrayList.get(i);
 
-                if (infoIndicator.getTime().getTime() <= time) {
+                if (infoIndicator.getTime().getTime() < time) {
                     infoIndicatorArrayList.remove(i);
                     break;
                 }
@@ -291,9 +295,12 @@ public class ListensLooksAndComparesUser {
             }
         }
 
+        time = timeNow - (1000 * 60 * 5);
+
         if (infoIndicatorArrayList.size() != 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
-                arrayList.add(infoIndicator.toStringUser());
+                if (infoIndicator.getTime().getTime() < time)
+                    arrayList.add(infoIndicator.toString());
             }
         }
 

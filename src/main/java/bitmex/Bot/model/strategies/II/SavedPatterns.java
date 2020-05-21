@@ -46,80 +46,99 @@ public class SavedPatterns implements Serializable {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Сравниваю ПАТТЕРН с имеющимися");
 
         ArrayList<String> inArrayList = new ArrayList<>(arrayList);
+        int countBias = 0;
+        int indexBias = 0;
 
-        // перебираем массив стратегий и сравниваем с пришедшим
-        for (ArrayList<String> stringArrayList : listsPricePatterns) {
-            boolean result = true;
-
-            // проверяем совпадает ли их размер
-            if (stringArrayList.size() == inArrayList.size()) {
-
-                // если размер совпал то начинаем сравнивать построчно
-                // не считая 0-вой строки так как там инфа о паттерне
-                for (int i = 1; i < inArrayList.size(); i++) {
-                    String[] strings1;
-                    String[] strings2;
-                    String[] arr1;
-                    String[] arr2;
-
-                    // Тут мы так же определяем не строка ли это направления и сравниваем либо ее либо строки уровней
-                    // BIAS===BUY===10===AVERAGE===3===MAX===5   <----- строка направления
-                    if (inArrayList.get(i).startsWith("BIAS") && stringArrayList.get(i).startsWith("BIAS")) {
-                        arr1 = stringArrayList.get(i).split("===");
-                        arr2 = inArrayList.get(i).split("===");
-
-                        // если хоть один объект не равен то прирываем цикл
-                        if (!arr1[1].equals(arr2[1])) {
-                            result = false;
-                            break;
-                        }
-
-                    } else if ((inArrayList.get(i).startsWith("BIAS") && !stringArrayList.get(i).startsWith("BIAS"))
-                            || (!inArrayList.get(i).startsWith("BIAS") && stringArrayList.get(i).startsWith("BIAS"))) {
-                        // если под одним и тем же номером находятся разные по значимости строки то прирываем цикл
-                        result = false;
-                        break;
-                    } else if (!inArrayList.get(i).startsWith("BIAS") && !stringArrayList.get(i).startsWith("BIAS")) {
-                        arr1 = stringArrayList.get(i).split("\"type\": \"");
-                        arr2 = inArrayList.get(i).split("\"type\": \"");
-                        strings1 = arr1[1].split("\"");
-                        strings2 = arr2[1].split("\"");
-
-                        // если хоть один объект не равен то прирываем цикл
-                        if (!strings1[0].equals(strings2[0])) {
-                            result = false;
-                            break;
-                        }
-                    }
+        for (String string : inArrayList) {
+            if (string.startsWith("BIAS"))
+                if (indexBias == 0) {
+                    indexBias = inArrayList.indexOf(string);
                 }
-
-                // если цикл не прерван и флаг TRUE то корректируем инфо данные о патерне
-                // с учетом информации пришедшего паттерна
-                // а так же прекращаем процесс поиска и сравнения
-                if (result) {
-                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- ПАТТЕРН такой есть - обновляю информацию");
-                    String stringZero = setPriority(stringArrayList.get(0), inArrayList.get(0));
-                    stringArrayList.set(0, stringZero);
-                    ReadAndSavePatterns.saveSavedPatterns();
-                    return;
-                }
-            }
+                countBias++;
         }
 
-        // если совпадение не было найдено - добавляем данный патерн в массив
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Такого ПАТТЕРНА нет - ДОБАВЛЕН --- "
-                +  "SIZE --- " + inArrayList.size());
+        if (countBias > 0) {
 
-        // проверяю есть ли такой айди и если есть меняю его на другой
-        inArrayList.set(0, checkingID(inArrayList.get(0)));
+            for (int i = indexBias; i > 0; i--) {
+                inArrayList.remove(i);
+            }
 
-        listsPricePatterns.add(0, inArrayList);
-        maxArraySize = Math.max(inArrayList.size(), maxArraySize);
+            // перебираем массив стратегий и сравниваем с пришедшим
+            for (ArrayList<String> stringArrayList : listsPricePatterns) {
+                boolean result = true;
 
-        listsPricePatterns.sort(sortSize);
+                // проверяем совпадает ли их размер
+                if (stringArrayList.size() == inArrayList.size()) {
 
-        ReadAndSavePatterns.saveSavedPatterns();
+                    // если размер совпал то начинаем сравнивать построчно
+                    // не считая 0-вой строки так как там инфа о паттерне
+                    for (int i = 1; i < inArrayList.size(); i++) {
+                        String[] strings1;
+                        String[] strings2;
+                        String[] arr1;
+                        String[] arr2;
+
+                        // Тут мы так же определяем не строка ли это направления и сравниваем либо ее либо строки уровней
+                        // BIAS===BUY===10===AVERAGE===3===MAX===5   <----- строка направления
+                        if (inArrayList.get(i).startsWith("BIAS") && stringArrayList.get(i).startsWith("BIAS")) {
+                            arr1 = stringArrayList.get(i).split("===");
+                            arr2 = inArrayList.get(i).split("===");
+
+                            // если хоть один объект не равен то прирываем цикл
+                            if (!arr1[1].equals(arr2[1])) {
+                                result = false;
+                                break;
+                            }
+
+                        } else if ((inArrayList.get(i).startsWith("BIAS") && !stringArrayList.get(i).startsWith("BIAS"))
+                                || (!inArrayList.get(i).startsWith("BIAS") && stringArrayList.get(i).startsWith("BIAS"))) {
+                            // если под одним и тем же номером находятся разные по значимости строки то прирываем цикл
+                            result = false;
+                            break;
+                        } else if (!inArrayList.get(i).startsWith("BIAS") && !stringArrayList.get(i).startsWith("BIAS")) {
+                            arr1 = stringArrayList.get(i).split("\"type\": \"");
+                            arr2 = inArrayList.get(i).split("\"type\": \"");
+                            strings1 = arr1[1].split("\"");
+                            strings2 = arr2[1].split("\"");
+
+                            // если хоть один объект не равен то прирываем цикл
+                            if (!strings1[0].equals(strings2[0])) {
+                                result = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    // если цикл не прерван и флаг TRUE то корректируем инфо данные о патерне
+                    // с учетом информации пришедшего паттерна
+                    // а так же прекращаем процесс поиска и сравнения
+                    if (result) {
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                                + " --- ПАТТЕРН такой есть - обновляю информацию");
+                        String stringZero = setPriority(stringArrayList.get(0), inArrayList.get(0));
+                        stringArrayList.set(0, stringZero);
+                        ReadAndSavePatterns.saveSavedPatterns();
+                        return;
+                    }
+                }
+            }
+
+            // если совпадение не было найдено - добавляем данный патерн в массив
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Такого ПАТТЕРНА нет - ДОБАВЛЕН --- "
+                    + "SIZE --- " + inArrayList.size());
+
+            // проверяю есть ли такой айди и если есть меняю его на другой
+            inArrayList.set(0, checkingID(inArrayList.get(0)));
+
+            listsPricePatterns.add(0, inArrayList);
+            maxArraySize = Math.max(inArrayList.size(), maxArraySize);
+
+            listsPricePatterns.sort(sortSize);
+
+            ReadAndSavePatterns.saveSavedPatterns();
+        } else {
+            inArrayList.clear();
+        }
     }
 
 

@@ -32,6 +32,7 @@ public class ListensToLooksAndFills {
     private boolean oneStartFlag;
 
 
+
     private ListensToLooksAndFills() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Начал работать класс сбора Паттернов");
@@ -186,9 +187,11 @@ public class ListensToLooksAndFills {
                        9 "close": "9549,0",
                        10 "high": "9561,0",
                        11 "low": "9548,5"}*/
+
     // проверяем есть ли такие уровни, если есть то удаляем их из входящего листа и меняем их в листе направлений
     private ArrayList<InfoIndicator> checkIfThereAreSuchLevels(boolean buyOrSell) {
         ArrayList<InfoIndicator> arrayList = new ArrayList<>(listInfoIndicator);
+        long timeNow = DatesTimes.getDateTerminalLong();
         int count = 0;
         long time;
 
@@ -197,8 +200,11 @@ public class ListensToLooksAndFills {
                 if (s.startsWith("BIAS")) count++;
             }
 
-            if (count != 0) time = DatesTimes.getDateTerminalLong() - (1000 * 60 * count);
-            else time = DatesTimes.getDateTerminalLong();
+            if (count != 0) {
+                time = timeNow - (1000 * 60 * count);
+            } else {
+                time = timeNow - (1000 * 60 * 5);
+            }
 
             for (int i = arrayList.size() - 1; i > -1; i--) {
                 InfoIndicator infoIndicator = arrayList.get(i);
@@ -226,13 +232,16 @@ public class ListensToLooksAndFills {
                 if (s.startsWith("BIAS")) count++;
             }
 
-            if (count != 0) time = DatesTimes.getDateTerminalLong() - (1000 * 60 * count);
-            else time = DatesTimes.getDateTerminalLong();
+            if (count != 0) {
+                time = timeNow - (1000 * 60 * count);
+            } else {
+                time = timeNow - (1000 * 60 * 5);
+            }
 
             for (int i = arrayList.size() - 1; i > -1; i--) {
                 InfoIndicator infoIndicator = arrayList.get(i);
 
-                if (infoIndicator.getTime().getTime() <= time) {
+                if (infoIndicator.getTime().getTime() < time) {
                     arrayList.remove(i);
                     break;
                 }
@@ -251,6 +260,15 @@ public class ListensToLooksAndFills {
                 }
             }
         }
+
+        time = timeNow - (1000 * 60 * 5);
+
+        for (int i = arrayList.size() - 1; i > -1; i--) {
+            if (arrayList.get(i).getTime().getTime() < time) {
+                arrayList.remove(i);
+            }
+        }
+
         return arrayList;
     }
 

@@ -57,14 +57,14 @@ public class ReadAndSavePatterns {
 
         ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Принял на запись лист размером --- "
-                + arrayLists.size());
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Принял на запись лист размером --- "
+//                + arrayLists.size());
 
-        System.out.println(arrayLists.size());
+//        System.out.println(arrayLists.size());
 
         for (ArrayList<String> arr : arrayLists) {
 
-            System.out.println(DatesTimes.getDateTerminal() + " --- В нем лежат листы размерами --- " + arr.size());
+//            System.out.println(DatesTimes.getDateTerminal() + " --- В нем лежат листы размерами --- " + arr.size());
 
             for (String s : arr) {
                 stringBuilder.append(s);
@@ -87,12 +87,11 @@ public class ReadAndSavePatterns {
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
 
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- Принял на запись временные лист размером --- "
+//                + arrayLists.size());
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- Принял на запись временные лист размером --- "
-                + arrayLists.size());
-
-        System.out.println(arrayLists.size());
+//        System.out.println(arrayLists.size());
 
         for (ArrayList<String> arr : arrayLists) {
             for (String s : arr) {
@@ -116,11 +115,11 @@ public class ReadAndSavePatterns {
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- Принял на запись удаленные лист размером --- "
-                + arrayLists.size());
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- Принял на запись удаленные лист размером --- "
+//                + arrayLists.size());
 
-        System.out.println(arrayLists.size());
+//        System.out.println(arrayLists.size());
 
         for (ArrayList<String> arr : arrayLists) {
             for (String s : arr) {

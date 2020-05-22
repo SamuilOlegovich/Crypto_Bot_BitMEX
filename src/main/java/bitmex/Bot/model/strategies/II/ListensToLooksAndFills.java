@@ -49,8 +49,6 @@ public class ListensToLooksAndFills {
         this.oneStartFlag = true;
         this.priceEndSell = NaN;
         this.priceEndBuy = NaN;
-        new CountPriseSell();
-        new CountPriseBuy();
     }
 
 
@@ -157,15 +155,15 @@ public class ListensToLooksAndFills {
 
         if (arrayList.size() != 0) {
             if (buyOrSell) {
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                        + " --- Добавляем строки в листы направлений Бай");
+//                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                        + " --- Добавляем строки в листы направлений Бай");
 
                 for (InfoIndicator infoIndicator : arrayList) {
                     listStringPriceBuy.add(infoIndicator.toString());
                 }
             } else {
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                        + " --- Добавляем строки в листы направлений Селл");
+//                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                        + " --- Добавляем строки в листы направлений Селл");
 
                 for (InfoIndicator infoIndicator : arrayList) {
                     listStringPriceSell.add(infoIndicator.toString());
@@ -276,8 +274,8 @@ public class ListensToLooksAndFills {
 
     // находим максимальную просадку
     private double getMaxDeviations(boolean b) {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- находим максимальную просадку");
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- находим максимальную просадку");
         double result = 0;
         int count = 0;
 
@@ -293,14 +291,16 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
+                /////////////////////////////////
                 System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
                         + " = " + (countPriseBuy.getPriceStartBuy() - result));
-
+                /////////////////////////////////
                 return 0;
             } else {
+                //////////////////////////////////
                 System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
                         + " = " + (countPriseBuy.getPriceStartBuy() - result));
-
+                /////////////////////////////////
                 return countPriseBuy.getPriceStartBuy() - result; // проверить что не то с результатом он равен нулю постоянно
             }
 
@@ -316,13 +316,16 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
+                /////////////////////////////
                 System.out.println(result + " - " + countPriseSell.getPriceStartSell()
                         + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
-
+                ////////////////////////////
                 return 0;
             } else {
+                //////////////////////////
                 System.out.println(result + " - "
                         + countPriseSell.getPriceStartSell() + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
+                //////////////////////////
                 return result - countPriseSell.getPriceStartSell();
             }
         }
@@ -331,8 +334,8 @@ public class ListensToLooksAndFills {
 
     // находим среднюю просадку
     private double getAverageDeviations(boolean b) {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- находим среднюю просадку");
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- находим среднюю просадку");
 
         double result = 0;
 
@@ -344,10 +347,14 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
+                ////////////////////////////////////
                 System.out.println("---result==0");
+                ///////////////////////////////////
                 return 0;
             } else {
+                //////////////////////////////////
                 System.out.println(countPriseBuy.getPriceStartBuy() - (result / arrayList.size()));
+                /////////////////////////////////
                 return countPriseBuy.getPriceStartBuy() - (result / arrayList.size()); // резулт иногда ноль как итог вылетает НАН
             }
         } else {
@@ -358,10 +365,14 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
+                ///////////////////////////////////////
                 System.out.println("---result==0===2");
+                //////////////////////////////////////
                 return 0;
             } else {
+                ///////////////////////////////////////////////
                 System.out.println((result / arrayList.size()) - countPriseSell.getPriceStartSell());
+                //////////////////////////////////////////////
                 return (result / arrayList.size()) - countPriseSell.getPriceStartSell(); // резулт иногда ноль как итог вылетает НАН
             }
         }
@@ -454,6 +465,8 @@ public class ListensToLooksAndFills {
         private int previousValue;
 
         public KeepsTrackOfFillingListInfoIndicator() {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicator начал работать");
             this.previousValue = 0;
             start();
         }
@@ -486,8 +499,6 @@ public class ListensToLooksAndFills {
                 }
             }
         }
-
-
         private void setSleep() {
             sleep = Gasket.getSecondsSleepTime();
         }
@@ -503,6 +514,8 @@ public class ListensToLooksAndFills {
         private double priceStartBuy;
 
         public CountPriseBuy() {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Начал фиксировать цену отклонения Бай");
             this.arrayListOut = new ArrayList<>();
             this.arrayListBuy = new ArrayList<>();
             this.flag = false;
@@ -511,8 +524,6 @@ public class ListensToLooksAndFills {
 
         @Override
         public void run() {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Начал фиксировать цену отклонения Бай");
 
             while (true) {
                 if (flag) {
@@ -565,6 +576,8 @@ public class ListensToLooksAndFills {
         private boolean flag;
 
         public CountPriseSell() {
+            ConsoleHelper.writeMessage( DatesTimes.getDateTerminal()
+                    + " --- Начал фиксировать цену отклонения Селл");
             this.arrayListSell = new ArrayList<>();
             this.arrayListOut = new ArrayList<>();
             this.flag = false;
@@ -573,8 +586,6 @@ public class ListensToLooksAndFills {
 
         @Override
         public void run() {
-            ConsoleHelper.writeMessage( DatesTimes.getDateTerminal()
-                    + " --- Начал фиксировать цену отклонения Селл");
 
             while (true) {
                 if (flag) {

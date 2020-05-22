@@ -84,8 +84,8 @@ public class ListensLooksAndCompares {
         // сохраняю те патерны которые еще актуальны на данный момент
         ReadAndSavePatterns.saveTemporarySavedPatterns(listInListString);
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Сравниваю рынок с ПАТТЕРНАМИ");
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+//                + "Сравниваю рынок с ПАТТЕРНАМИ");
 
         // сравниваем оставшееся с патернами
         for (ArrayList<String> thisArrayListString : listInListString) {
@@ -94,8 +94,8 @@ public class ListensLooksAndCompares {
 
             // если равные по размеру патерны есть то начинаем сравнивать
             if (inListPatterns != null) {
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Есть - "
-                        + inListPatterns.size() + " - паттерна по размеру");
+//                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Есть - "
+//                        + inListPatterns.size() + " - паттерна по размеру");
 
                 for (ArrayList<String> inArrayListString : inListPatterns) {
                     boolean result = true;
@@ -150,9 +150,10 @@ public class ListensLooksAndCompares {
                         // возможно тут надо поставить return
                     }
                 }
-            }  else {
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Паттернов равных по размеру нет");
             }
+//            else {
+//                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Паттернов равных по размеру нет");
+//            }
         }
     }
 
@@ -198,8 +199,8 @@ public class ListensLooksAndCompares {
             Collections.reverse(lineNumbersToDelete);
             // сохраняю удаленные патерны
             ReadAndSavePatterns.saveSavedPatternsDelete(arrayListArrayList);
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Удалил - "
-                    + lineNumbersToDelete.size() + " - паттерна большего размера");
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Удалил - "
+//                    + lineNumbersToDelete.size() + " - паттерна большего размера");
 
             for (Integer integer : lineNumbersToDelete) {
                 listInListString.remove((int) integer);
@@ -215,15 +216,17 @@ public class ListensLooksAndCompares {
         boolean flag = isTime();
 
         if (listInListString.size() > 0) {
-            for (ArrayList<String> arrayListString : listInListString) {
-                if (arrayListString.get(0).equals("0")) {
+            // тут мы обрезаем мусорную часть - первый блок(единоразово)
+            for (ArrayList<String> arrayString : listInListString) {
+
+                if (arrayString.get(0).equals("0\n")) {
                     int indexOneBias = 0;
                     int countBias = 0;
 
-                    for (String string : arrayListString) {
+                    for (String string : arrayString) {
                         if (string.startsWith("BIAS")) {
                             if (countBias == 0) {
-                                indexOneBias = arrayListString.indexOf(string);
+                                indexOneBias = arrayString.indexOf(string);
                             }
                             countBias++;
                         }
@@ -231,9 +234,9 @@ public class ListensLooksAndCompares {
 
                     if (countBias > 0) {
                         for (int i = indexOneBias; i > 0; i--) {
-                            arrayListString.remove(i);
+                            arrayString.remove(i);
                         }
-                        arrayListString.set(0, "DEL");
+                        arrayString.set(0, "DEL\n");
                     }
                 }
             }
@@ -268,9 +271,9 @@ public class ListensLooksAndCompares {
         listInfoIndicator.clear();
         listInListString.sort(sortSize);
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- В листе для сравнения уже - "
-                + listInListString.size() + " - паттернов");
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- В листе для сравнения уже - "
+//                + listInListString.size() + " - паттернов");
     }
 
 
@@ -297,6 +300,7 @@ public class ListensLooksAndCompares {
 
             for (int i = infoIndicatorArrayList.size() - 1; i > -1; i--) {
                 InfoIndicator infoIndicator = infoIndicatorArrayList.get(i);
+                boolean flag = false;
 
                 if (infoIndicator.getTime().getTime() < time) {
                     infoIndicatorArrayList.remove(i);
@@ -311,9 +315,13 @@ public class ListensLooksAndCompares {
                         if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
                                 && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
                             arrayListIn.set(j, infoIndicator.toString());
-                            infoIndicatorArrayList.remove(i);
+                            flag = true;
                         }
                     }
+                }
+
+                if (flag) {
+                    infoIndicatorArrayList.remove(i);
                 }
             }
         }
@@ -322,7 +330,7 @@ public class ListensLooksAndCompares {
 
         if (infoIndicatorArrayList.size() != 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
-                if (infoIndicator.getTime().getTime() < time)
+                if (infoIndicator.getTime().getTime() > time)
                 arrayList.add(infoIndicator.toString());
             }
         }
@@ -456,8 +464,6 @@ public class ListensLooksAndCompares {
                 }
             }
         }
-
-
         private void setSleep() {
             sleep = Gasket.getSecondsSleepTime();
         }

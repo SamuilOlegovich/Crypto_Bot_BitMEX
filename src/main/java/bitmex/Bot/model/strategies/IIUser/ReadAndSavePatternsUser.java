@@ -56,12 +56,11 @@ public class ReadAndSavePatternsUser {
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
 
-
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- Принял на запись временные лист User размером --- "
-                + arrayLists.size());
-
-        System.out.println(arrayLists.size());
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- Принял на запись временные лист User размером --- "
+//                + arrayLists.size());
+//
+//        System.out.println(arrayLists.size());
 
         for (ArrayList<String> arr : arrayLists) {
             for (String s : arr) {
@@ -85,11 +84,11 @@ public class ReadAndSavePatternsUser {
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- Принял на запись удаленные User лист размером --- "
-                + arrayLists.size());
-
-        System.out.println(arrayLists.size());
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                + " --- Принял на запись удаленные User лист размером --- "
+//                + arrayLists.size());
+//
+//        System.out.println(arrayLists.size());
 
         for (ArrayList<String> arr : arrayLists) {
             for (String s : arr) {

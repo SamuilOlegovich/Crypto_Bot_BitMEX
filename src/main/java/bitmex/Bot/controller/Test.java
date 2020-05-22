@@ -13,7 +13,10 @@ import bitmex.Bot.view.ConsoleHelper;
 
 import java.util.List;
 
-public class Test {
+public class
+
+
+Test {
 
 
 

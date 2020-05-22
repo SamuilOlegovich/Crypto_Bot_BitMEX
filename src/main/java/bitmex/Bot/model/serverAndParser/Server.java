@@ -14,6 +14,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
+        ConsoleHelper.writeMessage("СЕРВЕР ЗАПУЩЕН");
         ParserString parserString = new ParserString();
         ServerSocket server = null;
         Socket socket = null;
@@ -36,6 +37,12 @@ public class Server extends Thread {
             ConsoleHelper.writeMessage("Что-то навернулось в методе MAIN класса serverAndParser.Server.");
         }
     }
+
+
+
+
+
+
 
     // TEST
     public static void main(String[] args) throws IOException {

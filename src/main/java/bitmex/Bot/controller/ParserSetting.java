@@ -150,6 +150,9 @@ public class ParserSetting {
                 + "takeForCollectingPatterns=" + Gasket.getTakeForCollectingPatterns()
                 + " ===== тейк для сбора и накопления паттернов\n"
 
+                + "tradingPatternsUser === " + Gasket.isTradingPatternsUser()
+                + " === торговля по паттернам USER\n"
+
 
                 + "\n"
                 + "END\n";

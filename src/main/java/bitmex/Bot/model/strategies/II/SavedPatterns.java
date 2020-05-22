@@ -6,6 +6,7 @@ import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.io.*;
@@ -63,6 +64,75 @@ public class SavedPatterns implements Serializable {
             for (int i = indexBias; i > 0; i--) {
                 inArrayList.remove(i);
             }
+
+            ArrayList<Integer> indexArrayList = new ArrayList<>();
+
+            for (String stringOne : arrayList) {
+                int bias = 0;
+
+                if (!stringOne.startsWith("BUY") && !stringOne.startsWith("BIAS")) {
+                    String[] oneStrings = stringOne.split(",");
+                    String[] twoStrings;
+
+                    for (int i = arrayList.indexOf(stringOne) + 1; i < arrayList.size(); i++) {
+
+                        if (bias == 0) {
+                            bias = bias + (stringOne.startsWith("BIAS") ? 1 : 0);
+                        } else if (bias == 1) {
+                            twoStrings = arrayList.get(i).split(",");
+
+                            if (oneStrings.length == twoStrings.length) {
+                                if (oneStrings[0].equals(twoStrings[0])
+                                        && oneStrings[1].equals(twoStrings[1])
+                                        && oneStrings[5].equals(twoStrings[5])) {
+                                    indexArrayList.add(arrayList.indexOf(stringOne));
+                                } else if (oneStrings[0].equals(twoStrings[0])
+                                        && (!oneStrings[1].equals(twoStrings[1])
+                                        && oneStrings[1].equals("\"preview\": \"1\""))
+                                        && oneStrings[5].equals(twoStrings[5])) {
+                                    indexArrayList.add(arrayList.indexOf(stringOne));
+                                } else if ((!oneStrings[0].equals(twoStrings[0])
+                                        && oneStrings[0].equals("{\"period\": \"M5\""))
+                                        && oneStrings[1].equals(twoStrings[1])
+                                        && oneStrings[5].equals(twoStrings[5])) {
+                                    indexArrayList.add(arrayList.indexOf(stringOne));
+                                } else if ((!oneStrings[0].equals(twoStrings[0])
+                                        && oneStrings[0].equals("{\"period\": \"M5\""))
+                                        && (!oneStrings[1].equals(twoStrings[1])
+                                        && oneStrings[1].equals("\"preview\": \"1\""))
+                                        && oneStrings[5].equals(twoStrings[5])) {
+                                    indexArrayList.add(arrayList.indexOf(stringOne));
+                                }
+                            }
+                        } else if (bias == 2) {
+                                break;
+                        }
+                    }
+                }
+            }
+
+            Collections.reverse(indexArrayList);
+
+            for (Integer index : indexArrayList) {
+                inArrayList.remove((int) index);
+            }
+
+
+
+           /*
+            0 {"period": "M5",
+                    1       "preview": "1",
+                    2      "time": "20.05.2020 21:19:00",
+                    3     "price": "9554,5",
+                    4    "value": "5465914",
+                    5   "type": "Volume",
+                    6  "avg": "7410290",
+                    7 "dir": "-1",
+                    8 "open": "9560,5",
+                    9 "close": "9549,0",
+                    10 "high": "9561,0",
+                    11 "low": "9548,5"}*/
+
 
             // перебираем массив стратегий и сравниваем с пришедшим
             for (ArrayList<String> stringArrayList : listsPricePatterns) {

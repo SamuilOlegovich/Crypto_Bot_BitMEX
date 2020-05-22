@@ -60,6 +60,12 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("tradingPatterns === "
                                 + Gasket.isTradingPatterns() + "\n");
                     break;
+                case "tradingPatternsUser" :
+                    Gasket.setTradingPatternsUser(strings[1].equalsIgnoreCase("true"));
+                    if (!flag)
+                        ConsoleHelper.writeMessage("tradingPatterns === "
+                                + Gasket.isTradingPatternsUser() + "\n");
+                    break;
                 case "timeCalculationCombinationLevel" :
                     Gasket.setTimeCalculationCombinationLevel(Integer.parseInt(strings[1]));
                     if (!flag)

@@ -129,6 +129,8 @@ public class ConsoleHelper {
                 + " === включить торговлю по патернам патернов\n"
                 + "takeForCollectingPatterns === " + Gasket.getTakeForCollectingPatterns()
                 + " === тейк для сбора и накопления паттернов\n"
+                + "tradingPatternsUser === " + Gasket.isTradingPatternsUser()
+                + " === торговля по паттернам USER\n"
 
                 + " === включить по патернам патернов\n"
                 + "savedPatterns === " + Gasket.isSavedPatterns()

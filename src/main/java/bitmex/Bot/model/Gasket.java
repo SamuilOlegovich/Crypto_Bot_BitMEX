@@ -22,6 +22,7 @@ public class Gasket {
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
     private static int numberOfCandlesForAnalysis = 60;             // количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку
     private static volatile boolean oneSellFLAG = true;
+    private static boolean tradingPatternsUser = false;             // включить по патернам User
     private static volatile boolean oneBuyFLAG = true;
     private static int useStopLevelOrNotStopTime = 10;              // сколько минут отслеживать сделку вышедшею за MIN уровни
     private static BitmexClient bitmexClient2Accounts;
@@ -1246,11 +1247,22 @@ public class Gasket {
     }
 
 
+
     public static int getSecondsSleepTime() {
         return secondsSleepTime;
     }
 
     public static void setSecondsSleepTime(int secondsSleepTime) {
         Gasket.secondsSleepTime = secondsSleepTime;
+    }
+
+
+
+    public static boolean isTradingPatternsUser() {
+        return tradingPatternsUser;
+    }
+
+    public static void setTradingPatternsUser(boolean tradingPatternsUser) {
+        Gasket.tradingPatternsUser = tradingPatternsUser;
     }
 }

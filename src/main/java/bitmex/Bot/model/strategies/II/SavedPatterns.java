@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.II;
 
+import apple.laf.JRSUIUtils;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -10,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.TreeSet;
 
 
 public class SavedPatterns implements Serializable {
@@ -46,6 +48,7 @@ public class SavedPatterns implements Serializable {
     private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Сравниваю ПАТТЕРН с имеющимися");
 
+        // находим количество смещений и запоминаем индекс первого смещения
         ArrayList<String> inArrayList = new ArrayList<>(arrayList);
         int countBias = 0;
         int indexBias = 0;
@@ -61,47 +64,70 @@ public class SavedPatterns implements Serializable {
 
         if (countBias > 0) {
 
+            // удаляю первый мусорный блок
             for (int i = indexBias; i > 0; i--) {
                 inArrayList.remove(i);
             }
 
+
+            // чистим от оставшихся предварительных исчезнувших уровняй
             ArrayList<Integer> indexArrayList = new ArrayList<>();
 
-            for (String stringOne : arrayList) {
+            for (String stringOne : inArrayList) {
                 int bias = 0;
 
                 if (!stringOne.startsWith("BUY") && !stringOne.startsWith("BIAS")) {
                     String[] oneStrings = stringOne.split(",");
                     String[] twoStrings;
 
-                    for (int i = arrayList.indexOf(stringOne) + 1; i < arrayList.size(); i++) {
+                    for (int i = inArrayList.indexOf(stringOne) + 1; i < inArrayList.size(); i++) {
+                        String stringTwo = inArrayList.get(i);
 
                         if (bias == 0) {
-                            bias = bias + (stringOne.startsWith("BIAS") ? 1 : 0);
+                            bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
+
                         } else if (bias == 1) {
-                            twoStrings = arrayList.get(i).split(",");
+                            twoStrings = stringTwo.split(",");
 
                             if (oneStrings.length == twoStrings.length) {
+
                                 if (oneStrings[0].equals(twoStrings[0])
                                         && oneStrings[1].equals(twoStrings[1])
                                         && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(arrayList.indexOf(stringOne));
+                                    indexArrayList.add(inArrayList.indexOf(stringOne));
+
                                 } else if (oneStrings[0].equals(twoStrings[0])
                                         && (!oneStrings[1].equals(twoStrings[1])
                                         && oneStrings[1].equals("\"preview\": \"1\""))
                                         && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(arrayList.indexOf(stringOne));
+                                    indexArrayList.add(inArrayList.indexOf(stringOne));
+
                                 } else if ((!oneStrings[0].equals(twoStrings[0])
                                         && oneStrings[0].equals("{\"period\": \"M5\""))
                                         && oneStrings[1].equals(twoStrings[1])
                                         && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(arrayList.indexOf(stringOne));
-                                } else if ((!oneStrings[0].equals(twoStrings[0])
+                                    indexArrayList.add(inArrayList.indexOf(stringOne));
+
+                                }else if ((!oneStrings[0].equals(twoStrings[0])
                                         && oneStrings[0].equals("{\"period\": \"M5\""))
                                         && (!oneStrings[1].equals(twoStrings[1])
                                         && oneStrings[1].equals("\"preview\": \"1\""))
                                         && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(arrayList.indexOf(stringOne));
+                                    indexArrayList.add(inArrayList.indexOf(stringOne));
+
+                                } else if ((!oneStrings[0].equals(twoStrings[0])
+                                        && oneStrings[0].equals("{\"period\": \"M5\""))
+                                        && (!oneStrings[1].equals(twoStrings[1])
+                                        && oneStrings[1].equals("\"preview\": \"0\""))
+                                        && oneStrings[5].equals(twoStrings[5])) {
+                                    indexArrayList.add(inArrayList.indexOf(stringTwo));
+
+                                } else if ((!oneStrings[0].equals(twoStrings[0])
+                                        && twoStrings[0].equals("{\"period\": \"M5\""))
+                                        && (!oneStrings[1].equals(twoStrings[1])
+                                        && oneStrings[1].equals("\"preview\": \"0\""))
+                                        && oneStrings[5].equals(twoStrings[5])) {
+                                    indexArrayList.add(inArrayList.indexOf(stringTwo));
                                 }
                             }
                         } else if (bias == 2) {
@@ -111,6 +137,10 @@ public class SavedPatterns implements Serializable {
                 }
             }
 
+            // если каким-то образом будет два одинаковых индекса, так мы их нивилируем
+            TreeSet<Integer> treeSet = new TreeSet<>(indexArrayList);
+            indexArrayList.clear();
+            indexArrayList.addAll(treeSet);
             Collections.reverse(indexArrayList);
 
             for (Integer index : indexArrayList) {

@@ -1,6 +1,6 @@
 package bitmex.Bot.model.strategies.II;
 
-import apple.laf.JRSUIUtils;
+
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -91,43 +91,49 @@ public class SavedPatterns implements Serializable {
 
                             if (oneStrings.length == twoStrings.length) {
 
-                                if (oneStrings[0].equals(twoStrings[0])
-                                        && oneStrings[1].equals(twoStrings[1])
-                                        && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(inArrayList.indexOf(stringOne));
+                                if (!oneStrings[5].equals("\"type\": \"OI_ZS_MIN_MINUS\"")
+                                        && !oneStrings[5].equals("\"type\": \"OI_ZS_MIN_PLUS\"")
+                                        && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_MINUS\"")
+                                        && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_PLUS\"")) {
 
-                                } else if (oneStrings[0].equals(twoStrings[0])
-                                        && (!oneStrings[1].equals(twoStrings[1])
-                                        && oneStrings[1].equals("\"preview\": \"1\""))
-                                        && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(inArrayList.indexOf(stringOne));
+                                    if (oneStrings[0].equals(twoStrings[0])
+                                            && oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringOne));
 
-                                } else if ((!oneStrings[0].equals(twoStrings[0])
-                                        && oneStrings[0].equals("{\"period\": \"M5\""))
-                                        && oneStrings[1].equals(twoStrings[1])
-                                        && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(inArrayList.indexOf(stringOne));
+                                    } else if (oneStrings[0].equals(twoStrings[0])
+                                            && (!oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[1].equals("\"preview\": \"1\""))
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringOne));
 
-                                }else if ((!oneStrings[0].equals(twoStrings[0])
-                                        && oneStrings[0].equals("{\"period\": \"M5\""))
-                                        && (!oneStrings[1].equals(twoStrings[1])
-                                        && oneStrings[1].equals("\"preview\": \"1\""))
-                                        && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(inArrayList.indexOf(stringOne));
+                                    } else if ((!oneStrings[0].equals(twoStrings[0])
+                                            && oneStrings[0].equals("{\"period\": \"M5\""))
+                                            && oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringOne));
 
-                                } else if ((!oneStrings[0].equals(twoStrings[0])
-                                        && oneStrings[0].equals("{\"period\": \"M5\""))
-                                        && (!oneStrings[1].equals(twoStrings[1])
-                                        && oneStrings[1].equals("\"preview\": \"0\""))
-                                        && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(inArrayList.indexOf(stringTwo));
+                                    } else if ((!oneStrings[0].equals(twoStrings[0])
+                                            && oneStrings[0].equals("{\"period\": \"M5\""))
+                                            && (!oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[1].equals("\"preview\": \"1\""))
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringOne));
 
-                                } else if ((!oneStrings[0].equals(twoStrings[0])
-                                        && twoStrings[0].equals("{\"period\": \"M5\""))
-                                        && (!oneStrings[1].equals(twoStrings[1])
-                                        && oneStrings[1].equals("\"preview\": \"0\""))
-                                        && oneStrings[5].equals(twoStrings[5])) {
-                                    indexArrayList.add(inArrayList.indexOf(stringTwo));
+                                    } else if ((!oneStrings[0].equals(twoStrings[0])
+                                            && oneStrings[0].equals("{\"period\": \"M5\""))
+                                            && (!oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[1].equals("\"preview\": \"0\""))
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringTwo));
+
+                                    } else if ((!oneStrings[0].equals(twoStrings[0])
+                                            && twoStrings[0].equals("{\"period\": \"M5\""))
+                                            && (!oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[1].equals("\"preview\": \"0\""))
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringTwo));
+                                    }
                                 }
                             }
                         } else if (bias == 2) {

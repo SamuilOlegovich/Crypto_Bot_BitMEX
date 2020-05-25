@@ -19,9 +19,10 @@ public class InfoIndicator {
     private int preview;            // предварительный или реальный уровень 0 - реальный, 1 - предварительный
     private long value;             // объём
     private double low;             // минимальная цена свечи
+//    private int point;              // 0 - одинаковая цена, 1 - разная
     private Date time;              // Дата свечи на которой находится данный уровень
     private long avg;
-    private int dir;                // направление свечи 1 - бай, -1 - селл
+    private int dir;                // направление свечи 1 - бай, 0 - дожи, -1 - селл
 
 
 
@@ -40,12 +41,20 @@ public class InfoIndicator {
         this.dir = dir;
         this.low = low;
         whatLevelIsIt();
+        ifDodji();
     }
 
 
     private void whatLevelIsIt() {
         if (price > high || price < low) {
             price = (high + low) / 2.0;
+        }
+    }
+
+
+    private void ifDodji() {
+        if (open == close) {
+            dir = 0;
         }
     }
 
@@ -99,7 +108,13 @@ public class InfoIndicator {
         return dir;
     }
 
-
+//    public int getPoint() {
+//        return point;
+//    }
+//
+//    public void setPoint(int point) {
+//        this.point = point;
+//    }
 
     public String toStringUser() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -109,7 +124,7 @@ public class InfoIndicator {
                 + "===price===" + price + "===value===" + value + "===type===" + type.toString()
                 + "===avg===" + avg + "===dir===" + dir + "===open===" + open
                 + "===close===" + close + "===high===" + high
-                + "===low===" + low
+                + "===low===" + low     // + "===point===" + point
                 + "\n";
     }
 

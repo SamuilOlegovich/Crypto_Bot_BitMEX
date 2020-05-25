@@ -404,7 +404,7 @@ public class ListensLooksAndCompares {
     private class SortPrice implements Comparator<InfoIndicator> {
         @Override
         public int compare(InfoIndicator o1, InfoIndicator o2) {
-            double result = o1.getPrice() - o2.getPrice();
+            double result = o2.getPrice() - o1.getPrice();
             if (result > 0) return 1;
             else if (result < 0) return -1;
             else return 0;

@@ -18,6 +18,7 @@ public class ParserString {
     private StrategyFactory strategyFactory;
 
 
+
     public ParserString() {
         this.strategyFactory = StrategyFactory.getInstance();
         ConsoleHelper.writeMessage("ПАРСЕР ЗАПУЩЕН");

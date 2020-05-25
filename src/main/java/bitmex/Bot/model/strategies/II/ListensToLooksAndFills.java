@@ -221,6 +221,7 @@ public class ListensToLooksAndFills {
                                 && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
                             listStringPriceBuy.set(j, infoIndicator.toString());
                             arrayList.remove(i);
+                            break;
                         }
                     }
                 }
@@ -253,6 +254,7 @@ public class ListensToLooksAndFills {
                                 && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
                             listStringPriceSell.set(j, infoIndicator.toString());
                             arrayList.remove(i);
+                            break;
                         }
                     }
                 }
@@ -451,7 +453,7 @@ public class ListensToLooksAndFills {
     private class SortPrice implements Comparator<InfoIndicator> {
         @Override
         public int compare(InfoIndicator o1, InfoIndicator o2) {
-            double result = o1.getPrice() - o2.getPrice();
+            double result = o2.getPrice() - o1.getPrice();
             if (result > 0) return 1;
             else if (result < 0) return -1;
             else return 0;

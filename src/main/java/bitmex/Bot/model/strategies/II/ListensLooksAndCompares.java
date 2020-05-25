@@ -12,6 +12,7 @@ import bitmex.Bot.model.Gasket;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import static java.lang.Double.NaN;
 
@@ -79,6 +80,8 @@ public class ListensLooksAndCompares {
 
         // сортируем и добавляем
         sortPrice();
+        // приводим паттерны в порядок
+        setThePatternsInOrder();
         // удаляем ненужное
         removeUnnecessaryLists();
         // сохраняю те патерны которые еще актуальны на данный момент
@@ -274,6 +277,96 @@ public class ListensLooksAndCompares {
 //        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
 //                + " --- В листе для сравнения уже - "
 //                + listInListString.size() + " - паттернов");
+    }
+
+
+    // приводим паттерны в порядок
+    private void setThePatternsInOrder() {
+        for (ArrayList<String> inArrayList : listInListString) {
+            // чистим от оставшихся предварительных исчезнувших уровняй
+            ArrayList<Integer> indexArrayList = new ArrayList<>();
+
+            for (String stringOne : inArrayList) {
+                int bias = 0;
+
+                if (!stringOne.startsWith("BUY") && !stringOne.startsWith("BIAS")) {
+                    String[] oneStrings = stringOne.split(",");
+                    String[] twoStrings;
+
+                    for (int i = inArrayList.indexOf(stringOne) + 1; i < inArrayList.size(); i++) {
+                        String stringTwo = inArrayList.get(i);
+
+                        if (bias == 0) {
+                            bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
+
+                        } else if (bias == 1) {
+                            twoStrings = stringTwo.split(",");
+
+                            if (oneStrings.length == twoStrings.length) {
+
+                                // эти уровни есть всегда их не надо уничтожать
+                                if (!oneStrings[5].equals("\"type\": \"OI_ZS_MIN_MINUS\"")
+                                        && !oneStrings[5].equals("\"type\": \"OI_ZS_MIN_PLUS\"")
+                                        && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_MINUS\"")
+                                        && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_PLUS\"")) {
+
+                                    if (oneStrings[0].equals(twoStrings[0])
+                                            && oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringOne));
+
+                                    } else if (oneStrings[0].equals(twoStrings[0])
+                                            && (!oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[1].equals("\"preview\": \"1\""))
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringOne));
+
+                                    } else if ((!oneStrings[0].equals(twoStrings[0])
+                                            && oneStrings[0].equals("{\"period\": \"M5\""))
+                                            && oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringOne));
+
+                                    } else if ((!oneStrings[0].equals(twoStrings[0])
+                                            && oneStrings[0].equals("{\"period\": \"M5\""))
+                                            && (!oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[1].equals("\"preview\": \"1\""))
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringOne));
+
+                                    } else if ((!oneStrings[0].equals(twoStrings[0])
+                                            && oneStrings[0].equals("{\"period\": \"M5\""))
+                                            && (!oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[1].equals("\"preview\": \"0\""))
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringTwo));
+
+                                    } else if ((!oneStrings[0].equals(twoStrings[0])
+                                            && twoStrings[0].equals("{\"period\": \"M5\""))
+                                            && (!oneStrings[1].equals(twoStrings[1])
+                                            && oneStrings[1].equals("\"preview\": \"0\""))
+                                            && oneStrings[5].equals(twoStrings[5])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringTwo));
+                                    }
+                                }
+                            }
+                        } else if (bias == 2) {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // если каким-то образом будет два одинаковых индекса, так мы их нивилируем
+            TreeSet<Integer> treeSet = new TreeSet<>(indexArrayList);
+            indexArrayList.clear();
+            indexArrayList.addAll(treeSet);
+            Collections.reverse(indexArrayList);
+
+            for (Integer index : indexArrayList) {
+                inArrayList.remove((int) index);
+            }
+        }
     }
 
 

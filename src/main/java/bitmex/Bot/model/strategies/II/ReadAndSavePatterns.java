@@ -16,7 +16,6 @@ public class ReadAndSavePatterns {
 
     public static void createSavedPatterns() {
         SavedPatterns savedPatterns = Gasket.getSavedPatternsClass();
-//        SaveRestoreHelper.restoreSavedPatternsClass();
         ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю SavedPatterns");
 
         File file = new File(Gasket.getFilesAndPathCreator().getPathPatterns());
@@ -49,7 +48,6 @@ public class ReadAndSavePatterns {
 
 
     public static void saveSavedPatterns() {
-//        SaveRestoreHelper.saveSavedPatternsClass();
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
         String next = "NEXT" + lineBreak;
@@ -57,21 +55,13 @@ public class ReadAndSavePatterns {
 
         ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
 
-//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Принял на запись лист размером --- "
-//                + arrayLists.size());
-
-//        System.out.println(arrayLists.size());
-
         for (ArrayList<String> arr : arrayLists) {
-
-//            System.out.println(DatesTimes.getDateTerminal() + " --- В нем лежат листы размерами --- " + arr.size());
 
             for (String s : arr) {
                 stringBuilder.append(s);
             }
             stringBuilder.append(next);
         }
-        //stringBuilder.delete(stringBuilder.length() - next.length(), stringBuilder.length());
         stringBuilder.append("END").append(lineBreak);
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),
@@ -79,8 +69,31 @@ public class ReadAndSavePatterns {
     }
 
 
+
+    // сделать тут преобразование стров в строки для юзера
+    public static void saveSavedPatternsFromUser() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String lineBreak = "\n";
+        String next = "NEXT" + lineBreak;
+        stringBuilder.append("START").append(lineBreak);
+
+        ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
+
+        for (ArrayList<String> arr : arrayLists) {
+
+            for (String s : arr) {
+                stringBuilder.append(s);
+            }
+            stringBuilder.append(next);
+        }
+        stringBuilder.append("END").append(lineBreak);
+
+        WriterAndReadFile.writerFile(stringBuilder.toString(),
+                Gasket.getFilesAndPathCreator().getPathPatternsForUser(), false);
+    }
+
+
     public static void saveTemporarySavedPatterns(ArrayList<ArrayList<String>> arrayListArrayList) {
-//        SaveRestoreHelper.saveSavedPatternsClass();
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
@@ -108,18 +121,11 @@ public class ReadAndSavePatterns {
 
 
     public static void saveSavedPatternsDelete(ArrayList<ArrayList<String>> arrayListArrayList) {
-//        SaveRestoreHelper.saveSavedPatternsClass();
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
-
-//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                + " --- Принял на запись удаленные лист размером --- "
-//                + arrayLists.size());
-
-//        System.out.println(arrayLists.size());
 
         for (ArrayList<String> arr : arrayLists) {
             for (String s : arr) {
@@ -127,8 +133,6 @@ public class ReadAndSavePatterns {
             }
             stringBuilder.append(next);
         }
-//        stringBuilder.delete(stringBuilder.length() - next.length(), stringBuilder.length());
-//        stringBuilder.append("END").append(lineBreak);
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),
                 Gasket.getFilesAndPathCreator().getPathPatternsDelete(), true);

@@ -13,6 +13,7 @@ public class FilesAndPathCreator {
     private String pathPatternsTemporaryUser;
     private String pathPatternsDeleteUser;
     private String pathPatternsTemporary;
+    private String pathPatternsForUser;
     private String pathPatternsDelete;
     private String pathPatternsUser;
     private String pathSettings;
@@ -32,23 +33,27 @@ public class FilesAndPathCreator {
     private void createdPath() {
         pathPatternsTemporaryUser = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
-                .replaceAll("model/", "") + "Logs/TemporaryPatternsUser.txt";
+                .replaceAll("model/", "") + "Logs/PatternsUser/TemporaryPatternsUser.txt";
 
         pathPatternsTemporary = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
-                .replaceAll("model/", "") + "Logs/TemporaryPatterns.txt";
+                .replaceAll("model/", "") + "Logs/Patterns/TemporaryPatterns.txt";
 
         pathPatternsDeleteUser = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
-                .replaceAll("model/", "") + "Logs/TemporaryDeleteUser.txt";
+                .replaceAll("model/", "") + "Logs/PatternsUser/TemporaryDeleteUser.txt";
+
+        pathPatternsForUser = getClass().getResource("").getPath()
+                .replaceAll("target/classes", "src/main/java")
+                .replaceAll("model/", "") + "Logs/PatternsUser/PatternsForUser.txt";
 
         pathPatternsDelete = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
-                .replaceAll("model/", "") + "Logs/TemporaryDelete.txt";
+                .replaceAll("model/", "") + "Logs/Patterns/TemporaryDelete.txt";
 
         pathPatternsUser = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
-                .replaceAll("model/", "") + "Logs/PatternsUser.txt";
+                .replaceAll("model/", "") + "Logs/PatternsUser/PatternsUser.txt";
 
         pathSettings = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
@@ -56,11 +61,11 @@ public class FilesAndPathCreator {
 
         pathPatterns = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
-                .replaceAll("model/", "") + "Logs/Patterns.txt";
+                .replaceAll("model/", "") + "Logs/Patterns/Patterns.txt";
 
         pathLogs = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
-                .replaceAll("model/", "") + "Logs/"
+                .replaceAll("model/", "") + "Logs/Log/"
                 + DatesTimes.getDateLogs() + "===Log.txt";
 
         if (System.getProperty("os.name").startsWith("Windows")) {
@@ -71,6 +76,9 @@ public class FilesAndPathCreator {
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
             pathPatternsTemporary = pathPatternsTemporary
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
+            pathPatternsForUser = pathPatternsForUser
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
             pathPatternsDelete = pathPatternsDelete
@@ -92,6 +100,7 @@ public class FilesAndPathCreator {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryUser);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsDeleteUser);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporary);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsForUser);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsDelete);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsUser);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathSettings);
@@ -110,6 +119,10 @@ public class FilesAndPathCreator {
 
         if (!Files.exists(Paths.get(pathPatternsDeleteUser))) {
             createdFileDeletePatternsUser();
+        }
+
+        if (!Files.exists(Paths.get(pathPatternsForUser))) {
+            createdFilePatternsForUser();
         }
 
         if (!Files.exists(Paths.get(pathPatternsDelete))) {
@@ -150,6 +163,18 @@ public class FilesAndPathCreator {
         } catch (IOException ex) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "Не удалось создать файл User Петтернов.");
+        }
+    }
+
+    private void createdFilePatternsForUser() {
+        File file = new File(pathPatternsForUser);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл для FOR User Паттернов успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл FOR User Петтернов.");
         }
     }
 
@@ -232,6 +257,10 @@ public class FilesAndPathCreator {
 
     public String getPathPatternsTemporary() {
         return pathPatternsTemporary;
+    }
+
+    public String getPathPatternsForUser() {
+        return pathPatternsForUser;
     }
 
     public String getPathPatternsDeleteUser() {

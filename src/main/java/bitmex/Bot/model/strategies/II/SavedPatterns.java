@@ -10,8 +10,9 @@ import bitmex.Bot.model.Gasket;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
-import java.io.*;
 import java.util.TreeSet;
+import java.io.*;
+
 
 
 public class SavedPatterns implements Serializable {
@@ -91,6 +92,7 @@ public class SavedPatterns implements Serializable {
 
                             if (oneStrings.length == twoStrings.length) {
 
+                                // эти уровни есть всегда их не надо уничтожать
                                 if (!oneStrings[5].equals("\"type\": \"OI_ZS_MIN_MINUS\"")
                                         && !oneStrings[5].equals("\"type\": \"OI_ZS_MIN_PLUS\"")
                                         && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_MINUS\"")
@@ -224,6 +226,8 @@ public class SavedPatterns implements Serializable {
                                 + " --- ПАТТЕРН такой есть - обновляю информацию");
                         String stringZero = setPriority(stringArrayList.get(0), inArrayList.get(0));
                         stringArrayList.set(0, stringZero);
+
+                        ReadAndSavePatterns.saveSavedPatternsFromUser();
                         ReadAndSavePatterns.saveSavedPatterns();
                         return;
                     }
@@ -242,6 +246,7 @@ public class SavedPatterns implements Serializable {
 
             listsPricePatterns.sort(sortSize);
 
+            ReadAndSavePatterns.saveSavedPatternsFromUser();
             ReadAndSavePatterns.saveSavedPatterns();
         } else {
             inArrayList.clear();
@@ -405,6 +410,7 @@ public class SavedPatterns implements Serializable {
         }
             System.out.println("END" + "\n");
 
+        ReadAndSavePatterns.saveSavedPatternsFromUser();
         ReadAndSavePatterns.saveSavedPatterns();
 
         // сер

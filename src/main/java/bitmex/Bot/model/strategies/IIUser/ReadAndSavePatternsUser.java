@@ -16,7 +16,6 @@ public class ReadAndSavePatternsUser {
 
     public static void createSavedPatternsUser() {
         SavedPatternsUser savedPatternsUser = Gasket.getSavedPatternsUserClass();
-//        SaveRestoreHelper.restoreSavedPatternsClass();
         ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю SavedPatternsUser");
 
         File file = new File(Gasket.getFilesAndPathCreator().getPathPatternsUser());

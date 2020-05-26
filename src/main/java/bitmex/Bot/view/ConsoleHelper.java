@@ -135,6 +135,8 @@ public class ConsoleHelper {
                 + " === включить по патернам патернов\n"
                 + "savedPatterns === " + Gasket.isSavedPatterns()
                 + " === включить нахождение и запись патернов\n"
+                + "numberOfHistoryBlocks === " + Gasket.getNumberOfHistoryBlocks()
+                + " === количество блоков истории выше которого обрезать историю\n"
                 + "\n"
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"

@@ -50,7 +50,7 @@ public class FilesAndPathCreator {
         pathPatternsDelete = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
                 .replaceAll("model/", "") + "Logs/Patterns/TemporaryDelete.txt";
-
+////////
         pathPatternsUser = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
                 .replaceAll("model/", "") + "Logs/PatternsUser/PatternsUser.txt";
@@ -58,7 +58,7 @@ public class FilesAndPathCreator {
         pathSettings = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
                 .replaceAll("model/", "") + "Logs/Settings.txt";
-
+//////////
         pathPatterns = getClass().getResource("").getPath()
                 .replaceAll("target/classes", "src/main/java")
                 .replaceAll("model/", "") + "Logs/Patterns/Patterns.txt";
@@ -252,7 +252,7 @@ public class FilesAndPathCreator {
 
 
     public String getPathPatternsTemporaryUser() {
-        return pathPatternsTemporary;
+        return pathPatternsTemporaryUser;
     }
 
     public String getPathPatternsTemporary() {
@@ -264,7 +264,7 @@ public class FilesAndPathCreator {
     }
 
     public String getPathPatternsDeleteUser() {
-        return pathPatternsDelete;
+        return pathPatternsDeleteUser;
     }
 
     public String getPathPatternsDelete() {
@@ -276,7 +276,7 @@ public class FilesAndPathCreator {
     }
 
     public String getPathPatternsUser() {
-        return pathPatterns;
+        return pathPatternsUser;
     }
 
     public String getPathPatterns() {

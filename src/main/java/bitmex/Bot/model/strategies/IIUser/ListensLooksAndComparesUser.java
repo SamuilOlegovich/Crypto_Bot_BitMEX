@@ -98,11 +98,15 @@ public class ListensLooksAndComparesUser {
                         + inListPatterns.size() + " - паттерна по размеру");
 
                 for (ArrayList<String> inArrayListString : inListPatterns) {
+                    ArrayList<String> thisTheSamePriceList = new ArrayList<>();
+                    ArrayList<String> inTheSamePriceList = new ArrayList<>();
                     boolean result = true;
 
                     for (int i = 1; i < inArrayListString.size(); i++) {
                         String[] strings1;
                         String[] strings2;
+                        String[] strings3;
+                        String[] strings4;
 
                         // Тут мы так же определяем не строка ли это направления и сравниваем либо ее
                         // либо строки уровней
@@ -123,6 +127,7 @@ public class ListensLooksAndComparesUser {
                                 result = false;
                                 break;
                             }
+
                         } else if ((inArrayListString.get(i).startsWith("BIAS")
                                 && !thisArrayListString.get(i).startsWith("BIAS"))
                                 || (!inArrayListString.get(i).startsWith("BIAS")
@@ -130,19 +135,81 @@ public class ListensLooksAndComparesUser {
                             // если под одним и тем же номером находятся разные по значимости строки то прирываем цикл
                             result = false;
                             break;
+
                         } else if (!inArrayListString.get(i).startsWith("BIAS")
                                 && !thisArrayListString.get(i).startsWith("BIAS")) {
 
+                            // тут мы заглядываем на строку вперед и проверяем не сходятся ли там цена с этой строкой
+                            // если сходится то складируем их отдельно, сортируем и сравниваем
+                            // это позволяет в любой очередности выставлять уровни находящиеся в одной ценовой точке
                             strings1 = thisArrayListString.get(i).split("===");
                             strings2 = inArrayListString.get(i).split("===");
+                            strings3 = thisArrayListString.get((i + 1) < thisArrayListString.size() - 1
+                                    ? (i + 1) : i).split("===");
+                            strings4 = inArrayListString.get((i + 1) < inArrayListString.size() - 1
+                                    ? (i + 1) : i).split("===");
 
-                            // если хоть один объект не равен то прирываем цикл
-                            if (!strings1[9].equals(strings2[9]) || !strings1[13].equals(strings2[13])) {
-                                result = false;
-                                break;
+                            if (i < inArrayListString.size() - 1) {
+                                if (!strings3[0].equals("BIAS") && !strings4[0].equals("BIAS")
+                                        && !strings1[7].equals(strings3[7]) && !strings2[7].equals(strings4[7])) {
+
+                                    // если хоть один объект не равен то прирываем цикл
+                                    if (!strings1[11].equals(strings2[11]) || !strings1[15].equals(strings2[15])) {
+                                        result = false;
+                                        break;
+                                    }
+                                } else if (!strings3[0].equals("BIAS") && !strings4[0].equals("BIAS")
+                                        && strings1[7].equals(strings3[7]) && strings2[7].equals(strings4[7])) {
+                                    thisTheSamePriceList.add(strings3[11]);
+                                    thisTheSamePriceList.add(strings4[11]);
+                                    inTheSamePriceList.add(strings1[11]);
+                                    inTheSamePriceList.add(strings2[11]);
+                                }
+                            } else {
+                                if (!strings1[11].equals(strings2[11]) || !strings1[15].equals(strings2[15])) {
+                                    result = false;
+                                    break;
+                                } else {
+                                    Collections.sort(thisTheSamePriceList);
+                                    Collections.sort(inTheSamePriceList);
+
+                                    for (String string : thisTheSamePriceList) {
+                                        if (!string.equals(inTheSamePriceList
+                                                .get(thisTheSamePriceList.indexOf(string)))) {
+                                            result = false;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
+                             /*
+    0 period
+    1 period.toString()
+    2 ===preview=== +
+    3 preview +
+    4 "===time===" +
+    5 dateFormat.format(time)
+    6 "===price===" +
+    7 price
+    8 "===value===" +
+    9 value +
+    10 "===type===" +
+    11 type.toString() +
+    12 "===avg===" +
+    13 avg
+    14 "===dir===" +
+    15 dir + "
+    16 ===open===" +
+    17 open + "
+    18 ===close===" +
+    19 close + "
+    20 ===high===" +
+    21 high
+    22 ===low===" +
+    23 low
+                */
 
                     if (result) {
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
@@ -167,14 +234,14 @@ public class ListensLooksAndComparesUser {
 //        String[] strings = string.split("===");
 //
 //        if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
-//            String stringOut = string + "-PAT";
+//            String stringOut = string + "-PATU";
 //
 //            if (Gasket.isTrading()) new TradeBuy(stringOut);
 //            new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
 //            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
 //                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ");
 //        } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
-//            String stringOut = string + "-PAT";
+//            String stringOut = string + "-PATU";
 //
 //            if (Gasket.isTrading()) new TradeSell(stringOut);
 //            new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getBidPrice());
@@ -338,34 +405,6 @@ public class ListensLooksAndComparesUser {
 
         return arrayList;
     }
-
-
-    /*
-    0 period
-    1 period.toString()
-    2 ===preview=== +
-    3 preview +
-    4 "===time===" +
-    5 dateFormat.format(time)
-    6 "===price===" +
-    7 price
-    8 "===value===" +
-    9 value +
-    10 "===type===" +
-    11 type.toString() +
-    12 "===avg===" +
-    13 avg
-    14 "===dir===" +
-    15 dir + "
-    16 ===open===" +
-    17 open + "
-    18 ===close===" +
-    19 close + "
-    20 ===high===" +
-    21 high
-    22 ===low===" +
-    23 low
-                */
 
 
 

@@ -30,12 +30,16 @@ public class Main {
 
     public static void main(String[] args) {
         FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
+
         SavedPatternsUser savedPatternsUser = SavedPatternsUser.getInstance();
         SavedPatterns savedPatterns = SavedPatterns.getInstance();
+
         Gasket.setSavedPatternsUserClass(savedPatternsUser);
         ReadAndSavePatternsUser.createSavedPatternsUser();
+
         Gasket.setSavedPatternsClass(savedPatterns);
         ReadAndSavePatterns.createSavedPatterns();
+
         //  тут можно подождать пару секунд
         //  тут можно подождать пару секунд
         ticker = new Ticker("XBTUSD");

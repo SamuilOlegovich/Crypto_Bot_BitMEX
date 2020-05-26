@@ -101,11 +101,15 @@ public class ListensLooksAndCompares {
 //                        + inListPatterns.size() + " - паттерна по размеру");
 
                 for (ArrayList<String> inArrayListString : inListPatterns) {
+                    ArrayList<String> thisTheSamePriceList = new ArrayList<>();
+                    ArrayList<String> inTheSamePriceList = new ArrayList<>();
                     boolean result = true;
 
                     for (int i = 1; i < inArrayListString.size(); i++) {
                         String[] strings1;
                         String[] strings2;
+                        String[] strings3;
+                        String[] strings4;
                         String[] arr1;
                         String[] arr2;
 
@@ -130,6 +134,7 @@ public class ListensLooksAndCompares {
                             // если под одним и тем же номером находятся разные по значимости строки то прирываем цикл
                             result = false;
                             break;
+
                         } else if (!inArrayListString.get(i).startsWith("BIAS")
                                 && !thisArrayListString.get(i).startsWith("BIAS")) {
 

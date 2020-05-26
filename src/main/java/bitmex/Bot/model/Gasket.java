@@ -34,6 +34,7 @@ public class Gasket {
     private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
     private static boolean tradingPatterns = false;     // включить по патернам патернов
+    private static int numberOfHistoryBlocks = 5;       // количество блоков истории выше которого обрезать историю
     private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
     private static volatile double PROFIT = 0.0;        // итоговый профит
     private static boolean savedPatterns = true;        // включить нахождение и запись патернов
@@ -1264,5 +1265,15 @@ public class Gasket {
 
     public static void setTradingPatternsUser(boolean tradingPatternsUser) {
         Gasket.tradingPatternsUser = tradingPatternsUser;
+    }
+
+
+
+    public static int getNumberOfHistoryBlocks() {
+        return numberOfHistoryBlocks;
+    }
+
+    public static void setNumberOfHistoryBlocks(int numberOfHistoryBlocks) {
+        Gasket.numberOfHistoryBlocks = numberOfHistoryBlocks;
     }
 }

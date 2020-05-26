@@ -1,5 +1,7 @@
 package bitmex.Bot.model.strategies.II;
 
+import bitmex.Bot.model.enums.BidAsk;
+import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -7,9 +9,11 @@ import bitmex.Bot.model.Gasket;
 
 
 import java.io.BufferedReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.File;
+import java.util.Date;
 
 
 public class ReadAndSavePatterns {
@@ -82,7 +86,11 @@ public class ReadAndSavePatterns {
         for (ArrayList<String> arr : arrayLists) {
 
             for (String s : arr) {
-                stringBuilder.append(s);
+                if (!s.startsWith("BIAS") && !s.startsWith("BUY")) {
+                    stringBuilder.append(convertStringForUser(s));
+                } else {
+                    stringBuilder.append(s);
+                }
             }
             stringBuilder.append(next);
         }
@@ -136,5 +144,36 @@ public class ReadAndSavePatterns {
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),
                 Gasket.getFilesAndPathCreator().getPathPatternsDelete(), true);
+    }
+
+
+
+    /////////// PARSER ///////////
+
+
+
+    private static String convertStringForUser(String string) {
+        String in = string.replaceAll("\\{", "");
+        in = in.replaceAll("}", "");
+        in = in.replaceAll("\"", " ");
+        String[] strings = in.split(" , ");
+        String period = strings[0].trim().replaceAll("period : {2}","");
+        String preview = strings[1].trim().replaceAll("preview : {2}", "");
+        String time = strings[2].trim().replaceAll("time : {2}", "");
+        String price = strings[3].trim().replaceAll("price : {2}", "");
+        String value = strings[4].trim().replaceAll("value : {2}", "");
+        String type = strings[5].trim().replaceAll("type : {2}", "");
+        String avg = strings[6].trim().replaceAll("avg : {2}", "");
+        String dir = strings[7].trim().replaceAll("dir : {2}", "");
+        String open = strings[8].trim().replaceAll("open : {2}", "");
+        String close = strings[9].trim().replaceAll("close : {2}", "");
+        String high = strings[10].trim().replaceAll("high : {2}", "");
+        String low = strings[11].trim().replaceAll("low : {2}", "");
+
+        return "period===" + period + "===preview===" + preview + "===time===" + time + "===price===" + price
+                + "===value===" + value + "===type===" + type + "===avg===" + avg + "===dir===" + dir
+                + "===open===" + open + "===close===" + close + "===high===" + high
+                + "===low===" + low
+                + "\n";
     }
 }

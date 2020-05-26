@@ -156,6 +156,12 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("one === "
                                 + Gasket.isObs() + "\n");
                     break;
+                case "numberOfHistoryBlocks" :
+                    Gasket.setNumberOfHistoryBlocks(Integer.parseInt(strings[1]));
+                    if (!flag)
+                        ConsoleHelper.writeMessage("numberOfHistoryBlocks === "
+                                + Gasket.getNumberOfHistoryBlocks() + "\n");
+                    break;
                 case "strategyWorkOne":
                     Gasket.setStrategyWorkOne(Integer.parseInt(strings[1]));
                     if (!flag)

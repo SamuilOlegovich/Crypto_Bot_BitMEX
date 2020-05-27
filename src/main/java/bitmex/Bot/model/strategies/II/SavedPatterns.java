@@ -70,6 +70,25 @@ public class SavedPatterns implements Serializable {
                 inArrayList.remove(i);
             }
 
+            // ограничиваем патерн нужным нам количеством блоков
+            if (countBias >= Gasket.getNumberOfHistoryBlocks()) {
+                int count = 0;
+                int index = 0;
+
+                for (int i = inArrayList.size() - 1; i > 0; i--) {
+                    if (inArrayList.get(i).startsWith("BIAS")) {
+                        count++;
+                        if (count == Gasket.getNumberOfHistoryBlocks()) {
+                            index = i;
+                            break;
+                        }
+                    }
+                }
+
+                for (int i = index; i > 0; i--) {
+                    inArrayList.remove(i);
+                }
+            }
 
             // чистим от оставшихся предварительных исчезнувших уровняй
             ArrayList<Integer> indexArrayList = new ArrayList<>();
@@ -145,26 +164,6 @@ public class SavedPatterns implements Serializable {
                 }
             }
 
-            // ограничиваем патерн нужным нам количеством блоков
-            if (countBias >= Gasket.getNumberOfHistoryBlocks()) {
-                int count = 0;
-                int index = 0;
-
-                for (int i = inArrayList.size() - 1; i > 0; i--) {
-                    if (inArrayList.get(i).startsWith("BIAS")) {
-                        count++;
-                        if (count == Gasket.getNumberOfHistoryBlocks()) {
-                            index = i;
-                            break;
-                        }
-                    }
-                }
-
-                for (int i = index; i > 0; i--) {
-                    arrayList.remove(i);
-                }
-            }
-
             // если каким-то образом будет два одинаковых индекса, так мы их нивилируем
             TreeSet<Integer> treeSet = new TreeSet<>(indexArrayList);
             indexArrayList.clear();
@@ -174,8 +173,6 @@ public class SavedPatterns implements Serializable {
             for (Integer index : indexArrayList) {
                 inArrayList.remove((int) index);
             }
-
-
 
            /*
             0 {"period": "M5",

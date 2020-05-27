@@ -539,7 +539,12 @@ public class ListensLooksAndCompares {
         public void run() {
 
             while (true) {
-                int size = listInfoIndicator.size();
+                int size;
+                if (listInfoIndicator != null) {
+                    size = listInfoIndicator.size();
+                } else {
+                    size = 0;
+                }
 
                 if (size > 0) {
                     if (previousValue == listInfoIndicator.size()) {    // && isTime()) {

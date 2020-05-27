@@ -1,6 +1,8 @@
 package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
+import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -150,7 +152,12 @@ public class ListensLooksAndComparesUser {
                                     ? (i + 1) : i).split("===");
 
                             if (i < inArrayListString.size() - 1) {
+                                System.out.println(strings1[0]);
+                                System.out.println(strings2[0]);
+                                System.out.println(strings3[0]);
+                                System.out.println(strings4[0]);
                                 if (!strings3[0].equals("BIAS") && !strings4[0].equals("BIAS")
+                                        && !strings1[0].equals("BIAS") && !strings2[0].equals("BIAS")
                                         && !strings1[7].equals(strings3[7]) && !strings2[7].equals(strings4[7])) {
 
                                     // если хоть один объект не равен то прирываем цикл
@@ -231,23 +238,23 @@ public class ListensLooksAndComparesUser {
     private void makeDeal(String string) {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ");
-//        String[] strings = string.split("===");
-//
-//        if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
-//            String stringOut = string + "-PATU";
-//
-//            if (Gasket.isTrading()) new TradeBuy(stringOut);
-//            new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
-//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-//                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ");
-//        } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
-//            String stringOut = string + "-PATU";
-//
-//            if (Gasket.isTrading()) new TradeSell(stringOut);
-//            new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getBidPrice());
-//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-//                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ");
-//        }
+        String[] strings = string.split("===");
+
+        if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
+            String stringOut = string + "-PATU";
+
+            if (Gasket.isTrading()) new TradeBuy(stringOut);
+            new TestOrderBuyPatternUser(stringOut, Gasket.getBitmexQuote().getAskPrice());
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ");
+        } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
+            String stringOut = string + "-PATU";
+
+            if (Gasket.isTrading()) new TradeSell(stringOut);
+            new TestOrderSellPatternUser(stringOut, Gasket.getBitmexQuote().getBidPrice());
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ");
+        }
     }
 
 
@@ -318,12 +325,14 @@ public class ListensLooksAndComparesUser {
                 }
                 arrayListString.addAll(getListString(arrayListString));
             }
+
             if (flag) {
                 ArrayList<String> arrayList = new ArrayList<>(getListString(null));
                 arrayList.add(0, "0\n");
                 listInListString.add(arrayList);
                 priceStart = Gasket.getBitmexQuote().getBidPrice();
             }
+
         } else {
             ArrayList<String> arrayList = new ArrayList<>(getListString(null));
             arrayList.add(0, "0\n");
@@ -376,17 +385,58 @@ public class ListensLooksAndComparesUser {
                 }
 
                 for (int j = arrayListIn.size() - 1; j > -1; j--) {
-                    String[] stringsIn = infoIndicator.toString().split(",");
+                    String[] stringsIn = infoIndicator.toStringUser().split(",");
                     String[] stringsThis = arrayListIn.get(j).split(",");
 
                     if (stringsIn.length == stringsThis.length) {
-                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
-                            arrayListIn.set(j, infoIndicator.toString());
+                        if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
+                                && stringsIn[11].equals(stringsThis[11]) && stringsIn[15].equals(stringsThis[15])) {
+                            arrayListIn.set(j, infoIndicator.toStringUser());
                             flag = true;
                         }
                     }
                 }
+
+                /*
+                0{"period": "M5",
+                1"preview": "1",
+                2"time": "2020-05-27 12:28:00",
+                3"price": "9175.0",
+                4"value": "2920763",
+                5"type": "ASK",
+                6"avg": "2871888",
+                7"dir": "1",
+                8"open": "9167.5",
+                9"close": "9178.5",
+                10"high": "9183.0",
+                11"low": "9167.0"}
+
+
+                 0 period
+    1 period.toString()
+    2 ===preview=== +
+    3 preview +
+    4 "===time===" +
+    5 dateFormat.format(time)
+    6 "===price===" +
+    7 price
+    8 "===value===" +
+    9 value +
+    10 "===type===" +
+    11 type.toString() +
+    12 "===avg===" +
+    13 avg
+    14 "===dir===" +
+    15 dir + "
+    16 ===open===" +
+    17 open + "
+    18 ===close===" +
+    19 close + "
+    20 ===high===" +
+    21 high
+    22 ===low===" +
+    23 low
+                * */
 
                 if (flag) {
                     infoIndicatorArrayList.remove(i);
@@ -399,7 +449,7 @@ public class ListensLooksAndComparesUser {
         if (infoIndicatorArrayList.size() != 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
                 if (infoIndicator.getTime().getTime() > time)
-                    arrayList.add(infoIndicator.toString());
+                    arrayList.add(infoIndicator.toStringUser());
             }
         }
 
@@ -417,7 +467,7 @@ public class ListensLooksAndComparesUser {
             for (String stringOne : inArrayList) {
                 int bias = 0;
 
-                if (!stringOne.startsWith("BUY") && !stringOne.startsWith("BIAS")) {
+                if (!stringOne.startsWith("0") && !stringOne.startsWith("DEL") && !stringOne.startsWith("BIAS")) {
                     String[] oneStrings = stringOne.split("===");
                     String[] twoStrings;
 
@@ -600,10 +650,16 @@ public class ListensLooksAndComparesUser {
         public void run() {
 
             while (true) {
-                int size = listInfoIndicator.size();
+                int size;
+
+                if (listInfoIndicator != null) {
+                    size = listInfoIndicator.size();
+                } else {
+                    size = 0;
+                }
 
                 if (size > 0) {
-                    if (previousValue == listInfoIndicator.size()) { // && isTime()) {
+                    if (previousValue == listInfoIndicator.size()) {
                         priceNow = Gasket.getBitmexQuote().getBidPrice();
                         previousValue = 0;
                         listSortedAndCompares();
@@ -628,6 +684,5 @@ public class ListensLooksAndComparesUser {
         private void setSleep() {
             sleep = Gasket.getSecondsSleepTime();
         }
-
     }
 }

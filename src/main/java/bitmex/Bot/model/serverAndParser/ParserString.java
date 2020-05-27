@@ -1,6 +1,7 @@
 package bitmex.Bot.model.serverAndParser;
 
 
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.strategies.StrategyFactory;
 import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.view.ConsoleHelper;
@@ -16,17 +17,29 @@ import java.util.Date;
 public class ParserString {
     //private ArrayList<InfoIndicator> arrayList;
     private StrategyFactory strategyFactory;
+    private boolean linkWithIndicator;
 
 
 
     public ParserString() {
         this.strategyFactory = StrategyFactory.getInstance();
-        ConsoleHelper.writeMessage("ПАРСЕР ЗАПУЩЕН");
+        this.linkWithIndicator = true;
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- ПАРСЕР ЗАПУЩЕН");
         //this.arrayList = new ArrayList<>();
 //        this.arrayListAllLevel = new ArrayList<>();
     }
 
     public synchronized void parserStringJson(String string) {
+
+        if (linkWithIndicator) {
+            if (string.length() > 20) {
+                linkWithIndicator = false;
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        + " --- СВЯЗЬ С ИНДИКАТОРОМ УСТАНОВЛЕНА");
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        + " --- " + string);
+            }
+        }
 //        showAllAvailableLevels(string);
         String in = string.replaceAll("\\{", "");
         in = in.replaceAll("}", "");
@@ -96,7 +109,7 @@ public class ParserString {
 
 
 
-private BidAsk getType(String string) {
+    private BidAsk getType(String string) {
         switch (string) {
             case "OpenPosBidMinusSmall" :
                 return BidAsk.OPEN_POS_BID_MINUS_SMALL;

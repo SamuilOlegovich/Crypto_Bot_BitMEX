@@ -37,10 +37,9 @@ public class TestOrderBuyPatternUser extends Thread {
             if (priceBid <= priseStopOrder) {
                 flag();
                 setStop();
-
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал СТОП ЛОСС USER");
-                Gasket.setPROFIT_Buy(Gasket.getPROFIT_Buy() - Gasket.getStop());
+                Gasket.setPROFIT_Buy_PAT(Gasket.getPROFIT_Buy_PAT() - Gasket.getStop());
                 break;
             }
 
@@ -50,7 +49,7 @@ public class TestOrderBuyPatternUser extends Thread {
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал ТЕЙК ПРОФИТ USER");
-                Gasket.setPROFIT_Buy(Gasket.getPROFIT_Buy() + Gasket.getTake());
+                Gasket.setPROFIT_Buy_PAT(Gasket.getPROFIT_Buy_PAT() + Gasket.getTake());
                 break;
             }
 

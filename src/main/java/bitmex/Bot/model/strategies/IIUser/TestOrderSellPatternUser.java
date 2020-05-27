@@ -40,7 +40,7 @@ public class TestOrderSellPatternUser extends Thread {
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал СТОП ЛОСС USER");
-                Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() - Gasket.getStop());
+                Gasket.setPROFIT_Sell_PAT(Gasket.getPROFIT_Sell_PAT() - Gasket.getStop());
                 break;
             }
 
@@ -50,7 +50,7 @@ public class TestOrderSellPatternUser extends Thread {
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал ТЕЙК ПРОФИТ USER");
-                Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() + Gasket.getTake());
+                Gasket.setPROFIT_Sell_PAT(Gasket.getPROFIT_Sell_PAT() + Gasket.getTake());
                 break;
             }
 

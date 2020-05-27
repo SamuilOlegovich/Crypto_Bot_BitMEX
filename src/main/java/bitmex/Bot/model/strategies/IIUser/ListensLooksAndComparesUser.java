@@ -152,10 +152,6 @@ public class ListensLooksAndComparesUser {
                                     ? (i + 1) : i).split("===");
 
                             if (i < inArrayListString.size() - 1) {
-                                System.out.println(strings1[0]);
-                                System.out.println(strings2[0]);
-                                System.out.println(strings3[0]);
-                                System.out.println(strings4[0]);
                                 if (!strings3[0].equals("BIAS") && !strings4[0].equals("BIAS")
                                         && !strings1[0].equals("BIAS") && !strings2[0].equals("BIAS")
                                         && !strings1[7].equals(strings3[7]) && !strings2[7].equals(strings4[7])) {
@@ -191,32 +187,6 @@ public class ListensLooksAndComparesUser {
                             }
                         }
                     }
-                             /*
-    0 period
-    1 period.toString()
-    2 ===preview=== +
-    3 preview +
-    4 "===time===" +
-    5 dateFormat.format(time)
-    6 "===price===" +
-    7 price
-    8 "===value===" +
-    9 value +
-    10 "===type===" +
-    11 type.toString() +
-    12 "===avg===" +
-    13 avg
-    14 "===dir===" +
-    15 dir + "
-    16 ===open===" +
-    17 open + "
-    18 ===close===" +
-    19 close + "
-    20 ===high===" +
-    21 high
-    22 ===low===" +
-    23 low
-                */
 
                     if (result) {
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
@@ -385,10 +355,11 @@ public class ListensLooksAndComparesUser {
                 }
 
                 for (int j = arrayListIn.size() - 1; j > -1; j--) {
-                    String[] stringsIn = infoIndicator.toStringUser().split(",");
-                    String[] stringsThis = arrayListIn.get(j).split(",");
+                    String[] stringsIn = infoIndicator.toStringUser().split("===");
+                    String[] stringsThis = arrayListIn.get(j).split("===");
 
                     if (stringsIn.length == stringsThis.length) {
+
                         if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
                                 && stringsIn[11].equals(stringsThis[11]) && stringsIn[15].equals(stringsThis[15])) {
                             arrayListIn.set(j, infoIndicator.toStringUser());

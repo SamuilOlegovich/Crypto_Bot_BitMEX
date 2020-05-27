@@ -124,7 +124,7 @@ public class InfoIndicator {
                 + "===price===" + price + "===value===" + value + "===type===" + type.toString()
                 + "===avg===" + avg + "===dir===" + dir + "===open===" + open
                 + "===close===" + close + "===high===" + high
-                + "===low===" + low     // + "===point===" + point
+                + "===low===" + low
                 + "\n";
     }
 

@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 
 import java.util.ArrayList;
@@ -68,5 +69,38 @@ public class SavedPatternsUser {
             }
         }
         ConsoleHelper.writeMessage("");
+    }
+
+    public synchronized void updateFirstRowData(String string) {
+        String stringSet = string;
+        String[] in = stringSet.split("===");
+        String[] thIs;
+
+        int count = 0;
+
+        for (ArrayList<String> stringArrayList : listsPricePatternsUser) {
+            thIs = stringArrayList.get(0).split("===");
+
+            if (in.length == thIs.length) {
+                if (in[in.length - 1].equals(thIs[thIs.length - 1])) {
+                    stringArrayList.set(0, stringSet);
+                    count++;
+                }
+            }
+        }
+
+        if (count > 0) {
+            ReadAndSavePatternsUser.saveSavedPatternsUser();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- ОБНОВИЛ нулевую стороку ПАТТЕРНОВ USER согласно исходу сделки");
+        } else {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Такого номера ===" + in[in.length - 1] + "=== ПАТТЕРНА USER нет --- \n");
+        }
+    }
+
+
+    public ArrayList<ArrayList<String>> getListsPricePatternsUser() {
+        return listsPricePatternsUser;
     }
 }

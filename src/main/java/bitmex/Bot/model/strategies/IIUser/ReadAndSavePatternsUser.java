@@ -101,4 +101,25 @@ public class ReadAndSavePatternsUser {
         WriterAndReadFile.writerFile(stringBuilder.toString(),
                 Gasket.getFilesAndPathCreator().getPathPatternsDeleteUser(), true);
     }
+
+    public static void saveSavedPatternsUser() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String lineBreak = "\n";
+        String next = "NEXT" + lineBreak;
+        stringBuilder.append("START").append(lineBreak);
+
+        ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsUserClass().getListsPricePatternsUser();
+
+        for (ArrayList<String> arr : arrayLists) {
+
+            for (String s : arr) {
+                stringBuilder.append(s);
+            }
+            stringBuilder.append(next);
+        }
+        stringBuilder.append("END").append(lineBreak);
+
+        WriterAndReadFile.writerFile(stringBuilder.toString(),
+                Gasket.getFilesAndPathCreator().getPathPatternsUser(), false);
+    }
 }

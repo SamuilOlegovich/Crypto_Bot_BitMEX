@@ -1,5 +1,7 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.Gasket;
+
 public class updatingStatisticsDataUser extends Thread {
     private String id;
 
@@ -10,7 +12,6 @@ public class updatingStatisticsDataUser extends Thread {
 
     @Override
     public void run() {
-
+        Gasket.getSavedPatternsUserClass().updateFirstRowData(id);
     }
-
 }

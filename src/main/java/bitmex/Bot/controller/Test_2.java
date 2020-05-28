@@ -11,11 +11,12 @@ public class Test_2 {
 
 
     public static void main(String[] args) {
-        List<String> treeSet = new ArrayList<>();
-        treeSet.add(BidAsk.VOLUME.toString());
-        treeSet.add(BidAsk.ASK_SMALL.toString());
-        treeSet.add(BidAsk.DELTA_BID.toString());
-        treeSet.add(BidAsk.OPEN_POS_ASK_MINUS_SMALL.toString());
+        List<String> treeSet = null;
+        ArrayList<String> s = new ArrayList<>(treeSet);
+//        treeSet.add(BidAsk.VOLUME.toString());
+//        treeSet.add(BidAsk.ASK_SMALL.toString());
+//        treeSet.add(BidAsk.DELTA_BID.toString());
+//        treeSet.add(BidAsk.OPEN_POS_ASK_MINUS_SMALL.toString());
 //        System.out.println(treeSet);
 //        Collections.reverse(treeSet);
 //        Set<Integer> set = new TreeSet<>(treeSet);
@@ -28,8 +29,8 @@ public class Test_2 {
 
         System.out.println(treeSet);
         System.out.println();
-        Collections.sort(treeSet);
-        System.out.println(treeSet);
+//        Collections.sort(treeSet);
+        System.out.println(s);
 
 
     }

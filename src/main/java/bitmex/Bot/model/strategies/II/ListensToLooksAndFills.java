@@ -19,9 +19,11 @@ public class ListensToLooksAndFills {
     private ArrayList<String> listStringPriceSell;      // лист для формирования селл паттерна
     private ArrayList<String> listStringPriceBuy;       // лист для формирования бай паттерна
 
+
     private volatile double priceEndSell;               // цена к которой должна прийти цена для фиксации паттерна
     private volatile double priceEndBuy;                // цена к которой должна прийти цена для фиксации паттерна
     private volatile double priceNow;                   // цена в данный момент
+
 
     private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
     private CountPriseSell countPriseSell;
@@ -29,7 +31,10 @@ public class ListensToLooksAndFills {
     private SavedPatterns savedPatterns;
     private SortPrice sortPrice;
 
+
     private boolean oneStartFlag;
+
+
 
 
 
@@ -153,17 +158,13 @@ public class ListensToLooksAndFills {
     private void addStringsInListDirections(boolean buyOrSell) {
         ArrayList<InfoIndicator> arrayList = new ArrayList<>(checkIfThereAreSuchLevels(buyOrSell));
 
-        if (arrayList.size() != 0) {
+        if (arrayList.size() > 0) {
             if (buyOrSell) {
-//                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                        + " --- Добавляем строки в листы направлений Бай");
 
                 for (InfoIndicator infoIndicator : arrayList) {
                     listStringPriceBuy.add(infoIndicator.toString());
                 }
             } else {
-//                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                        + " --- Добавляем строки в листы направлений Селл");
 
                 for (InfoIndicator infoIndicator : arrayList) {
                     listStringPriceSell.add(infoIndicator.toString());
@@ -172,19 +173,7 @@ public class ListensToLooksAndFills {
         }
     }
 
-    /*
-               0 {"period": "M5",
-                1       "preview": "1",
-                 2      "time": "20.05.2020 21:19:00",
-                  3     "price": "9554,5",
-                   4    "value": "5465914",
-                    5   "type": "Volume",
-                     6  "avg": "7410290",
-                      7 "dir": "-1",
-                       8 "open": "9560,5",
-                       9 "close": "9549,0",
-                       10 "high": "9561,0",
-                       11 "low": "9548,5"}*/
+
 
     // проверяем есть ли такие уровни, если есть то удаляем их из входящего листа и меняем их в листе направлений
     private ArrayList<InfoIndicator> checkIfThereAreSuchLevels(boolean buyOrSell) {
@@ -194,6 +183,7 @@ public class ListensToLooksAndFills {
         long time;
 
         if (buyOrSell) {
+
             for (String s : listStringPriceBuy) {
                 if (s.startsWith("BIAS")) count++;
             }
@@ -252,6 +242,7 @@ public class ListensToLooksAndFills {
                     if (stringsIn.length == stringsThis.length) {
                         if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
                                 && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+
                             listStringPriceSell.set(j, infoIndicator.toString());
                             arrayList.remove(i);
                             break;
@@ -276,8 +267,6 @@ public class ListensToLooksAndFills {
 
     // находим максимальную просадку
     private double getMaxDeviations(boolean b) {
-//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                + " --- находим максимальную просадку");
         double result = 0;
         int count = 0;
 
@@ -336,9 +325,6 @@ public class ListensToLooksAndFills {
 
     // находим среднюю просадку
     private double getAverageDeviations(boolean b) {
-//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                + " --- находим среднюю просадку");
-
         double result = 0;
 
         if (b) {
@@ -445,7 +431,11 @@ public class ListensToLooksAndFills {
 
 
 
+
+
     /// === INNER CLASSES === ///
+
+
 
 
 

@@ -1,8 +1,8 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
 import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
+import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
+import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -69,13 +69,13 @@ public class ListensLooksAndComparesUser {
 
     // отсыпаемся и начинаем работать
     private synchronized void listSortedAndCompares() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Не смог проснуться в методе listSorter() "
-                    + "класса ListensToLooksAndFills");
-        }
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+//                    + "Не смог проснуться в методе listSorter() "
+//                    + "класса ListensToLooksAndFills");
+//        }
 
         // сортируем и добавляем
         sortPrice();
@@ -87,7 +87,7 @@ public class ListensLooksAndComparesUser {
         ReadAndSavePatternsUser.saveTemporarySavedPatternsUser(listInListString);
 
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Сравниваю рынок с ПАТТЕРНАМИ");
+                + "Сравниваю рынок с ПАТТЕРНАМИ USER");
 
         // сравниваем оставшееся с патернами
         for (ArrayList<String> thisArrayListString : listInListString) {
@@ -194,6 +194,9 @@ public class ListensLooksAndComparesUser {
                         makeDeal(inArrayListString.get(0));
                         return;
                         // возможно тут надо поставить return
+                    } else {
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                                + "Совпадений с ПАТТЕРНАМИ USER не найдено");
                     }
                 }
             } else {
@@ -205,31 +208,31 @@ public class ListensLooksAndComparesUser {
 
 
     // Определяем какую сделку сделать и даем команду на ее исполнение
-    private void makeDeal(String string) {
+    private synchronized void makeDeal(String string) {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ");
         String[] strings = string.split("===");
 
         if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
-            String stringOut = string + "-PATU";
+            String stringOut = string;
 
             if (Gasket.isTrading()) new TradeBuy(stringOut);
             new TestOrderBuyPatternUser(stringOut, Gasket.getBitmexQuote().getAskPrice());
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ");
+                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ USER");
         } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
-            String stringOut = string + "-PATU";
+            String stringOut = string;
 
             if (Gasket.isTrading()) new TradeSell(stringOut);
             new TestOrderSellPatternUser(stringOut, Gasket.getBitmexQuote().getBidPrice());
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ");
+                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ USER");
         }
     }
 
 
     // удаляем листы размеры которых длиннее паттернов
-    private void removeUnnecessaryLists() {
+    private synchronized void removeUnnecessaryLists() {
         if (listInListString.size() > 0) {
             int maxArraySize = savedPatternsUser.getMaxArraySizeUser();
             ArrayList<Integer> lineNumbersToDelete = new ArrayList<>();
@@ -245,8 +248,6 @@ public class ListensLooksAndComparesUser {
             Collections.reverse(lineNumbersToDelete);
             // сохраняю удаленные патерны
             ReadAndSavePatternsUser.saveSavedPatternsDeleteUser(arrayListArrayList);
-//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Удалил - "
-//                    + lineNumbersToDelete.size() + " - паттерна большего размера");
 
             for (Integer integer : lineNumbersToDelete) {
                 listInListString.remove((int) integer);
@@ -257,35 +258,11 @@ public class ListensLooksAndComparesUser {
 
     // сортируем и наполняем лист сравнений листами строк
     // очищаем лист входящих объектов
-    private void sortPrice() {
+    private synchronized void sortPrice() {
         listInfoIndicator.sort(sortPriceComparatorUser);
         boolean flag = isTime();
-//        oneStartFlag = false;
 
-        // тут мы обрезаем мусорную часть - первый блок(единоразово)
         if (listInListString.size() > 0) {
-            for (ArrayList<String> arrayString : listInListString) {
-                if (arrayString.get(0).equals("0\n")) {
-                    int indexOneBias = 0;
-                    int countBias = 0;
-
-                    for (String string : arrayString) {
-                        if (string.startsWith("BIAS")) {
-                            if (countBias == 0) {
-                                indexOneBias = arrayString.indexOf(string);
-                            }
-                            countBias++;
-                        }
-                    }
-
-                    if (countBias > 0) {
-                        for (int i = indexOneBias; i > 0; i--) {
-                            arrayString.remove(i);
-                        }
-                        arrayString.set(0, "DEL\n");
-                    }
-                }
-            }
 
             for (ArrayList<String> arrayListString : listInListString) {
                 if (flag) {
@@ -293,7 +270,10 @@ public class ListensLooksAndComparesUser {
                     arrayListString.add(stringBias);
                     flag = true;
                 }
-                arrayListString.addAll(getListString(arrayListString));
+
+                ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));
+                arrayListString.clear();
+                arrayListString.addAll(arrayListOut);
             }
 
             if (flag) {
@@ -308,13 +288,7 @@ public class ListensLooksAndComparesUser {
             arrayList.add(0, "0\n");
             listInListString.add(arrayList);
             priceStart = Gasket.getBitmexQuote().getBidPrice();
-//        } else {
-//                ArrayList<String> arrayList = new ArrayList<>(getListString());
-//                arrayList.add(0, "0\n");
-//                listInListString.add(arrayList);
         }
-
-
 
         listInfoIndicator.clear();
         listInListString.sort(sortSizeUser);
@@ -327,48 +301,124 @@ public class ListensLooksAndComparesUser {
 
     // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
     // если есть то удаляем их из входящего листа и меняем их в листе направлений
-    private ArrayList<String> getListString(ArrayList<String> arrayListIn) {
+    private synchronized ArrayList<String> getListString(ArrayList<String> arrayListIn) {
         ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicator);
-        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayList<String> arrayList = null;
+
+        if (arrayListIn != null) {
+            arrayList = new ArrayList<>(arrayListIn);
+        } else {
+            arrayList = new ArrayList<>();
+        }
+
         long timeNow = DatesTimes.getDateTerminalLong();
         int count = 0;
         long time;
 
-        if (arrayListIn != null) {
-            for (String s : arrayListIn) {
+        if (arrayList.size() > 0) {
+            //arrayList.addAll(arrayListIn);
+
+            // находим еоличество BIAS
+            for (String s : arrayList) {
                 if (s.startsWith("BIAS")) count++;
             }
 
+            // согласно количеству BIAS находим максимальный нужный нам промежуток времени
             if (count != 0) {
                 time = timeNow - (1000 * 60 * count);
             } else {
                 time = timeNow - (1000 * 60 * 5);
             }
 
+            // перебираем объекты и смотрим вписываются ли они в промежуток времени
             for (int i = infoIndicatorArrayList.size() - 1; i > -1; i--) {
                 InfoIndicator infoIndicator = infoIndicatorArrayList.get(i);
                 boolean flag = false;
 
+                // если не вписались в промежуток удаляем объект и прирываем этот цикл
                 if (infoIndicator.getTime().getTime() < time) {
                     infoIndicatorArrayList.remove(i);
                     break;
                 }
 
-                for (int j = arrayListIn.size() - 1; j > -1; j--) {
+                // сравниваем строки объекта с строками в списке
+                for (int j = arrayList.size() - 1; j > -1; j--) {
                     String[] stringsIn = infoIndicator.toStringUser().split("===");
-                    String[] stringsThis = arrayListIn.get(j).split("===");
+                    String[] stringsThis = arrayList.get(j).split("===");
 
+                    // если длина строки объекта и массива равны то ...
                     if (stringsIn.length == stringsThis.length) {
 
+                        // если такая строка уже есть то заменяем ее на более новую
                         if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
                                 && stringsIn[11].equals(stringsThis[11]) && stringsIn[15].equals(stringsThis[15])) {
-                            arrayListIn.set(j, infoIndicator.toStringUser());
+
+                            arrayList.set(j, infoIndicator.toStringUser());
                             flag = true;
                         }
                     }
                 }
 
-                /*
+                // удаляем строку
+                if (flag) {
+                    infoIndicatorArrayList.remove(i);
+                }
+            }
+        }
+
+        // определяем пределы последнего блока
+        time = timeNow - (1000 * 60 * 5);
+
+        // если еще остались строки, то добаляем их в последний блок
+        if (infoIndicatorArrayList.size() > 0) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
+                if (infoIndicator.getTime().getTime() > time)
+                    arrayList.add(infoIndicator.toStringUser());
+            }
+        }
+
+        return arrayList;
+    }
+
+
+
+    // приводим паттерны в порядок
+    // чистим от оставшихся предварительных исчезнувших уровняй
+    private synchronized void setThePatternsInOrder() {
+        // перебираем все листы листов
+        for (ArrayList<String> inArrayList : listInListString) {
+            // индекса строк в массиве которые надо будет удалить
+            ArrayList<Integer> indexArrayList = new ArrayList<>();
+
+            for (String stringOne : inArrayList) {
+                int bias = 0;
+
+                // если строка не ровна нулевой строке или промежуточной
+                if (!stringOne.startsWith("0") && !stringOne.startsWith("BIAS")) {
+                    // разбиваем строку на запчасти
+                    String[] oneStrings = stringOne.split("===");
+                    String[] twoStrings;
+
+                    // начинаем шагать по тому же массиву и искать ближайший BIAS
+                    for (int i = inArrayList.indexOf(stringOne) + 1; i < inArrayList.size(); i++) {
+                        String stringTwo = inArrayList.get(i);
+
+                        bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
+
+                        if (bias == 1) {
+                            // если мы сюда заши то значит мы перешли в нужны нам блок
+                            // начинаем сравнения с его строками
+                            twoStrings = stringTwo.split("===");
+
+                            if (oneStrings.length == twoStrings.length) {
+
+                                // эти уровни есть всегда их не надо уничтожать
+                                if (!oneStrings[11].equals("OI_ZS_MIN_MINUS")
+                                        && !oneStrings[11].equals("OI_ZS_MIN_PLUS")
+                                        && !oneStrings[11].equals("DELTA_ZS_MIN_MINUS")
+                                        && !oneStrings[11].equals("DELTA_ZS_MIN_PLUS")) {
+
+                                                    /*
                 0{"period": "M5",
                 1"preview": "1",
                 2"time": "2020-05-27 12:28:00",
@@ -383,7 +433,7 @@ public class ListensLooksAndComparesUser {
                 11"low": "9167.0"}
 
 
-                 0 period
+    0 period
     1 period.toString()
     2 ===preview=== +
     3 preview +
@@ -407,75 +457,35 @@ public class ListensLooksAndComparesUser {
     21 high
     22 ===low===" +
     23 low
-                * */
-
-                if (flag) {
-                    infoIndicatorArrayList.remove(i);
-                }
-            }
-        }
-
-        time = timeNow - (1000 * 60 * 5);
-
-        if (infoIndicatorArrayList.size() != 0) {
-            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
-                if (infoIndicator.getTime().getTime() > time)
-                    arrayList.add(infoIndicator.toStringUser());
-            }
-        }
-
-        return arrayList;
-    }
-
-
-
-    // приводим паттерны в порядок
-    private void setThePatternsInOrder() {
-        for (ArrayList<String> inArrayList : listInListString) {
-            // чистим от оставшихся предварительных исчезнувших уровняй
-            ArrayList<Integer> indexArrayList = new ArrayList<>();
-
-            for (String stringOne : inArrayList) {
-                int bias = 0;
-
-                if (!stringOne.startsWith("0") && !stringOne.startsWith("DEL") && !stringOne.startsWith("BIAS")) {
-                    String[] oneStrings = stringOne.split("===");
-                    String[] twoStrings;
-
-                    for (int i = inArrayList.indexOf(stringOne) + 1; i < inArrayList.size(); i++) {
-                        String stringTwo = inArrayList.get(i);
-
-                        if (bias == 0) {
-                            bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
-
-                        } else if (bias == 1) {
-                            twoStrings = stringTwo.split("===");
-
-                            if (oneStrings.length == twoStrings.length) {
-
-                                // эти уровни есть всегда их не надо уничтожать
-                                if (!oneStrings[11].equals("OI_ZS_MIN_MINUS")
-                                        && !oneStrings[11].equals("OI_ZS_MIN_PLUS")
-                                        && !oneStrings[11].equals("DELTA_ZS_MIN_MINUS")
-                                        && !oneStrings[11].equals("DELTA_ZS_MIN_PLUS")) {
-
+                */
+                                        // M5 == M5  1 == 1  ASK == ASK
                                     if (oneStrings[1].equals(twoStrings[1])
                                             && oneStrings[3].equals(twoStrings[3])
                                             && oneStrings[11].equals(twoStrings[11])) {
                                         indexArrayList.add(inArrayList.indexOf(stringOne));
 
+                                        // M5 == M5  1 != 1(0)  ASK == ASK
                                     } else if (oneStrings[1].equals(twoStrings[1])
                                             && (!oneStrings[3].equals(twoStrings[3])
                                             && oneStrings[3].equals("1"))
                                             && oneStrings[11].equals(twoStrings[11])) {
                                         indexArrayList.add(inArrayList.indexOf(stringOne));
 
+                                        // M5 == M5  (0)1 != 1  ASK == ASK
+                                    } else if (oneStrings[1].equals(twoStrings[1])
+                                            && (!oneStrings[3].equals(twoStrings[3])
+                                            && oneStrings[3].equals("0"))
+                                            && oneStrings[11].equals(twoStrings[11])) {
+                                        indexArrayList.add(inArrayList.indexOf(stringTwo));
+
+                                        // M5 != M5(M15)  1 == 1  ASK == ASK
                                     } else if ((!oneStrings[1].equals(twoStrings[1])
                                             && oneStrings[1].equals("M5"))
                                             && oneStrings[3].equals(twoStrings[3])
                                             && oneStrings[11].equals(twoStrings[11])) {
                                         indexArrayList.add(inArrayList.indexOf(stringOne));
 
+                                        // M5 != M5(M15)  1 != 1(0)  ASK == ASK
                                     } else if ((!oneStrings[1].equals(twoStrings[1])
                                             && oneStrings[1].equals("M5"))
                                             && (!oneStrings[3].equals(twoStrings[3])
@@ -483,6 +493,7 @@ public class ListensLooksAndComparesUser {
                                             && oneStrings[11].equals(twoStrings[11])) {
                                         indexArrayList.add(inArrayList.indexOf(stringOne));
 
+                                        // M5 != M5(M15)  (0)1 != 1  ASK == ASK
                                     } else if ((!oneStrings[1].equals(twoStrings[1])
                                             && oneStrings[1].equals("M5"))
                                             && (!oneStrings[3].equals(twoStrings[3])
@@ -490,6 +501,7 @@ public class ListensLooksAndComparesUser {
                                             && oneStrings[11].equals(twoStrings[11])) {
                                         indexArrayList.add(inArrayList.indexOf(stringTwo));
 
+                                        // M5 != M5(M15)  (0)1 != 1  ASK == ASK
                                     } else if ((!oneStrings[1].equals(twoStrings[1])
                                             && twoStrings[1].equals("M5"))
                                             && (!oneStrings[3].equals(twoStrings[3])
@@ -508,6 +520,7 @@ public class ListensLooksAndComparesUser {
 
             // если каким-то образом будет два одинаковых индекса, так мы их нивилируем
             TreeSet<Integer> treeSet = new TreeSet<>(indexArrayList);
+
             indexArrayList.clear();
             indexArrayList.addAll(treeSet);
             Collections.reverse(indexArrayList);
@@ -521,7 +534,7 @@ public class ListensLooksAndComparesUser {
 
 
     // находим куда сместилась цена и другие данные
-    private String getBias() {
+    private synchronized String getBias() {
         double bias = priceNow - priceStart;
         String stringOut;
 
@@ -537,7 +550,7 @@ public class ListensLooksAndComparesUser {
 
 
     // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
-    private boolean isTime() {
+    private synchronized boolean isTime() {
         String string = DatesTimes.getDateTerminal();
         String[] strings = string.split(":");
         double seconds = Double.parseDouble(strings[1] + "." + strings[2]);

@@ -103,10 +103,9 @@ public class SavedPatterns implements Serializable {
                     for (int i = inArrayList.indexOf(stringOne) + 1; i < inArrayList.size(); i++) {
                         String stringTwo = inArrayList.get(i);
 
-                        if (bias == 0) {
-                            bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
+                        bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
 
-                        } else if (bias == 1) {
+                        if (bias == 1) {
                             twoStrings = stringTwo.split(",");
 
                             if (oneStrings.length == twoStrings.length) {

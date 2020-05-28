@@ -37,8 +37,25 @@ public class TestOrderBuyPatternUser extends Thread {
             if (priceBid <= priseStopOrder) {
                 flag();
                 setStop();
+
+                String[] strings = ID.split("===");
+                strings[3] = (Integer.parseInt(strings[3]) + 1) + "";
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (int i = 0; i < strings.length; i++) {
+                    stringBuilder.append(strings[i]);
+
+                    if (i != strings.length - 1) {
+                        stringBuilder.append("===");
+                    }
+                }
+
+                new updatingStatisticsDataUser(stringBuilder.toString());
+
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал СТОП ЛОСС USER");
+
                 Gasket.setPROFIT_Buy_PAT(Gasket.getPROFIT_Buy_PAT() - Gasket.getStop());
                 break;
             }
@@ -47,8 +64,24 @@ public class TestOrderBuyPatternUser extends Thread {
                 flag();
                 setTake();
 
+                String[] strings = ID.split("===");
+                strings[1] = (Integer.parseInt(strings[1]) + 1) + "";
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (int i = 0; i < strings.length; i++) {
+                    stringBuilder.append(strings[i]);
+
+                    if (i != strings.length - 1) {
+                        stringBuilder.append("===");
+                    }
+                }
+
+                new updatingStatisticsDataUser(stringBuilder.toString());
+
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал ТЕЙК ПРОФИТ USER");
+
                 Gasket.setPROFIT_Buy_PAT(Gasket.getPROFIT_Buy_PAT() + Gasket.getTake());
                 break;
             }
@@ -77,11 +110,11 @@ public class TestOrderBuyPatternUser extends Thread {
     }
 
     private void setStop() {
-        if (ID.endsWith("-PATU")) Gasket.setObStopPat(Gasket.getObStopPat() + 1);
+        Gasket.setObStopPat(Gasket.getObStopPat() + 1);
     }
 
     private void setTake() {
-        if (ID.endsWith("-PATU")) Gasket.setObTakePat(Gasket.getObTakePat() + 1);
+        Gasket.setObTakePat(Gasket.getObTakePat() + 1);
     }
 }
 

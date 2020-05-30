@@ -18,6 +18,7 @@ import static java.lang.Float.NaN;
 public class ListensLooksAndComparesUser {
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
 
+    private volatile ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
     private ArrayList<ArrayList<String>> listInListString;
     private ArrayList<InfoIndicator> listInfoIndicator;
 
@@ -38,6 +39,7 @@ public class ListensLooksAndComparesUser {
 
         this.keepsTrackOfFillingListInfoIndicatorUser = new KeepsTrackOfFillingListInfoIndicatorUser();
         this.savedPatternsUser = Gasket.getSavedPatternsUserClass();
+        this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.sortPriceComparatorUser = new SortPriceUser();
         this.listInfoIndicator = new ArrayList<>();
         this.listInListString = new ArrayList<>();
@@ -70,14 +72,8 @@ public class ListensLooksAndComparesUser {
     // отсыпаемся и начинаем работать
     private synchronized void listSortedAndCompares() {
         if (isTime()) {
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-//                    + "Не смог проснуться в методе listSorter() "
-//                    + "класса ListensToLooksAndFills");
-//        }
-
+            listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
+            listInfoIndicator.clear();
             // сортируем и добавляем
             sortPrice();
             // приводим паттерны в порядок
@@ -261,14 +257,10 @@ public class ListensLooksAndComparesUser {
     // сортируем и наполняем лист сравнений листами строк
     // очищаем лист входящих объектов
     private synchronized void sortPrice() {
-        listInfoIndicator.sort(sortPriceComparatorUser);
-//        boolean flag = isTime();
-
-//        if (flag) {
-            ArrayList<String> arrayList = new ArrayList<>(getListString(null));
-            arrayList.add(0, "0\n");
-            listInListString.add(0, arrayList);
-//        }
+        listInfoIndicatorWorkingCopy.sort(sortPriceComparatorUser);
+        ArrayList<String> arrayList = new ArrayList<>(getListString(null));
+        arrayList.add(0, "0\n");
+        listInListString.add(0, arrayList);
 
         if (listInListString.size() > 1) { // && flag) {
             for (ArrayList<String> arrayListString : listInListString) {
@@ -286,11 +278,9 @@ public class ListensLooksAndComparesUser {
             }
         }
 
-        //if (flag) {
-            listInfoIndicator.clear();
-            listInListString.sort(sortSizeUser);
-            priceStart = Gasket.getBitmexQuote().getBidPrice();
-        //}
+        priceStart = Gasket.getBitmexQuote().getBidPrice();
+        listInfoIndicatorWorkingCopy.clear();
+        listInListString.sort(sortSizeUser);
 
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                 + " --- В листе для сравнения уже - "
@@ -302,13 +292,11 @@ public class ListensLooksAndComparesUser {
     // если есть то удаляем их из входящего листа и меняем их в листе направлений
     private synchronized ArrayList<String> getListString(ArrayList<String> arrayListIn) {
         long timeNow = DatesTimes.getDateTerminalLong();
-        ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicator);
+        ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicatorWorkingCopy);
         ArrayList<String> inArrayList = null;
-//        boolean isNull = false;
 
         if (arrayListIn != null) {
             inArrayList = new ArrayList<>(arrayListIn);
-//            isNull = true;
         } else {
             inArrayList = new ArrayList<>();
         }
@@ -341,9 +329,7 @@ public class ListensLooksAndComparesUser {
                 // если не вписались в промежуток удаляем объект и прирываем этот цикл
                 if (infoIndicator.getTime().getTime() < time) {
                     indexDelete.add(infoIndicatorArrayList.indexOf(infoIndicator));
-
                 } else {
-
                     // сравниваем строки объекта с строками в списке
                     for (String string : inArrayList) {
                         String[] stringsIn = infoIndicator.toStringUser().split("===");
@@ -566,29 +552,29 @@ public class ListensLooksAndComparesUser {
         String[] strings = string.split(":");
         double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
 
-        if (seconds > 00.20 && seconds < 4.98) {
+        if (seconds > 00.10 && seconds < 4.98) {
             return false;
-        } else if (seconds > 5.20 && seconds < 9.98) {
+        } else if (seconds > 5.10 && seconds < 9.98) {
             return false;
-        } else if (seconds > 10.20 && seconds < 14.98) {
+        } else if (seconds > 10.10 && seconds < 14.98) {
             return false;
-        } else if (seconds > 15.20 && seconds < 19.98) {
+        } else if (seconds > 15.10 && seconds < 19.98) {
             return false;
-        } else if (seconds > 20.20 && seconds < 24.98) {
+        } else if (seconds > 20.10 && seconds < 24.98) {
             return false;
-        } else if (seconds > 25.20 && seconds < 29.98) {
+        } else if (seconds > 25.10 && seconds < 29.98) {
             return false;
-        } else if (seconds > 30.20 && seconds < 34.98) {
+        } else if (seconds > 30.10 && seconds < 34.98) {
             return false;
-        } else if (seconds > 35.20 && seconds < 39.98) {
+        } else if (seconds > 35.10 && seconds < 39.98) {
             return false;
-        } else if (seconds > 40.20 && seconds < 44.98) {
+        } else if (seconds > 40.10 && seconds < 44.98) {
             return false;
-        } else if (seconds > 45.20 && seconds < 49.98) {
+        } else if (seconds > 45.10 && seconds < 49.98) {
             return false;
-        } else if (seconds > 50.20 && seconds < 54.98) {
+        } else if (seconds > 50.10 && seconds < 54.98) {
             return false;
-        } else if (seconds > 55.20 && seconds < 59.98) {
+        } else if (seconds > 55.10 && seconds < 59.98) {
             return false;
         } else {
             keepsTrackOfFillingListInfoIndicatorUser.setSleep();

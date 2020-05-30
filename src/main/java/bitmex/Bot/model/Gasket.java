@@ -45,7 +45,7 @@ public class Gasket {
     private static String typeOrder = "Limit";          // тип первого открываемого ордера
     private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;
-    private static int secondsSleepTime = 11;        // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
+    private static int secondsSleepTime = 15;        // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
     private static double priceActive = 3.0;        // цена тригер для стоп лимитов и тейк лимитов
     private static int strategyWorkOne = 2;         // количество стратегий одновременно работающих (можно еще допелить или убрать)
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней

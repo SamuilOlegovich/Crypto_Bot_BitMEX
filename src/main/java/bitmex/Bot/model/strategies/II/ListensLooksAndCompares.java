@@ -20,6 +20,7 @@ import static java.lang.Double.NaN;
 public class ListensLooksAndCompares {
     private static ListensLooksAndCompares listensLooksAndCompares;
 
+    private volatile ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
     private ArrayList<ArrayList<String>> listInListString;
     private ArrayList<InfoIndicator> listInfoIndicator;
 
@@ -39,6 +40,7 @@ public class ListensLooksAndCompares {
                 + "Класс ListensLooksAndCompares начал работать");
 
         this.keepsTrackOfFillingListInfoIndicator = new KeepsTrackOfFillingListInfoIndicator();
+        this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsClass();
         this.sortPriceComparator = new SortPrice();
         this.listInfoIndicator = new ArrayList<>();
@@ -70,14 +72,9 @@ public class ListensLooksAndCompares {
 
     // отсыпаемся и начинаем работать
     private synchronized void listSortedAndCompares() {
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-//                    + "Не смог проснуться в методе listSorter() "
-//                    + "класса ListensToLooksAndFills");
-//        }
         if (isTime()) {
+            listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
+            listInfoIndicator.clear();
             // сортируем и добавляем
             sortPrice();
             // приводим паттерны в порядок
@@ -221,14 +218,10 @@ public class ListensLooksAndCompares {
     // сортируем и наполняем лист сравнений листами строк
     // очищаем лист входящих объектов
     private synchronized void sortPrice() {
-        listInfoIndicator.sort(sortPriceComparator);
-//        boolean flag = isTime();
-
-//        if (flag) {
-            ArrayList<String> arrayList = new ArrayList<>(getListString(null));
-            arrayList.add(0, "0\n");
-            listInListString.add(0, arrayList);
-//        }
+        listInfoIndicatorWorkingCopy.sort(sortPriceComparator);
+        ArrayList<String> arrayList = new ArrayList<>(getListString(null));
+        arrayList.add(0, "0\n");
+        listInListString.add(0, arrayList);
 
         if (listInListString.size() > 1) {  // && flag) {
             for (ArrayList<String> arrayListString : listInListString) {
@@ -245,16 +238,91 @@ public class ListensLooksAndCompares {
             }
         }
 
-//        if (flag) {
-            listInfoIndicator.clear();
-            listInListString.sort(sortSize);
-            priceStart = Gasket.getBitmexQuote().getBidPrice();
-//        }
+        listInfoIndicatorWorkingCopy.clear();
+        listInListString.sort(sortSize);
+        priceStart = Gasket.getBitmexQuote().getBidPrice();
 
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                 + " --- В листе для сравнения уже - "
                 + listInListString.size() + " - паттернов");
     }
+
+
+
+    // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
+    // если есть то удаляем их из входящего листа и меняем их в листе направлений
+    private synchronized ArrayList<String> getListString(ArrayList<String> arrayListIn) {
+        ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicatorWorkingCopy);
+        ArrayList<String> inArrayList = null;
+
+        if (arrayListIn != null) {
+            inArrayList = new ArrayList<>(arrayListIn);
+        } else {
+            inArrayList = new ArrayList<>();
+        }
+
+        long timeNow = DatesTimes.getDateTerminalLong();
+        int count = 0;
+        long time;
+
+        if (inArrayList.size() > 0) {
+
+            for (String s : inArrayList) {
+                if (s.startsWith("BIAS")) count++;
+            }
+
+            if (count >= 1) {
+                time = timeNow - (1000 * 60 * (count + 1));
+            } else {
+                time = timeNow - (1000 * 60 * 6);
+            }
+
+            ArrayList<Integer> indexDelete = new ArrayList<>();
+
+            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
+
+                if (infoIndicator.getTime().getTime() < time) {
+                    indexDelete.add(infoIndicatorArrayList.indexOf(infoIndicator));
+                } else {
+                    for (String string : inArrayList) {
+                        String[] stringsIn = infoIndicator.toString().split(",");
+                        String[] stringsThis = inArrayList.toString().split(",");
+
+                        if (stringsIn.length == stringsThis.length) {
+                            if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                                    && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+
+                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toString());
+                                indexDelete.add(infoIndicatorArrayList.indexOf(infoIndicator));
+                            }
+                        }
+                    }
+                }
+            }
+
+            // удаляем строку
+            TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
+            indexDelete.clear();
+            indexDelete.addAll(treeSet);
+            Collections.reverse(indexDelete);
+
+            for (Integer index : indexDelete) {
+                infoIndicatorArrayList.remove((int) index);
+            }
+        }
+
+        time = timeNow - (1000 * 60 * 6);
+
+        if (infoIndicatorArrayList.size() != 0) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
+                if (infoIndicator.getTime().getTime() > time)
+                    inArrayList.add(infoIndicator.toString());
+            }
+        }
+
+        return inArrayList;
+    }
+
 
 
     // приводим паттерны в порядок
@@ -346,75 +414,6 @@ public class ListensLooksAndCompares {
         }
     }
 
-
-    // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
-    // если есть то удаляем их из входящего листа и меняем их в листе направлений
-    private synchronized ArrayList<String> getListString(ArrayList<String> arrayListIn) {
-        ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicator);
-        ArrayList<String> arrayList = null;
-
-        if (arrayListIn != null) {
-            arrayList = new ArrayList<>(arrayListIn);
-        } else {
-            arrayList = new ArrayList<>();
-        }
-
-        long timeNow = DatesTimes.getDateTerminalLong();
-        int count = 0;
-        long time;
-
-        if (arrayList.size() > 0) {
-
-            for (String s : arrayList) {
-                if (s.startsWith("BIAS")) count++;
-            }
-
-            if (count >= 1) {
-                time = timeNow - (1000 * 60 * (count + 1));
-            } else {
-                time = timeNow - (1000 * 60 * 6);
-            }
-
-            for (int i = infoIndicatorArrayList.size() - 1; i > -1; i--) {
-                InfoIndicator infoIndicator = infoIndicatorArrayList.get(i);
-                boolean flag = false;
-
-                if (infoIndicator.getTime().getTime() < time) {
-                    infoIndicatorArrayList.remove(i);
-                    break;
-                }
-
-                for (int j = arrayList.size() - 1; j > -1; j--) {
-                    String[] stringsIn = infoIndicator.toString().split(",");
-                    String[] stringsThis = arrayList.get(j).split(",");
-
-                    if (stringsIn.length == stringsThis.length) {
-                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
-
-                            arrayList.set(j, infoIndicator.toString());
-                            flag = true;
-                        }
-                    }
-                }
-
-                if (flag) {
-                    infoIndicatorArrayList.remove(i);
-                }
-            }
-        }
-
-        time = timeNow - (1000 * 60 * 6);
-
-        if (infoIndicatorArrayList.size() != 0) {
-            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
-                if (infoIndicator.getTime().getTime() > time)
-                arrayList.add(infoIndicator.toString());
-            }
-        }
-
-        return arrayList;
-    }
 
 
     // находим куда сместилась цена и другие данные

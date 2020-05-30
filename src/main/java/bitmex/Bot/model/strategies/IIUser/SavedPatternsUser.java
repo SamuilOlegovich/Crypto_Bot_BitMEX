@@ -91,11 +91,12 @@ public class SavedPatternsUser {
 
         if (count > 0) {
             ReadAndSavePatternsUser.saveSavedPatternsUser();
+
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- ОБНОВИЛ нулевую стороку ПАТТЕРНОВ USER согласно исходу сделки");
         } else {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Такого номера ===" + in[in.length - 1] + "=== ПАТТЕРНА USER нет --- \n");
+                    + " --- Такого номера ===" + in[in.length - 1] + "=== ПАТТЕРНА USER нет");
         }
     }
 

@@ -356,6 +356,36 @@ public class SavedPatterns implements Serializable {
     }
 
 
+    public synchronized void updateFirstRowData(String string) {
+        String stringSet = string;
+        String[] in = stringSet.split("===");
+        String[] thIs;
+
+        int count = 0;
+
+        for (ArrayList<String> stringArrayList : listsPricePatterns) {
+            thIs = stringArrayList.get(0).split("===");
+
+            if (in.length == thIs.length) {
+                if (in[in.length - 1].equals(thIs[thIs.length - 1])) {
+                    stringArrayList.set(0, stringSet);
+                    count++;
+                }
+            }
+        }
+
+        if (count > 0) {
+            ReadAndSavePatterns.saveSavedPatterns();
+
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- ОБНОВИЛ нулевую стороку ПАТТЕРНОВ согласно исходу сделки");
+        } else {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Такого номера ===" + in[in.length - 1] + "=== ПАТТЕРНА нет");
+        }
+    }
+
+
 
     /// === INNER CLASSES === ///
 
@@ -463,6 +493,6 @@ public class SavedPatterns implements Serializable {
         if (savedPatterns != null) {
             System.out.println(savedPatterns.listsPricePatterns);
         }
-
     }
+
 }

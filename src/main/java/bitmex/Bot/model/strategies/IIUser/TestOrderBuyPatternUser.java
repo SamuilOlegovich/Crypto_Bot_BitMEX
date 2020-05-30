@@ -51,7 +51,7 @@ public class TestOrderBuyPatternUser extends Thread {
                     }
                 }
 
-                new updatingStatisticsDataUser(stringBuilder.toString());
+                new UpdatingStatisticsDataUser(stringBuilder.toString());
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал СТОП ЛОСС USER");
@@ -77,7 +77,7 @@ public class TestOrderBuyPatternUser extends Thread {
                     }
                 }
 
-                new updatingStatisticsDataUser(stringBuilder.toString());
+                new UpdatingStatisticsDataUser(stringBuilder.toString());
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал ТЕЙК ПРОФИТ USER");

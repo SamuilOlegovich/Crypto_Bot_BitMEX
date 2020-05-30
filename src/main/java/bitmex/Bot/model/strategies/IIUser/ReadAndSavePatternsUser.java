@@ -78,10 +78,12 @@ public class ReadAndSavePatternsUser {
     public static void saveSavedPatternsDeleteUser(ArrayList<ArrayList<String>> arrayListArrayList) {
 //        SaveRestoreHelper.saveSavedPatternsClass();
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
-        StringBuilder stringBuilder = new StringBuilder();
-        String lineBreak = "\n";
-        String next = "NEXT" + lineBreak;
-        stringBuilder.append("START").append(lineBreak);
+
+        if (arrayLists.size() > 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String lineBreak = "\n";
+            String next = "NEXT" + lineBreak;
+            stringBuilder.append("START").append(lineBreak);
 
 //        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
 //                + " --- Принял на запись удаленные User лист размером --- "
@@ -89,17 +91,18 @@ public class ReadAndSavePatternsUser {
 //
 //        System.out.println(arrayLists.size());
 
-        for (ArrayList<String> arr : arrayLists) {
-            for (String s : arr) {
-                stringBuilder.append(s);
+            for (ArrayList<String> arr : arrayLists) {
+                for (String s : arr) {
+                    stringBuilder.append(s);
+                }
+                stringBuilder.append(next);
             }
-            stringBuilder.append(next);
-        }
 //        stringBuilder.delete(stringBuilder.length() - next.length(), stringBuilder.length());
 //        stringBuilder.append("END").append(lineBreak);
 
-        WriterAndReadFile.writerFile(stringBuilder.toString(),
-                Gasket.getFilesAndPathCreator().getPathPatternsDeleteUser(), true);
+            WriterAndReadFile.writerFile(stringBuilder.toString(),
+                    Gasket.getFilesAndPathCreator().getPathPatternsDeleteUser(), true);
+        }
     }
 
     public static void saveSavedPatternsUser() {

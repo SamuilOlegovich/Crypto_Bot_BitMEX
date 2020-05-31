@@ -15,7 +15,8 @@ public class ListensToLooksAndFills {
 
     private static ListensToLooksAndFills listensToLooksAndFills;
 
-    private ArrayList<InfoIndicator> listInfoIndicator; // лист для входящих объектов
+    private volatile ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
+    private volatile ArrayList<InfoIndicator> listInfoIndicator; // лист для входящих объектов
     private ArrayList<String> listStringPriceSell;      // лист для формирования селл паттерна
     private ArrayList<String> listStringPriceBuy;       // лист для формирования бай паттерна
 
@@ -44,6 +45,7 @@ public class ListensToLooksAndFills {
 
         this.keepsTrackOfFillingListInfoIndicator = new KeepsTrackOfFillingListInfoIndicator();
         this.priceNow = Gasket.getBitmexQuote().getBidPrice();
+        this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsClass();
         this.listStringPriceSell = new ArrayList<>();
         this.listStringPriceBuy = new ArrayList<>();
@@ -75,82 +77,92 @@ public class ListensToLooksAndFills {
 
     // отсыпаемся и начинаем работать
     private synchronized void listSorter() {
-        listInfoIndicator.sort(sortPrice);
-        boolean flag = isTime();
-
-        if (priceEndBuy <= priceNow && !oneStartFlag) {
-            // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
-            // добавляем лист в стратегии,
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Добавляю лист в ПАТТЕРН Бай");
-
-            String stringZero = "BUY===1===SELL===0===AVERAGE===" + getAverageDeviations(true)
-                    + "===MAX===" + getMaxDeviations(true)
-                    + "===SIZE===" + (listStringPriceBuy.size() + 1)
-                    + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                    + "\n";
-
-            listStringPriceBuy.add(0, stringZero);
-            savedPatterns.addListsPricePatterns(listStringPriceBuy);
-            // стираем и добавляем в него новые данные
-            listStringPriceBuy.clear();
-        } else {
-            // добавляем строку данных о поведении цены в промежутке между поступлениями уровней
-            if (!oneStartFlag && flag) {
-                String stringBias = "BIAS===" + getBias(true) + "===AVERAGE===" + getAverageDeviations(true)
-                        + "===MAX===" + getMaxDeviations(true)
-                        + "\n";
-                listStringPriceBuy.add(stringBias);
+        if (isTime()) {
+            try {
+                Thread.sleep(1000 * 11);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }
+///////////////////// пересмотреть и доработать под новые реалии
+            listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
+            listInfoIndicator.clear();
+            listInfoIndicatorWorkingCopy.sort(sortPrice);
+            boolean flag = isTime();
 
-        if (flag) {
-            priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
-            countPriseBuy.clearList();
-        }
+            if (priceEndBuy <= priceNow && !oneStartFlag) {
+                // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
+                // добавляем лист в стратегии,
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        + " --- Добавляю лист в ПАТТЕРН Бай");
 
-        if (oneStartFlag) {
-            priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
-        }
-        addStringsInListDirections(true);
-
-        // тоже самое только для комбиначии СЕЛЛ
-        if (priceEndSell >= priceNow && !oneStartFlag) {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Добавляю лист в ПАТТЕРН Селл");
-
-            String stringZero = "BUY===0===SELL===1===AVERAGE===" + getAverageDeviations(false)
-                    + "===MAX===" + getMaxDeviations(false)
-                    + "===SIZE===" + (listStringPriceSell.size() + 1)
-                    + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                    + "\n";
-
-            listStringPriceSell.add(0, stringZero);
-            savedPatterns.addListsPricePatterns(listStringPriceSell);
-            listStringPriceSell.clear();
-        } else {
-            if (!oneStartFlag && flag) {
-                String stringBias = "BIAS===" + getBias(false) + "===AVERAGE===" + getAverageDeviations(false)
-                        + "===MAX===" + getMaxDeviations(false)
+                String stringZero = "BUY===1===SELL===0===AVERAGE===" + getAverageDeviations(true)
+                        + "===MAX===" + getMaxDeviations(true)
+                        + "===SIZE===" + (listStringPriceBuy.size() + 1)
+                        + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
                         + "\n";
-                listStringPriceSell.add(stringBias);
+
+                listStringPriceBuy.add(0, stringZero);
+                savedPatterns.addListsPricePatterns(listStringPriceBuy);
+                // стираем и добавляем в него новые данные
+                listStringPriceBuy.clear();
+            } else {
+                // добавляем строку данных о поведении цены в промежутке между поступлениями уровней
+                if (!oneStartFlag && flag) {
+                    String stringBias = "BIAS===" + getBias(true) + "===AVERAGE===" + getAverageDeviations(true)
+                            + "===MAX===" + getMaxDeviations(true)
+                            + "\n";
+                    listStringPriceBuy.add(stringBias);
+                }
+            }
+
+            if (flag) {
+                priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+                countPriseBuy.clearList();
+            }
+
+            if (oneStartFlag) {
+                priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+            }
+            addStringsInListDirections(true);
+
+            // тоже самое только для комбиначии СЕЛЛ
+            if (priceEndSell >= priceNow && !oneStartFlag) {
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        + " --- Добавляю лист в ПАТТЕРН Селл");
+
+                String stringZero = "BUY===0===SELL===1===AVERAGE===" + getAverageDeviations(false)
+                        + "===MAX===" + getMaxDeviations(false)
+                        + "===SIZE===" + (listStringPriceSell.size() + 1)
+                        + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                        + "\n";
+
+                listStringPriceSell.add(0, stringZero);
+                savedPatterns.addListsPricePatterns(listStringPriceSell);
+                listStringPriceSell.clear();
+            } else {
+                if (!oneStartFlag && flag) {
+                    String stringBias = "BIAS===" + getBias(false) + "===AVERAGE===" + getAverageDeviations(false)
+                            + "===MAX===" + getMaxDeviations(false)
+                            + "\n";
+                    listStringPriceSell.add(stringBias);
+                    countPriseSell.clearList();
+                }
+            }
+
+            if (flag) {
+                priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
                 countPriseSell.clearList();
             }
-        }
 
-        if (flag) {
-            priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
-            countPriseSell.clearList();
-        }
+            if (oneStartFlag) {
+                priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+            }
+            addStringsInListDirections(false);
 
-        if (oneStartFlag) {
-            priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+            // очищаем лист входящих объектов
+            listInfoIndicator.clear();
+            oneStartFlag = false;
         }
-        addStringsInListDirections(false);
-
-        // очищаем лист входящих объектов
-        listInfoIndicator.clear();
-        oneStartFlag = false;
     }
 
 
@@ -189,9 +201,9 @@ public class ListensToLooksAndFills {
             }
 
             if (count != 0) {
-                time = timeNow - (1000 * 60 * count);
+                time = timeNow - ((50000) + 1000 * 60 * count);
             } else {
-                time = timeNow - (1000 * 60 * 5);
+                time = timeNow - ((50000) + 1000 * 60 * 5);
             }
 
             for (int i = arrayList.size() - 1; i > -1; i--) {
@@ -222,9 +234,9 @@ public class ListensToLooksAndFills {
             }
 
             if (count != 0) {
-                time = timeNow - (1000 * 60 * count);
+                time = timeNow - ((50000) + 1000 * 60 * count);
             } else {
-                time = timeNow - (1000 * 60 * 5);
+                time = timeNow - ((50000) + 1000 * 60 * 5);
             }
 
             for (int i = arrayList.size() - 1; i > -1; i--) {
@@ -391,36 +403,35 @@ public class ListensToLooksAndFills {
 
 
 
-
     // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
     private boolean isTime() {
         String string = DatesTimes.getDateTerminal();
         String[] strings = string.split(":");
         double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
 
-        if (seconds > 00.20 && seconds < 4.98) {
+        if (seconds > 00.10 && seconds < 4.98) {
             return false;
-        } else if (seconds > 5.20 && seconds < 9.98) {
+        } else if (seconds > 5.10 && seconds < 9.98) {
             return false;
-        } else if (seconds > 10.20 && seconds < 14.98) {
+        } else if (seconds > 10.10 && seconds < 14.98) {
             return false;
-        } else if (seconds > 15.20 && seconds < 19.98) {
+        } else if (seconds > 15.10 && seconds < 19.98) {
             return false;
-        } else if (seconds > 20.20 && seconds < 24.98) {
+        } else if (seconds > 20.10 && seconds < 24.98) {
             return false;
-        } else if (seconds > 25.20 && seconds < 29.98) {
+        } else if (seconds > 25.10 && seconds < 29.98) {
             return false;
-        } else if (seconds > 30.20 && seconds < 34.98) {
+        } else if (seconds > 30.10 && seconds < 34.98) {
             return false;
-        } else if (seconds > 35.20 && seconds < 39.98) {
+        } else if (seconds > 35.10 && seconds < 39.98) {
             return false;
-        } else if (seconds > 40.20 && seconds < 44.98) {
+        } else if (seconds > 40.10 && seconds < 44.98) {
             return false;
-        } else if (seconds > 45.20 && seconds < 49.98) {
+        } else if (seconds > 45.10 && seconds < 49.98) {
             return false;
-        } else if (seconds > 50.20 && seconds < 54.98) {
+        } else if (seconds > 50.10 && seconds < 54.98) {
             return false;
-        } else if (seconds > 55.20 && seconds < 59.98) {
+        } else if (seconds > 55.10 && seconds < 59.98) {
             return false;
         } else {
             keepsTrackOfFillingListInfoIndicator.setSleep();

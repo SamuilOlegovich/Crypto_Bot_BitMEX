@@ -21,8 +21,8 @@ public class ListensLooksAndCompares {
     private static ListensLooksAndCompares listensLooksAndCompares;
 
     private volatile ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
-    private ArrayList<ArrayList<String>> listInListString;
-    private ArrayList<InfoIndicator> listInfoIndicator;
+    private volatile ArrayList<ArrayList<String>> listInListString;
+    private volatile ArrayList<InfoIndicator> listInfoIndicator;
 
     private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
     private SortPrice sortPriceComparator;
@@ -73,6 +73,12 @@ public class ListensLooksAndCompares {
     // отсыпаемся и начинаем работать
     private synchronized void listSortedAndCompares() {
         if (isTime()) {
+            try {
+                Thread.sleep(1000 * 40);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
             listInfoIndicator.clear();
             // сортируем и добавляем
@@ -98,15 +104,15 @@ public class ListensLooksAndCompares {
 //                        + inListPatterns.size() + " - паттерна по размеру");
 
                     for (ArrayList<String> inArrayListString : inListPatterns) {
-                        ArrayList<String> thisTheSamePriceList = new ArrayList<>();
-                        ArrayList<String> inTheSamePriceList = new ArrayList<>();
+//                        ArrayList<String> thisTheSamePriceList = new ArrayList<>();
+//                        ArrayList<String> inTheSamePriceList = new ArrayList<>();
                         boolean result = true;
 
                         for (int i = 1; i < inArrayListString.size(); i++) {
                             String[] strings1;
                             String[] strings2;
-                            String[] strings3;
-                            String[] strings4;
+//                            String[] strings3;
+//                            String[] strings4;
                             String[] arr1;
                             String[] arr2;
 
@@ -227,13 +233,10 @@ public class ListensLooksAndCompares {
             for (ArrayList<String> arrayListString : listInListString) {
                 if (listInListString.indexOf(arrayListString) != 0) {
                     String stringBias = "BIAS===" + getBias() + "\n";
-
                     arrayListString.add(stringBias);
-
-                    ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));
-
+//                    ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));
                     arrayListString.clear();
-                    arrayListString.addAll(arrayListOut);
+                    arrayListString.addAll(getListString(arrayListString));
                 }
             }
         }
@@ -272,9 +275,9 @@ public class ListensLooksAndCompares {
             }
 
             if (count >= 1) {
-                time = timeNow - (1000 * 60 * (count + 1));
+                time = timeNow - ((50000) + 1000 * 60 * (count + 1));
             } else {
-                time = timeNow - (1000 * 60 * 6);
+                time = timeNow - ((50000) + 1000 * 60 * 6);
             }
 
             ArrayList<Integer> indexDelete = new ArrayList<>();
@@ -311,7 +314,7 @@ public class ListensLooksAndCompares {
             }
         }
 
-        time = timeNow - (1000 * 60 * 6);
+        time = timeNow - ((50000) + 1000 * 60 * 6);
 
         if (infoIndicatorArrayList.size() != 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
@@ -439,29 +442,29 @@ public class ListensLooksAndCompares {
         String[] strings = string.split(":");
         double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
 
-        if (seconds > 00.20 && seconds < 4.98) {
+        if (seconds > 00.10 && seconds < 4.98) {
             return false;
-        } else if (seconds > 5.20 && seconds < 9.98) {
+        } else if (seconds > 5.10 && seconds < 9.98) {
             return false;
-        } else if (seconds > 10.20 && seconds < 14.98) {
+        } else if (seconds > 10.10 && seconds < 14.98) {
             return false;
-        } else if (seconds > 15.20 && seconds < 19.98) {
+        } else if (seconds > 15.10 && seconds < 19.98) {
             return false;
-        } else if (seconds > 20.20 && seconds < 24.98) {
+        } else if (seconds > 20.10 && seconds < 24.98) {
             return false;
-        } else if (seconds > 25.20 && seconds < 29.98) {
+        } else if (seconds > 25.10 && seconds < 29.98) {
             return false;
-        } else if (seconds > 30.20 && seconds < 34.98) {
+        } else if (seconds > 30.10 && seconds < 34.98) {
             return false;
-        } else if (seconds > 35.20 && seconds < 39.98) {
+        } else if (seconds > 35.10 && seconds < 39.98) {
             return false;
-        } else if (seconds > 40.20 && seconds < 44.98) {
+        } else if (seconds > 40.10 && seconds < 44.98) {
             return false;
-        } else if (seconds > 45.20 && seconds < 49.98) {
+        } else if (seconds > 45.10 && seconds < 49.98) {
             return false;
-        } else if (seconds > 50.20 && seconds < 54.98) {
+        } else if (seconds > 50.10 && seconds < 54.98) {
             return false;
-        } else if (seconds > 55.20 && seconds < 59.98) {
+        } else if (seconds > 55.10 && seconds < 59.98) {
             return false;
         } else {
             keepsTrackOfFillingListInfoIndicator.setSleep();

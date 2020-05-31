@@ -398,10 +398,10 @@ public class ListensLooksAndComparesUser {
         arrayList.add(0, "0\n");
         listInListString.add(0, arrayList);
 
-        if (listInListString.size() > 1) { // && flag) {
+        if (listInListString.size() > 1 && b) { // && flag) {
             for (ArrayList<String> arrayListString : listInListString) {
 
-                if (listInListString.indexOf(arrayListString) != 0 && b) {
+                if (listInListString.indexOf(arrayListString) != 0) {
                     String stringBias = "BIAS===" + getBias() + "\n";
                     arrayListString.add(stringBias);
 //                    ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));

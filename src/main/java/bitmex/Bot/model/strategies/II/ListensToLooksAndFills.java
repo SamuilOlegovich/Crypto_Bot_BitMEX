@@ -16,9 +16,9 @@ public class ListensToLooksAndFills {
     private static ListensToLooksAndFills listensToLooksAndFills;
 
     private volatile ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
-    private volatile ArrayList<InfoIndicator> listInfoIndicator; // лист для входящих объектов
-    private ArrayList<String> listStringPriceSell;      // лист для формирования селл паттерна
-    private ArrayList<String> listStringPriceBuy;       // лист для формирования бай паттерна
+    private volatile ArrayList<InfoIndicator> listInfoIndicator;                // лист для входящих объектов
+    private volatile ArrayList<String> listStringPriceSell;                     // лист для формирования селл паттерна
+    private volatile ArrayList<String> listStringPriceBuy;                      // лист для формирования бай паттерна
 
 
     private volatile double priceEndSell;               // цена к которой должна прийти цена для фиксации паттерна
@@ -33,9 +33,7 @@ public class ListensToLooksAndFills {
     private SortPrice sortPrice;
 
 
-    private boolean oneStartFlag;
-
-
+    private volatile boolean oneStartFlag;
 
 
 
@@ -77,92 +75,94 @@ public class ListensToLooksAndFills {
 
     // отсыпаемся и начинаем работать
     private synchronized void listSorter() {
-        if (isTime()) {
+        boolean flag = isTime();
+
+        if (flag) {
             try {
                 Thread.sleep(1000 * 11);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
 ///////////////////// пересмотреть и доработать под новые реалии
-            listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
-            listInfoIndicator.clear();
-            listInfoIndicatorWorkingCopy.sort(sortPrice);
-            boolean flag = isTime();
+        listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
+        listInfoIndicator.clear();
+        listInfoIndicatorWorkingCopy.sort(sortPrice);
 
-            if (priceEndBuy <= priceNow && !oneStartFlag) {
-                // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
-                // добавляем лист в стратегии,
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+
+        if (priceEndBuy <= priceNow && !oneStartFlag) {
+            // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
+            // добавляем лист в стратегии,
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                         + " --- Добавляю лист в ПАТТЕРН Бай");
 
-                String stringZero = "BUY===1===SELL===0===AVERAGE===" + getAverageDeviations(true)
+            String stringZero = "BUY===1===SELL===0===AVERAGE===" + getAverageDeviations(true)
                         + "===MAX===" + getMaxDeviations(true)
                         + "===SIZE===" + (listStringPriceBuy.size() + 1)
                         + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
                         + "\n";
 
-                listStringPriceBuy.add(0, stringZero);
-                savedPatterns.addListsPricePatterns(listStringPriceBuy);
-                // стираем и добавляем в него новые данные
-                listStringPriceBuy.clear();
-            } else {
-                // добавляем строку данных о поведении цены в промежутке между поступлениями уровней
-                if (!oneStartFlag && flag) {
-                    String stringBias = "BIAS===" + getBias(true) + "===AVERAGE===" + getAverageDeviations(true)
+            listStringPriceBuy.add(0, stringZero);
+            savedPatterns.addListsPricePatterns(listStringPriceBuy);
+            // стираем и добавляем в него новые данные
+            listStringPriceBuy.clear();
+        } else {
+            // добавляем строку данных о поведении цены в промежутке между поступлениями уровней
+            if (!oneStartFlag && flag) {
+                String stringBias = "BIAS===" + getBias(true) + "===AVERAGE===" + getAverageDeviations(true)
                             + "===MAX===" + getMaxDeviations(true)
                             + "\n";
-                    listStringPriceBuy.add(stringBias);
-                }
+                listStringPriceBuy.add(stringBias);
             }
+        }
 
-            if (flag) {
-                priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
-                countPriseBuy.clearList();
-            }
+        if (flag) {
+            priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+            countPriseBuy.clearList();
+        }
 
-            if (oneStartFlag) {
-                priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
-            }
-            addStringsInListDirections(true);
+        if (oneStartFlag) {
+            priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+        }
+        addStringsInListDirections(true);
 
             // тоже самое только для комбиначии СЕЛЛ
-            if (priceEndSell >= priceNow && !oneStartFlag) {
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+        if (priceEndSell >= priceNow && !oneStartFlag) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                         + " --- Добавляю лист в ПАТТЕРН Селл");
 
-                String stringZero = "BUY===0===SELL===1===AVERAGE===" + getAverageDeviations(false)
+            String stringZero = "BUY===0===SELL===1===AVERAGE===" + getAverageDeviations(false)
                         + "===MAX===" + getMaxDeviations(false)
                         + "===SIZE===" + (listStringPriceSell.size() + 1)
                         + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
                         + "\n";
 
-                listStringPriceSell.add(0, stringZero);
-                savedPatterns.addListsPricePatterns(listStringPriceSell);
-                listStringPriceSell.clear();
-            } else {
-                if (!oneStartFlag && flag) {
-                    String stringBias = "BIAS===" + getBias(false) + "===AVERAGE===" + getAverageDeviations(false)
+            listStringPriceSell.add(0, stringZero);
+            savedPatterns.addListsPricePatterns(listStringPriceSell);
+            listStringPriceSell.clear();
+        } else {
+            if (!oneStartFlag && flag) {
+                String stringBias = "BIAS===" + getBias(false) + "===AVERAGE===" + getAverageDeviations(false)
                             + "===MAX===" + getMaxDeviations(false)
                             + "\n";
-                    listStringPriceSell.add(stringBias);
-                    countPriseSell.clearList();
-                }
-            }
-
-            if (flag) {
-                priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+                listStringPriceSell.add(stringBias);
                 countPriseSell.clearList();
             }
+        }
 
-            if (oneStartFlag) {
-                priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
-            }
-            addStringsInListDirections(false);
+        if (flag) {
+            priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+            countPriseSell.clearList();
+        }
+
+        if (oneStartFlag) {
+            priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+        }
+        addStringsInListDirections(false);
 
             // очищаем лист входящих объектов
-            listInfoIndicator.clear();
-            oneStartFlag = false;
-        }
+        listInfoIndicatorWorkingCopy.clear();
+        oneStartFlag = false;
     }
 
 
@@ -189,7 +189,7 @@ public class ListensToLooksAndFills {
 
     // проверяем есть ли такие уровни, если есть то удаляем их из входящего листа и меняем их в листе направлений
     private ArrayList<InfoIndicator> checkIfThereAreSuchLevels(boolean buyOrSell) {
-        ArrayList<InfoIndicator> arrayList = new ArrayList<>(listInfoIndicator);
+        ArrayList<InfoIndicator> arrayList = new ArrayList<>(listInfoIndicatorWorkingCopy);
         long timeNow = DatesTimes.getDateTerminalLong();
         int count = 0;
         long time;

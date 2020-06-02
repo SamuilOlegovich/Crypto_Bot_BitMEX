@@ -7,20 +7,20 @@ import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.ArrayList;
-import java.util.TreeSet;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.*;
 
 import static java.lang.Float.NaN;
+
 
 
 public class ListensLooksAndComparesUser {
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
 
-    private volatile ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
-    private volatile ArrayList<ArrayList<String>> listInListString;
-    private volatile ArrayList<InfoIndicator> listInfoIndicator;
+    private ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
+    private ArrayList<ArrayList<String>> listInListString;
+    private ArrayList<InfoIndicator> listInfoIndicator;
 
     private KeepsTrackOfFillingListInfoIndicatorUser keepsTrackOfFillingListInfoIndicatorUser;
     private SortPriceUser sortPriceComparatorUser;
@@ -31,6 +31,7 @@ public class ListensLooksAndComparesUser {
 
     private double priceStart;
     private double priceNow;
+    private long timeNow;
 
 
     private ListensLooksAndComparesUser() {
@@ -70,12 +71,20 @@ public class ListensLooksAndComparesUser {
 
 
     // отсыпаемся и начинаем работать
-    private synchronized void listSortedAndCompares() {
-        boolean flag = isTime();
+    private synchronized void listSortedAndCompares(boolean flag) {
+//        boolean flag = isTime();
 
         if (flag) {
             try {
                 Thread.sleep(1000 * 11);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (flag && listInfoIndicator.size() < 2) {
+            try {
+                Thread.sleep(1000 * 17);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -271,40 +280,61 @@ public class ListensLooksAndComparesUser {
     // очищаем лист входящих объектов
     private synchronized void sortPrice(boolean b) {
         listInfoIndicatorWorkingCopy.sort(sortPriceComparatorUser);
-        ArrayList<String> arrayList = new ArrayList<>(getListString(null));
-        arrayList.add(0, "0\n");
-        listInListString.add(0, arrayList);
+        System.out.println(DatesTimes.getDateTerminal() + "---1-SORT---" + listInfoIndicatorWorkingCopy.size());
 
-        if (listInListString.size() > 1) {
-            for (ArrayList<String> arrayListString : listInListString) {
-                if (listInListString.indexOf(arrayListString) != 0) {
-                    if (b) {
-                        String stringBias = "BIAS===" + getBias() + "\n";
-                        arrayListString.add(stringBias);
-                    }
-
+        if (b) {
+            System.out.println(DatesTimes.getDateTerminal() + "---2-SORT---" + listInListString.size());
+            if (listInListString.size() > 0) {
+                for (ArrayList<String> arrayListString : listInListString) {
+                    String stringBias = "BIAS===" + getBias() + "===" + DatesTimes.getDateTerminal() + "\n";
+                    arrayListString.add(stringBias);
+                    System.out.println(DatesTimes.getDateTerminal() + "---3-SORT---" + arrayListString.size());
                     ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));
+                    System.out.println(DatesTimes.getDateTerminal() + "---4-SORT---" + arrayListOut.size());
+                    System.out.println(DatesTimes.getDateTerminal() + "---5-SORT---" + arrayListString.size());
                     arrayListString.clear();
-                    arrayListString.addAll(getListString(arrayListOut));
+                    System.out.println(DatesTimes.getDateTerminal() + "---6-SORT---" + arrayListString.size());
+                    arrayListString.addAll(arrayListOut);
+                    System.out.println(DatesTimes.getDateTerminal() + "---7-SORT---" + arrayListString.size());
                 }
             }
+
+            ArrayList<String> arrayListOut = new ArrayList<>(getListString(null));
+            System.out.println(DatesTimes.getDateTerminal() + "---8-SORT---" + arrayListOut.size());
+            arrayListOut.add(0, "0===" + DatesTimes.getDateTerminal() + "\n");
+            System.out.println(DatesTimes.getDateTerminal() + "---9-SORT---" + arrayListOut.size());
+            listInListString.add(arrayListOut);
+            System.out.println(DatesTimes.getDateTerminal() + "---10-SORT---" + listInListString.size());
+
+            priceStart = Gasket.getBitmexQuote().getBidPrice();
+            listInfoIndicatorWorkingCopy.clear();
+            System.out.println(DatesTimes.getDateTerminal() + "---11-SORT---" + listInfoIndicatorWorkingCopy.size());
+            listInListString.sort(sortSizeUser);
+
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- В листе для сравнения уже - "
+                    + listInListString.size() + " - паттернов USER");
+        } else {
+            if (listInListString.size() > 0) {
+                for (ArrayList<String> arrayListString : listInListString) {
+                    ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));
+                    arrayListString.clear();
+                    arrayListString.addAll(arrayListOut);
+                }
+            }
+
+            listInfoIndicatorWorkingCopy.clear();
+            listInListString.sort(sortSizeUser);
         }
-
-        priceStart = Gasket.getBitmexQuote().getBidPrice();
-        listInfoIndicatorWorkingCopy.clear();
-        listInListString.sort(sortSizeUser);
-
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- В листе для сравнения уже - "
-                + listInListString.size() + " - паттернов USER");
     }
 
 
     // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
     // если есть то удаляем их из входящего листа и меняем их в листе направлений
     private synchronized ArrayList<String> getListString(ArrayList<String> arrayListIn) {
-        long timeNow = DatesTimes.getDateTerminalLong();
         ArrayList<InfoIndicator> infoIndicatorArrayList = new ArrayList<>(listInfoIndicatorWorkingCopy);
+        System.out.println(DatesTimes.getDateTerminal() + "---1-GET---" + listInfoIndicatorWorkingCopy.size());
+        System.out.println(DatesTimes.getDateTerminal() + "---2-GET---" + infoIndicatorArrayList.size());
         ArrayList<String> inArrayList = null;
 
         if (arrayListIn != null) {
@@ -312,80 +342,86 @@ public class ListensLooksAndComparesUser {
         } else {
             inArrayList = new ArrayList<>();
         }
+        System.out.println(DatesTimes.getDateTerminal() + "---4-GET---" + inArrayList.size());
 
         int count = 0;
         long time;
 
 ////////////////////////////////////////
 
-        if (inArrayList.size() > 1) {
-            //arrayList.addAll(arrayListIn);
+//        if (inArrayList.size() > 1) {
+//            //arrayList.addAll(arrayListIn);
+//
+//            // находим количество BIAS
+//            for (String s : inArrayList) {
+//                if (s.startsWith("BIAS")) count++;
+//            }
+//
+//            // согласно количеству BIAS находим максимальный нужный нам промежуток времени
+//            if (count >= 1) {
+//                time = timeNow - (1000 * 60 * (count + 1));
+//            } else {
+//                time = timeNow - (1000 * 60 * 6);
+//            }
+//
+//            ArrayList<Integer> indexDelete = new ArrayList<>();
+//
+//            // перебираем объекты и смотрим вписываются ли они в промежуток времени
+//            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
+//
+//                // если не вписались в промежуток удаляем объект и прирываем этот цикл
+//                if (infoIndicator.getTime().getTime() < time) {
+//                    indexDelete.add(infoIndicatorArrayList.indexOf(infoIndicator));
+//                } else {
+//                    // сравниваем строки объекта с строками в списке
+//                    for (String string : inArrayList) {
+//                        String[] stringsIn = infoIndicator.toStringUser().split("===");
+//                        String[] stringsThis = string.split("===");
+//
+//                        // если длина строки объекта и массива равны то ...
+//                        if (stringsIn.length == stringsThis.length) {
+//
+//                            // если такая строка уже есть то заменяем ее на более новую
+//                            if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
+//                                    && stringsIn[11].equals(stringsThis[11]) && stringsIn[15].equals(stringsThis[15])) {
+//
+//                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
+//                                indexDelete.add(infoIndicatorArrayList.indexOf(infoIndicator));
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            // удаляем строку
+//            TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
+//            indexDelete.clear();
+//            indexDelete.addAll(treeSet);
+//            Collections.reverse(indexDelete);
+//
+//            for (Integer index : indexDelete) {
+//                infoIndicatorArrayList.remove((int) index);
+//            }
+//        }
 
-            // находим еоличество BIAS
-            for (String s : inArrayList) {
-                if (s.startsWith("BIAS")) count++;
-            }
-
-            // согласно количеству BIAS находим максимальный нужный нам промежуток времени
-            if (count >= 1) {
-                time = timeNow - (1000 * 60 * (count + 1));
-            } else {
-                time = timeNow - (1000 * 60 * 6);
-            }
-
-            ArrayList<Integer> indexDelete = new ArrayList<>();
-
-            // перебираем объекты и смотрим вписываются ли они в промежуток времени
-            for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
-
-                // если не вписались в промежуток удаляем объект и прирываем этот цикл
-                if (infoIndicator.getTime().getTime() < time) {
-                    indexDelete.add(infoIndicatorArrayList.indexOf(infoIndicator));
-                } else {
-                    // сравниваем строки объекта с строками в списке
-                    for (String string : inArrayList) {
-                        String[] stringsIn = infoIndicator.toStringUser().split("===");
-                        String[] stringsThis = string.split("===");
-
-                        // если длина строки объекта и массива равны то ...
-                        if (stringsIn.length == stringsThis.length) {
-
-                            // если такая строка уже есть то заменяем ее на более новую
-                            if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
-                                    && stringsIn[11].equals(stringsThis[11]) && stringsIn[15].equals(stringsThis[15])) {
-
-                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
-                                indexDelete.add(infoIndicatorArrayList.indexOf(infoIndicator));
-                            }
-                        }
-                    }
-                }
-            }
-
-            // удаляем строку
-            TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
-            indexDelete.clear();
-            indexDelete.addAll(treeSet);
-            Collections.reverse(indexDelete);
-
-            for (Integer index : indexDelete) {
-                infoIndicatorArrayList.remove((int) index);
-            }
-        }
         ////////////////////////////////////
 
 
         // определяем пределы последнего блока
         time = timeNow - (1000 * 60 * 6);
 
+
         // если еще остались строки, то добаляем их в последний блок
         if (infoIndicatorArrayList.size() > 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayList) {
                 if (infoIndicator.getTime().getTime() > time)
                     inArrayList.add(infoIndicator.toStringUser());
+                System.out.println(DatesTimes.getDateTerminal() + "---5-GET---+1---" + inArrayList.size());
             }
         }
 
+        System.out.println(DatesTimes.getDateTerminal() + "---6-GET---" + infoIndicatorArrayList.size());
+        System.out.println(DatesTimes.getDateTerminal() + "---6-GET---" + inArrayList.size());
         return inArrayList;
     }
 
@@ -558,48 +594,11 @@ public class ListensLooksAndComparesUser {
     }
 
 
-    // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
-    private synchronized boolean isTime() {
-        String string = DatesTimes.getDateTerminal();
-        String[] strings = string.split(":");
-        double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
-
-        if (seconds > 00.05 && seconds < 4.98) {
-            return false;
-        } else if (seconds > 5.05 && seconds < 9.98) {
-            return false;
-        } else if (seconds > 10.05 && seconds < 14.98) {
-            return false;
-        } else if (seconds > 15.05 && seconds < 19.98) {
-            return false;
-        } else if (seconds > 20.05 && seconds < 24.98) {
-            return false;
-        } else if (seconds > 25.05 && seconds < 29.98) {
-            return false;
-        } else if (seconds > 30.05 && seconds < 34.98) {
-            return false;
-        } else if (seconds > 35.05 && seconds < 39.98) {
-            return false;
-        } else if (seconds > 40.05 && seconds < 44.98) {
-            return false;
-        } else if (seconds > 45.05 && seconds < 49.98) {
-            return false;
-        } else if (seconds > 50.05 && seconds < 54.98) {
-            return false;
-        } else if (seconds > 55.05 && seconds < 59.98) {
-            return false;
-        } else {
-            keepsTrackOfFillingListInfoIndicatorUser.setSleep();
-            return true;
-        }
-    }
-
-
-
 
 
 
     /// === INNER CLASSES === ///
+
 
 
 
@@ -626,53 +625,88 @@ public class ListensLooksAndComparesUser {
 
 
 
+
     // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
     private class KeepsTrackOfFillingListInfoIndicatorUser extends Thread {
-        private volatile int sleep = 2;
-        private int previousValue;
-
 
         public KeepsTrackOfFillingListInfoIndicatorUser() {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicatorUser начал работать");
-            this.previousValue = 0;
             start();
         }
 
+
+
         @Override
         public void run() {
+            Timer time2 = new Timer();
+            Timer time = new Timer();
 
-            while (true) {
-                int size;
+            DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+            Date date = new Date();
 
-                if (listInfoIndicator != null) {
-                    size = listInfoIndicator.size();
-                } else {
-                    size = 0;
+            String[] strings = dateFormat.format(date).split(":");
+
+            int minute = (5 - (Integer.parseInt(strings[0]) % 5)) * 60 * 1000;
+            int seconds = ((60 - (Integer.parseInt(strings[1]))) == 60
+                    ? 0 : Integer.parseInt(strings[1])) * 1000;
+            long timeStart = minute - seconds;
+
+            time.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    priceNow = Gasket.getBitmexQuote().getBidPrice();
+                    timeNow = DatesTimes.getDateTerminalLong();
+                    listSortedAndCompares(true);
                 }
+            }, timeStart, 1000 * 60 * 5);
 
-                if (size > 0) {
-                    if (previousValue == listInfoIndicator.size()) {
-                        priceNow = Gasket.getBitmexQuote().getBidPrice();
-                        previousValue = 0;
-                        listSortedAndCompares();
-                    } else {
-                        previousValue = size;
+
+            time2.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!isTime() && listInfoIndicator.size() > 0) {
+                        listSortedAndCompares(false);
                     }
                 }
-
-                try {
-                    Thread.sleep(1000 * sleep);
-                } catch (InterruptedException e) {
-                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- Не смог проснуться во внутреннем классе "
-                            + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
-                            + " sleep = " + sleep);
-                }
-            }
+            }, timeStart, 1000 * 30);
         }
-        private void setSleep() {
-            sleep = Gasket.getSecondsSleepTime();
+
+
+
+        // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
+        private synchronized boolean isTime() {
+            String string = DatesTimes.getDateTerminal();
+            String[] strings = string.split(":");
+            double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
+
+            if (seconds > 00.05 && seconds < 4.98) {
+                return false;
+            } else if (seconds > 5.05 && seconds < 9.98) {
+                return false;
+            } else if (seconds > 10.05 && seconds < 14.98) {
+                return false;
+            } else if (seconds > 15.05 && seconds < 19.98) {
+                return false;
+            } else if (seconds > 20.05 && seconds < 24.98) {
+                return false;
+            } else if (seconds > 25.05 && seconds < 29.98) {
+                return false;
+            } else if (seconds > 30.05 && seconds < 34.98) {
+                return false;
+            } else if (seconds > 35.05 && seconds < 39.98) {
+                return false;
+            } else if (seconds > 40.05 && seconds < 44.98) {
+                return false;
+            } else if (seconds > 45.05 && seconds < 49.98) {
+                return false;
+            } else if (seconds > 50.05 && seconds < 54.98) {
+                return false;
+            } else if (seconds > 55.05 && seconds < 59.98) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 }

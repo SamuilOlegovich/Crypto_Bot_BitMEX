@@ -464,7 +464,7 @@ public class ListensToLooksAndFills {
 
     // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
     private class KeepsTrackOfFillingListInfoIndicator extends Thread {
-        private volatile int sleep = 2;
+        private volatile int sleep = 1;
         private int previousValue;
 
         public KeepsTrackOfFillingListInfoIndicator() {
@@ -481,14 +481,12 @@ public class ListensToLooksAndFills {
                 int size = listInfoIndicator.size();
 
                 if (size > 0) {
-                    if (previousValue == listInfoIndicator.size()) { // && isTime()) {
+                    if (previousValue == listInfoIndicator.size()) {
                         priceNow = Gasket.getBitmexQuote().getBidPrice();
                         previousValue = 0;
                         listSorter();
-//                        sleep = 10;
                     } else {
                         previousValue = size;
-                        sleep = 2;
                     }
                 }
 

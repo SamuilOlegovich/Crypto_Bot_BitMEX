@@ -242,7 +242,7 @@ public class ListensLooksAndCompares {
 
                     ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));
                     arrayListString.clear();
-                    arrayListString.addAll(getListString(arrayListOut));
+                    arrayListString.addAll(arrayListOut);
                 }
             }
         }
@@ -535,11 +535,14 @@ public class ListensLooksAndCompares {
                 }
 
                 if (size > 0) {
-                    if (previousValue == listInfoIndicator.size()) {    // && isTime()) {
+                    if (isTime()) {
                         priceNow = Gasket.getBitmexQuote().getBidPrice();
-                        previousValue = 0;
                         listSortedAndCompares();
-                        sleep = 10;
+                        previousValue = 0;
+                    } else if (previousValue == listInfoIndicator.size()) {
+                        //priceNow = Gasket.getBitmexQuote().getBidPrice();
+                        listSortedAndCompares();
+                        previousValue = 0;
                     } else {
                         previousValue = size;
                     }

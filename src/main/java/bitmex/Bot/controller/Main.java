@@ -1,16 +1,16 @@
 package bitmex.Bot.controller;
 
+import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
+import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
+import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
+import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.serverAndParser.Server;
 import bitmex.Bot.model.FilesAndPathCreator;
-import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
-import bitmex.Bot.model.strategies.II.SavedPatterns;
-import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
-import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -40,8 +40,6 @@ public class Main {
         Gasket.setSavedPatternsClass(savedPatterns);
         ReadAndSavePatterns.createSavedPatterns();
 
-        //  тут можно подождать пару секунд
-        //  тут можно подождать пару секунд
         ticker = new Ticker("XBTUSD");
         ExecutorCommandos executorCommandos = new ExecutorCommandos();
         ParserSetting parserSetting = new ParserSetting(executorCommandos);

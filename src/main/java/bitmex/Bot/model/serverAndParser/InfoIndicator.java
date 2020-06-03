@@ -19,7 +19,6 @@ public class InfoIndicator {
     private int preview;            // предварительный или реальный уровень 0 - реальный, 1 - предварительный
     private long value;             // объём
     private double low;             // минимальная цена свечи
-//    private int point;              // 0 - одинаковая цена, 1 - разная
     private Date time;              // Дата свечи на которой находится данный уровень
     private long avg;
     private int dir;                // направление свечи 1 - бай, 0 - дожи, -1 - селл

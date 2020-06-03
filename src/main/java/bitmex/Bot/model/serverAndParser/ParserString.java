@@ -1,11 +1,11 @@
 package bitmex.Bot.model.serverAndParser;
 
 
-import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.strategies.StrategyFactory;
 import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.enums.BidAsk;
+import bitmex.Bot.model.DatesTimes;
 
 
 import java.text.SimpleDateFormat;
@@ -82,109 +82,127 @@ public class ParserString {
     }
 
     private TimeFrame getTimeFrame(String string) {
-        switch (string) {
-            case "M1" :
-                return TimeFrame.M1;
-            case "M5" :
-                return TimeFrame.M5;
-            case "M15" :
-                return TimeFrame.M15;
-            case "M30" :
-                return TimeFrame.M30;
-            case "H1" :
-                return TimeFrame.H1;
-            case "H4" :
-                return TimeFrame.H4;
-            case "D1" :
-                return TimeFrame.D1;
-            case "W1" :
-                return TimeFrame.W1;
-            case "MN1" :
-                return TimeFrame.MN1;
-            case "Y1" :
-                return TimeFrame.Y1;
+        TimeFrame[] timeFrames = TimeFrame.values();
+
+        for (TimeFrame timeFrame : timeFrames) {
+            if (timeFrame.toString().equalsIgnoreCase(string)) {
+                return timeFrame;
+            }
         }
         return null;
+
+//        switch (string) {
+//            case "M1" :
+//                return TimeFrame.M1;
+//            case "M5" :
+//                return TimeFrame.M5;
+//            case "M15" :
+//                return TimeFrame.M15;
+//            case "M30" :
+//                return TimeFrame.M30;
+//            case "H1" :
+//                return TimeFrame.H1;
+//            case "H4" :
+//                return TimeFrame.H4;
+//            case "D1" :
+//                return TimeFrame.D1;
+//            case "W1" :
+//                return TimeFrame.W1;
+//            case "MN1" :
+//                return TimeFrame.MN1;
+//            case "Y1" :
+//                return TimeFrame.Y1;
+//        }
+//        return null;
     }
 
 
 
     private BidAsk getType(String string) {
-        switch (string) {
-            case "OpenPosBidMinusSmall" :
-                return BidAsk.OPEN_POS_BID_MINUS_SMALL;
-            case "OpenPosAskMinusSmall" :
-                return BidAsk.OPEN_POS_ASK_MINUS_SMALL;
-            case "OpenPosAskPlusSmall" :
-                return BidAsk.OPEN_POS_ASK_PLUS_SMALL;
-            case "OpenPosBidPlusSmall" :
-                return BidAsk.OPEN_POS_BID_PLUS_SMALL;
-            case "DeltaMinVolBidHL" :
-                return BidAsk.DELTA_MIN_VOL_BID_HL;
-            case "DeltaMinVolAskHL" :
-                return BidAsk.DELTA_MIN_VOL_ASK_HL;
-            case "OpenPosMinusSmall" :
-                return BidAsk.OPEN_POS_MINUS_SMALL;
-            case "OpenPosPlusSmall" :
-                return BidAsk.OPEN_POS_PLUS_SMALL;
-            case "DeltaZSMinMinus" :
-                return BidAsk.DELTA_ZS_MIN_MINUS;
-            case "OpenPosAskMinus" :
-                return BidAsk.OPEN_POS_ASK_MINUS;
-            case "OpenPosBidMinus" :
-                return BidAsk.OPEN_POS_BID_MINUS;
-            case "OpenPosAskPlus" :
-                return BidAsk.OPEN_POS_ASK_PLUS;
-            case "DeltaZSMinPlus" :
-                return BidAsk.DELTA_ZS_MIN_PLUS;
-            case "OpenPosBidPlus" :
-                return BidAsk.OPEN_POS_BID_PLUS;
-            case "OpenPosMinusHL" :
-                return BidAsk.OPEN_POS_MINUS_HL;
-            case "OpenPosPlusHL" :
-                return BidAsk.OPEN_POS_PLUS_HL;
-            case "OIZSMinMinus" :
-                return BidAsk.OI_ZS_MIN_MINUS;
-            case "DeltaBidSmall" :
-                return BidAsk.DELTA_BID_SMALL;
-            case "DeltaAskSmall" :
-                return BidAsk.DELTA_ASK_SMALL;
-            case "DeltaZSMinus" :
-                return BidAsk.DELTA_ZS_MINUS;
-            case "OIZSMinPlus" :
-                return BidAsk.OI_ZS_MIN_PLUS;
-            case "OpenPosMinus" :
-                return BidAsk.OPEN_POS_MINUS;
-            case "OpenPosPlus" :
-                return BidAsk.OPEN_POS_PLUS;
-            case "DeltaZSPlus" :
-                return BidAsk.DELTA_ZS_PLUS;
-            case "DeltaBidHL" :
-                return BidAsk.DELTA_BID_HL;
-            case "DeltaAskHL" :
-                return BidAsk.DELTA_ASK_HL;
-            case "VolumeSmall" :
-                return BidAsk.VOLUME_SMALL;
-            case "OIZSMinus" :
-                return BidAsk.OI_ZS_MINUS;
-            case  "OIZSPlus" :
-                return BidAsk.OI_ZS_PLUS;
-            case "DeltaAsk" :
-                return BidAsk.DELTA_ASK;
-            case "DeltaBid" :
-                return BidAsk.DELTA_BID;
-            case "AskSmall" :
-                return BidAsk.ASK_SMALL;
-            case "BidSmall" :
-                return BidAsk.BID_SMALL;
-            case "Volume" :
-                return BidAsk.VOLUME;
-            case "Bid" :
-                return BidAsk.BID;
-            case "Ask" :
-                return BidAsk.ASK;
+        BidAsk[] bidAsks = BidAsk.values();
+
+        for (BidAsk bidAsk : bidAsks) {
+            if (bidAsk.toString().replaceAll("_", "").equalsIgnoreCase(string)) {
+                return bidAsk;
+            }
         }
         return null;
+
+//        switch (string) {
+//            case "OpenPosBidMinusSmall" :
+//                return BidAsk.OPEN_POS_BID_MINUS_SMALL;
+//            case "OpenPosAskMinusSmall" :
+//                return BidAsk.OPEN_POS_ASK_MINUS_SMALL;
+//            case "OpenPosAskPlusSmall" :
+//                return BidAsk.OPEN_POS_ASK_PLUS_SMALL;
+//            case "OpenPosBidPlusSmall" :
+//                return BidAsk.OPEN_POS_BID_PLUS_SMALL;
+//            case "DeltaMinVolBidHL" :
+//                return BidAsk.DELTA_MIN_VOL_BID_HL;
+//            case "DeltaMinVolAskHL" :
+//                return BidAsk.DELTA_MIN_VOL_ASK_HL;
+//            case "OpenPosMinusSmall" :
+//                return BidAsk.OPEN_POS_MINUS_SMALL;
+//            case "OpenPosPlusSmall" :
+//                return BidAsk.OPEN_POS_PLUS_SMALL;
+//            case "DeltaZSMinMinus" :
+//                return BidAsk.DELTA_ZS_MIN_MINUS;
+//            case "OpenPosAskMinus" :
+//                return BidAsk.OPEN_POS_ASK_MINUS;
+//            case "OpenPosBidMinus" :
+//                return BidAsk.OPEN_POS_BID_MINUS;
+//            case "OpenPosAskPlus" :
+//                return BidAsk.OPEN_POS_ASK_PLUS;
+//            case "DeltaZSMinPlus" :
+//                return BidAsk.DELTA_ZS_MIN_PLUS;
+//            case "OpenPosBidPlus" :
+//                return BidAsk.OPEN_POS_BID_PLUS;
+//            case "OpenPosMinusHL" :
+//                return BidAsk.OPEN_POS_MINUS_HL;
+//            case "OpenPosPlusHL" :
+//                return BidAsk.OPEN_POS_PLUS_HL;
+//            case "OIZSMinMinus" :
+//                return BidAsk.OI_ZS_MIN_MINUS;
+//            case "DeltaBidSmall" :
+//                return BidAsk.DELTA_BID_SMALL;
+//            case "DeltaAskSmall" :
+//                return BidAsk.DELTA_ASK_SMALL;
+//            case "DeltaZSMinus" :
+//                return BidAsk.DELTA_ZS_MINUS;
+//            case "OIZSMinPlus" :
+//                return BidAsk.OI_ZS_MIN_PLUS;
+//            case "OpenPosMinus" :
+//                return BidAsk.OPEN_POS_MINUS;
+//            case "OpenPosPlus" :
+//                return BidAsk.OPEN_POS_PLUS;
+//            case "DeltaZSPlus" :
+//                return BidAsk.DELTA_ZS_PLUS;
+//            case "DeltaBidHL" :
+//                return BidAsk.DELTA_BID_HL;
+//            case "DeltaAskHL" :
+//                return BidAsk.DELTA_ASK_HL;
+//            case "VolumeSmall" :
+//                return BidAsk.VOLUME_SMALL;
+//            case "OIZSMinus" :
+//                return BidAsk.OI_ZS_MINUS;
+//            case  "OIZSPlus" :
+//                return BidAsk.OI_ZS_PLUS;
+//            case "DeltaAsk" :
+//                return BidAsk.DELTA_ASK;
+//            case "DeltaBid" :
+//                return BidAsk.DELTA_BID;
+//            case "AskSmall" :
+//                return BidAsk.ASK_SMALL;
+//            case "BidSmall" :
+//                return BidAsk.BID_SMALL;
+//            case "Volume" :
+//                return BidAsk.VOLUME;
+//            case "Bid" :
+//                return BidAsk.BID;
+//            case "Ask" :
+//                return BidAsk.ASK;
+//        }
+//        return null;
     }
 
 

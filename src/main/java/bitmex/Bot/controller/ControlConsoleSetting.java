@@ -28,7 +28,7 @@ public class ControlConsoleSetting extends Thread {
                     ConsoleHelper.writeMessage("chart === " + Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
                             10, ChartDataBinSize.ONE_MINUTE));
                 } else {
-                    executorCommandos.parserAndExecutor(string);
+                    executorCommandos.parseAndExecute(string);
                 }
             }
         }

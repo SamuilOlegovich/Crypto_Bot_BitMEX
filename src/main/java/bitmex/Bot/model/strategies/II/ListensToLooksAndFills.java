@@ -5,10 +5,13 @@ import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
-import java.util.Comparator;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.*;
+
 
 import static java.lang.Double.NaN;
+
 
 
 public class ListensToLooksAndFills {
@@ -24,6 +27,7 @@ public class ListensToLooksAndFills {
     private volatile double priceEndSell;               // цена к которой должна прийти цена для фиксации паттерна
     private volatile double priceEndBuy;                // цена к которой должна прийти цена для фиксации паттерна
     private volatile double priceNow;                   // цена в данный момент
+    private volatile long timeNow;
 
 
     private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
@@ -67,15 +71,14 @@ public class ListensToLooksAndFills {
     // принимаем объекты и если еще не запускали метод их обработки то запускаем его,
     // если он уже запущен то просто кладем объекты в массив
     // так же получаем текущую цену
-    public synchronized void setInfoString(InfoIndicator infoIndicator) {
+    public void setInfoString(InfoIndicator infoIndicator) {
         listInfoIndicator.add(infoIndicator);
     }
 
 
 
     // отсыпаемся и начинаем работать
-    private synchronized void listSorter() {
-        boolean flag = isTime();
+    private synchronized void listSorter(boolean flag) {
 
         if (flag) {
             try {
@@ -84,6 +87,15 @@ public class ListensToLooksAndFills {
                 e.printStackTrace();
             }
         }
+
+        if (flag && listInfoIndicator.size() < 2) {
+            try {
+                Thread.sleep(1000 * 17);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
 ///////////////////// пересмотреть и доработать под новые реалии
         listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
         listInfoIndicator.clear();
@@ -124,7 +136,10 @@ public class ListensToLooksAndFills {
         if (oneStartFlag) {
             priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
         }
+
         addStringsInListDirections(true);
+
+
 
             // тоже самое только для комбиначии СЕЛЛ
         if (priceEndSell >= priceNow && !oneStartFlag) {
@@ -201,9 +216,9 @@ public class ListensToLooksAndFills {
             }
 
             if (count != 0) {
-                time = timeNow - ((50000) + 1000 * 60 * count);
+                time = timeNow - (1000 * 60 * (count + 1));
             } else {
-                time = timeNow - ((50000) + 1000 * 60 * 5);
+                time = timeNow - (1000 * 60 * 6);
             }
 
             for (int i = arrayList.size() - 1; i > -1; i--) {
@@ -234,9 +249,9 @@ public class ListensToLooksAndFills {
             }
 
             if (count != 0) {
-                time = timeNow - ((50000) + 1000 * 60 * count);
+                time = timeNow - (1000 * 60 * (count + 1));
             } else {
-                time = timeNow - ((50000) + 1000 * 60 * 5);
+                time = timeNow - (1000 * 60 * 6);
             }
 
             for (int i = arrayList.size() - 1; i > -1; i--) {
@@ -264,7 +279,7 @@ public class ListensToLooksAndFills {
             }
         }
 
-        time = timeNow - (1000 * 60 * 5);
+        time = timeNow - (1000 * 60 * 6);
 
         for (int i = arrayList.size() - 1; i > -1; i--) {
             if (arrayList.get(i).getTime().getTime() < time) {
@@ -403,42 +418,6 @@ public class ListensToLooksAndFills {
 
 
 
-    // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
-    private boolean isTime() {
-        String string = DatesTimes.getDateTerminal();
-        String[] strings = string.split(":");
-        double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
-
-        if (seconds > 00.10 && seconds < 4.98) {
-            return false;
-        } else if (seconds > 5.10 && seconds < 9.98) {
-            return false;
-        } else if (seconds > 10.10 && seconds < 14.98) {
-            return false;
-        } else if (seconds > 15.10 && seconds < 19.98) {
-            return false;
-        } else if (seconds > 20.10 && seconds < 24.98) {
-            return false;
-        } else if (seconds > 25.10 && seconds < 29.98) {
-            return false;
-        } else if (seconds > 30.10 && seconds < 34.98) {
-            return false;
-        } else if (seconds > 35.10 && seconds < 39.98) {
-            return false;
-        } else if (seconds > 40.10 && seconds < 44.98) {
-            return false;
-        } else if (seconds > 45.10 && seconds < 49.98) {
-            return false;
-        } else if (seconds > 50.10 && seconds < 54.98) {
-            return false;
-        } else if (seconds > 55.10 && seconds < 59.98) {
-            return false;
-        } else {
-            keepsTrackOfFillingListInfoIndicator.setSleep();
-            return true;
-        }
-    }
-
 
 
 
@@ -464,45 +443,128 @@ public class ListensToLooksAndFills {
 
     // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
     private class KeepsTrackOfFillingListInfoIndicator extends Thread {
-        private volatile int sleep = 1;
-        private int previousValue;
 
         public KeepsTrackOfFillingListInfoIndicator() {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicator начал работать");
-            this.previousValue = 0;
+                    + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicatorUser начал работать");
             start();
         }
 
+
+
         @Override
         public void run() {
+            Timer time2 = new Timer();
+            Timer time = new Timer();
 
-            while (true) {
-                int size = listInfoIndicator.size();
+            DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+            Date date = new Date();
 
-                if (size > 0) {
-                    if (previousValue == listInfoIndicator.size()) {
-                        priceNow = Gasket.getBitmexQuote().getBidPrice();
-                        previousValue = 0;
-                        listSorter();
-                    } else {
-                        previousValue = size;
+            String[] strings = dateFormat.format(date).split(":");
+
+            int minute = (5 - (Integer.parseInt(strings[0]) % 5)) * 60 * 1000;
+            int seconds = ((60 - (Integer.parseInt(strings[1]))) == 60
+                    ? 0 : Integer.parseInt(strings[1])) * 1000;
+            long timeStart = minute - seconds;
+
+            time.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    priceNow = Gasket.getBitmexQuote().getBidPrice();
+                    timeNow = DatesTimes.getDateTerminalLong();
+                    listSorter(true);
+                }
+            }, timeStart, 1000 * 60 * 5);
+
+
+            time2.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!isTime() && listInfoIndicator.size() > 0) {
+                        listSorter(false);
                     }
                 }
+            }, timeStart + (1000 * 2), 1000 * 20);
+        }
 
-                try {
-                    Thread.sleep(1000 * sleep);
-                } catch (InterruptedException e) {
-                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- Не смог проснуться во внутреннем классе "
-                            + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
-                            + " sleep = " + sleep);
-                }
+
+
+        // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
+        private synchronized boolean isTime() {
+            String string = DatesTimes.getDateTerminal();
+            String[] strings = string.split(":");
+            double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
+
+            if (seconds > 00.05 && seconds < 4.98) {
+                return false;
+            } else if (seconds > 5.05 && seconds < 9.98) {
+                return false;
+            } else if (seconds > 10.05 && seconds < 14.98) {
+                return false;
+            } else if (seconds > 15.05 && seconds < 19.98) {
+                return false;
+            } else if (seconds > 20.05 && seconds < 24.98) {
+                return false;
+            } else if (seconds > 25.05 && seconds < 29.98) {
+                return false;
+            } else if (seconds > 30.05 && seconds < 34.98) {
+                return false;
+            } else if (seconds > 35.05 && seconds < 39.98) {
+                return false;
+            } else if (seconds > 40.05 && seconds < 44.98) {
+                return false;
+            } else if (seconds > 45.05 && seconds < 49.98) {
+                return false;
+            } else if (seconds > 50.05 && seconds < 54.98) {
+                return false;
+            } else if (seconds > 55.05 && seconds < 59.98) {
+                return false;
+            } else {
+                return true;
             }
         }
-        private void setSleep() {
-            sleep = Gasket.getSecondsSleepTime();
-        }
+
+
+
+//        private volatile int sleep = 1;
+//        private int previousValue;
+//
+//        public KeepsTrackOfFillingListInfoIndicator() {
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                    + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicator начал работать");
+//            this.previousValue = 0;
+//            start();
+//        }
+//
+//        @Override
+//        public void run() {
+//
+//            while (true) {
+//                int size = listInfoIndicator.size();
+//
+//                if (size > 0) {
+//                    if (previousValue == listInfoIndicator.size()) {
+//                        priceNow = Gasket.getBitmexQuote().getBidPrice();
+//                        previousValue = 0;
+//                        listSorter();
+//                    } else {
+//                        previousValue = size;
+//                    }
+//                }
+//
+//                try {
+//                    Thread.sleep(1000 * sleep);
+//                } catch (InterruptedException e) {
+//                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+//                            + " --- Не смог проснуться во внутреннем классе "
+//                            + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
+//                            + " sleep = " + sleep);
+//                }
+//            }
+//        }
+//        private void setSleep() {
+//            sleep = Gasket.getSecondsSleepTime();
+//        }
     }
 
 
@@ -543,11 +605,6 @@ public class ListensToLooksAndFills {
                             + "сласса ListensToLooksAndFills");
                 }
             }
-        }
-
-        private void setPriceStartBuy(double priceStartBuy) {
-            this.priceStartBuy = priceStartBuy;
-            this.flag = true;
         }
 
         private ArrayList<Double> getArrayListBuy() {
@@ -605,11 +662,6 @@ public class ListensToLooksAndFills {
                             + "сласса ListensToLooksAndFills");
                 }
             }
-        }
-
-        private void setPriceStartSell(double priceStartBuy) {
-            this.priceStartSell = priceStartBuy;
-            this.flag = true;
         }
 
         private ArrayList<Double> getArrayListSell() {

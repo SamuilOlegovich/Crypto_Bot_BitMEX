@@ -11,8 +11,6 @@ import java.util.ArrayList;
 public class ParserSetting {
     private ExecutorCommandos executorCommandos;
     private String path;
-    // = "/Users/samuilolegovich/Desktop/bitmex-client-master/src/main/java/bitmex/Bot/Logs/Settings.txt";
-    //    /Users/samuilolegovich/Desktop/bitmex-client-master/target/classes/bitmex/Bot/Logs/2020-04-18 12:38:46=Log.txt
 
 
     public ParserSetting(ExecutorCommandos executorCommandos) {
@@ -49,7 +47,7 @@ public class ParserSetting {
                 if (string.length() > 4
                         && !string.equals(" --- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- ")) {
                     strings = string.split(" ===== ");
-                    executorCommandos.parserAndExecutor(strings[0]);
+                    executorCommandos.parseAndExecute(strings[0]);
                 }
             }
         } catch (Exception e) {

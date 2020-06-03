@@ -12,7 +12,7 @@ public class ExecutorCommandos {
         this.flag = false;
     }
 
-    public synchronized void parserAndExecutor(String string) {
+    public synchronized void parseAndExecute(String string) {
         String[] strings = string.trim().split("=");
 
         if (strings.length < 1  || strings.length == 1) {

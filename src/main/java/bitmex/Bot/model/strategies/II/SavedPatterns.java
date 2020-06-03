@@ -173,19 +173,6 @@ public class SavedPatterns implements Serializable {
                 inArrayList.remove((int) index);
             }
 
-           /*
-            0 {"period": "M5",
-                    1       "preview": "1",
-                    2      "time": "20.05.2020 21:19:00",
-                    3     "price": "9554,5",
-                    4    "value": "5465914",
-                    5   "type": "Volume",
-                    6  "avg": "7410290",
-                    7 "dir": "-1",
-                    8 "open": "9560,5",
-                    9 "close": "9549,0",
-                    10 "high": "9561,0",
-                    11 "low": "9548,5"}*/
 
 
             // перебираем массив стратегий и сравниваем с пришедшим

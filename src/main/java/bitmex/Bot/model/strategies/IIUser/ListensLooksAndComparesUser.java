@@ -23,6 +23,7 @@ public class ListensLooksAndComparesUser {
     private ArrayList<InfoIndicator> listInfoIndicator;
 
     private KeepsTrackOfFillingListInfoIndicatorUser keepsTrackOfFillingListInfoIndicatorUser;
+    private SortPriceRemainingLevelsUser sortPriceRemainingLevelsUser;
     private SortPriceUser sortPriceComparatorUser;
     private SavedPatternsUser savedPatternsUser;
     private SortSizeUser sortSizeUser;
@@ -38,6 +39,7 @@ public class ListensLooksAndComparesUser {
                 + "Класс ListensLooksAndCompares начал работать");
 
         this.keepsTrackOfFillingListInfoIndicatorUser = new KeepsTrackOfFillingListInfoIndicatorUser();
+        this.sortPriceRemainingLevelsUser = new SortPriceRemainingLevelsUser();
         this.savedPatternsUser = Gasket.getSavedPatternsUserClass();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.sortPriceComparatorUser = new SortPriceUser();
@@ -538,6 +540,76 @@ public class ListensLooksAndComparesUser {
 
 
 
+    // тут мы находи нужное место расположение к вновь пришедшим уровням более длительной давности чем пять минут
+    // при том их вообще могло и не быть, потому раньше мы их не заменили на более новые
+    // и потом конечно же сортируем массив по новому
+    private ArrayList<String> insertRemainingLevels(ArrayList<String> edit, ArrayList<String> additionalLevels) {
+        ArrayList<String> inAdditionalLevels = new ArrayList<>(additionalLevels);
+        ArrayList<String> inEdit = new ArrayList<>(edit);
+        ArrayList<String> out = new ArrayList<>();
+        Date startData = null;
+
+        for (String inAdditionalLevel : inAdditionalLevels) {
+            String[] stringsInAdditionalLevel = inAdditionalLevel.split("===");
+            Date date = getDate(stringsInAdditionalLevel[5]);
+
+            for (String stringInEdit : inEdit) {
+                if (!stringInEdit.startsWith("0") && !stringInEdit.startsWith("BIAS")
+                        && !stringInEdit.startsWith("BUY")) {
+                    String[] stringsInEdit = stringInEdit.split("===");
+                    Date date2 = getDate(stringsInEdit[5]);
+                    if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
+                        if (date.getTime() <= date2.getTime()) {
+                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel);
+                        }
+                    }
+                } else if (stringInEdit.startsWith("0")) {
+                    String[] strings = stringInEdit.split("===");
+                    startData = getDate(strings[1]);
+                }
+            }
+        }
+
+        inAdditionalLevels.clear();
+
+        for (String string : inEdit) {
+            if (string.startsWith("0")) {
+                out.add(string);
+            } else {
+                if (string.startsWith("BIAS")) {
+                    inAdditionalLevels.sort(sortPriceRemainingLevelsUser);
+                    inAdditionalLevels.add(string);
+                    out.addAll(inAdditionalLevels);
+                    inAdditionalLevels.clear();
+                } else {
+                    inAdditionalLevels.add(string);
+                }
+            }
+        }
+
+        inAdditionalLevels.clear();
+        inEdit.clear();
+        return out;
+    }
+
+
+
+    private Date getDate(String string) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dateFromString = null;
+
+        try {
+            dateFromString = simpleDateFormat.parse(string);
+        } catch (Exception e) {
+            ConsoleHelper.writeMessage("неверный формат даты");
+        }
+        return dateFromString;
+    }
+
+
+
+
+
 
 
     /// === INNER CLASSES === ///
@@ -560,6 +632,25 @@ public class ListensLooksAndComparesUser {
         @Override
         public int compare(ArrayList<String> o1, ArrayList<String> o2) {
             double result = o1.size() - o2.size();
+            if (result > 0) return 1;
+            else if (result < 0) return -1;
+            else return 0;
+        }
+    }
+
+
+
+    private class SortPriceRemainingLevelsUser implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+            if (o1.startsWith("0") || o2.startsWith("BIAS") || o1.startsWith("BIAS")) {
+                return 0;
+            }
+
+            String[] strings1 = o1.split("===");
+            String[] strings2 = o2.split("===");
+
+            double result = Double.parseDouble(strings2[7]) - Double.parseDouble(strings1[7]);
             if (result > 0) return 1;
             else if (result < 0) return -1;
             else return 0;

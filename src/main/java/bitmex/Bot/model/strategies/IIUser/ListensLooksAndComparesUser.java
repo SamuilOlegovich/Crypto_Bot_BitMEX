@@ -168,8 +168,8 @@ public class ListensLooksAndComparesUser {
 
                             if (i < inArrayListString.size() - 1) {
                                 if (!strings3[0].equals("BIAS") && !strings4[0].equals("BIAS")
-                                            && !strings1[0].equals("BIAS") && !strings2[0].equals("BIAS")
-                                            && !strings1[7].equals(strings3[7]) && !strings2[7].equals(strings4[7])) {
+                                        && !strings1[0].equals("BIAS") && !strings2[0].equals("BIAS")
+                                        && !strings1[7].equals(strings3[7]) && !strings2[7].equals(strings4[7])) {
 
                                         // если хоть один объект не равен то прирываем цикл
                                     if (!strings1[11].equals(strings2[11]) || !strings1[15].equals(strings2[15])) {
@@ -364,7 +364,8 @@ public class ListensLooksAndComparesUser {
 
                             // если такая строка уже есть то заменяем ее на более новую
                             if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
-                                    && stringsIn[11].equals(stringsThis[11]) && stringsIn[15].equals(stringsThis[15])) {
+                                    && stringsIn[11].equals(stringsThis[11])
+                                    && stringsIn[15].equals(stringsThis[15])) {
 
                                 inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
                                 indexDelete.add(infoIndicatorArrayList.indexOf(infoIndicator));
@@ -402,12 +403,13 @@ public class ListensLooksAndComparesUser {
             }
         }
 
-        if (residualArrayList.size() > 0) {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- размер оставшихся уровней --- "
-                    + residualArrayList.size());
-        }
+//        if (residualArrayList.size() > 0) {
+//
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- размер оставшихся уровней --- "
+//                    + residualArrayList.size());
+//        }
 
-        return inArrayList;
+        return residualArrayList.size() > 0 ? insertRemainingLevels(inArrayList, residualArrayList) : inArrayList;
     }
 
 
@@ -543,14 +545,16 @@ public class ListensLooksAndComparesUser {
     // тут мы находи нужное место расположение к вновь пришедшим уровням более длительной давности чем пять минут
     // при том их вообще могло и не быть, потому раньше мы их не заменили на более новые
     // и потом конечно же сортируем массив по новому
-    private ArrayList<String> insertRemainingLevels(ArrayList<String> edit, ArrayList<String> additionalLevels) {
-        ArrayList<String> inAdditionalLevels = new ArrayList<>(additionalLevels);
+    private synchronized ArrayList<String> insertRemainingLevels(ArrayList<String> edit,
+                                                                 ArrayList<InfoIndicator> additionalLevels) {
+        ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
+        ArrayList<String> intermediary = new ArrayList<>();
         ArrayList<String> inEdit = new ArrayList<>(edit);
         ArrayList<String> out = new ArrayList<>();
         Date startData = null;
 
-        for (String inAdditionalLevel : inAdditionalLevels) {
-            String[] stringsInAdditionalLevel = inAdditionalLevel.split("===");
+        for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
+            String[] stringsInAdditionalLevel = inAdditionalLevel.toStringUser().split("===");
             Date date = getDate(stringsInAdditionalLevel[5]);
 
             for (String stringInEdit : inEdit) {
@@ -560,7 +564,7 @@ public class ListensLooksAndComparesUser {
                     Date date2 = getDate(stringsInEdit[5]);
                     if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
                         if (date.getTime() <= date2.getTime()) {
-                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel);
+                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
                         }
                     }
                 } else if (stringInEdit.startsWith("0")) {
@@ -572,22 +576,23 @@ public class ListensLooksAndComparesUser {
 
         inAdditionalLevels.clear();
 
+
         for (String string : inEdit) {
             if (string.startsWith("0")) {
                 out.add(string);
             } else {
                 if (string.startsWith("BIAS")) {
-                    inAdditionalLevels.sort(sortPriceRemainingLevelsUser);
-                    inAdditionalLevels.add(string);
-                    out.addAll(inAdditionalLevels);
+                    intermediary.sort(sortPriceRemainingLevelsUser);
+                    intermediary.add(string);
+                    out.addAll(intermediary);
                     inAdditionalLevels.clear();
                 } else {
-                    inAdditionalLevels.add(string);
+                    intermediary.add(string);
                 }
             }
         }
 
-        inAdditionalLevels.clear();
+        intermediary.clear();
         inEdit.clear();
         return out;
     }

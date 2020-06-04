@@ -14,7 +14,6 @@ import java.util.TreeSet;
 import java.io.*;
 
 
-
 public class SavedPatterns implements Serializable {
 
     private static final long serialVersionUID = 908198101052020L;

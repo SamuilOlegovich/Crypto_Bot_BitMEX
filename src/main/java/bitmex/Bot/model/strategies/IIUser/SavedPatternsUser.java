@@ -1,9 +1,14 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.DatesTimes;
 
 import java.util.ArrayList;
+
+
+
+
+
 
 public class SavedPatternsUser {
     private static SavedPatternsUser savedPatternsUser;

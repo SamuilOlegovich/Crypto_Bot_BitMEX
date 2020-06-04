@@ -1,19 +1,19 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.model.enums.BidAsk;
-import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.view.WriterAndReadFile;
+import bitmex.Bot.model.enums.TimeFrame;
+import bitmex.Bot.model.enums.BidAsk;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 
-import java.io.BufferedReader;
 import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.io.FileReader;
-import java.io.File;
 import java.util.Date;
+import java.io.File;
 
 
 public class ReadAndSavePatterns {
@@ -107,12 +107,6 @@ public class ReadAndSavePatterns {
         String lineBreak = "\n";
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
-
-//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                + " --- Принял на запись временные лист размером --- "
-//                + arrayLists.size());
-
-//        System.out.println(arrayLists.size());
 
         for (ArrayList<String> arr : arrayLists) {
             for (String s : arr) {

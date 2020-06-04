@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.File;
 
 
-
 public class ReadAndSavePatternsUser {
 
     public static void createSavedPatternsUser() {
@@ -47,19 +46,12 @@ public class ReadAndSavePatternsUser {
     }
 
 
-    public static void saveTemporarySavedPatternsUser(ArrayList<ArrayList<String>> arrayListArrayList) {
-//        SaveRestoreHelper.saveSavedPatternsClass();
+    public static synchronized void saveTemporarySavedPatternsUser(ArrayList<ArrayList<String>> arrayListArrayList) {
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
-
-//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                + " --- Принял на запись временные лист User размером --- "
-//                + arrayLists.size());
-//
-//        System.out.println(arrayLists.size());
 
         for (ArrayList<String> arr : arrayLists) {
             for (String s : arr) {
@@ -67,7 +59,6 @@ public class ReadAndSavePatternsUser {
             }
             stringBuilder.append(next);
         }
-        //stringBuilder.delete(stringBuilder.length() - next.length(), stringBuilder.length());
         stringBuilder.append("END").append(lineBreak);
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),
@@ -76,7 +67,6 @@ public class ReadAndSavePatternsUser {
 
 
     public static void saveSavedPatternsDeleteUser(ArrayList<ArrayList<String>> arrayListArrayList) {
-//        SaveRestoreHelper.saveSavedPatternsClass();
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
 
         if (arrayLists.size() > 0) {
@@ -85,20 +75,12 @@ public class ReadAndSavePatternsUser {
             String next = "NEXT" + lineBreak;
             stringBuilder.append("START").append(lineBreak);
 
-//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                + " --- Принял на запись удаленные User лист размером --- "
-//                + arrayLists.size());
-//
-//        System.out.println(arrayLists.size());
-
             for (ArrayList<String> arr : arrayLists) {
                 for (String s : arr) {
                     stringBuilder.append(s);
                 }
                 stringBuilder.append(next);
             }
-//        stringBuilder.delete(stringBuilder.length() - next.length(), stringBuilder.length());
-//        stringBuilder.append("END").append(lineBreak);
 
             WriterAndReadFile.writerFile(stringBuilder.toString(),
                     Gasket.getFilesAndPathCreator().getPathPatternsDeleteUser(), true);

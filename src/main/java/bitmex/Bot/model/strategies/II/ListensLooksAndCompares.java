@@ -619,19 +619,19 @@ public class ListensLooksAndCompares {
     }
 
 
-    public void startListSortedAndCompares(boolean b) {
+    protected void startListSortedAndCompares(boolean b) {
         listSortedAndCompares(b);
     }
 
-    public void setPriceNow(double priceNow) {
+    protected void setPriceNow(double priceNow) {
         this.priceNow = priceNow;
     }
 
-    public void setTimeNow(long timeNow) {
+    protected void setTimeNow(long timeNow) {
         this.timeNow = timeNow;
     }
 
-    public int getSizeListInfoIndicator() {
+    protected int getSizeListInfoIndicator() {
         return listInfoIndicator.size();
     }
 

@@ -429,6 +429,10 @@ public class ListensToLooksAndFills {
         this.timeNow = timeNow;
     }
 
+    protected int getSizeListInfoIndicator() {
+        return listInfoIndicator.size();
+    }
+
 
 
 

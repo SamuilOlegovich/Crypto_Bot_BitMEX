@@ -80,12 +80,12 @@ public class KeepsTrackOfFillingListInfoIndicator extends Thread {
         time2.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (!isTime() && listensLooksAndCompares.getSizeListInfoIndicator() > 0) {
-                    if (listensLooksAndCompares != null) {
+                if (!isTime()) {
+                    if (listensLooksAndCompares != null &&  listensLooksAndCompares.getSizeListInfoIndicator() > 0) {
                         listensLooksAndCompares.startListSortedAndCompares(false);
                     }
 
-                    if (listensToLooksAndFills != null) {
+                    if (listensToLooksAndFills != null &&  listensToLooksAndFills.getSizeListInfoIndicator() > 0) {
                         listensToLooksAndFills.startListSorter(false);
                     }
                 }

@@ -5,8 +5,6 @@ import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
 import java.util.*;
 
 
@@ -15,7 +13,6 @@ import static java.lang.Double.NaN;
 
 
 public class ListensToLooksAndFills {
-
     private static ListensToLooksAndFills listensToLooksAndFills;
 
     private volatile ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
@@ -30,7 +27,6 @@ public class ListensToLooksAndFills {
     private volatile long timeNow;
 
 
-    private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
     private CountPriseSell countPriseSell;
     private CountPriseBuy countPriseBuy;
     private SavedPatterns savedPatterns;
@@ -45,7 +41,6 @@ public class ListensToLooksAndFills {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Начал работать класс сбора Паттернов");
 
-        this.keepsTrackOfFillingListInfoIndicator = new KeepsTrackOfFillingListInfoIndicator();
         this.priceNow = Gasket.getBitmexQuote().getBidPrice();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsClass();
@@ -450,135 +445,6 @@ public class ListensToLooksAndFills {
             else return 0;
         }
     }
-
-
-//    // следит за наполнением листа и если наполнение больше нет то сортирует его и запускает нужные методы
-//    private class KeepsTrackOfFillingListInfoIndicator extends Thread {
-//
-//        public KeepsTrackOfFillingListInfoIndicator() {
-//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                    + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicatorUser начал работать");
-//            start();
-//        }
-//
-//
-//
-//        @Override
-//        public void run() {
-//            Timer time2 = new Timer();
-//            Timer time = new Timer();
-//
-//            DateFormat dateFormat = new SimpleDateFormat("mm:ss");
-//            Date date = new Date();
-//
-//            String[] strings = dateFormat.format(date).split(":");
-//
-//            int minute = (5 - (Integer.parseInt(strings[0]) % 5)) * 60 * 1000;
-//            int seconds = ((60 - (Integer.parseInt(strings[1]))) == 60
-//                    ? 0 : Integer.parseInt(strings[1])) * 1000;
-//            long timeStart = minute - seconds;
-//
-//            time.scheduleAtFixedRate(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    priceNow = Gasket.getBitmexQuote().getBidPrice();
-//                    timeNow = DatesTimes.getDateTerminalLong();
-//
-//                    listSorter(true);
-//                }
-//            }, timeStart, 1000 * 60 * 5);
-//
-//
-//            time2.scheduleAtFixedRate(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    if (!isTime() && listInfoIndicator.size() > 0) {
-//                        listSorter(false);
-//                    }
-//                }
-//            }, timeStart + (1000 * 2), 1000 * 20);
-//        }
-//
-//
-//
-//        // Проверяем что бы наши пакеты данных не выбивалис из пятиминутки
-//        private synchronized boolean isTime() {
-//            String string = DatesTimes.getDateTerminal();
-//            String[] strings = string.split(":");
-//            double seconds = Double.parseDouble(strings[1] + "." + strings[2]);
-//
-//            if (seconds > 00.05 && seconds < 4.98) {
-//                return false;
-//            } else if (seconds > 5.05 && seconds < 9.98) {
-//                return false;
-//            } else if (seconds > 10.05 && seconds < 14.98) {
-//                return false;
-//            } else if (seconds > 15.05 && seconds < 19.98) {
-//                return false;
-//            } else if (seconds > 20.05 && seconds < 24.98) {
-//                return false;
-//            } else if (seconds > 25.05 && seconds < 29.98) {
-//                return false;
-//            } else if (seconds > 30.05 && seconds < 34.98) {
-//                return false;
-//            } else if (seconds > 35.05 && seconds < 39.98) {
-//                return false;
-//            } else if (seconds > 40.05 && seconds < 44.98) {
-//                return false;
-//            } else if (seconds > 45.05 && seconds < 49.98) {
-//                return false;
-//            } else if (seconds > 50.05 && seconds < 54.98) {
-//                return false;
-//            } else if (seconds > 55.05 && seconds < 59.98) {
-//                return false;
-//            } else {
-//                return true;
-//            }
-//        }
-
-
-
-//        private volatile int sleep = 1;
-//        private int previousValue;
-//
-//        public KeepsTrackOfFillingListInfoIndicator() {
-//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                    + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicator начал работать");
-//            this.previousValue = 0;
-//            start();
-//        }
-//
-//        @Override
-//        public void run() {
-//
-//            while (true) {
-//                int size = listInfoIndicator.size();
-//
-//                if (size > 0) {
-//                    if (previousValue == listInfoIndicator.size()) {
-//                        priceNow = Gasket.getBitmexQuote().getBidPrice();
-//                        previousValue = 0;
-//                        listSorter();
-//                    } else {
-//                        previousValue = size;
-//                    }
-//                }
-//
-//                try {
-//                    Thread.sleep(1000 * sleep);
-//                } catch (InterruptedException e) {
-//                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-//                            + " --- Не смог проснуться во внутреннем классе "
-//                            + "KeepsTrackOfFillingListInfoIndicator класса ListensToLooksAndFills - "
-//                            + " sleep = " + sleep);
-//                }
-//            }
-//        }
-//        private void setSleep() {
-//            sleep = Gasket.getSecondsSleepTime();
-//        }
-
-//    }
 
 
 

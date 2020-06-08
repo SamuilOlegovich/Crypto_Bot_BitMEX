@@ -73,7 +73,7 @@ public class ListensLooksAndComparesUser {
     private synchronized void listSortedAndCompares(boolean flag) {
 
         if (flag) {
-            sortPrice(flag);
+            sortPrice(true);
 
         } else {
 
@@ -84,7 +84,7 @@ public class ListensLooksAndComparesUser {
             }
 
             // сортируем и добавляем
-            sortPrice(flag);
+            sortPrice(false);
             // приводим паттерны в порядок
             setThePatternsInOrder();
             // удаляем ненужное
@@ -402,8 +402,90 @@ public class ListensLooksAndComparesUser {
                     }
                 }
             }
-            return residualArrayList.size() > 0 ? insertRemainingLevels(inArrayList, residualArrayList) : inArrayList;
+            return residualArrayList.size() > 0
+                    ? insertRemainingLevels(inArrayList, residualArrayList) : inArrayList;
 
+    }
+
+
+
+    // тут мы находи нужное место расположение к вновь пришедшим уровням более длительной давности чем пять минут
+    // при том их вообще могло и не быть, потому раньше мы их не заменили на более новые
+    // и потом конечно же сортируем массив по новому
+    private synchronized ArrayList<String> insertRemainingLevels(ArrayList<String> edit,
+                                                                 ArrayList<InfoIndicator> additionalLevels) {
+
+        ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
+        ArrayList<String> intermediary = new ArrayList<>();
+        ArrayList<String> inEdit = new ArrayList<>(edit);
+        ArrayList<String> out = new ArrayList<>();
+        ArrayList<Integer> key = new ArrayList<>();
+        ArrayList<String> value = new ArrayList<>();
+
+
+        // находим минимальную дату ниже которой у нас ничего нет
+        String[] strings = inEdit.get(0).split("===");
+        Date startData = new Date(getDate(strings[strings.length - 1]).getTime() - (5 * 60 * 1000));
+
+
+        // перебираем пришедшие уровни и ищем куда бы их вставить
+        for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
+            Date date = inAdditionalLevel.getTime();
+
+            // перебираем основные уровни паттернов
+            for (String stringInEdit : inEdit) {
+
+                // если это не первая и не промежуточная строка то находим ее время
+                if (!stringInEdit.startsWith("0") && !stringInEdit.startsWith("BIAS")
+                        && !stringInEdit.startsWith("BUY")) {
+                    String[] stringsInEdit = stringInEdit.split("===");
+                    Date date2 = getDate(stringsInEdit[5]);
+
+                    // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
+                    if (startData.getTime() <= date.getTime()) {
+                    //if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
+                        if (date.getTime() <= date2.getTime()) {
+//                            hashMap.put(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
+                            value.add(inAdditionalLevel.toStringUser());
+                            key.add(inEdit.indexOf(stringInEdit));
+//                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
+                        }
+                    }
+                }
+//                else if (stringInEdit.startsWith("0")) {
+//                    String[] strings = stringInEdit.split("===");
+//                    startData = getDate(strings[1]);
+//                }
+            }
+        }
+
+        inAdditionalLevels.clear();
+        Collections.reverse(value);
+        Collections.reverse(key);
+
+        for (int i = 0; i < value.size(); i++) {
+            inEdit.add(key.get(i), value.get(i));
+        }
+
+        // сортируем по новому
+        for (String string : inEdit) {
+            if (string.startsWith("0")) {
+                out.add(string);
+            } else {
+                if (string.startsWith("BIAS")) {
+                    intermediary.sort(sortPriceRemainingLevelsUser);
+                    intermediary.add(string);
+                    out.addAll(intermediary);
+                    intermediary.clear();
+                } else {
+                    intermediary.add(string);
+                }
+            }
+        }
+
+        intermediary.clear();
+        inEdit.clear();
+        return out;
     }
 
 
@@ -541,74 +623,6 @@ public class ListensLooksAndComparesUser {
             stringOut = "NULL===0";
         }
         return stringOut;
-    }
-
-
-
-    // тут мы находи нужное место расположение к вновь пришедшим уровням более длительной давности чем пять минут
-    // при том их вообще могло и не быть, потому раньше мы их не заменили на более новые
-    // и потом конечно же сортируем массив по новому
-    private synchronized ArrayList<String> insertRemainingLevels(ArrayList<String> edit,
-                                                                 ArrayList<InfoIndicator> additionalLevels) {
-
-        ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
-        HashMap<Integer, String> hashMap = new HashMap<>();
-        ArrayList<String> intermediary = new ArrayList<>();
-        ArrayList<String> inEdit = new ArrayList<>(edit);
-        ArrayList<String> out = new ArrayList<>();
-        Date startData = null;
-
-        for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
-            Date date = inAdditionalLevel.getTime();
-
-            for (String stringInEdit : inEdit) {
-
-                if (!stringInEdit.startsWith("0") && !stringInEdit.startsWith("BIAS")
-                        && !stringInEdit.startsWith("BUY")) {
-                    String[] stringsInEdit = stringInEdit.split("===");
-                    Date date2 = getDate(stringsInEdit[5]);
-
-                    if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
-                        if (date.getTime() <= date2.getTime()) {
-                            hashMap.put(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
-//                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
-                        }
-                    }
-                } else if (stringInEdit.startsWith("0")) {
-                    String[] strings = stringInEdit.split("===");
-                    startData = getDate(strings[1]);
-                }
-            }
-        }
-
-        inAdditionalLevels.clear();
-
-        for (Map.Entry<Integer, String> entry : hashMap.entrySet()) {
-            Integer key = entry.getKey();
-            String value = entry.getValue();
-
-            inEdit.add(key, value);
-        }
-
-
-        for (String string : inEdit) {
-            if (string.startsWith("0")) {
-                out.add(string);
-            } else {
-                if (string.startsWith("BIAS")) {
-                    intermediary.sort(sortPriceRemainingLevelsUser);
-                    intermediary.add(string);
-                    out.addAll(intermediary);
-                    intermediary.clear();
-                } else {
-                    intermediary.add(string);
-                }
-            }
-        }
-
-        intermediary.clear();
-        inEdit.clear();
-        return out;
     }
 
 

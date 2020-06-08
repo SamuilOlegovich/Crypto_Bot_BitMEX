@@ -4,20 +4,20 @@ import bitmex.Bot.model.enums.BidAsk;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Test_2 {
 
     public static void main(String[] args) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("\"type\": \"ASK\"");
-        arrayList.add("\"type\": \"CSK\"");
-        arrayList.add("\"type\": \"FSK\"");
-        arrayList.add("\"type\": \"DSK\"");
-        arrayList.add("\"type\": \"ASK\"");
 
-        Collections.sort(arrayList);
+        HashMap<Integer, String> hashMap = new HashMap<>();
 
-        System.out.println(arrayList);
+        for (Map.Entry<String, String> e : hashMap.descendingMap().entrySet()) {
+            System.out.println(e);
+        }
+
+        System.out.println(e);
     }
 }
 

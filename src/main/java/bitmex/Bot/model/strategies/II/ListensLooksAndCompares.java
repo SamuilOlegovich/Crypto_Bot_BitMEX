@@ -73,7 +73,7 @@ public class ListensLooksAndCompares {
     private synchronized void listSortedAndCompares(boolean flag) {
 
         if (flag) {
-            sortPrice(flag);
+            sortPrice(true);
         } else {
 
             listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
@@ -83,7 +83,7 @@ public class ListensLooksAndCompares {
             }
 
             // сортируем и добавляем
-            sortPrice(flag);
+            sortPrice(false);
             // приводим паттерны в порядок
             setThePatternsInOrder();
             // удаляем ненужное

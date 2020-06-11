@@ -75,9 +75,7 @@ public class ListensLooksAndComparesUser {
 
         if (flag) {
             sortPrice(true);
-
         } else {
-
             listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
 
             for (int i = listInfoIndicatorWorkingCopy.size() - 1; i > -1; i--) {
@@ -89,13 +87,14 @@ public class ListensLooksAndComparesUser {
             // приводим паттерны в порядок
             setThePatternsInOrder();
             // удаляем ненужное
-            removeUnnecessaryLists();
+            removeUnnecessaryLists(); //////////////////---ПЕРЕДЕЛАТЬ
             // сохраняю те патерны которые еще актуальны на данный момент
             ReadAndSavePatternsUser.saveTemporarySavedPatternsUser(listInListString);
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "Сравниваю рынок с ПАТТЕРНАМИ USER");
 
+            //////////////////////////---ПЕРЕДЕЛАТЬ---////////////////////////////
             // сравниваем оставшееся с патернами
             for (ArrayList<String> thisArrayListString : listInListString) {
                 // получаем равные по размеру патерны
@@ -220,6 +219,7 @@ public class ListensLooksAndComparesUser {
 
         }
     }
+    /////////////////////////////////////////////////////////////
 
 
 
@@ -309,8 +309,6 @@ public class ListensLooksAndComparesUser {
                 }
             }
 
-//            listInListString.clear();
-
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- В листе для сравнения уже - "
                     + listInListString.size() + " - паттернов USER");
@@ -326,86 +324,85 @@ public class ListensLooksAndComparesUser {
     // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
     // если есть то удаляем их из входящего листа и меняем их в листе направлений
     private synchronized ArrayList<String> getListString(ArrayList<String> arrayListIn) {
+        ArrayList<InfoIndicator> infoIndicatorArrayListWorking = new ArrayList<>(listInfoIndicatorWorkingCopy);
+        ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
+        ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
+        ArrayList<Integer> indexDelete = new ArrayList<>();
 
-            ArrayList<InfoIndicator> infoIndicatorArrayListWorking = new ArrayList<>(listInfoIndicatorWorkingCopy);
-            ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
-            ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
-            ArrayList<Integer> indexDelete = new ArrayList<>();
-
-            int count = 0;
-            long time;
+        int count = 0;
+        long time;
 
 
-            if (inArrayList.size() > 0) {
+        if (inArrayList.size() > 0) {
 
-                // находим количество BIAS
-                for (String s : inArrayList) {
-                    if (s.startsWith("BIAS")) count++;
-                }
+            // находим количество BIAS
+            for (String s : inArrayList) {
+                if (s.startsWith("BIAS")) count++;
+            }
 
-                // согласно количеству BIAS находим максимальный нужный нам промежуток времени
-                if (count >= 1) {
-                    time = timeNow - (1000 * 60 * 5 * (count + 1));
-                } else {
-                    time = timeNow - (1000 * 60 * 6);
-                }
+            // согласно количеству BIAS находим максимальный нужный нам промежуток времени
+            if (count >= 1) {
+                time = timeNow - (1000 * 60 * 5 * (count + 1));
+            } else {
+                time = timeNow - (1000 * 60 * 6);
+            }
 
                 // перебираем объекты и смотрим вписываются ли они в промежуток времени
-                for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
 
                     // если не вписались в промежуток удаляем объект и прирываем этот цикл
-                    if (infoIndicator.getTime().getTime() < time) {
+                if (infoIndicator.getTime().getTime() < time) {
                         indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
 
-                    } else {
+                } else {
                         // сравниваем строки объекта с строками в списке
-                        for (String string : inArrayList) {
-                            String[] stringsIn = infoIndicator.toStringUser().split("===");
-                            String[] stringsThis = string.split("===");
+                    for (String string : inArrayList) {
+                        String[] stringsIn = infoIndicator.toStringUser().split("===");
+                        String[] stringsThis = string.split("===");
 
                             // если длина строки объекта и массива равны то ...
-                            if (stringsIn.length == stringsThis.length) {
+                        if (stringsIn.length == stringsThis.length) {
 
                                 // если такая строка уже есть то заменяем ее на более новую
-                                if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
+                            if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
                                         && stringsIn[11].equals(stringsThis[11])
                                         && stringsIn[15].equals(stringsThis[15])) {
 
-                                    inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
-                                    indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
-                                }
+                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
+                                indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
                             }
                         }
                     }
                 }
+            }
 
                 // удаляем строку
-                TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
-                indexDelete.clear();
-                indexDelete.addAll(treeSet);
-                Collections.reverse(indexDelete);
+            TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
+            indexDelete.clear();
+            indexDelete.addAll(treeSet);
+            Collections.reverse(indexDelete);
 
-                for (Integer index : indexDelete) {
-                    infoIndicatorArrayListWorking.remove((int) index);
-                }
+            for (Integer index : indexDelete) {
+                infoIndicatorArrayListWorking.remove((int) index);
             }
+        }
 
             // определяем пределы последнего блока
-            time = timeNow - (1000 * 60 * 6);
+        time = timeNow - (1000 * 60 * 6);
 
             // если еще остались строки, то добаляем их в последний блок
-            if (infoIndicatorArrayListWorking.size() > 0) {
-                for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
-                    if (infoIndicator.getTime().getTime() > time) {
-                        inArrayList.add(infoIndicator.toStringUser());
-                    } else {
-                        residualArrayList.add(infoIndicator);
-                    }
+        if (infoIndicatorArrayListWorking.size() > 0) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
+                if (infoIndicator.getTime().getTime() > time) {
+                    inArrayList.add(infoIndicator.toStringUser());
+                } else {
+                    residualArrayList.add(infoIndicator);
                 }
             }
+        }
 
-            return residualArrayList.size() > 0
-                    ? new ArrayList<>(insertRemainingLevels(inArrayList, residualArrayList)) : inArrayList;
+        return residualArrayList.size() > 0
+                ? new ArrayList<>(insertRemainingLevels(inArrayList, residualArrayList)) : inArrayList;
     }
 
 
@@ -642,7 +639,7 @@ public class ListensLooksAndComparesUser {
         try {
             dateFromString = simpleDateFormat.parse(string);
         } catch (Exception e) {
-            ConsoleHelper.writeMessage("неверный формат даты");
+            ConsoleHelper.writeMessage("неверный формат даты --- " + string);
         }
         return dateFromString;
     }

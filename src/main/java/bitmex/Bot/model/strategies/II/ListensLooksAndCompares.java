@@ -71,11 +71,9 @@ public class ListensLooksAndCompares {
 
     // отсыпаемся и начинаем работать
     private synchronized void listSortedAndCompares(boolean flag) {
-
         if (flag) {
             sortPrice(true);
         } else {
-
             listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
 
             for (int i = listInfoIndicatorWorkingCopy.size() - 1; i > -1; i--) {
@@ -291,8 +289,7 @@ public class ListensLooksAndCompares {
 
             if (listInListString.size() > 0) {
                 for (ArrayList<String> arrayListString : listInListString) {
-                    ArrayList<String> arrayListOut
-                            = new ArrayList<>(getListString(arrayListString));
+                    ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));
                     arrayListString.clear();
                     arrayListString.addAll(arrayListOut);
                 }
@@ -313,85 +310,85 @@ public class ListensLooksAndCompares {
     // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
     // если есть то удаляем их из входящего листа и меняем их в листе направлений
     private ArrayList<String> getListString(ArrayList<String> arrayListIn) {
-        synchronized (listInfoIndicatorWorkingCopy) {
-            ArrayList<InfoIndicator> infoIndicatorArrayListWorking = new ArrayList<>(listInfoIndicatorWorkingCopy);
-            ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
-            ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
-            ArrayList<Integer> indexDelete = new ArrayList<>();
+        ArrayList<InfoIndicator> infoIndicatorArrayListWorking = new ArrayList<>(listInfoIndicatorWorkingCopy);
+        ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
+        ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
+        ArrayList<Integer> indexDelete = new ArrayList<>();
 
-            int count = 0;
-            long time;
+        int count = 0;
+        long time;
 
 
-            if (inArrayList.size() > 0) {
+        if (inArrayList.size() > 0) {
 
                 // находим количество BIAS
-                for (String s : inArrayList) {
-                    if (s.startsWith("BIAS")) count++;
-                }
+            for (String s : inArrayList) {
+                if (s.startsWith("BIAS")) count++;
+            }
 
                 // согласно количеству BIAS находим максимальный нужный нам промежуток времени
-                if (count >= 1) {
-                    time = timeNow - (1000 * 60 * 5 * (count + 1));
-                } else {
-                    time = timeNow - (1000 * 60 * 6);
-                }
+            if (count >= 1) {
+                time = timeNow - (1000 * 60 * 5 * (count + 1));
+            } else {
+                time = timeNow - (1000 * 60 * 6);
+            }
 
                 // перебираем объекты и смотрим вписываются ли они в промежуток времени
-                for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
 
                     // если не вписались в промежуток удаляем объект и прирываем этот цикл
-                    if (infoIndicator.getTime().getTime() < time) {
-                        indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
+                if (infoIndicator.getTime().getTime() < time) {
+                    indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
 
-                    } else {
+                } else {
                         // сравниваем строки объекта с строками в списке
-                        for (String string : inArrayList) {
-                            String[] stringsIn = infoIndicator.toStringUser().split(",");
-                            String[] stringsThis = string.split(",");
+                    for (String string : inArrayList) {
+                        String[] stringsIn = infoIndicator.toStringUser().split(",");
+                        String[] stringsThis = string.split(",");
 
                             // если длина строки объекта и массива равны то ...
-                            if (stringsIn.length == stringsThis.length && stringsIn.length > 2) {
+                        if (stringsIn.length == stringsThis.length && stringsIn.length > 2) {
 
                                 // если такая строка уже есть то заменяем ее на более новую
-                                if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-                                        && stringsIn[5].equals(stringsThis[5])
-                                        && stringsIn[7].equals(stringsThis[7])) {
+                            if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                                    && stringsIn[5].equals(stringsThis[5])
+                                    && stringsIn[7].equals(stringsThis[7])) {
 
-                                    inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
-                                    indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
-                                }
+                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
+                                indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
                             }
                         }
                     }
                 }
+            }
 
                 // удаляем строку
-                TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
-                indexDelete.clear();
-                indexDelete.addAll(treeSet);
-                Collections.reverse(indexDelete);
+            TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
+            indexDelete.clear();
+            indexDelete.addAll(treeSet);
+            Collections.reverse(indexDelete);
 
-                for (Integer index : indexDelete) {
-                    infoIndicatorArrayListWorking.remove((int) index);
-                }
+            for (Integer index : indexDelete) {
+                infoIndicatorArrayListWorking.remove((int) index);
             }
+        }
 
             // определяем пределы последнего блока
-            time = timeNow - (1000 * 60 * 6);
+        time = timeNow - (1000 * 60 * 6);
 
             // если еще остались строки, то добаляем их в последний блок
-            if (infoIndicatorArrayListWorking.size() > 0) {
-                for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
-                    if (infoIndicator.getTime().getTime() > time) {
-                        inArrayList.add(infoIndicator.toStringUser());
-                    } else {
-                        residualArrayList.add(infoIndicator);
-                    }
+        if (infoIndicatorArrayListWorking.size() > 0) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
+                if (infoIndicator.getTime().getTime() > time) {
+                    inArrayList.add(infoIndicator.toStringUser());
+                } else {
+                    residualArrayList.add(infoIndicator);
                 }
             }
-            return residualArrayList.size() > 0 ? insertRemainingLevels(inArrayList, residualArrayList) : inArrayList;
         }
+
+        return residualArrayList.size() > 0
+                ? new ArrayList<>(insertRemainingLevels(inArrayList, residualArrayList)) : inArrayList;
     }
 
 
@@ -503,15 +500,6 @@ public class ListensLooksAndCompares {
                 inArrayList.remove((int) index);
             }
         }
-//////////////////////////////////////////////////////////////////////
-//        for (ArrayList<String> inArrayList : listInListString) {
-//            if (inArrayList.size() > 1) {
-//                if (inArrayList.get(1).startsWith("BIAS")) {
-//                    inArrayList.remove(1);
-//                }
-//            }
-//        }
-//////////////////////////////////////////////////////////////////////
     }
 
 
@@ -540,56 +528,77 @@ public class ListensLooksAndCompares {
                                                                  ArrayList<InfoIndicator> additionalLevels) {
 
         ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
-        HashMap<Integer, String> hashMap = new HashMap<>();
         ArrayList<String> intermediary = new ArrayList<>();
         ArrayList<String> inEdit = new ArrayList<>(edit);
+        ArrayList<String> value = new ArrayList<>();
+        ArrayList<Integer> key = new ArrayList<>();
         ArrayList<String> out = new ArrayList<>();
-        Date startData = null;
 
+
+        // находим минимальную дату ниже которой у нас ничего нет
+        String[] strings = inEdit.get(0).split("===");
+        Date startData = new Date(getDate(strings[strings.length - 1]).getTime() - (5 * 60 * 1000));
+
+
+        // перебираем пришедшие уровни и ищем куда бы их вставить
         for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
             Date date = inAdditionalLevel.getTime();
 
+            // перебираем основные уровни паттернов
             for (String stringInEdit : inEdit) {
+
+                // если это не первая и не промежуточная строка то находим ее время
                 if (!stringInEdit.startsWith("0") && !stringInEdit.startsWith("BIAS")
                         && !stringInEdit.startsWith("BUY")) {
-
                     String[] stringsInEdit = stringInEdit.split(",");
-                    Date date2 = getDate(stringsInEdit[2].replaceAll("\"", "")
-                            .replaceAll("time: ", ""));
+                    Date date2 = getDate(stringsInEdit[2]);
 
-                    if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
+                    // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
+                    if (startData.getTime() <= date.getTime()) {
+                        //if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
                         if (date.getTime() <= date2.getTime()) {
-                            hashMap.put(inEdit.indexOf(stringInEdit), inAdditionalLevel.toString());
+//                            hashMap.put(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
+                            value.add(inAdditionalLevel.toStringUser());
+                            key.add(inEdit.indexOf(stringInEdit));
+//                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
                         }
                     }
-                } else if (stringInEdit.startsWith("0")) {
-                    String[] strings = stringInEdit.split("===");
-                    startData = getDate(strings[1]);
                 }
             }
         }
 
+        HashSet<String> hashSetValue = new HashSet<>(value);
+        HashSet<Integer> hashSetKey = new HashSet<>(key);
         inAdditionalLevels.clear();
+        value.clear();
+        key.clear();
 
-        for (Map.Entry<Integer, String> entry : hashMap.entrySet()) {
-            Integer key = entry.getKey();
-            String value = entry.getValue();
+        value.addAll(hashSetValue);
+        key.addAll(hashSetKey);
 
-            inEdit.add(key, value);
+        Collections.reverse(value);
+        Collections.reverse(key);
+
+        for (int i = 0; i < value.size(); i++) {
+            inEdit.add(key.get(i), value.get(i));
         }
 
+        // сортируем по новому
         for (String string : inEdit) {
             if (string.startsWith("0")) {
                 out.add(string);
+            } else if (string.startsWith("BIAS")) {
+                intermediary.sort(sortPriceRemainingLevels);
+                intermediary.add(string);
+                out.addAll(intermediary);
+                intermediary.clear();
+            } else if (inEdit.indexOf(string) == inEdit.size() - 1) {
+                intermediary.add(string);
+                intermediary.sort(sortPriceRemainingLevels);
+                out.addAll(intermediary);
+                intermediary.clear();
             } else {
-                if (string.startsWith("BIAS")) {
-                    intermediary.sort(sortPriceRemainingLevels);
-                    intermediary.add(string);
-                    out.addAll(intermediary);
-                    intermediary.clear();
-                } else {
-                    intermediary.add(string);
-                }
+                intermediary.add(string);
             }
         }
 
@@ -602,12 +611,14 @@ public class ListensLooksAndCompares {
 
     private Date getDate(String string) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String inString = string.replaceAll("\"", "").replaceAll("time: ", "");
         Date dateFromString = null;
 
+
         try {
-            dateFromString = simpleDateFormat.parse(string);
+            dateFromString = simpleDateFormat.parse(inString);
         } catch (Exception e) {
-            ConsoleHelper.writeMessage("неверный формат даты");
+            ConsoleHelper.writeMessage("неверный формат даты --- " + inString);
         }
         return dateFromString;
     }

@@ -5,6 +5,7 @@ import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -15,18 +16,19 @@ import static java.lang.Double.NaN;
 public class ListensToLooksAndFills {
     private static ListensToLooksAndFills listensToLooksAndFills;
 
-    private volatile ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
-    private volatile ArrayList<InfoIndicator> listInfoIndicator;                // лист для входящих объектов
-    private volatile ArrayList<String> listStringPriceSell;                     // лист для формирования селл паттерна
-    private volatile ArrayList<String> listStringPriceBuy;                      // лист для формирования бай паттерна
+    private ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
+    private ArrayList<InfoIndicator> listInfoIndicator;                // лист для входящих объектов
+    private ArrayList<String> listStringPriceSell;                     // лист для формирования селл паттерна
+    private ArrayList<String> listStringPriceBuy;                      // лист для формирования бай паттерна
 
 
-    private volatile double priceEndSell;               // цена к которой должна прийти цена для фиксации паттерна
-    private volatile double priceEndBuy;                // цена к которой должна прийти цена для фиксации паттерна
-    private volatile double priceNow;                   // цена в данный момент
-    private volatile long timeNow;
+    private double priceEndSell;               // цена к которой должна прийти цена для фиксации паттерна
+    private double priceEndBuy;                // цена к которой должна прийти цена для фиксации паттерна
+    private double priceNow;                   // цена в данный момент
+    private long timeNow;
 
 
+    private SortPriceRemainingLevels sortPriceRemainingLevels;
     private CountPriseSell countPriseSell;
     private CountPriseBuy countPriseBuy;
     private SavedPatterns savedPatterns;
@@ -41,6 +43,7 @@ public class ListensToLooksAndFills {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Начал работать класс сбора Паттернов");
 
+        this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
         this.priceNow = Gasket.getBitmexQuote().getBidPrice();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsClass();
@@ -74,30 +77,16 @@ public class ListensToLooksAndFills {
 
     // отсыпаемся и начинаем работать
     private synchronized void listSorter(boolean flag) {
-
-        if (flag) {
-            try {
-                Thread.sleep(1000 * 11);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (flag && listInfoIndicator.size() < 2) {
-            try {
-                Thread.sleep(1000 * 17);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
 ///////////////////// пересмотреть и доработать под новые реалии
         listInfoIndicatorWorkingCopy.addAll(listInfoIndicator);
-        listInfoIndicator.clear();
+
+        for (int i = listInfoIndicatorWorkingCopy.size() - 1; i > -1; i--) {
+            listInfoIndicator.remove(i);
+        }
+
         listInfoIndicatorWorkingCopy.sort(sortPrice);
 
-
-        if (priceEndBuy <= priceNow && !oneStartFlag) {
+        if (priceEndBuy <= priceNow && !oneStartFlag && flag) {
             // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
             // добавляем лист в стратегии,
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
@@ -117,8 +106,9 @@ public class ListensToLooksAndFills {
             // добавляем строку данных о поведении цены в промежутке между поступлениями уровней
             if (!oneStartFlag && flag) {
                 String stringBias = "BIAS===" + getBias(true) + "===AVERAGE===" + getAverageDeviations(true)
-                            + "===MAX===" + getMaxDeviations(true)
-                            + "\n";
+                        + "===MAX===" + getMaxDeviations(true)
+                        + "===TIME===" + DatesTimes.getDateTerminal()
+                        + "\n";
                 listStringPriceBuy.add(stringBias);
             }
         }
@@ -153,8 +143,9 @@ public class ListensToLooksAndFills {
         } else {
             if (!oneStartFlag && flag) {
                 String stringBias = "BIAS===" + getBias(false) + "===AVERAGE===" + getAverageDeviations(false)
-                            + "===MAX===" + getMaxDeviations(false)
-                            + "\n";
+                        + "===MAX===" + getMaxDeviations(false)
+                        + "===TIME===" + DatesTimes.getDateTerminal()
+                        + "\n";
                 listStringPriceSell.add(stringBias);
                 countPriseSell.clearList();
             }
@@ -178,112 +169,323 @@ public class ListensToLooksAndFills {
 
     // добавляем строки в листы направлений
     private void addStringsInListDirections(boolean buyOrSell) {
-        ArrayList<InfoIndicator> arrayList = new ArrayList<>(checkIfThereAreSuchLevels(buyOrSell));
+        ArrayList<String> stringArrayListOut = new ArrayList<>();
+//        ArrayList<InfoIndicator> arrayList = new ArrayList<>(checkIfThereAreSuchLevels(buyOrSell));
 
-        if (arrayList.size() > 0) {
+
+//        if (arrayList.size() > 0) {
             if (buyOrSell) {
+                stringArrayListOut.addAll(checkIfThereAreSuchLevels(listStringPriceBuy));
+                listStringPriceBuy.clear();
+                listStringPriceBuy.addAll(stringArrayListOut);
 
-                for (InfoIndicator infoIndicator : arrayList) {
-                    listStringPriceBuy.add(infoIndicator.toString());
-                }
+//                for (InfoIndicator infoIndicator : arrayList) {
+//                    listStringPriceBuy.add(infoIndicator.toString());
+//
+//                }
             } else {
+                stringArrayListOut.addAll(checkIfThereAreSuchLevels(listStringPriceSell));
+                listStringPriceSell.clear();
+                listStringPriceSell.addAll(stringArrayListOut);
 
-                for (InfoIndicator infoIndicator : arrayList) {
-                    listStringPriceSell.add(infoIndicator.toString());
-                }
+
+//                for (InfoIndicator infoIndicator : arrayList) {
+//                    listStringPriceSell.add(infoIndicator.toString());
+//                }
             }
-        }
+//        }
     }
 
 
+    // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
+    // если есть то удаляем их из входящего листа и меняем их в листе направлений
+    private synchronized ArrayList<String> checkIfThereAreSuchLevels(ArrayList<String> arrayListIn) {
+        ArrayList<InfoIndicator> infoIndicatorArrayListWorking = new ArrayList<>(listInfoIndicatorWorkingCopy);
+        ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
+        ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
+        ArrayList<Integer> indexDelete = new ArrayList<>();
 
-    // проверяем есть ли такие уровни, если есть то удаляем их из входящего листа и меняем их в листе направлений
-    private ArrayList<InfoIndicator> checkIfThereAreSuchLevels(boolean buyOrSell) {
-        ArrayList<InfoIndicator> arrayList = new ArrayList<>(listInfoIndicatorWorkingCopy);
-        long timeNow = DatesTimes.getDateTerminalLong();
         int count = 0;
         long time;
 
-        if (buyOrSell) {
 
-            for (String s : listStringPriceBuy) {
+        if (inArrayList.size() > 0) {
+
+            // находим количество BIAS
+            for (String s : inArrayList) {
                 if (s.startsWith("BIAS")) count++;
             }
 
-            if (count != 0) {
-                time = timeNow - (1000 * 60 * (count + 1));
+            // согласно количеству BIAS находим максимальный нужный нам промежуток времени
+            if (count >= 1) {
+                time = timeNow - (1000 * 60 * 5 * (count + 1));
             } else {
                 time = timeNow - (1000 * 60 * 6);
             }
 
-            for (int i = arrayList.size() - 1; i > -1; i--) {
-                InfoIndicator infoIndicator = arrayList.get(i);
+            // перебираем объекты и смотрим вписываются ли они в промежуток времени
+            for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
 
-                if (infoIndicator.getTime().getTime() <= time) {
-                    arrayList.remove(i);
-                    break;
-                }
-
-                for (int j = listStringPriceBuy.size() - 1; j > -1; j--) {
-                    String[] stringsIn = infoIndicator.toString().split(",");
-                    String[] stringsThis = listStringPriceBuy.get(j).split(",");
-
-                    if (stringsIn.length == stringsThis.length) {
-                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
-                            listStringPriceBuy.set(j, infoIndicator.toString());
-                            arrayList.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        } else {
-            for (String s : listStringPriceSell) {
-                if (s.startsWith("BIAS")) count++;
-            }
-
-            if (count != 0) {
-                time = timeNow - (1000 * 60 * (count + 1));
-            } else {
-                time = timeNow - (1000 * 60 * 6);
-            }
-
-            for (int i = arrayList.size() - 1; i > -1; i--) {
-                InfoIndicator infoIndicator = arrayList.get(i);
-
+                // если не вписались в промежуток удаляем объект и прирываем этот цикл
                 if (infoIndicator.getTime().getTime() < time) {
-                    arrayList.remove(i);
-                    break;
-                }
+                    indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
 
-                for (int j = listStringPriceSell.size() - 1; j > -1; j--) {
-                    String[] stringsIn = infoIndicator.toString().split(",");
-                    String[] stringsThis = listStringPriceSell.get(j).split(",");
+                } else {
+                    // сравниваем строки объекта с строками в списке
+                    for (String string : inArrayList) {
+                        String[] stringsIn = infoIndicator.toString().split(",");
+                        String[] stringsThis = string.split(",");
 
-                    if (stringsIn.length == stringsThis.length) {
-                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+                        // если длина строки объекта и массива равны то ...
+                        if (stringsIn.length == stringsThis.length) {
 
-                            listStringPriceSell.set(j, infoIndicator.toString());
-                            arrayList.remove(i);
-                            break;
+                            // если такая строка уже есть то заменяем ее на более новую
+                            if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+                                    && stringsIn[5].equals(stringsThis[5])
+                                    && stringsIn[7].equals(stringsThis[7])) {
+
+                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
+                                indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
+                            }
                         }
                     }
                 }
+            }
+
+            // удаляем строку
+            TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
+            indexDelete.clear();
+            indexDelete.addAll(treeSet);
+            Collections.reverse(indexDelete);
+
+            for (Integer index : indexDelete) {
+                infoIndicatorArrayListWorking.remove((int) index);
             }
         }
 
+        // определяем пределы последнего блока
         time = timeNow - (1000 * 60 * 6);
 
-        for (int i = arrayList.size() - 1; i > -1; i--) {
-            if (arrayList.get(i).getTime().getTime() < time) {
-                arrayList.remove(i);
+        // если еще остались строки, то добаляем их в последний блок
+        if (infoIndicatorArrayListWorking.size() > 0) {
+            for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
+                if (infoIndicator.getTime().getTime() > time) {
+                    inArrayList.add(infoIndicator.toStringUser());
+                } else {
+                    residualArrayList.add(infoIndicator);
+                }
             }
         }
 
-        return arrayList;
+        return residualArrayList.size() > 0
+                ? new ArrayList<>(insertRemainingLevels(inArrayList, residualArrayList)) : inArrayList;
     }
+
+
+    // тут мы находи нужное место расположение к вновь пришедшим уровням более длительной давности чем пять минут
+    // при том их вообще могло и не быть, потому раньше мы их не заменили на более новые
+    // и потом конечно же сортируем массив по новому
+    private synchronized ArrayList<String> insertRemainingLevels(ArrayList<String> edit,
+                                                                 ArrayList<InfoIndicator> additionalLevels) {
+
+        ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
+        ArrayList<String> intermediary = new ArrayList<>();
+        ArrayList<String> inEdit = new ArrayList<>(edit);
+        ArrayList<String> value = new ArrayList<>();
+        ArrayList<Integer> key = new ArrayList<>();
+        ArrayList<String> out = new ArrayList<>();
+
+
+        // находим минимальную дату ниже которой у нас ничего нет
+        String stringDateStart = "";
+
+        for (String string : inEdit) {
+            if (string.startsWith("BIAS")) {
+                String[] strings = inEdit.get(0).split("===");
+                stringDateStart = "\"time\": \"" + strings[strings.length - 1] + "\"";
+                break;
+            }
+        }
+
+        Date startData = new Date(getDate(stringDateStart).getTime() - (1000 * 60 * 6));
+
+
+        // перебираем пришедшие уровни и ищем куда бы их вставить
+        for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
+            Date date = inAdditionalLevel.getTime();
+
+            // перебираем основные уровни паттернов
+            for (String stringInEdit : inEdit) {
+
+                // если это не первая и не промежуточная строка то находим ее время
+                if (!stringInEdit.startsWith("0") && !stringInEdit.startsWith("BIAS")
+                        && !stringInEdit.startsWith("BUY")) {
+                    String[] stringsInEdit = stringInEdit.split(",");
+                    Date date2 = getDate(stringsInEdit[2]);
+
+                    // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
+                    if (startData.getTime() <= date.getTime()) {
+                        //if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
+                        if (date.getTime() <= date2.getTime()) {
+//                            hashMap.put(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
+                            value.add(inAdditionalLevel.toStringUser());
+                            key.add(inEdit.indexOf(stringInEdit));
+//                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
+                        }
+                    }
+                }
+            }
+        }
+
+        HashSet<String> hashSetValue = new HashSet<>(value);
+        HashSet<Integer> hashSetKey = new HashSet<>(key);
+        inAdditionalLevels.clear();
+        value.clear();
+        key.clear();
+
+        value.addAll(hashSetValue);
+        key.addAll(hashSetKey);
+
+        Collections.reverse(value);
+        Collections.reverse(key);
+
+        for (int i = 0; i < value.size(); i++) {
+            inEdit.add(key.get(i), value.get(i));
+        }
+
+        // сортируем по новому
+        for (String string : inEdit) {
+            if (string.startsWith("BUY")) {
+                out.add(string);
+            } else if (string.startsWith("BIAS")) {
+                intermediary.sort(sortPriceRemainingLevels);
+                intermediary.add(string);
+                out.addAll(intermediary);
+                intermediary.clear();
+            } else if (inEdit.indexOf(string) == inEdit.size() - 1) {
+                intermediary.add(string);
+                intermediary.sort(sortPriceRemainingLevels);
+                out.addAll(intermediary);
+                intermediary.clear();
+            } else {
+                intermediary.add(string);
+            }
+        }
+
+        intermediary.clear();
+        inEdit.clear();
+        return out;
+    }
+
+
+    private Date getDate(String string) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String stringIn = string.replaceAll("\"", "").replace("time: ", "");
+        Date dateFromString = null;
+
+        try {
+            dateFromString = simpleDateFormat.parse(stringIn);
+        } catch (Exception e) {
+            ConsoleHelper.writeMessage("неверный формат даты --- " + stringIn);
+        }
+        return dateFromString;
+    }
+
+
+
+
+
+
+
+
+
+//    // проверяем есть ли такие уровни, если есть то удаляем их из входящего листа и меняем их в листе направлений
+//    private ArrayList<InfoIndicator> checkIfThereAreSuchLevels(boolean buyOrSell) {
+//        ArrayList<InfoIndicator> arrayList = new ArrayList<>(listInfoIndicatorWorkingCopy);
+//        long timeNow = DatesTimes.getDateTerminalLong();
+//        int count = 0;
+//        long time;
+//
+//        if (buyOrSell) {
+//
+//            for (String s : listStringPriceBuy) {
+//                if (s.startsWith("BIAS")) count++;
+//            }
+//
+//            if (count != 0) {
+//                time = timeNow - (1000 * 60 * 5 * (count + 1));
+//            } else {
+//                time = timeNow - (1000 * 60 * 6);
+//            }
+//
+//            for (int i = arrayList.size() - 1; i > -1; i--) {
+//                InfoIndicator infoIndicator = arrayList.get(i);
+//
+//                if (infoIndicator.getTime().getTime() <= time) {
+//                    arrayList.remove(i);
+//                    break;
+//                }
+//
+//                for (int j = listStringPriceBuy.size() - 1; j > -1; j--) {
+//                    String[] stringsIn = infoIndicator.toString().split(",");
+//                    String[] stringsThis = listStringPriceBuy.get(j).split(",");
+//
+//                    if (stringsIn.length == stringsThis.length) {
+//                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+//                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+//                            listStringPriceBuy.set(j, infoIndicator.toString());
+//                            arrayList.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            for (String s : listStringPriceSell) {
+//                if (s.startsWith("BIAS")) count++;
+//            }
+//
+//            if (count != 0) {
+//                time = timeNow - (1000 * 60 * 5 * (count + 1));
+//            } else {
+//                time = timeNow - (1000 * 60 * 6);
+//            }
+//
+//            for (int i = arrayList.size() - 1; i > -1; i--) {
+//                InfoIndicator infoIndicator = arrayList.get(i);
+//
+//                if (infoIndicator.getTime().getTime() < time) {
+//                    arrayList.remove(i);
+//                    break;
+//                }
+//
+//                for (int j = listStringPriceSell.size() - 1; j > -1; j--) {
+//                    String[] stringsIn = infoIndicator.toString().split(",");
+//                    String[] stringsThis = listStringPriceSell.get(j).split(",");
+//
+//                    if (stringsIn.length == stringsThis.length) {
+//                        if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
+//                                && stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])) {
+//
+//                            listStringPriceSell.set(j, infoIndicator.toString());
+//                            arrayList.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        time = timeNow - (1000 * 60 * 6);
+//
+//        for (int i = arrayList.size() - 1; i > -1; i--) {
+//            if (arrayList.get(i).getTime().getTime() < time) {
+//                arrayList.remove(i);
+//            }
+//        }
+//
+//        return arrayList;
+//    }
 
 
 
@@ -447,6 +649,23 @@ public class ListensToLooksAndFills {
     }
 
 
+    private class SortPriceRemainingLevels implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+            String[] strings1 = o1.split(",");
+            String[] strings2 = o2.split(",");
+
+            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
+                    .replaceAll("price: ", ""))
+                    - Double.parseDouble(strings1[3].replaceAll("\"", "")
+                    .replaceAll("price: ", ""));
+            if (result > 0) return 1;
+            else if (result < 0) return -1;
+            else return 0;
+        }
+    }
+
+
 
     // Фиксируем цену отклонения
     private class CountPriseBuy extends Thread {
@@ -561,3 +780,43 @@ public class ListensToLooksAndFills {
         }
     }
 }
+
+
+//    0 {"period": "M5",
+//    1 "preview": "1",
+//    2 "time": "2020-05-27 12:28:00",
+//    3 "price": "9175.0",
+//    4 "value": "2920763",
+//    5 "type": "ASK",
+//    6 "avg": "2871888",
+//    7 "dir": "1",
+//    8 "open": "9167.5",
+//    9 "close": "9178.5",
+//    10 "high": "9183.0",
+//    11 "low": "9167.0"}
+//
+//
+//    0 period
+//    1 period.toString()
+//    2 ===preview=== +
+//    3 preview +
+//    4 "===time===" +
+//    5 dateFormat.format(time)
+//    6 "===price===" +
+//    7 price
+//    8 "===value===" +
+//    9 value +
+//    10 "===type===" +
+//    11 type.toString() +
+//    12 "===avg===" +
+//    13 avg
+//    14 "===dir===" +
+//    15 dir + "
+//    16 ===open===" +
+//    17 open + "
+//    18 ===close===" +
+//    19 close + "
+//    20 ===high===" +
+//    21 high
+//    22 ===low===" +
+//    23 low

@@ -37,7 +37,8 @@ public class ListensLooksAndComparesUser {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Класс ListensLooksAndCompares начал работать");
 
-        this.keepsTrackOfFillingListInfoIndicatorUser = new KeepsTrackOfFillingListInfoIndicatorUser(this);
+        this.keepsTrackOfFillingListInfoIndicatorUser
+                = new KeepsTrackOfFillingListInfoIndicatorUser(this);
         this.sortPriceRemainingLevelsUser = new SortPriceRemainingLevelsUser();
         this.savedPatternsUser = Gasket.getSavedPatternsUserClass();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
@@ -402,9 +403,9 @@ public class ListensLooksAndComparesUser {
                     }
                 }
             }
-            return residualArrayList.size() > 0
-                    ? insertRemainingLevels(inArrayList, residualArrayList) : inArrayList;
 
+            return residualArrayList.size() > 0
+                    ? new ArrayList<>(insertRemainingLevels(inArrayList, residualArrayList)) : inArrayList;
     }
 
 
@@ -418,9 +419,9 @@ public class ListensLooksAndComparesUser {
         ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
         ArrayList<String> intermediary = new ArrayList<>();
         ArrayList<String> inEdit = new ArrayList<>(edit);
-        ArrayList<String> out = new ArrayList<>();
-        ArrayList<Integer> key = new ArrayList<>();
         ArrayList<String> value = new ArrayList<>();
+        ArrayList<Integer> key = new ArrayList<>();
+        ArrayList<String> out = new ArrayList<>();
 
 
         // находим минимальную дату ниже которой у нас ничего нет
@@ -452,14 +453,18 @@ public class ListensLooksAndComparesUser {
                         }
                     }
                 }
-//                else if (stringInEdit.startsWith("0")) {
-//                    String[] strings = stringInEdit.split("===");
-//                    startData = getDate(strings[1]);
-//                }
             }
         }
 
+        HashSet<String> hashSetValue = new HashSet<>(value);
+        HashSet<Integer> hashSetKey = new HashSet<>(key);
         inAdditionalLevels.clear();
+        value.clear();
+        key.clear();
+
+        value.addAll(hashSetValue);
+        key.addAll(hashSetKey);
+
         Collections.reverse(value);
         Collections.reverse(key);
 
@@ -471,15 +476,18 @@ public class ListensLooksAndComparesUser {
         for (String string : inEdit) {
             if (string.startsWith("0")) {
                 out.add(string);
+            } else if (string.startsWith("BIAS")) {
+                intermediary.sort(sortPriceRemainingLevelsUser);
+                intermediary.add(string);
+                out.addAll(intermediary);
+                intermediary.clear();
+            } else if (inEdit.indexOf(string) == inEdit.size() - 1) {
+                intermediary.add(string);
+                intermediary.sort(sortPriceRemainingLevelsUser);
+                out.addAll(intermediary);
+                intermediary.clear();
             } else {
-                if (string.startsWith("BIAS")) {
-                    intermediary.sort(sortPriceRemainingLevelsUser);
-                    intermediary.add(string);
-                    out.addAll(intermediary);
-                    intermediary.clear();
-                } else {
-                    intermediary.add(string);
-                }
+                intermediary.add(string);
             }
         }
 

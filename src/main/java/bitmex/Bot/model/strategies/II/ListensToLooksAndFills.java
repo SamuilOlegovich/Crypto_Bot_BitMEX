@@ -40,9 +40,8 @@ public class ListensToLooksAndFills {
 
 
     private ListensToLooksAndFills() {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Начал работать класс сбора Паттернов");
-
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                + " --- " + "Начал работать класс сбора Паттернов");
         this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
         this.priceNow = Gasket.getBitmexQuote().getBidPrice();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
@@ -204,7 +203,6 @@ public class ListensToLooksAndFills {
         ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
         ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
         ArrayList<Integer> indexDelete = new ArrayList<>();
-
         int count = 0;
         long time;
 
@@ -244,7 +242,7 @@ public class ListensToLooksAndFills {
                                     && stringsIn[5].equals(stringsThis[5])
                                     && stringsIn[7].equals(stringsThis[7])) {
 
-                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
+                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toString());
                                 indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
                             }
                         }
@@ -270,7 +268,7 @@ public class ListensToLooksAndFills {
         if (infoIndicatorArrayListWorking.size() > 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
                 if (infoIndicator.getTime().getTime() > time) {
-                    inArrayList.add(infoIndicator.toStringUser());
+                    inArrayList.add(infoIndicator.toString());
                 } else {
                     residualArrayList.add(infoIndicator);
                 }
@@ -287,101 +285,102 @@ public class ListensToLooksAndFills {
     // и потом конечно же сортируем массив по новому
     private synchronized ArrayList<String> insertRemainingLevels(ArrayList<String> edit,
                                                                  ArrayList<InfoIndicator> additionalLevels) {
-
         ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
         ArrayList<String> intermediary = new ArrayList<>();
         ArrayList<String> inEdit = new ArrayList<>(edit);
         ArrayList<String> value = new ArrayList<>();
         ArrayList<Integer> key = new ArrayList<>();
         ArrayList<String> out = new ArrayList<>();
+        String stringDateStart = null;
 
 
         // находим минимальную дату ниже которой у нас ничего нет
-        String stringDateStart = "";
-
         for (String string : inEdit) {
             if (string.startsWith("BIAS")) {
-                String[] strings = inEdit.get(0).split("===");
-                stringDateStart = "\"time\": \"" + strings[strings.length - 1] + "\"";
+                String[] strings = string.split("===");
+                stringDateStart = "\"time\": \"" + strings[strings.length - 1];
+                stringDateStart = stringDateStart.replaceAll("\n", "\"");
                 break;
             }
         }
 
-        Date startData = new Date(getDate(stringDateStart).getTime() - (1000 * 60 * 6));
+        if (stringDateStart != null) {
 
+            Date startData = new Date(getDate(stringDateStart).getTime() - (1000 * 60 * 6));
 
-        // перебираем пришедшие уровни и ищем куда бы их вставить
-        for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
-            Date date = inAdditionalLevel.getTime();
+            // перебираем пришедшие уровни и ищем куда бы их вставить
+            for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
+                Date date = inAdditionalLevel.getTime();
 
-            // перебираем основные уровни паттернов
-            for (String stringInEdit : inEdit) {
+                // перебираем основные уровни паттернов
+                for (String stringInEdit : inEdit) {
 
-                // если это не первая и не промежуточная строка то находим ее время
-                if (!stringInEdit.startsWith("0") && !stringInEdit.startsWith("BIAS")
-                        && !stringInEdit.startsWith("BUY")) {
-                    String[] stringsInEdit = stringInEdit.split(",");
-                    Date date2 = getDate(stringsInEdit[2]);
+                    // если это не первая и не промежуточная строка то находим ее время
+                    if (!stringInEdit.startsWith("0") && !stringInEdit.startsWith("BIAS")
+                            && !stringInEdit.startsWith("BUY")) {
+                        String[] stringsInEdit = stringInEdit.split(",");
+                        Date date2 = getDate(stringsInEdit[2]);
 
-                    // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
-                    if (startData.getTime() <= date.getTime()) {
-                        //if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
-                        if (date.getTime() <= date2.getTime()) {
-//                            hashMap.put(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
-                            value.add(inAdditionalLevel.toStringUser());
-                            key.add(inEdit.indexOf(stringInEdit));
-//                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
+                        // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
+                        if (startData.getTime() <= date.getTime()) {
+                            if (date.getTime() <= date2.getTime()) {
+                                value.add(inAdditionalLevel.toStringUser());
+                                key.add(inEdit.indexOf(stringInEdit));
+                            }
                         }
                     }
                 }
             }
-        }
 
-        HashSet<String> hashSetValue = new HashSet<>(value);
-        HashSet<Integer> hashSetKey = new HashSet<>(key);
-        inAdditionalLevels.clear();
-        value.clear();
-        key.clear();
+            HashSet<String> hashSetValue = new HashSet<>(value);
+            HashSet<Integer> hashSetKey = new HashSet<>(key);
+            inAdditionalLevels.clear();
+            value.clear();
+            key.clear();
 
-        value.addAll(hashSetValue);
-        key.addAll(hashSetKey);
+            value.addAll(hashSetValue);
+            key.addAll(hashSetKey);
 
-        Collections.reverse(value);
-        Collections.reverse(key);
+            Collections.reverse(value);
+            Collections.reverse(key);
 
-        for (int i = 0; i < value.size(); i++) {
-            inEdit.add(key.get(i), value.get(i));
-        }
-
-        // сортируем по новому
-        for (String string : inEdit) {
-            if (string.startsWith("BUY")) {
-                out.add(string);
-            } else if (string.startsWith("BIAS")) {
-                intermediary.sort(sortPriceRemainingLevels);
-                intermediary.add(string);
-                out.addAll(intermediary);
-                intermediary.clear();
-            } else if (inEdit.indexOf(string) == inEdit.size() - 1) {
-                intermediary.add(string);
-                intermediary.sort(sortPriceRemainingLevels);
-                out.addAll(intermediary);
-                intermediary.clear();
-            } else {
-                intermediary.add(string);
+            for (int i = 0; i < value.size(); i++) {
+                inEdit.add(key.get(i), value.get(i));
             }
-        }
 
-        intermediary.clear();
-        inEdit.clear();
-        return out;
+            // сортируем по новому
+            for (String string : inEdit) {
+                if (string.startsWith("BUY")) {
+                    out.add(string);
+                } else if (string.startsWith("BIAS")) {
+                    intermediary.sort(sortPriceRemainingLevels);
+                    intermediary.add(string);
+                    out.addAll(intermediary);
+                    intermediary.clear();
+                } else if (inEdit.indexOf(string) == inEdit.size() - 1) {
+                    intermediary.add(string);
+                    intermediary.sort(sortPriceRemainingLevels);
+                    out.addAll(intermediary);
+                    intermediary.clear();
+                } else {
+                    intermediary.add(string);
+                }
+            }
+
+            intermediary.clear();
+            inEdit.clear();
+            return out;
+        } else {
+            return inEdit;
+        }
     }
 
 
     private Date getDate(String string) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String stringIn = string.replaceAll("\"", "").replace("time: ", "");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateFromString = null;
+
 
         try {
             dateFromString = simpleDateFormat.parse(stringIn);
@@ -494,6 +493,7 @@ public class ListensToLooksAndFills {
         double result = 0;
         int count = 0;
 
+
         if (b) {
             ArrayList<Double> arrayList = new ArrayList<>(countPriseBuy.getArrayListBuy());
 
@@ -518,7 +518,6 @@ public class ListensToLooksAndFills {
                 /////////////////////////////////
                 return countPriseBuy.getPriceStartBuy() - result; // проверить что не то с результатом он равен нулю постоянно
             }
-
         } else {
             ArrayList<Double> arrayList = new ArrayList<>(countPriseSell.getArrayListSell());
 
@@ -550,6 +549,7 @@ public class ListensToLooksAndFills {
     // находим среднюю просадку
     private double getAverageDeviations(boolean b) {
         double result = 0;
+
 
         if (b) {
             ArrayList<Double> arrayList = countPriseBuy.getArrayListBuy();
@@ -596,6 +596,7 @@ public class ListensToLooksAndFills {
     private String getBias(boolean b) {
         String stringOut = "";
         double bias;
+
 
         if (b) {
             bias = priceNow - countPriseBuy.getPriceStartBuy();
@@ -659,6 +660,7 @@ public class ListensToLooksAndFills {
                     .replaceAll("price: ", ""))
                     - Double.parseDouble(strings1[3].replaceAll("\"", "")
                     .replaceAll("price: ", ""));
+
             if (result > 0) return 1;
             else if (result < 0) return -1;
             else return 0;
@@ -674,6 +676,7 @@ public class ListensToLooksAndFills {
         private volatile boolean flag;
         private double priceStartBuy;
 
+
         public CountPriseBuy() {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- Начал фиксировать цену отклонения Бай");
@@ -682,6 +685,7 @@ public class ListensToLooksAndFills {
             this.flag = false;
             start();
         }
+
 
         @Override
         public void run() {
@@ -705,6 +709,7 @@ public class ListensToLooksAndFills {
             }
         }
 
+
         private ArrayList<Double> getArrayListBuy() {
             this.flag = false;
             this.arrayListOut.addAll(arrayListBuy);
@@ -712,11 +717,13 @@ public class ListensToLooksAndFills {
             return this.arrayListOut;
         }
 
+
         private void clearList() {
             this.priceStartBuy = Gasket.getBitmexQuote().getAskPrice();
             this.arrayListOut.clear();
             this.flag = true;
         }
+
 
         private double getPriceStartBuy() {
             return this.priceStartBuy;
@@ -731,6 +738,7 @@ public class ListensToLooksAndFills {
         private double priceStartSell;
         private boolean flag;
 
+
         public CountPriseSell() {
             ConsoleHelper.writeMessage( DatesTimes.getDateTerminal()
                     + " --- Начал фиксировать цену отклонения Селл");
@@ -740,9 +748,9 @@ public class ListensToLooksAndFills {
             start();
         }
 
+
         @Override
         public void run() {
-
             while (true) {
                 if (flag) {
                     double price = Gasket.getBitmexQuote().getBidPrice();
@@ -762,6 +770,7 @@ public class ListensToLooksAndFills {
             }
         }
 
+
         private ArrayList<Double> getArrayListSell() {
             this.flag = false;
             this.arrayListOut.addAll(arrayListSell);
@@ -769,11 +778,13 @@ public class ListensToLooksAndFills {
             return this.arrayListOut;
         }
 
+
         private void clearList() {
             this.priceStartSell = Gasket.getBitmexQuote().getBidPrice();
             this.arrayListOut.clear();
             this.flag = true;
         }
+
 
         private double getPriceStartSell() {
             return this.priceStartSell;

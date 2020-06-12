@@ -313,7 +313,7 @@ public class ListensToLooksAndFills {
                         // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
                         if (startData.getTime() <= date.getTime()) {
                             if (date.getTime() <= date2.getTime()) {
-                                value.add(inAdditionalLevel.toStringUser());
+                                value.add(inAdditionalLevel.toString());
                                 key.add(inEdit.indexOf(stringInEdit));
                             }
                         }

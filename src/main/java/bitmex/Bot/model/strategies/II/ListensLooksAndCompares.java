@@ -343,7 +343,7 @@ public class ListensLooksAndCompares {
                 } else {
                         // сравниваем строки объекта с строками в списке
                     for (String string : inArrayList) {
-                        String[] stringsIn = infoIndicator.toStringUser().split(",");
+                        String[] stringsIn = infoIndicator.toString().split(",");
                         String[] stringsThis = string.split(",");
 
                             // если длина строки объекта и массива равны то ...
@@ -354,7 +354,7 @@ public class ListensLooksAndCompares {
                                     && stringsIn[5].equals(stringsThis[5])
                                     && stringsIn[7].equals(stringsThis[7])) {
 
-                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
+                                inArrayList.set(inArrayList.indexOf(string), infoIndicator.toString());
                                 indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
                             }
                         }
@@ -380,7 +380,7 @@ public class ListensLooksAndCompares {
         if (infoIndicatorArrayListWorking.size() > 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
                 if (infoIndicator.getTime().getTime() > time) {
-                    inArrayList.add(infoIndicator.toStringUser());
+                    inArrayList.add(infoIndicator.toString());
                 } else {
                     residualArrayList.add(infoIndicator);
                 }
@@ -556,7 +556,7 @@ public class ListensLooksAndCompares {
                     // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
                     if (startData.getTime() <= date.getTime()) {
                         if (date.getTime() <= date2.getTime()) {
-                            value.add(inAdditionalLevel.toStringUser());
+                            value.add(inAdditionalLevel.toString());
                             key.add(inEdit.indexOf(stringInEdit));
                         }
                     }

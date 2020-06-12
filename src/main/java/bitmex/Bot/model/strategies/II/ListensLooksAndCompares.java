@@ -149,17 +149,14 @@ public class ListensLooksAndCompares {
                                 // это позволяет в любой очередности выставлять уровни находящиеся в одной ценовой точке
                                 strings1 = thisArrayListString.get(i).split(",");
                                 strings2 = inArrayListString.get(i).split(",");
-                                strings3 = thisArrayListString.get((i + 1) < thisArrayListString.size() - 1
-                                        ? (i + 1) : i).split(",");
-                                strings4 = inArrayListString.get((i + 1) < inArrayListString.size() - 1
-                                        ? (i + 1) : i).split(",");
+
 
                                 if (i < inArrayListString.size() - 1) {
-                                    if (!strings3[0].equals("BIAS")
-                                            && !strings4[0].equals("BIAS")
-                                            && !strings1[0].equals("BIAS")
-                                            && !strings2[0].equals("BIAS")
-                                            && !strings1[3].equals(strings3[3])
+                                    strings3 = thisArrayListString.get(i + 1).split(",");
+                                    strings4 = inArrayListString.get(i + 1).split(",");
+
+                                    if (strings3.length > 7 && strings4.length > 7 && strings1.length > 7
+                                            && strings2.length > 7 && !strings1[3].equals(strings3[3])
                                             && !strings2[3].equals(strings4[3])) {
 
                                         // если хоть один объект не равен то прирываем цикл
@@ -168,7 +165,7 @@ public class ListensLooksAndCompares {
                                             result = false;
                                             break;
                                         }
-                                    } else if (!strings3[0].equals("BIAS") && !strings4[0].equals("BIAS")
+                                    } else if (strings3.length > 7 && strings4.length > 7
                                             && strings1[3].equals(strings3[3]) && strings2[3].equals(strings4[3])) {
                                         thisTheSamePriceList.add(strings3[5]);
                                         thisTheSamePriceList.add(strings4[5]);
@@ -207,7 +204,6 @@ public class ListensLooksAndCompares {
                     }
                 }
             }
-
         }
     }
 

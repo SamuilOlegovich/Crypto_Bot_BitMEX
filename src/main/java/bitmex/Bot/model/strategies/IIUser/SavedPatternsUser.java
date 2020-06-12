@@ -15,18 +15,23 @@ public class SavedPatternsUser {
 
     private ArrayList<ArrayList<String>> listsPricePatternsUser;
     private int maxArraySizeUser;
+    private int maxCountBiasUser;
+
 
 
     private SavedPatternsUser() {
         this.listsPricePatternsUser = new ArrayList<>();
         this.maxArraySizeUser = 0;
+        this.maxCountBiasUser = 0;
     }
+
 
 
     public static SavedPatternsUser getInstance() {
         if (savedPatternsUser == null) savedPatternsUser = new SavedPatternsUser();
         return savedPatternsUser;
     }
+
 
 
     // находим и отдаем массивы нужной длины - размера
@@ -43,17 +48,22 @@ public class SavedPatternsUser {
         else return null;
     }
 
-    // возвращаем самую большую длину имеющегося паттерна
-    public int getMaxArraySizeUser() {
-        return maxArraySizeUser;
-    }
 
 
     public void setPatternsInListsPricePatternsUser(ArrayList<String> arrayList) {
         ArrayList<String> strings = new ArrayList<>(arrayList);
         listsPricePatternsUser.add(strings);
         maxArraySizeUser = Math.max(strings.size(), maxArraySizeUser);
+        int countBias = 0;
+
+        for (String s : strings) {
+            if (s.startsWith("BIAS")) {
+                countBias++;
+            }
+        }
+        maxCountBiasUser = Math.max(countBias, maxCountBiasUser);
     }
+
 
 
     public void seeListsUser() {
@@ -75,6 +85,8 @@ public class SavedPatternsUser {
         }
         ConsoleHelper.writeMessage("");
     }
+
+
 
     public synchronized void updateFirstRowData(String string) {
         String stringSet = string;
@@ -106,7 +118,19 @@ public class SavedPatternsUser {
     }
 
 
+
+    // возвращаем самую большую длину имеющегося паттерна
+    public int getMaxArraySizeUser() {
+        return maxArraySizeUser;
+    }
+
+
     public ArrayList<ArrayList<String>> getListsPricePatternsUser() {
         return listsPricePatternsUser;
+    }
+
+
+    public int getMaxCountBiasUser() {
+        return maxCountBiasUser;
     }
 }

@@ -1,18 +1,14 @@
 package bitmex.Bot.model.strategies.II;
 
 import bitmex.Bot.view.WriterAndReadFile;
-import bitmex.Bot.model.enums.TimeFrame;
-import bitmex.Bot.model.enums.BidAsk;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 
-import java.text.SimpleDateFormat;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.io.FileReader;
-import java.util.Date;
 import java.io.File;
 
 
@@ -21,10 +17,9 @@ public class ReadAndSavePatterns {
     public static void createSavedPatterns() {
         SavedPatterns savedPatterns = Gasket.getSavedPatternsClass();
         ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю SavedPatterns");
-
         File file = new File(Gasket.getFilesAndPathCreator().getPathPatterns());
-
         ArrayList<String> arrayListOut = new ArrayList<>();
+
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while (reader.ready()) {
@@ -51,13 +46,14 @@ public class ReadAndSavePatterns {
     }
 
 
+
     public static void saveSavedPatterns() {
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
-
         ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
+
 
         for (ArrayList<String> arr : arrayLists) {
 
@@ -80,8 +76,8 @@ public class ReadAndSavePatterns {
         String lineBreak = "\n";
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
-
         ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
+
 
         for (ArrayList<String> arr : arrayLists) {
 
@@ -101,12 +97,14 @@ public class ReadAndSavePatterns {
     }
 
 
+
     public static void saveTemporarySavedPatterns(ArrayList<ArrayList<String>> arrayListArrayList) {
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
         String next = "NEXT" + lineBreak;
         stringBuilder.append("START").append(lineBreak);
+
 
         for (ArrayList<String> arr : arrayLists) {
             for (String s : arr) {
@@ -120,6 +118,7 @@ public class ReadAndSavePatterns {
         WriterAndReadFile.writerFile(stringBuilder.toString(),
                 Gasket.getFilesAndPathCreator().getPathPatternsTemporary(), false);
     }
+
 
 
     public static void saveSavedPatternsDelete(ArrayList<ArrayList<String>> arrayListArrayList) {
@@ -166,6 +165,7 @@ public class ReadAndSavePatterns {
         String close = strings[9].trim().replaceAll("close : {2}", "");
         String high = strings[10].trim().replaceAll("high : {2}", "");
         String low = strings[11].trim().replaceAll("low : {2}", "");
+
 
         return "period===" + period + "===preview===" + preview + "===time===" + time + "===price===" + price
                 + "===value===" + value + "===type===" + type + "===avg===" + avg + "===dir===" + dir

@@ -33,6 +33,7 @@ public class ListensLooksAndComparesUser {
     private long timeNow;
 
 
+
     private ListensLooksAndComparesUser() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Класс ListensLooksAndCompares начал работать");
@@ -49,6 +50,7 @@ public class ListensLooksAndComparesUser {
         this.priceStart = NaN;
         this.priceNow = NaN;
     }
+
 
 
     public static ListensLooksAndComparesUser getInstance() {
@@ -86,8 +88,9 @@ public class ListensLooksAndComparesUser {
             sortPrice(false);
             // приводим паттерны в порядок
             setThePatternsInOrder();
+            //////////////////---ПЕРЕДЕЛАТЬ---//////////////////////////////////////////////////////////////////////////
             // удаляем ненужное
-            removeUnnecessaryLists(); //////////////////---ПЕРЕДЕЛАТЬ
+            removeUnnecessaryLists();
             // сохраняю те патерны которые еще актуальны на данный момент
             ReadAndSavePatternsUser.saveTemporarySavedPatternsUser(listInListString);
 
@@ -219,21 +222,17 @@ public class ListensLooksAndComparesUser {
 
         }
     }
-    /////////////////////////////////////////////////////////////
-
-
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
     // Определяем какую сделку сделать и даем команду на ее исполнение
     private synchronized void makeDeal(String stringIn) {
-
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ");
-
         String[] strings = stringIn.split("===");
         String stringOut = stringIn;
+
 
         if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
 
@@ -258,13 +257,22 @@ public class ListensLooksAndComparesUser {
 
     // удаляем листы размеры которых длиннее паттернов
     private synchronized void removeUnnecessaryLists() {
-        if (listInListString.size() > 0) {
-            int maxArraySize = savedPatternsUser.getMaxArraySizeUser();
-            ArrayList<Integer> lineNumbersToDelete = new ArrayList<>();
-            ArrayList<ArrayList<String>> arrayListArrayList = new ArrayList<>();
+        ArrayList<ArrayList<String>> arrayListArrayList = new ArrayList<>();
+        ArrayList<Integer> lineNumbersToDelete = new ArrayList<>();
+        int maxCountBias = savedPatternsUser.getMaxCountBiasUser();
 
+
+        if (listInListString.size() > 0) {
             for (int i = 0; i < listInListString.size(); i++) {
-                if (listInListString.get(i).size() > maxArraySize) {
+                int countBias = 0;
+
+                for (String s : listInListString.get(i)) {
+                    if (s.startsWith("BIAS")) {
+                        countBias++;
+                    }
+                }
+
+                if (countBias > maxCountBias) {
                     arrayListArrayList.add(listInListString.get(i));
                     lineNumbersToDelete.add(i);
                 }
@@ -281,10 +289,12 @@ public class ListensLooksAndComparesUser {
     }
 
 
+
     // сортируем и наполняем лист сравнений листами строк
     // очищаем лист входящих объектов
     private synchronized void sortPrice(boolean b) {
         listInfoIndicatorWorkingCopy.sort(sortPriceComparatorUser);
+
 
         if (b) {
             if (listInListString.size() > 0) {
@@ -320,7 +330,6 @@ public class ListensLooksAndComparesUser {
 
 
 
-
     // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
     // если есть то удаляем их из входящего листа и меняем их в листе направлений
     private synchronized ArrayList<String> getListString(ArrayList<String> arrayListIn) {
@@ -328,7 +337,6 @@ public class ListensLooksAndComparesUser {
         ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
         ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
         ArrayList<Integer> indexDelete = new ArrayList<>();
-
         int count = 0;
         long time;
 
@@ -412,7 +420,6 @@ public class ListensLooksAndComparesUser {
     // и потом конечно же сортируем массив по новому
     private synchronized ArrayList<String> insertRemainingLevels(ArrayList<String> edit,
                                                                  ArrayList<InfoIndicator> additionalLevels) {
-
         ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
         ArrayList<String> intermediary = new ArrayList<>();
         ArrayList<String> inEdit = new ArrayList<>(edit);
@@ -424,7 +431,6 @@ public class ListensLooksAndComparesUser {
         // находим минимальную дату ниже которой у нас ничего нет
         String[] strings = inEdit.get(0).split("===");
         Date startData = new Date(getDate(strings[strings.length - 1]).getTime() - (5 * 60 * 1000));
-
 
         // перебираем пришедшие уровни и ищем куда бы их вставить
         for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
@@ -441,12 +447,9 @@ public class ListensLooksAndComparesUser {
 
                     // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
                     if (startData.getTime() <= date.getTime()) {
-                    //if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
                         if (date.getTime() <= date2.getTime()) {
-//                            hashMap.put(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
                             value.add(inAdditionalLevel.toStringUser());
                             key.add(inEdit.indexOf(stringInEdit));
-//                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
                         }
                     }
                 }
@@ -602,15 +605,6 @@ public class ListensLooksAndComparesUser {
                 inArrayList.remove((int) index);
             }
         }
-//////////////////////////////////////////////////////////////////////
-//        for (ArrayList<String> inArrayList : listInListString) {
-//            if (inArrayList.size() > 1) {
-//                if (inArrayList.get(1).startsWith("BIAS")) {
-//                    inArrayList.remove(1);
-//                }
-//            }
-//        }
-//////////////////////////////////////////////////////////////////////
     }
 
 
@@ -619,6 +613,7 @@ public class ListensLooksAndComparesUser {
     private synchronized String getBias() {
         double bias = priceNow - priceStart;
         String stringOut;
+
 
         if (bias > 0) {
             stringOut = "BUY===" + bias;
@@ -679,6 +674,7 @@ public class ListensLooksAndComparesUser {
             else return 0;
         }
     }
+
 
 
     private class SortSizeUser implements Comparator<ArrayList<String>> {

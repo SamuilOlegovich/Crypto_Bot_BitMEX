@@ -555,12 +555,9 @@ public class ListensLooksAndCompares {
 
                     // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
                     if (startData.getTime() <= date.getTime()) {
-                        //if ((startData != null ? startData.getTime() : date.getTime() + 1) <= date.getTime()) {
                         if (date.getTime() <= date2.getTime()) {
-//                            hashMap.put(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
                             value.add(inAdditionalLevel.toStringUser());
                             key.add(inEdit.indexOf(stringInEdit));
-//                            inEdit.add(inEdit.indexOf(stringInEdit), inAdditionalLevel.toStringUser());
                         }
                     }
                 }

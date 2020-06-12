@@ -219,11 +219,20 @@ public class CompareAndMakeDecision extends Thread {
 
 
     private boolean finallyComparisonOnAllData(String thisArray, String inArray) {
+        String[] stringsThis = thisArray.split("===");
+        String[] stringsIn = inArray.split("===");
 
-
-
-
-
+        if (!stringsThis[1].equalsIgnoreCase("null") && !stringsThis[1].equals(stringsIn[1])) {
+            return false;
+        } else if (!stringsThis[3].equalsIgnoreCase("null") && !stringsThis[3].equals(stringsIn[3])) {
+            return false;
+        } else if (!stringsThis[11].equalsIgnoreCase("null") && !stringsThis[11].equals(stringsIn[11])) {
+            return false;
+        } else if (!stringsThis[13].equalsIgnoreCase("null") && !stringsThis[13].equals(stringsIn[13])) {
+            return false;
+        } else if (!stringsThis[15].equalsIgnoreCase("null") && !stringsThis[15].equals(stringsIn[15])) {
+            return false;
+        }
         return true;
     }
 

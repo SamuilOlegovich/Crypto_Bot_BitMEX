@@ -1,7 +1,5 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
-import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -99,7 +97,7 @@ public class ListensLooksAndComparesUser {
 
                 for (ArrayList<String> thisArrayListString : listInListString) {
                     for (ArrayList<String> inArrayListStrings : inListPatterns) {
-                        new CompareAndMakeDecision(thisArrayListString, inArrayListStrings);
+                        new CompareAndMakeDecisionUser(thisArrayListString, inArrayListStrings);
                     }
                 }
             }
@@ -287,7 +285,7 @@ public class ListensLooksAndComparesUser {
 
 
         // находим минимальную дату ниже которой у нас ничего нет
-        String[] strings = inEdit.get(0).split("===");
+        String[] strings = inEdit.get(0).split("==="); // java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
         Date startData = new Date(getDate(strings[strings.length - 1]).getTime() - (5 * 60 * 1000));
 
         // перебираем пришедшие уровни и ищем куда бы их вставить

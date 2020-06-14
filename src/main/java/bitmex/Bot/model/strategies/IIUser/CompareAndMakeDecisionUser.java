@@ -12,15 +12,15 @@ import java.util.HashSet;
 
 
 // сравниваю и принимаю решение
-public class CompareAndMakeDecision extends Thread {
+public class CompareAndMakeDecisionUser extends Thread {
     private ArrayList<String> thisArrayListStrings;
     private ArrayList<String> inArrayListStrings;
 
 
 
-    public CompareAndMakeDecision(ArrayList<String> thisArrayListStrings, ArrayList<String> inArrayListStrings) {
-        this.thisArrayListStrings = thisArrayListStrings;
-        this.inArrayListStrings = inArrayListStrings;
+    public CompareAndMakeDecisionUser(ArrayList<String> thisArrayListStrings, ArrayList<String> inArrayListStrings) {
+        this.thisArrayListStrings = new ArrayList<>(thisArrayListStrings);
+        this.inArrayListStrings = new ArrayList<>(inArrayListStrings);
         start();
     }
 
@@ -31,7 +31,7 @@ public class CompareAndMakeDecision extends Thread {
         if (compareSheets()) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку");
-            makeDeal(inArrayListStrings.get(0));
+            new MakeDeal(thisArrayListStrings, inArrayListStrings.get(0));
         }
 
         thisArrayListStrings.clear();
@@ -63,9 +63,9 @@ public class CompareAndMakeDecision extends Thread {
 
         if (thisBiasStrings.size() != inBiasStrings.size()) {
             return false;
-        } else if (thisArrayListStrings.size() > 0){
+        } else if (thisBiasStrings.size() > 0){
             for (String thisString : thisBiasStrings) {
-                String[] stringsIn = inBiasStrings.get(thisStrings.indexOf(thisString)).split("===");
+                String[] stringsIn = inBiasStrings.get(thisBiasStrings.indexOf(thisString)).split("===");
                 String[] stringsThis = thisString.split("===");
 
                 if (!stringsIn[1].equalsIgnoreCase(stringsThis[1])) {
@@ -75,8 +75,8 @@ public class CompareAndMakeDecision extends Thread {
         }
 
         maxBias = thisBiasStrings.size();
-        thisArrayListStrings.clear();
-        inArrayListStrings.clear();
+//        thisArrayListStrings.clear();
+//        inArrayListStrings.clear();
 
         for (int i = 1; i <= (maxBias > 0 ? maxBias : 1); i++) {
             int bias = 0;
@@ -234,35 +234,6 @@ public class CompareAndMakeDecision extends Thread {
             return false;
         }
         return true;
-    }
-
-
-
-    // Определяем какую сделку сделать и даем команду на ее исполнение
-    private synchronized void makeDeal(String stringIn) {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ");
-        String[] strings = stringIn.split("===");
-        String stringOut = stringIn;
-
-
-        if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
-
-            if (Gasket.isTrading()) new TradeBuy(stringOut);
-            new TestOrderBuyPatternUser(stringOut, Gasket.getBitmexQuote().getAskPrice());
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ USER");
-
-        } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
-
-            if (Gasket.isTrading()) new TradeSell(stringOut);
-            new TestOrderSellPatternUser(stringOut, Gasket.getBitmexQuote().getBidPrice());
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ USER");
-
-        }
     }
 }
 

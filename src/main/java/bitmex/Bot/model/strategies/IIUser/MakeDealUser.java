@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 
 // Определяем какую сделку сделать и даем команду на ее исполнение
-public class MakeDeal extends Thread {
+public class MakeDealUser extends Thread {
     private ArrayList<String> arrayListThis;
     private String stringIn;
 
 
-    public MakeDeal(ArrayList<String> arrayListThis, String string) {
+    public MakeDealUser(ArrayList<String> arrayListThis, String string) {
         this.arrayListThis = new ArrayList<>(arrayListThis);
         this.stringIn = string;
         start();

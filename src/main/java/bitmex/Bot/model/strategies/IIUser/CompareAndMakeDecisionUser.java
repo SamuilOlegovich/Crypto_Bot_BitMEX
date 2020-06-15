@@ -1,11 +1,8 @@
 package bitmex.Bot.model.strategies.IIUser;
 
 
-import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
-import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
-import bitmex.Bot.model.Gasket;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,7 +28,7 @@ public class CompareAndMakeDecisionUser extends Thread {
         if (compareSheets()) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку");
-            new MakeDeal(thisArrayListStrings, inArrayListStrings.get(0));
+            new MakeDealUser(thisArrayListStrings, inArrayListStrings.get(0));
         }
 
         thisArrayListStrings.clear();

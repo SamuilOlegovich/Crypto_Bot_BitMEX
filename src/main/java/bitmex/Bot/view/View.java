@@ -1,16 +1,10 @@
-package bitmex.Bot.view;
-
-
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import java.awt.event.ActionListener;
-import javax.swing.undo.UndoManager;
-import java.awt.event.ActionEvent;
-import javax.swing.*;
-import java.awt.*;
-
-
-public class View {//extends JFrame implements ActionListener {
+//package bitmex.Bot.view;
+//
+//
+//import javax.swing.*;
+//import javax.swing.undo.UndoManager;
+//
+//public class View {//extends JFrame implements ActionListener {
 //    private Controller controller;
 //    // это будет панель с двумя вкладками.
 //    private JTabbedPane tabbedPane = new JTabbedPane();
@@ -194,4 +188,4 @@ public class View {//extends JFrame implements ActionListener {
 //    }
 //
 //}
-}
+//

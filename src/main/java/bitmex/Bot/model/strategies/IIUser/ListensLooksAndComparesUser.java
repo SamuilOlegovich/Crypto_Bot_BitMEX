@@ -34,7 +34,7 @@ public class ListensLooksAndComparesUser {
 
     private ListensLooksAndComparesUser() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Класс ListensLooksAndCompares начал работать");
+                + "Класс ListensLooksAndComparesUser начал работать");
 
         this.keepsTrackOfFillingListInfoIndicatorUser
                 = new KeepsTrackOfFillingListInfoIndicatorUser(this);

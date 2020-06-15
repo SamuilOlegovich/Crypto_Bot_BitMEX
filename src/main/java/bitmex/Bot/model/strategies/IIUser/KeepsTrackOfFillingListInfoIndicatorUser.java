@@ -21,7 +21,7 @@ public class KeepsTrackOfFillingListInfoIndicatorUser extends Thread {
     public KeepsTrackOfFillingListInfoIndicatorUser(ListensLooksAndComparesUser listensLooksAndComparesUser) {
         this.listensLooksAndComparesUser = listensLooksAndComparesUser;
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicatorUser начал работать");
+                + " --- Класс KeepsTrackOfFillingListInfoIndicatorUser начал работать");
         start();
     }
 

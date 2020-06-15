@@ -1,8 +1,6 @@
 package bitmex.Bot.model.strategies.II;
 
 
-import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
-import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -191,10 +189,11 @@ public class ListensLooksAndCompares {
                                 }
                             }
                         }
+
                         if (result) {
                             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ передаю на сделку");
-                            makeDeal(inArrayListString.get(0));
+                            new MakeDeal(inArrayListString.get(0));
                             return;
                             // возможно тут надо поставить return
                         } else {
@@ -207,35 +206,6 @@ public class ListensLooksAndCompares {
         }
     }
 
-
-
-    // Определяем какую сделку сделать и даем команду на ее исполнение
-    private synchronized void makeDeal(String stringIn) {
-
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ");
-
-        String[] strings = stringIn.split("===");
-        String stringOut = stringIn;
-
-        if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
-
-            if (Gasket.isTrading()) new TradeBuy(stringOut);
-            new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ");
-
-        } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
-
-            if (Gasket.isTrading()) new TradeSell(stringOut);
-            new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getBidPrice());
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ");
-
-        }
-    }
 
 
     // удаляем листы размеры которых длиннее паттернов

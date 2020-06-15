@@ -22,7 +22,7 @@ public class KeepsTrackOfFillingListInfoIndicator extends Thread {
 
     public KeepsTrackOfFillingListInfoIndicator() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- Внутренний класс KeepsTrackOfFillingListInfoIndicatorUser начал работать");
+                + " --- Класс KeepsTrackOfFillingListInfoIndicator начал работать");
         start();
     }
 

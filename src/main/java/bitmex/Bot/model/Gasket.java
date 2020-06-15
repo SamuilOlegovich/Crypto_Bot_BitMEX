@@ -15,6 +15,7 @@ public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
+    private static String numberOfHistoryBlocks = "5===4===3===2";  // количество блоков истории выше которого обрезать историю
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
@@ -34,7 +35,6 @@ public class Gasket {
     private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
     private static boolean tradingPatterns = false;     // включить по патернам патернов
-    private static int numberOfHistoryBlocks = 5;       // количество блоков истории выше которого обрезать историю
     private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
     private static volatile double PROFIT = 0.0;        // итоговый профит
     private static boolean savedPatterns = true;        // включить нахождение и запись патернов
@@ -1269,11 +1269,11 @@ public class Gasket {
 
 
 
-    public static int getNumberOfHistoryBlocks() {
+    public static String getNumberOfHistoryBlocks() {
         return numberOfHistoryBlocks;
     }
 
-    public static void setNumberOfHistoryBlocks(int numberOfHistoryBlocks) {
+    public static void setNumberOfHistoryBlocks(String numberOfHistoryBlocks) {
         Gasket.numberOfHistoryBlocks = numberOfHistoryBlocks;
     }
 }

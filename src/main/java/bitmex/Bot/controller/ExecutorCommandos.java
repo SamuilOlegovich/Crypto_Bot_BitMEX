@@ -9,6 +9,7 @@ public class ExecutorCommandos {
     private boolean flag;
 
     public ExecutorCommandos() {
+        Gasket.setExecutorCommandos(this);
         this.flag = false;
     }
 
@@ -157,7 +158,7 @@ public class ExecutorCommandos {
                                 + Gasket.isObs() + "\n");
                     break;
                 case "numberOfHistoryBlocks" :
-                    Gasket.setNumberOfHistoryBlocks(Integer.parseInt(strings[1]));
+                    Gasket.setNumberOfHistoryBlocks(strings[1]);
                     if (!flag)
                         ConsoleHelper.writeMessage("numberOfHistoryBlocks === "
                                 + Gasket.getNumberOfHistoryBlocks() + "\n");

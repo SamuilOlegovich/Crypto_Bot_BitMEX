@@ -1,11 +1,14 @@
 package bitmex.Bot.model;
 
+import bitmex.Bot.controller.ControlConsoleSetting;
+import bitmex.Bot.controller.ExecutorCommandos;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
+import bitmex.Bot.view.View;
 
 import java.util.List;
 
@@ -16,11 +19,13 @@ public class Gasket {
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static String numberOfHistoryBlocks = "5===4===3===2";  // количество блоков истории выше которого обрезать историю
+    private static ControlConsoleSetting controlConsoleSetting;
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
     private static double takeForCollectingPatterns = 20;           // тейк для сбора и накопления паттернов
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
+    private static ExecutorCommandos executorCommandos;
     private static int numberOfCandlesForAnalysis = 60;             // количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку
     private static volatile boolean oneSellFLAG = true;
     private static boolean tradingPatternsUser = false;             // включить по патернам User
@@ -56,6 +61,7 @@ public class Gasket {
     private static double stop = 30.0;              // стоп лосс в долларах
     private static double lot = 1.0;                // количество контрактов
     private static String path = "";
+    private static View viewThread;
     private static int PORT = 4444;                 // порт подключения
     private static Ticker ticker;
 
@@ -1275,5 +1281,32 @@ public class Gasket {
 
     public static void setNumberOfHistoryBlocks(String numberOfHistoryBlocks) {
         Gasket.numberOfHistoryBlocks = numberOfHistoryBlocks;
+    }
+
+
+    public static View getViewThread() {
+        return viewThread;
+    }
+
+    public static void setViewThread(View viewThread) {
+        Gasket.viewThread = viewThread;
+    }
+
+
+    public static ControlConsoleSetting getControlConsoleSetting() {
+        return controlConsoleSetting;
+    }
+
+    public static void setControlConsoleSetting(ControlConsoleSetting controlConsoleSetting) {
+        Gasket.controlConsoleSetting = controlConsoleSetting;
+    }
+
+
+    public static ExecutorCommandos getExecutorCommandos() {
+        return executorCommandos;
+    }
+
+    public static void setExecutorCommandos(ExecutorCommandos executorCommandos) {
+        Gasket.executorCommandos = executorCommandos;
     }
 }

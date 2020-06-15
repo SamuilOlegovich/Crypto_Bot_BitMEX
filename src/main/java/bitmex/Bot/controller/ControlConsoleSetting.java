@@ -13,6 +13,10 @@ public class ControlConsoleSetting extends Thread {
         this.executorCommandos = executorCommandos;
     }
 
+
+
+
+
     @Override
     public void run() {
         while (true) {

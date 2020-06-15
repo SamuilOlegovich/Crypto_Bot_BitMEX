@@ -1,191 +1,147 @@
-//package bitmex.Bot.view;
-//
-//
-//import javax.swing.*;
-//import javax.swing.undo.UndoManager;
-//
-//public class View {//extends JFrame implements ActionListener {
-//    private Controller controller;
-//    // это будет панель с двумя вкладками.
-//    private JTabbedPane tabbedPane = new JTabbedPane();
-//    // это будет компонент для визуального редактирования html.
-//    private JTextPane htmlTextPane = new JTextPane();
-//    // это будет компонент для редактирования html в виде текста,
-//    // он будет отображать код html(теги и их содержимое).
-//    private JEditorPane plainTextPane = new JEditorPane();
-//
-//    private UndoManager undoManager = new UndoManager();
-//    private UndoListener undoListener = new UndoListener(undoManager);
-//
-//    // В конструкторе класса View, через класс UIManager, должен устанавливаться внешний вид
-//    //      и поведение (look and feel).
-//    public View () {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (Exception e) { ExceptionHandler.log(e); }
-//    }
-//    // Они будут отвечать за инициализацию меню и панелей редактора.
-//    // В методе initMenuBar() должно создаваться новое меню (объект типа JMenuBar).
-//    // В методе initMenuBar() c помощью MenuHelper должно быть проинициализировано
-//    //      меню в следующем порядке: Файл, Редактировать, Стиль, Выравнивание,
-//    //      Цвет, Шрифт и Помощь.
-//    // В методе initMenuBar() должно добавляться новосозданное меню в верхнюю часть панели
-//    //      контента текущего фрейма, используя метод getContentPane().
-//    public void initMenuBar () {
-//        JMenuBar jMenuBar = new JMenuBar();
-//        initFileMenu(this, jMenuBar);
-//        initEditMenu(this, jMenuBar);
-//        initStyleMenu(this, jMenuBar);
-//        initAlignMenu(this, jMenuBar);
-//        initColorMenu(this, jMenuBar);
-//        initFontMenu(this, jMenuBar);
-//        initHelpMenu(this, jMenuBar);
-//        getContentPane().add(jMenuBar, BorderLayout.NORTH);
-//    }
-//    // В методе initEditor() для компонента htmlTextPane должен устанавливаться тип контента
-//    //      "text/html" через сеттер setContentType.
-//    // В методе initEditor() должен создаваться новый локальный компонент JScrollPane через
-//    //      конструктор принимающий htmlTextPane.
-//    // В методе initEditor() для компонента tabbedPane должна добавляться вкладка с именем "HTML"
-//    //      и созданным компонентом JScrollPane на базе htmlTextPane.
-//    // В методе initEditor() должен создаваться новый локальный компонент JScrollPane через
-//    //      конструктор принимающий plainTextPane.
-//    // В методе initEditor() для компонента tabbedPane должна добавляться вкладка с именем "Текст"
-//    //      и созданным компонентом JScrollPane на базе plainTextPane.
-//    // В методе initEditor() для компонента tabbedPane должен устанавливаться предпочтительный
-//    //      размер панели, через сеттер setPreferredSize.
-//    // В методе initEditor() для компонента tabbedPane должен добавляться слушатель
-//    //      TabbedPaneChangeListener через метод addChangeListener.
-//    // Метод initEditor() должен добавлять по центру панели контента текущего фрейма нашу панель
-//    //      с вкладками, через getContentPane().add().
-//    public void initEditor() {
-//        htmlTextPane.setContentType("text/html");
-//        JScrollPane jScrollPane = new JScrollPane(htmlTextPane);
-//        tabbedPane.addTab("HTML", jScrollPane);
-//        JScrollPane jScrollPaneNew = new JScrollPane(plainTextPane);
-//        tabbedPane.addTab("Текст", jScrollPaneNew);
-//        tabbedPane.setPreferredSize(new Dimension(500, 500));
-//        tabbedPane.addChangeListener(new TabbedPaneChangeListener(this));
-//        getContentPane().add(tabbedPane, BorderLayout.CENTER);
-//    }
-//    //-------------------------------------------------------------
-//    // Он будет инициализировать графический интерфейс.
-//    public void initGui() {
-//        this.initMenuBar();
-//        this.initEditor();
-//        this.pack();
-//    }
-//    //-------------------------------------------------------------
-//    public void init() {
-//        this.initGui();
-//        // Добавлять слушателя событий нашего окна. В качестве подписчика создай
-//        // и используй объект класса FrameListener.
-//        //В качестве метода для добавления подписчика используй подходящий метод из класса Window
-//        // от которого наследуется и наш класс через классы JFrame и Frame.
-//        addWindowListener(new FrameListener(this));
-//        setVisible(true);
-//    }
-//    // отменяет последнее действие. Реализуй его используя undoManager.
-//    public void undo() {
-//        try {
-//            undoManager.undo();
-//        } catch (CannotUndoException e) {
-//            ExceptionHandler.log(e);
-//        }
-//    }
-//    // возвращает ранее отмененное действие. Реализуй его по аналогии с предыдущим пунктом.
-//    public void redo() {
-//        try {
-//            undoManager.redo();
-//        } catch (CannotRedoException e) {
-//            ExceptionHandler.log(e);
-//        }
-//    }
-//    // должен сбрасывать все правки в менеджере undoManager.
-//    public void resetUndo() { undoManager.discardAllEdits(); }
-//    // Этот метод вызывается, когда произошла смена выбранной вкладки. Итак:
-//    // Метод должен проверить, какая вкладка сейчас оказалась выбранной.
-//    // Если выбрана вкладка с индексом 0 (html вкладка), значит нам нужно получить текст
-//    //      из plainTextPane и установить его в контроллер с помощью метода setPlainText.
-//    // Если выбрана вкладка с индексом 1 (вкладка с html текстом), то необходимо получить текст
-//    //      у контроллера с помощью метода getPlainText() и установить его в панель plainTextPane.
-//    // Сбросить правки (вызвать метод resetUndo представления).
-//    public void selectedTabChanged() {
-//        if (tabbedPane.getSelectedIndex() == 0) {
-//            controller.setPlainText(plainTextPane.getText());
-//        }
-//        else if (tabbedPane.getSelectedIndex() == 1) {
-//            plainTextPane.setText(controller.getPlainText());
-//        }
-//        resetUndo();
-//    }
-//
-//    public boolean isHtmlTabSelected() {
-//        if (tabbedPane.getSelectedIndex() == 0) return true;
-//        else return false;
-//    }
-//
-//    public void exit() { controller.exit(); }
-//
-//    public boolean canUndo() { return undoManager.canUndo(); }
-//
-//    public boolean canRedo() { return undoManager.canRedo(); }
-//    // Этот метод наследуется от интерфейса ActionListener и будет вызваться при выборе пунктов меню,
-//    //      у которых наше представление указано в виде слушателя событий.
-//    // Получи из события команду с помощью метода getActionCommand(). Это будет обычная строка.
-//    // По этой строке ты можешь понять какой пункт меню создал данное событие.
-//    // Если это команда "Новый", вызови у контроллера метод createNewDocument().
-//    // В этом пункте и далее, если необходимого метода в контроллере еще нет - создай заглушки.
-//    // Если это команда "Открыть", вызови метод openDocument().
-//    // Если "Сохранить", то вызови saveDocument().
-//    // Если "Сохранить как..." - saveDocumentAs().
-//    // Если "Выход" - exit().
-//    // Если "О программе", то вызови метод showAbout() у представления.
-//    // Проверь, что заработали пункты меню Выход и О программе.
-//    public void actionPerformed(ActionEvent actionEvent) {
-//        switch (actionEvent.getActionCommand()) {
-//            case ("Новый"):
-//                controller.createNewDocument();
-//                break;
-//            case ("Открыть"):
-//                controller.openDocument();
-//                break;
-//            case ("Сохранить"):
-//                controller.saveDocument();
-//                break;
-//            case ("Сохранить как..."):
-//                controller.saveDocumentAs();
-//                break;
-//            case ("Выход"):
-//                controller.exit();
-//                break;
-//            case("О программе"):
-//                showAbout();
-//                break;
-//        }
-//    }
-//
-//    public Controller getController() { return controller; }
-//
-//    public UndoListener getUndoListener() { return undoListener; }
-//
-//    public void setController(Controller controller) { this.controller = controller; }
-//    // он должен выбирать html вкладку (переключаться на нее).
-//    // сбрасывать все правки с помощью метода, который ты реализовал ранее.
-//    public void selectHtmlTab() {
-//        tabbedPane.setSelectedIndex(0);
-//        this.resetUndo();
-//    }
-//    // должен получать документ у контроллера и устанавливать его в панель
-//    // редактирования htmlTextPane.
-//    public void update() { htmlTextPane.setDocument(controller.getDocument()); }
-//    // должен показывать диалоговое окно с информацией о программе.
-//    // информацию придумай сам, а вот тип сообщения должен быть JOptionPane.
-//    // INFORMATION_MESSAGE
-//    public void showAbout() {
-//        JOptionPane.showMessageDialog(tabbedPane.getSelectedComponent(),
-//                "Версия 1.0", "О программме", JOptionPane.INFORMATION_MESSAGE);
-//    }
-//
-//}
-//
+package bitmex.Bot.view;
+
+import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
+import bitmex.Bot.controller.RunTheProgram;
+import bitmex.Bot.model.Gasket;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.*;
+import java.awt.*;
+
+
+
+
+public class View extends Thread {
+    private RunTheProgram runTheProgram;
+    private JScrollPane jScrollPane;
+    private JTextField jTextField;
+    private JButton jButtonStart;
+    private JButton jButtonStop;
+    private JTextArea jTextArea;
+    private JButton jButtonSet;
+    private JFrame jFrame;
+    private JPanel jPanel;
+
+    public View() {
+        run();
+    }
+
+    @Override
+    public void run() {
+        jFrame = getJFrame();
+        jPanel = new JPanel();
+        jFrame.add(jPanel);
+        jPanel.setBackground(Color.LIGHT_GRAY);
+        jButtonStart = new JButton("START");
+        jButtonStop = new JButton("STOP");
+
+        jPanel.add(jButtonStart);
+        jPanel.add(jButtonStop);
+
+
+        jPanel.add(new JLabel("Commands"));
+        jTextField = new JTextField("insert commands",30);
+        jPanel.add(jTextField);
+        jPanel.revalidate();
+
+        jButtonSet = new JButton("SET");
+        jPanel.add(jButtonSet);
+
+        jTextArea = new JTextArea(35, 90);
+        jScrollPane = new JScrollPane(jTextArea);
+        jTextArea.setLineWrap(true);
+        jPanel.add(jScrollPane);
+
+
+
+        jButtonStart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // тут прописать старт программы
+                jPanel.setBackground(Color.GREEN);
+
+                if (runTheProgram == null) {
+                    new RunTheProgram().start();
+                }
+            }
+        });
+
+
+        jButtonStop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // тут прописать Стоп программы
+                jPanel.setBackground(Color.RED);
+            }
+        });
+
+
+
+        jButtonSet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // тут прописать настройки программы
+                new Thread() {
+                    @Override
+                    public void run() {
+                        jPanel.setBackground(Color.yellow);
+                        try {
+                            Thread.sleep(1000 * 10);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        jPanel.setBackground(Color.GREEN);
+                    }
+                }.start();
+
+                String string = jTextField.getText();
+                if (string.length() > 3) {
+                    if (string.trim().equalsIgnoreCase("info")) {
+                        ConsoleHelper.printInfoSettings();
+                    } else if (string.trim().equalsIgnoreCase("flag")) {
+                        ConsoleHelper.printFlag();
+                    } else if (string.trim().equalsIgnoreCase("price")) {
+                        ConsoleHelper.writeMessage("price now === " + Gasket.getBitmexQuote().getBidPrice());
+                    } else if (string.trim().equalsIgnoreCase("chart")) {
+                        ConsoleHelper.writeMessage("chart === " + Gasket.getBitmexClient()
+                                .getChartData(Gasket.getTicker(), 10, ChartDataBinSize.ONE_MINUTE));
+                    } else {
+                        Gasket.getExecutorCommandos().parseAndExecute(string);
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    private static JFrame getJFrame() {
+        JFrame jFrame = new JFrame() {};
+        jFrame.setVisible(true);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension dimension = toolkit.getScreenSize();
+
+        jFrame.setSize(1110, 635);
+        jFrame.setLocation(dimension.width/2 - 570, dimension.height/2 - 325);
+        jFrame.setTitle("II POWER by SAMUIL_OLEGOVICH");
+//        jFrame.setIconImage();
+        return jFrame;
+    }
+
+
+
+    public void updateInfoView(String string) {
+        if (string != null) {
+            if (string.endsWith("\n")) {
+                jTextArea.append(string);
+            } else {
+                jTextArea.append(string + "\n");
+            }
+        }
+    }
+}

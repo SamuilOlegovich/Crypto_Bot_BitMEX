@@ -285,7 +285,7 @@ public class ListensLooksAndComparesUser {
 
 
         // находим минимальную дату ниже которой у нас ничего нет
-        String[] strings = inEdit.get(0).split("==="); // java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+        String[] strings = inEdit.get(0).split("==="); ////// java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
         Date startData = new Date(getDate(strings[strings.length - 1]).getTime() - (5 * 60 * 1000));
 
         // перебираем пришедшие уровни и ищем куда бы их вставить

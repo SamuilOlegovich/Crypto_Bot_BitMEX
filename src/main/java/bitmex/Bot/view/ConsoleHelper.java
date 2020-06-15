@@ -1,9 +1,8 @@
 package bitmex.Bot.view;
 
 import bitmex.Bot.model.FilesAndPathCreator;
-import bitmex.Bot.model.Gasket;
-
 import java.io.InputStreamReader;
+import bitmex.Bot.model.Gasket;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -14,6 +13,7 @@ public class ConsoleHelper {
 
     public static void writeMessage(String string) {
         WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
+        Gasket.getViewThread().updateInfoView(string);
         System.out.println(string);
     }
 

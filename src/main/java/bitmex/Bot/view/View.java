@@ -23,9 +23,8 @@ public class View extends Thread {
     private JFrame jFrame;
     private JPanel jPanel;
 
-    public View() {
-        run();
-    }
+
+
 
     @Override
     public void run() {
@@ -54,7 +53,6 @@ public class View extends Thread {
         jPanel.add(jScrollPane);
 
 
-
         jButtonStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,10 +72,20 @@ public class View extends Thread {
             public void actionPerformed(ActionEvent e) {
 
                 // тут прописать Стоп программы
-                jPanel.setBackground(Color.RED);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        jPanel.setBackground(Color.RED);
+                        try {
+                            Thread.sleep(1000 * 10);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        System.exit(0);
+                    }
+                }.start();
             }
         });
-
 
 
         jButtonSet.addActionListener(new ActionListener() {

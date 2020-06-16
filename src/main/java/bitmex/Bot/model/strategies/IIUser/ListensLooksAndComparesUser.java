@@ -16,7 +16,7 @@ public class ListensLooksAndComparesUser {
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
 
     private final ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
-    private final ArrayList<ArrayList<String>> listInListString;
+    private final ArrayList<ArrayList<String>> marketListsStrings;
     private final ArrayList<InfoIndicator> listInfoIndicator;
 
     private KeepsTrackOfFillingListInfoIndicatorUser keepsTrackOfFillingListInfoIndicatorUser;
@@ -43,7 +43,7 @@ public class ListensLooksAndComparesUser {
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.sortPriceComparatorUser = new SortPriceUser();
         this.listInfoIndicator = new ArrayList<>();
-        this.listInListString = new ArrayList<>();
+        this.marketListsStrings = new ArrayList<>();
         this.sortSizeUser = new SortSizeUser();
         this.priceStart = NaN;
         this.priceNow = NaN;
@@ -88,16 +88,16 @@ public class ListensLooksAndComparesUser {
             setThePatternsInOrder();
 
             // получаем патерны
-            ArrayList<ArrayList<String>> inListPatterns = savedPatternsUser.getListsPricePatternsUser();
+            ArrayList<ArrayList<String>> patternsListsStrings = savedPatternsUser.getListsPricePatternsUser();
 
             // сравниваем с патернами
-            if (inListPatterns.size() > 0) {
+            if (patternsListsStrings.size() > 0) {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + "Сравниваю рынок с ПАТТЕРНАМИ USER");
 
-                for (ArrayList<String> thisArrayListString : listInListString) {
-                    for (ArrayList<String> inArrayListStrings : inListPatterns) {
-                        new CompareAndMakeDecisionUser(thisArrayListString, inArrayListStrings);
+                for (ArrayList<String> marketListString : marketListsStrings) {
+                    for (ArrayList<String> patternListString : patternsListsStrings) {
+                        new CompareAndMakeDecisionUser(marketListString, patternListString);
                     }
                 }
             }
@@ -105,7 +105,7 @@ public class ListensLooksAndComparesUser {
             // удаляем ненужное
             removeUnnecessaryLists();
             // сохраняю те патерны которые еще актуальны на данный момент
-            ReadAndSavePatternsUser.saveTemporarySavedPatternsUser(listInListString);
+            ReadAndSavePatternsUser.saveTemporarySavedPatternsUser(marketListsStrings);
         }
     }
 
@@ -118,18 +118,18 @@ public class ListensLooksAndComparesUser {
         int maxCountBias = savedPatternsUser.getMaxCountBiasUser();
 
 
-        if (listInListString.size() > 0) {
-            for (int i = 0; i < listInListString.size(); i++) {
+        if (marketListsStrings.size() > 0) {
+            for (int i = 0; i < marketListsStrings.size(); i++) {
                 int countBias = 0;
 
-                for (String s : listInListString.get(i)) {
+                for (String s : marketListsStrings.get(i)) {
                     if (s.startsWith("BIAS")) {
                         countBias++;
                     }
                 }
 
                 if (countBias > maxCountBias) {
-                    arrayListArrayList.add(listInListString.get(i));
+                    arrayListArrayList.add(marketListsStrings.get(i));
                     lineNumbersToDelete.add(i);
                 }
             }
@@ -139,7 +139,7 @@ public class ListensLooksAndComparesUser {
             ReadAndSavePatternsUser.saveSavedPatternsDeleteUser(arrayListArrayList);
 
             for (Integer integer : lineNumbersToDelete) {
-                listInListString.remove((int) integer);
+                marketListsStrings.remove((int) integer);
             }
         }
     }
@@ -153,8 +153,8 @@ public class ListensLooksAndComparesUser {
 
 
         if (b) {
-            if (listInListString.size() > 0) {
-                for (ArrayList<String> arrayListString : listInListString) {
+            if (marketListsStrings.size() > 0) {
+                for (ArrayList<String> arrayListString : marketListsStrings) {
                     String stringBias = "BIAS===" + getBias() + "===" + DatesTimes.getDateTerminal() + "\n";
                     arrayListString.add(stringBias);
                 }
@@ -162,13 +162,13 @@ public class ListensLooksAndComparesUser {
 
             ArrayList<String> arrayListOut = new ArrayList<>();
             arrayListOut.add("0===" + DatesTimes.getDateTerminal() + "\n");
-            listInListString.add(arrayListOut);
+            marketListsStrings.add(arrayListOut);
             priceStart = Gasket.getBitmexQuote().getBidPrice();
 
         } else {
 
-            if (listInListString.size() > 0) {
-                for (ArrayList<String> arrayListString : listInListString) {
+            if (marketListsStrings.size() > 0) {
+                for (ArrayList<String> arrayListString : marketListsStrings) {
                     ArrayList<String> arrayListOut = new ArrayList<>(getListString(arrayListString));
                     arrayListString.clear();
                     arrayListString.addAll(arrayListOut);
@@ -177,9 +177,9 @@ public class ListensLooksAndComparesUser {
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- В листе для сравнения уже - "
-                    + listInListString.size() + " - паттернов USER");
+                    + marketListsStrings.size() + " - паттернов USER");
 
-            listInListString.sort(sortSizeUser);
+            marketListsStrings.sort(sortSizeUser);
             listInfoIndicatorWorkingCopy.clear();
         }
     }
@@ -358,7 +358,7 @@ public class ListensLooksAndComparesUser {
     // чистим от оставшихся предварительных исчезнувших уровняй
     private synchronized void setThePatternsInOrder() {
         // перебираем все листы листов
-        for (ArrayList<String> inArrayList : listInListString) {
+        for (ArrayList<String> inArrayList : marketListsStrings) {
             // индекса строк в массиве которые надо будет удалить
             ArrayList<Integer> indexArrayList = new ArrayList<>();
 

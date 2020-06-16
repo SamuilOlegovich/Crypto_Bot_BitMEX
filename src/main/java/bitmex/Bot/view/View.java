@@ -70,8 +70,11 @@ public class View extends Thread {
         jButtonStop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 // тут прописать Стоп программы
+
+//                String pathPatterns = getClass().getResource("").getPath();
+//                jTextArea.append(pathPatterns + "\n");
+
                 new Thread() {
                     @Override
                     public void run() {

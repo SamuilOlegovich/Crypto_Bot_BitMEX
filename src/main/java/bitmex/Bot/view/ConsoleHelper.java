@@ -12,9 +12,9 @@ public class ConsoleHelper {
 
 
     public static void writeMessage(String string) {
-        WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
         Gasket.getViewThread().updateInfoView(string);
-        System.out.println(string);
+        WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
+        //System.out.println(string);
     }
 
 

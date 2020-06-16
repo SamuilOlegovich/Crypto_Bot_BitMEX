@@ -26,7 +26,7 @@ public class MakeDealUser extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ USER");
+                + "Определяю какую сделку сделать согласно ПАТТЕРНАМ USER");
         String[] strings = stringIn.split("===");
         String stringOut = stringIn;
 

@@ -26,7 +26,7 @@ public class MakeDeal extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Определяю какую сделку сделать согласно ИНФО ПАТТЕРНАМ");
+                + "Определяю какую сделку сделать согласно II ПАТТЕРНАМ");
 
         String[] strings = stringIn.split("===");
         String stringOut = stringIn;
@@ -37,7 +37,7 @@ public class MakeDeal extends Thread {
             new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку БАЙ");
+                    + stringOut + " --- Согластно ПАТТЕРНУ II сделал сделку БАЙ");
 
         } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
 
@@ -45,7 +45,7 @@ public class MakeDeal extends Thread {
             new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getBidPrice());
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ сделал сделку СЕЛЛ");
+                    + stringOut + " --- Согластно ПАТТЕРНУ II сделал сделку СЕЛЛ");
 
         }
     }

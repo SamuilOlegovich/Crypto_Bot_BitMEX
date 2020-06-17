@@ -22,6 +22,7 @@ public class ListensToLooksAndFills {
     private ArrayList<String> listStringPriceBuy;                      // лист для формирования бай паттерна
 
 
+    private boolean stopStartFlag;
     private double priceEndSell;               // цена к которой должна прийти цена для фиксации паттерна
     private double priceEndBuy;                // цена к которой должна прийти цена для фиксации паттерна
     private double priceNow;                   // цена в данный момент
@@ -51,7 +52,9 @@ public class ListensToLooksAndFills {
         this.listInfoIndicator = new ArrayList<>();
         this.countPriseSell = new CountPriseSell();
         this.countPriseBuy = new CountPriseBuy();
+        Gasket.setListensToLooksAndFills(this);
         this.sortPrice = new SortPrice();
+        this.stopStartFlag = true;
         this.oneStartFlag = true;
         this.priceEndSell = NaN;
         this.priceEndBuy = NaN;
@@ -70,7 +73,9 @@ public class ListensToLooksAndFills {
     // если он уже запущен то просто кладем объекты в массив
     // так же получаем текущую цену
     public void setInfoString(InfoIndicator infoIndicator) {
-        listInfoIndicator.add(infoIndicator);
+        if (stopStartFlag) {
+            listInfoIndicator.add(infoIndicator);
+        }
     }
 
 
@@ -528,6 +533,18 @@ public class ListensToLooksAndFills {
 
     protected int getSizeListInfoIndicator() {
         return listInfoIndicator.size();
+    }
+
+
+    public void setStopStartFlag(boolean stopStartFlag) {
+        this.stopStartFlag = stopStartFlag;
+
+        if (!stopStartFlag) {
+            listInfoIndicatorWorkingCopy.clear();
+            listStringPriceSell.clear();
+            listStringPriceBuy.clear();
+            listInfoIndicator.clear();
+        }
     }
 
 

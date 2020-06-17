@@ -30,7 +30,7 @@ public class View extends Thread {
     public void run() {
         jFrame = getJFrame();
         jPanel = new JPanel();
-        jFrame.add(jPanel);
+        jFrame.add(jPanel, BorderLayout.NORTH);
         jPanel.setBackground(Color.LIGHT_GRAY);
         jButtonStart = new JButton("START");
         jButtonStop = new JButton("STOP");
@@ -50,7 +50,7 @@ public class View extends Thread {
         jTextArea = new JTextArea(35, 90);
         jScrollPane = new JScrollPane(jTextArea);
         jTextArea.setLineWrap(true);
-        jPanel.add(jScrollPane);
+        jFrame.add(jScrollPane, BorderLayout.CENTER);
 
 
         jButtonStart.addActionListener(new ActionListener() {
@@ -63,6 +63,13 @@ public class View extends Thread {
                 if (runTheProgram == null) {
                     new RunTheProgram().start();
                 }
+
+                if (runTheProgram != null) {
+                    Gasket.getListensLooksAndComparesUser().setStopStartFlag(false);
+                    Gasket.getListensLooksAndCompares().setStopStartFlag(false);
+                    Gasket.getListensToLooksAndFills().setStopStartFlag(false);
+
+                }
             }
         });
 
@@ -72,19 +79,21 @@ public class View extends Thread {
             public void actionPerformed(ActionEvent e) {
                 // тут прописать Стоп программы
 
-//                String pathPatterns = getClass().getResource("").getPath();
-//                jTextArea.append(pathPatterns + "\n");
-
                 new Thread() {
                     @Override
                     public void run() {
                         jPanel.setBackground(Color.RED);
-                        try {
-                            Thread.sleep(1000 * 10);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
-                        System.exit(0);
+
+                        Gasket.getListensLooksAndComparesUser().setStopStartFlag(false);
+                        Gasket.getListensLooksAndCompares().setStopStartFlag(false);
+                        Gasket.getListensToLooksAndFills().setStopStartFlag(false);
+
+//                        try {
+//                            Thread.sleep(1000 * 10);
+//                        } catch (InterruptedException ex) {
+//                            ex.printStackTrace();
+//                        }
+//                        System.exit(0);
                     }
                 }.start();
             }

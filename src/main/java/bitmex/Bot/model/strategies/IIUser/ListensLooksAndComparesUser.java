@@ -26,6 +26,7 @@ public class ListensLooksAndComparesUser {
     private SortSizeUser sortSizeUser;
 
 
+    private boolean stopStartFlag;
     private double priceStart;
     private double priceNow;
     private long timeNow;
@@ -42,9 +43,11 @@ public class ListensLooksAndComparesUser {
         this.savedPatternsUser = Gasket.getSavedPatternsUserClass();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.sortPriceComparatorUser = new SortPriceUser();
-        this.listInfoIndicator = new ArrayList<>();
         this.marketListsStrings = new ArrayList<>();
+        this.listInfoIndicator = new ArrayList<>();
+        Gasket.setListensLooksAndComparesUser(this);
         this.sortSizeUser = new SortSizeUser();
+        this.stopStartFlag = true;
         this.priceStart = NaN;
         this.priceNow = NaN;
     }
@@ -62,10 +65,12 @@ public class ListensLooksAndComparesUser {
     // если он уже запущен то просто кладем объекты в массив
     // так же получаем текущую цену
     public synchronized void setInfoString(InfoIndicator infoIndicator) {
-        if (Double.isNaN(priceStart)) {
-            priceStart = Gasket.getBitmexQuote().getBidPrice();
+        if (stopStartFlag) {
+            if (Double.isNaN(priceStart)) {
+                priceStart = Gasket.getBitmexQuote().getBidPrice();
+            }
+            listInfoIndicator.add(infoIndicator);
         }
-        listInfoIndicator.add(infoIndicator);
     }
 
 
@@ -511,6 +516,18 @@ public class ListensLooksAndComparesUser {
 
     protected int getSizeListInfoIndicator() {
         return listInfoIndicator.size();
+    }
+
+
+    public void setStopStartFlag(boolean stopStartFlag) {
+        this.stopStartFlag = stopStartFlag;
+
+        if (!stopStartFlag) {
+            listInfoIndicatorWorkingCopy.clear();
+            marketListsStrings.clear();
+            listInfoIndicator.clear();
+
+        }
     }
 
 

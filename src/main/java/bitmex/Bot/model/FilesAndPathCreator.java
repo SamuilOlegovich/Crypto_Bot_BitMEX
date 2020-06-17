@@ -33,63 +33,123 @@ public class FilesAndPathCreator {
 
 
     private void createdPath() {
+
         String[] strings = getClass().getResource("").getPath().split("bitmex-client.jar");
         String finish = strings[0].replaceAll("file:", "");
 
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            finish = finish.replaceFirst("/", "").replaceAll("/", "\\\\");
+        }
+
+
         if (strings.length == 2) {
-            Path pathIIPatterns = Paths.get(strings[0] + "iiPatterns");
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                Path pathIIPatterns = Paths.get(finish + "iiPatterns");
 
-            if (!Files.exists(pathIIPatterns)) {
-                try {
-                    Files.createDirectories(Paths.get("iiPatterns"));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (!Files.exists(pathIIPatterns)) {
+                    try {
+                        Files.createDirectories(Paths.get("iiPatterns"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            Path pathUPatterns = Paths.get(strings[0] + "uPatterns");
+                Path pathUPatterns = Paths.get(finish + "uPatterns");
 
-            if (!Files.exists(pathUPatterns)) {
-                try {
-                    Files.createDirectories(Paths.get("uPatterns"));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (!Files.exists(pathUPatterns)) {
+                    try {
+                        Files.createDirectories(Paths.get("uPatterns"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            Path pathSetting = Paths.get(strings[0] + "Settings");
+                Path pathSetting = Paths.get(finish + "Settings");
 
-            if (!Files.exists(pathSetting)) {
-                // действия, если папка существует
-                try {
-                    Files.createDirectories(Paths.get("Logs"));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (!Files.exists(pathSetting)) {
+                    // действия, если папка существует
+                    try {
+                        Files.createDirectories(Paths.get("Settings"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            Path pathLog = Paths.get(strings[0] + "Logs");
+                Path pathLog = Paths.get(finish + "Logs");
 
-            if (!Files.exists(pathLog)) {
-                // действия, если папка существует
-                try {
-                    Files.createDirectories(Paths.get("Settings"));
-                    Files.createDirectories(Paths.get("Logs"));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (!Files.exists(pathLog)) {
+                    // действия, если папка существует
+                    try {
+                        Files.createDirectories(Paths.get("Logs"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+
+                pathPatternsTemporaryUser = finish + "uPatterns\\uTemporaryPatterns.txt";
+                pathLogs = finish  + "Logs\\" + DatesTimes.getDateLogs().replaceAll(":", "-")
+                        + " Log.txt";
+                pathPatternsTemporary = finish + "iiPatterns\\iiTemporaryPatterns.txt";
+                pathPatternsDeleteUser = finish + "uPatterns\\uTemporaryDelete.txt";
+                pathPatternsDelete = finish + "iiPatterns\\iiTemporaryDelete.txt";
+                pathPatternsForUser = finish + "uPatterns\\uPatternsFor.txt";
+                pathPatternsUser = finish + "uPatterns\\uPatterns.txt";
+                pathPatterns = finish + "iiPatterns\\iiPatterns.txt";
+                pathSettings = finish + "Settings\\Settings.txt";
+
+            } else {
+                Path pathIIPatterns = Paths.get(strings[0] + "iiPatterns");
+
+                if (!Files.exists(pathIIPatterns)) {
+                    try {
+                        Files.createDirectories(Paths.get("iiPatterns"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Path pathUPatterns = Paths.get(strings[0] + "uPatterns");
+
+                if (!Files.exists(pathUPatterns)) {
+                    try {
+                        Files.createDirectories(Paths.get("uPatterns"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Path pathSetting = Paths.get(strings[0] + "Settings");
+
+                if (!Files.exists(pathSetting)) {
+                    // действия, если папка существует
+                    try {
+                        Files.createDirectories(Paths.get("Settings"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Path pathLog = Paths.get(strings[0] + "Logs");
+
+                if (!Files.exists(pathLog)) {
+                    // действия, если папка существует
+                    try {
+                        Files.createDirectories(Paths.get("Logs"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                pathPatternsTemporaryUser = finish + "uPatterns/uTemporaryPatterns.txt";
+                pathLogs = finish + "Logs/" + DatesTimes.getDateLogs() + " Log.txt";
+                pathPatternsTemporary = finish + "iiPatterns/iiTemporaryPatterns.txt";
+                pathPatternsDeleteUser = finish + "uPatterns/uTemporaryDelete.txt";
+                pathPatternsDelete = finish + "iiPatterns/iiTemporaryDelete.txt";
+                pathPatternsForUser = finish + "uPatterns/uPatternsFor.txt";
+                pathPatternsUser = finish + "uPatterns/uPatterns.txt";
+                pathPatterns = finish + "iiPatterns/iiPatterns.txt";
+                pathSettings = finish + "Settings/Settings.txt";
             }
-
-            pathPatternsTemporaryUser = finish + "uPatterns/uTemporaryPatterns.txt";
-            pathLogs = finish  + "Logs/" + DatesTimes.getDateLogs() + "===Log.txt";
-            pathPatternsTemporary = finish + "iiPatterns/iiTemporaryPatterns.txt";
-            pathPatternsDeleteUser = finish + "uPatterns/uTemporaryDelete.txt";
-            pathPatternsDelete = finish + "iiPatterns/iiTemporaryDelete.txt";
-            pathPatternsForUser = finish + "uPatterns/uPatternsFor.txt";
-            pathPatternsUser = finish + "uPatterns/uPatterns.txt";
-            pathPatterns = finish + "iiPatterns/iiPatterns.txt";
-            pathSettings = finish + "Settings/Settings.txt";
-
         } else {
             String string = getClass().getResource("").getPath()
                     .replaceAll("target/classes", "src/main/java")

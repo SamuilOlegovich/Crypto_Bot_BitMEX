@@ -245,18 +245,23 @@ public class CompareAndMakeDecisionUser extends Thread {
         String[] stringsPattern = patternArray.split("===");
         String[] stringsMarket = marketArray.split("===");
 
+        // period
         if (!stringsPattern[1].equalsIgnoreCase("null")
                 && !stringsMarket[1].equals(stringsPattern[1])) {
             return false;
+            // preview
         } else if (!stringsPattern[3].equalsIgnoreCase("null")
                 && !stringsMarket[3].equals(stringsPattern[3])) {
             return false;
+            // type
         } else if (!stringsPattern[11].equalsIgnoreCase("null")
                 && !stringsMarket[11].equals(stringsPattern[11])) {
             return false;
+            // avg
         } else if (!stringsPattern[13].equalsIgnoreCase("null")
                 && !stringsMarket[13].equals(stringsPattern[13])) {
             return false;
+            // dir
         } else if (!stringsPattern[15].equalsIgnoreCase("null")
                 && !stringsMarket[15].equals(stringsPattern[15])) {
             return false;

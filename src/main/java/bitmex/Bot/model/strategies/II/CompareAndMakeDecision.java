@@ -234,16 +234,22 @@ public class CompareAndMakeDecision extends Thread {
         String[] stringsMarket = marketArray.split(",");
 
         if (!stringsMarket[0].equals(stringsPattern[0])) {
-            return false;
-        } else if (!stringsMarket[1].equals(stringsPattern[1])) {
-            return false;
-        } else if (!stringsMarket[5].equals(stringsPattern[5])) {
-            return false;
-        } else if (!stringsMarket[7].equals(stringsPattern[7])) {
-            return false;
-        } else {
-            return true;
+//            return false;
         }
+
+        if (!stringsMarket[1].equals(stringsPattern[1])) {
+//            return false;
+        }
+
+        if (!stringsMarket[5].equals(stringsPattern[5])) {
+            return false;
+        }
+
+        if (!stringsMarket[7].equals(stringsPattern[7])) {
+            return false;
+        }
+
+        return true;
     }
 }
 

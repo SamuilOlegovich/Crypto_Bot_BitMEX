@@ -43,7 +43,6 @@ public class ListensLooksAndCompares {
         this.marketListInListString = new ArrayList<>();
         this.sortPriceComparator = new SortPrice();
         this.listInfoIndicator = new ArrayList<>();
-        Gasket.setListensLooksAndCompares(this);
         this.sortSize = new SortSize();
         this.priceStart = Float.NaN;
         this.priceNow = Float.NaN;
@@ -52,7 +51,10 @@ public class ListensLooksAndCompares {
 
 
     public static ListensLooksAndCompares getInstance() {
-        if (listensLooksAndCompares == null) listensLooksAndCompares = new ListensLooksAndCompares();
+        if (listensLooksAndCompares == null) {
+            listensLooksAndCompares = new ListensLooksAndCompares();
+            Gasket.setListensLooksAndCompares(listensLooksAndCompares);
+        }
         return listensLooksAndCompares;
     }
 

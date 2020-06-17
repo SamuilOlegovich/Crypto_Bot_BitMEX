@@ -13,8 +13,8 @@ public class ConsoleHelper {
 
     public static void writeMessage(String string) {
         Gasket.getViewThread().updateInfoView(string);
-//        WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
-        //System.out.println(string);
+        WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
+        System.out.println(string);
     }
 
 
@@ -273,5 +273,58 @@ public class ConsoleHelper {
                 + "OB === " + Gasket.isObFlag() + "\n"
                 + "OS === " + Gasket.isOsFlag() + "\n"
                 + "\n");
+    }
+
+
+    public static void showCommands() {
+        ConsoleHelper.writeMessage("\n\n"
+        + "SETTINGS=RESTART программа перезапустит настройки не отключаясь\n"
+        + "activeNumberOfCandlesForAnalysis\n"
+        + "timeCalculationCombinationLevel\n"
+        + "numberOfCandlesForAnalysis\n"
+        + "takeForCollectingPatterns\n"
+        + "useStopLevelOrNotStopTime\n"
+        + "useStopLevelOrNotStop\n"
+        + "numberOfHistoryBlocks\n"
+        + "timeCalculationLevel\n"
+        + "tradingPatternsUser\n"
+        + "apiKeyName2Accounts\n"
+        + "timeBetweenOrders\n"
+        + "gameAllDirection\n"
+        + "useRealOrNotReal\n"
+        + "maxAndMinAverage\n"
+        + "secondsSleepTime\n"
+        + "tradingPatterns\n"
+        + "strategyWorkOne\n"
+        + "apiKey2Accounts\n"
+        + "dateDifference\n"
+        + "rangePriceMIN\n"
+        + "rangePriceMAX\n"
+        + "gameDirection\n"
+        + "savedPatterns\n"
+        + "twoAccounts\n"
+        + "oneSellFLAG\n"
+        + "priceActive\n"
+        + "PROFIT_Sell\n"
+        + "PROFIT_Buy\n"
+        + "apiKeyName\n"
+        + "oneBuyFLAG\n"
+        + "rangeLevel\n"
+        + "typeOrder\n"
+        + "visible\n"
+        + "trading\n"
+        + "PROFIT\n"
+        + "apiKey\n"
+        + "obs_2\n"
+        + "obs_5\n"
+        + "obs_4\n"
+        + "obs_3\n"
+        + "PORT\n"
+        + "stop\n"
+        + "take\n"
+        + "obs\n"
+        + "lot\n"
+
+        + "\n\n");
     }
 }

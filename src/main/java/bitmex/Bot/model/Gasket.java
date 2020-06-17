@@ -1,19 +1,22 @@
 package bitmex.Bot.model;
 
-import bitmex.Bot.controller.ControlConsoleSetting;
-import bitmex.Bot.controller.ExecutorCommandos;
-import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
-import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
+import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
 import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
 import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
+import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
+import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
+import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
+import bitmex.Bot.controller.ControlConsoleSetting;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
-import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
-import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
+import bitmex.Bot.controller.ExecutorCommandos;
 import bitmex.Bot.view.View;
 
 import java.util.List;
+
+
+
 
 import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
 
@@ -24,7 +27,6 @@ public class Gasket {
     private static ListensLooksAndCompares listensLooksAndCompares;
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static ListensToLooksAndFills listensToLooksAndFills;
-    private static ControlConsoleSetting controlConsoleSetting;
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
     private static String numberOfHistoryBlocks = "5-4-3-2";        // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;

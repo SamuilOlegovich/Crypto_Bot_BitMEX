@@ -231,6 +231,24 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("lot === "
                                 + Gasket.getLot() + "\n");
                     break;
+                case "apiKey" :
+                    ApiKey.setApiKey(strings[1]);
+                    ConsoleHelper.writeMessage("apiKey === "
+                            + ApiKey.getApiKey() + "\n");
+                    break;
+                case "apiKeyName" :
+                    ApiKey.setApiKeyName(strings[1]);
+                    ConsoleHelper.writeMessage("apiKeyName === "
+                            + ApiKey.getApiKeyName() + "\n");
+                case "apiKey2Accounts" :
+                    ApiKey.setApiKey2Accounts(strings[1]);
+                    ConsoleHelper.writeMessage("apiKey === "
+                            + ApiKey.getApiKey2Accounts() + "\n");
+                    break;
+                case "apiKeyName2Accounts" :
+                    ApiKey.setApiKeyName2Accounts(strings[1]);
+                    ConsoleHelper.writeMessage("apiKeyName === "
+                            + ApiKey.getApiKeyName2Accounts() + "\n");
                 case "SETTINGS" :
                     // SETTINGS=RESTART программа перезапустит настройки не отключаясь
                     if (strings[1].equalsIgnoreCase("RESTART")) parserSetting.writeSettings();

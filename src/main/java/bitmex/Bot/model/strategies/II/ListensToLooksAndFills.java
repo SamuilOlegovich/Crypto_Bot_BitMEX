@@ -52,7 +52,6 @@ public class ListensToLooksAndFills {
         this.listInfoIndicator = new ArrayList<>();
         this.countPriseSell = new CountPriseSell();
         this.countPriseBuy = new CountPriseBuy();
-        Gasket.setListensToLooksAndFills(this);
         this.sortPrice = new SortPrice();
         this.stopStartFlag = true;
         this.oneStartFlag = true;
@@ -63,7 +62,10 @@ public class ListensToLooksAndFills {
 
 
     public static ListensToLooksAndFills getInstance() {
-        if (listensToLooksAndFills == null) listensToLooksAndFills = new ListensToLooksAndFills();
+        if (listensToLooksAndFills == null) {
+            listensToLooksAndFills = new ListensToLooksAndFills();
+            Gasket.setListensToLooksAndFills(listensToLooksAndFills);
+        }
         return listensToLooksAndFills;
     }
 

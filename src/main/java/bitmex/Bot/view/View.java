@@ -2,6 +2,7 @@ package bitmex.Bot.view;
 
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.controller.RunTheProgram;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 import java.awt.event.ActionListener;
@@ -61,14 +62,16 @@ public class View extends Thread {
                 jPanel.setBackground(Color.GREEN);
 
                 if (runTheProgram == null) {
-                    new RunTheProgram().start();
+                    runTheProgram = new RunTheProgram();
+                    runTheProgram.start();
                 }
 
                 if (runTheProgram != null) {
+                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            + " --- Программа ЗАПУЩЕНА");
                     Gasket.getListensLooksAndComparesUser().setStopStartFlag(false);
                     Gasket.getListensLooksAndCompares().setStopStartFlag(false);
                     Gasket.getListensToLooksAndFills().setStopStartFlag(false);
-
                 }
             }
         });
@@ -78,24 +81,14 @@ public class View extends Thread {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // тут прописать Стоп программы
+                jPanel.setBackground(Color.RED);
 
-                new Thread() {
-                    @Override
-                    public void run() {
-                        jPanel.setBackground(Color.RED);
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        + " --- Программа ОСТАНОВЛЕНА");
 
-                        Gasket.getListensLooksAndComparesUser().setStopStartFlag(false);
-                        Gasket.getListensLooksAndCompares().setStopStartFlag(false);
-                        Gasket.getListensToLooksAndFills().setStopStartFlag(false);
-
-//                        try {
-//                            Thread.sleep(1000 * 10);
-//                        } catch (InterruptedException ex) {
-//                            ex.printStackTrace();
-//                        }
-//                        System.exit(0);
-                    }
-                }.start();
+                Gasket.getListensLooksAndComparesUser().setStopStartFlag(false);
+                Gasket.getListensLooksAndCompares().setStopStartFlag(false);
+                Gasket.getListensToLooksAndFills().setStopStartFlag(false);
             }
         });
 
@@ -122,6 +115,8 @@ public class View extends Thread {
                 if (string.length() > 3) {
                     if (string.trim().equalsIgnoreCase("info")) {
                         ConsoleHelper.printInfoSettings();
+                    } else if (string.trim().equalsIgnoreCase("commands")) {
+                        ConsoleHelper.showCommands();
                     } else if (string.trim().equalsIgnoreCase("flag")) {
                         ConsoleHelper.printFlag();
                     } else if (string.trim().equalsIgnoreCase("price")) {

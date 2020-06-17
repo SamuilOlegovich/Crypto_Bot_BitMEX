@@ -23,7 +23,6 @@ public class ParserSetting {
 
     private void readFileSettings() {
         executorCommandos.setParserSetting(this);
-        executorCommandos.setFlag(true);
 
         try {
             ArrayList<String> listSettings =  WriterAndReadFile.readFile(path);
@@ -38,23 +37,28 @@ public class ParserSetting {
                 }
             }
 
+
             for (String string : listSettings) {
                 if (string.equalsIgnoreCase("END")) {
                     ConsoleHelper.writeMessage("Настройки УСПЕШНО считьаны.");
                     return;
                 }
+
                 String[] strings;
+
                 if (string.length() > 4
-                        && !string.equals(" --- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- ")) {
-                    strings = string.split(" ===== ");
+                        && !string.equalsIgnoreCase(
+                                " --- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- ")) {
+                    strings = string.split(" ----- ");
                     executorCommandos.parseAndExecute(strings[0]);
                 }
             }
+
         } catch (Exception e) {
             ConsoleHelper.writeMessage("Ошибка в ЧТЕНИИ файла Settings.txt");
         }
-        executorCommandos.setFlag(false);
     }
+
 
 
     public void writeSettings() {
@@ -68,94 +72,8 @@ public class ParserSetting {
 
 
     private String getStringWrite() {
-        return " --- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n\n"
-                + "timeBetweenOrders=" + Gasket.getTimeBetweenOrders()
-                + " ===== время в секундах между выставлениями ордеров по одной стратегии\n"
-                + "strategyWorkOne=" + Gasket.getStrategyWorkOne()
-                + " ===== количество стратегий одновременно работающих (можно еще допелить или убрать)\n"
-                + "dateDifference=" + Gasket.getDateDifference()
-                + " ===== разница в часовом поясе\n"
-                + "\n"
-
-                + "rangePriceMAX=" + Gasket.getRangePriceMAX()
-                + " ===== диапазон в долларах от уровней для срабатывания ордера\n"
-                + "rangePriceMIN=" + Gasket.getRangePriceMIN()
-                + " ===== диапазон в долларах от уровней для отмены ордера\n"
-
-                + "priceActive=" + Gasket.getPriceActive()
-                + " ===== цена тригер для стоп лимитов и тейк лимитов\n"
-                + "rangeLevel=" + Gasket.getRangeLevel()
-                + " ===== диапазон в долларах для появления уровней\n"
-                + "typeOrder=" + Gasket.getTypeOrder()
-                + " ===== тип первого открываемого ордера\n"
-                + "visible=" + Gasket.getVisible()
-                + " ===== видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно\n"
-                + "\n"
-
-
-                + "useRealOrNotReal=" + Gasket.isUseRealOrNotReal()
-                + " ===== Выбираем счет, true - реальный счет\n"
-                + "gameAllDirection=" + Gasket.isGameAllDirection()
-                + " ===== true - играть во все стороны на одном счету\n"
-                + "gameAllDirection=" + Gasket.isGameAllDirection()
-                + " ===== true - играть во все стороны на одном счету\n"
-                + "gameDirection=" + Gasket.isGameDirection()
-                + " ===== направление игры при одном счете, true - Buy, false - Sell\n"
-                + "twoAccounts=" + Gasket.isTwoAccounts()
-                + " ===== true - два счета, можно играть в две стороны, false - только в одну сторону\n"
-                + "trading=" + Gasket.isTrading()
-                + " ===== торговать - true нет - false\n"
-                + "PORT=" + Gasket.getPORT()
-                + " ===== порт подключения\n"
-                + "\n"
-
-
-                + "take=" + Gasket.getTake()
-                + " ===== тейк профит в долларах\n"
-                + "stop=" + Gasket.getStop()
-                + " ===== стоп лосс в долларах\n"
-                + "lot=" + Gasket.getLot()
-                + " ===== количество контрактов\n"
-                + "\n"
-
-                + "obs_5=" + Gasket.isObs_5()
-                + " ===== включить выключить стратегию\n"
-                + "obs_4=" + Gasket.isObs_4()
-                + " ===== включить выключить стратегию\n"
-                + "obs_3=" + Gasket.isObs_3()
-                + " ===== включить выключить стратегию\n"
-                + "obs_2=" + Gasket.isObs_2()
-                + " ===== включить выключить стратегию\n"
-                + "obs=" + Gasket.isObs()
-                + " ===== включить выключить стратегию\n"
-                + "\n"
-
-                + "useStopLevelOrNotStopTime=" + Gasket.getUseStopLevelOrNotStopTime()
-                + " ===== сколько минут отслеживать сделку вышедшею за MIN уровни\n"
-                + "useStopLevelOrNotStop=" + Gasket.isUseStopLevelOrNotStop()
-                + " ===== отменять или не отменять сделку вышедшею за MIN уровни\n"
-                + "timeCalculationCombinationLevel=" + Gasket.getTimeCalculationCombinationLevel()
-                + " ===== когда уровни сформированы указываем время жизни данной комбинации\n"
-                + "timeCalculationLevel=" + Gasket.getTimeCalculationLevel()
-                + " ===== время за которое должны сформироваться уровни иначе все отменяется\n"
-                + "\n"
-
-                + "tradingPatterns=" + Gasket.isTradingPatterns()
-                + " ===== включить по патернам патернов\n"
-                + "savedPatterns=" + Gasket.isSavedPatterns()
-                + " ===== включить нахождение и запись патернов\n"
-
-                + "takeForCollectingPatterns=" + Gasket.getTakeForCollectingPatterns()
-                + " ===== тейк для сбора и накопления паттернов\n"
-
-                + "tradingPatternsUser === " + Gasket.isTradingPatternsUser()
-                + " === торговля по паттернам USER\n"
-
-
-                + "\n"
-                + "END\n";
+        return ConsoleHelper.getStringInfoSettings() + "\n" + "END\n";
     }
-
 
 
 

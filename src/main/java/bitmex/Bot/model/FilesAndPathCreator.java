@@ -37,14 +37,42 @@ public class FilesAndPathCreator {
         String finish = strings[0].replaceAll("file:", "");
 
         if (strings.length == 2) {
-            String pathLogsTest = strings[0] + "Logs";
-            Path path = Paths.get(pathLogsTest);
+            Path pathIIPatterns = Paths.get(strings[0] + "iiPatterns");
 
-            if (!Files.exists(path)) {
-                // действия, если папка существует
+            if (!Files.exists(pathIIPatterns)) {
                 try {
                     Files.createDirectories(Paths.get("iiPatterns"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Path pathUPatterns = Paths.get(strings[0] + "uPatterns");
+
+            if (!Files.exists(pathUPatterns)) {
+                try {
                     Files.createDirectories(Paths.get("uPatterns"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Path pathSetting = Paths.get(strings[0] + "Settings");
+
+            if (!Files.exists(pathSetting)) {
+                // действия, если папка существует
+                try {
+                    Files.createDirectories(Paths.get("Logs"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Path pathLog = Paths.get(strings[0] + "Logs");
+
+            if (!Files.exists(pathLog)) {
+                // действия, если папка существует
+                try {
                     Files.createDirectories(Paths.get("Settings"));
                     Files.createDirectories(Paths.get("Logs"));
                 } catch (IOException e) {

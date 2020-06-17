@@ -69,7 +69,7 @@ public class SavedPatterns implements Serializable {
                 inArrayList.remove(i);
             }
 
-            String[] strings = Gasket.getNumberOfHistoryBlocks().split("===");
+            String[] strings = Gasket.getNumberOfHistoryBlocks().split("-");
 
             for (String sBlock : strings) {
                 ArrayList<String> inArrayListCopy = new ArrayList<>(inArrayList);

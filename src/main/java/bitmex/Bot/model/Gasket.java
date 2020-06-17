@@ -18,9 +18,9 @@ public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
-    private static String numberOfHistoryBlocks = "5===4===3===2";  // количество блоков истории выше которого обрезать историю
     private static ControlConsoleSetting controlConsoleSetting;
     private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
+    private static String numberOfHistoryBlocks = "5-4-3-2";        // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
     private static double takeForCollectingPatterns = 20;           // тейк для сбора и накопления паттернов
@@ -177,8 +177,6 @@ public class Gasket {
             List<BitmexChartData> list = bitmexClient.getChartData(ticker, 1, ONE_MINUTE);
             return bitmexChartData = list.get(0);
     }
-
-
 
 
     public static void setBitmexClient(BitmexClient bitmexClient) {
@@ -1290,15 +1288,6 @@ public class Gasket {
 
     public static void setViewThread(View viewThread) {
         Gasket.viewThread = viewThread;
-    }
-
-
-    public static ControlConsoleSetting getControlConsoleSetting() {
-        return controlConsoleSetting;
-    }
-
-    public static void setControlConsoleSetting(ControlConsoleSetting controlConsoleSetting) {
-        Gasket.controlConsoleSetting = controlConsoleSetting;
     }
 
 

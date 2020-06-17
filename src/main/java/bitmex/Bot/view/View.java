@@ -121,7 +121,7 @@ public class View extends Thread {
                         ConsoleHelper.writeMessage("chart === " + Gasket.getBitmexClient()
                                 .getChartData(Gasket.getTicker(), 10, ChartDataBinSize.ONE_MINUTE));
                     } else {
-                        Gasket.getExecutorCommandos().parseAndExecute(string);
+                        Gasket.getExecutorCommandos().parseAndExecute(string.replaceAll("=", " === "));
                     }
                 }
             }

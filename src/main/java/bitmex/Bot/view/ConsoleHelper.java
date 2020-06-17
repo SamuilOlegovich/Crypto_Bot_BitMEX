@@ -28,6 +28,8 @@ public class ConsoleHelper {
         }
     }
 
+
+
     public static int readInt() {
         try {
             return Integer.parseInt(readString());
@@ -37,113 +39,126 @@ public class ConsoleHelper {
         }
     }
 
-    public static void printInfoSettings() {
-        ConsoleHelper.writeMessage("\n" + "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n"
+
+
+    public static String getStringInfoSettings() {
+        return "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n"
                 + "\n"
                 + "timeBetweenOrders === " + Gasket.getTimeBetweenOrders()
-                + " === время в секундах между выставлениями ордеров по одной стратегии\n"
+                + " ----- время в секундах между выставлениями ордеров по одной стратегии\n"
                 + "strategyWorkOne === " + Gasket.getStrategyWorkOne()
-                + " === количество стратегий одновременно работающих (можно еще допелить или убрать)\n"
+                + " ----- количество стратегий одновременно работающих (можно еще допелить или убрать)\n"
                 + "dateDifference === " + Gasket.getDateDifference()
-                + " ==== разница в часовом поясе\n"
+                + " ----- разница в часовом поясе\n"
                 + "\n"
 
                 + "rangePriceMAX === " + Gasket.getRangePriceMAX()
-                + " === диапазон в долларах от уровней для срабатывания ордера\n"
+                + " ----- диапазон в долларах от уровней для срабатывания ордера\n"
                 + "rangePriceMIN === " + Gasket.getRangePriceMIN()
-                + " === диапазон в долларах от уровней для отмены ордера\n"
+                + " ----- диапазон в долларах от уровней для отмены ордера\n"
                 + "\n"
 
                 + "priceActive === " + Gasket.getPriceActive()
-                + " === цена тригер для стоп лимитов и тейк лимитов\n"
+                + " ----- цена тригер для стоп лимитов и тейк лимитов\n"
                 + "rangeLevel === " + Gasket.getRangeLevel()
-                + " === диапазон в долларах для появления уровней\n"
+                + " ----- диапазон в долларах для появления уровней\n"
                 + "typeOrder === " + Gasket.getTypeOrder()
-                + " === тип первого открываемого ордера\n"
+                + " ----- тип первого открываемого ордера\n"
                 + "visible === " + Gasket.getVisible()
-                + " === видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно\n"
+                + " ----- видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно\n"
                 + "\n"
 
 
                 + "useRealOrNotReal === " + Gasket.isUseRealOrNotReal()
-                + " === Выбираем счет, true - реальный счет\n"
+                + " ----- Выбираем счет, true - реальный счет\n"
                 + "gameAllDirection === " + Gasket.isGameAllDirection()
-                + " === true - играть во все стороны на одном счету\n"
+                + " ----- true - играть во все стороны на одном счету\n"
                 + "gameAllDirection === " + Gasket.isGameAllDirection()
-                + " === true - играть во все стороны на одном счету\n"
+                + " ----- true - играть во все стороны на одном счету\n"
                 + "gameDirection === " + Gasket.isGameDirection()
-                + " === направление игры при одном счете, true - Buy, false - Sell\n"
+                + " ----- направление игры при одном счете, true - Buy, false - Sell\n"
                 + "twoAccounts === " + Gasket.isTwoAccounts()
-                + " === true - два счета, можно играть в две стороны, false - только в одну сторону\n"
+                + " ----- true - два счета, можно играть в две стороны, false - только в одну сторону\n"
                 + "trading === " + Gasket.isTrading()
-                + " === торговать - true нет - false\n"
+                + " ----- торговать - true нет - false\n"
                 + "\n"
 
                 + "PORT === " + Gasket.getPORT()
-                + " === порт подключения\n"
+                + " ----- порт подключения\n"
                 + "\n"
 
                 + "take === " + Gasket.getTake()
-                + " === тейк профит в долларах\n"
+                + " ----- тейк профит в долларах\n"
                 + "stop === " + Gasket.getStop()
-                + " === стоп лосс в долларах\n"
+                + " ----- стоп лосс в долларах\n"
                 + "lot === " + Gasket.getLot()
-                + " === количество контрактов\n"
+                + " ----- количество контрактов\n"
                 + "\n"
 
                 + "PROFIT_Sell === " + Gasket.getPROFIT_Sell()
-                + " === профит по сделкам в селл\n"
+                + " ----- профит по сделкам в селл\n"
                 + "PROFIT_Buy === " + Gasket.getPROFIT_Buy()
-                + " === профит по сделкам в бай\n"
+                + " ----- профит по сделкам в бай\n"
                 + "PROFIT === " + Gasket.getPROFIT()
-                + " === итоговый\n"
+                + " ----- итоговый\n"
                 + "\n"
 
                 + "obs_5 === " + Gasket.isObs_5()
-                + " === включить выключить стратегию\n"
+                + " ----- включить выключить стратегию\n"
                 + "obs_4 === " + Gasket.isObs_4()
-                + " === включить выключить стратегию\n"
+                + " ----- включить выключить стратегию\n"
                 + "obs_3 === " + Gasket.isObs_3()
-                + " === включить выключить стратегию\n"
+                + " ----- включить выключить стратегию\n"
                 + "obs_2 === " + Gasket.isObs_2()
-                + " === включить выключить стратегию\n"
+                + " ----- включить выключить стратегию\n"
                 + "obs === " + Gasket.isObs()
-                + " === включить выключить стратегию\n"
+                + " ----- включить выключить стратегию\n"
                 + "\n"
 
                 + "useStopLevelOrNotStopTime === " + Gasket.getUseStopLevelOrNotStopTime()
-                + " === сколько минут отслеживать сделку вышедшею за MIN уровни\n"
+                + " ----- сколько минут отслеживать сделку вышедшею за MIN уровни\n"
                 + "useStopLevelOrNotStop === " + Gasket.isUseStopLevelOrNotStop()
-                + " === отменять или не отменять сделку вышедшею за MIN уровни\n"
+                + " ----- отменять или не отменять сделку вышедшею за MIN уровни\n"
                 + "timeCalculationLevel === " + Gasket.getTimeCalculationLevel()
-                + " === время за которое должны сформироваться уровни иначе все отменяется\n"
+                + " ----- время за которое должны сформироваться уровни иначе все отменяется\n"
                 + "timeCalculationCombinationLevel === " + Gasket.getTimeCalculationCombinationLevel()
-                + " === когда уровни сформированы указываем время жизни данной комбинации\n"
+                + " ----- когда уровни сформированы указываем время жизни данной комбинации\n"
                 + "numberOfCandlesForAnalysis === " + Gasket.getNumberOfCandlesForAnalysis()
-                + " === количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку\n"
+                + " ----- количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку\n"
                 + "maxAndMinAverage === " + Gasket.isMaxAndMinAverage()
-                + " === при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false\n"
+                + " ----- при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false\n"
                 + "activeNumberOfCandlesForAnalysis === " + Gasket.isActiveNumberOfCandlesForAnalysis()
-                + " === включаем отклюаем отслеживания диапазона в котором находится цена true - включено\n"
+                + " ----- включаем отклюаем отслеживания диапазона в котором находится цена true - включено\n"
                 + "tradingPatterns === " + Gasket.isTradingPatterns()
-                + " === включить торговлю по патернам патернов\n"
+                + " ----- включить торговлю по патернам патернов\n"
                 + "takeForCollectingPatterns === " + Gasket.getTakeForCollectingPatterns()
-                + " === тейк для сбора и накопления паттернов\n"
+                + " ----- тейк для сбора и накопления паттернов\n"
                 + "tradingPatternsUser === " + Gasket.isTradingPatternsUser()
-                + " === торговля по паттернам USER\n"
+                + " ----- торговля по паттернам USER\n"
 
-                + " === включить по патернам патернов\n"
+                + "tradingPatterns === " + Gasket.isTradingPatterns()
+                + " ----- включить по патернам патернов\n"
                 + "savedPatterns === " + Gasket.isSavedPatterns()
-                + " === включить нахождение и запись патернов\n"
+                + " ----- включить нахождение и запись патернов\n"
                 + "numberOfHistoryBlocks === " + Gasket.getNumberOfHistoryBlocks()
-                + " === количество блоков истории выше которого обрезать историю\n"
+                + " ----- количество блоков истории выше которого обрезать историю\n";
+    }
+
+
+
+    public static void printInfoSettings() {
+        ConsoleHelper.writeMessage("\n\n"
+                + ConsoleHelper.getStringInfoSettings()
+
                 + "\n"
 
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
                 + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"
-                + "ПРИМЕР: lot=10.0\n"
+                + "команда=значение ----> PORT=777\n"
                 + "\n");
     }
+
+
 
     public static void printStatistics() {
         ConsoleHelper.writeMessage("\n"
@@ -172,6 +187,8 @@ public class ConsoleHelper {
                 + "\n");
     }
 
+
+
     public static void printStatisticsMr() {
         ConsoleHelper.writeMessage("\n"
                 + " --- ИТОГО на счету CEЛЛ MR --- " + Gasket.getPROFIT_Sell_MR() + "\n"
@@ -198,6 +215,8 @@ public class ConsoleHelper {
                 + "OS_STOP_MR === " + Gasket.getOsStopMr() + "\n"
                 + "\n");
     }
+
+
 
     public static void printStatisticsR() {
         ConsoleHelper.writeMessage("\n"
@@ -226,6 +245,8 @@ public class ConsoleHelper {
                 + "\n");
     }
 
+
+
     public static void printStatisticsPatterns() {
         ConsoleHelper.writeMessage("\n"
                 + " --- ИТОГО на счету CEЛЛ ПАТТЕРН --- " + Gasket.getPROFIT_Sell_PAT() + "\n"
@@ -252,28 +273,5 @@ public class ConsoleHelper {
                 + "OB === " + Gasket.isObFlag() + "\n"
                 + "OS === " + Gasket.isOsFlag() + "\n"
                 + "\n");
-    }
-
-
-//    private static void getPathString() {
-//        try {
-//            Thread.sleep(1000 * 3);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        path = Gasket.getPath() + "Logs/" + DatesTimes.getDateTerminal() + "=Log.txt";
-//    }
-
-
-
-    // TEST
-    public static void main(String[] args) {
-        FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
-        try {
-            Thread.sleep(1000 * 3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ConsoleHelper.printInfoSettings();
     }
 }

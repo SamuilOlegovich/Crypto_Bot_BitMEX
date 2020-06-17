@@ -15,8 +15,6 @@ public class ControlConsoleSetting extends Thread {
 
 
 
-
-
     @Override
     public void run() {
         while (true) {
@@ -27,12 +25,14 @@ public class ControlConsoleSetting extends Thread {
                 } else if (string.trim().equalsIgnoreCase("flag")) {
                     ConsoleHelper.printFlag();
                 } else if (string.trim().equalsIgnoreCase("price")) {
-                    ConsoleHelper.writeMessage("price now === " + Gasket.getBitmexQuote().getBidPrice());
+                    ConsoleHelper.writeMessage("price now === "
+                            + Gasket.getBitmexQuote().getBidPrice());
                 } else if (string.trim().equalsIgnoreCase("chart")) {
-                    ConsoleHelper.writeMessage("chart === " + Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
+                    ConsoleHelper.writeMessage("chart === "
+                            + Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
                             10, ChartDataBinSize.ONE_MINUTE));
                 } else {
-                    executorCommandos.parseAndExecute(string);
+                    executorCommandos.parseAndExecute(string.replaceAll("=", " === "));
                 }
             }
         }

@@ -1,5 +1,6 @@
 package bitmex.Bot.controller;
 
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -15,10 +16,15 @@ public class ExecutorCommandos {
 
 
     public void parseAndExecute(String string) {
+
         String[] strings = string.trim().split(" === ");
 
         if (strings.length < 1  || strings.length == 1) {
-            ConsoleHelper.writeMessage("\nВы допустили ошибку, повторите ввод.\n");
+            if (string.equalsIgnoreCase("--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ ---")) {
+                return;
+            }
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + " --- Вы допустили ошибку, повторите ввод === " + string + "\n");
             return;
         } else {
             strings[1] = strings[1].replaceAll(",", ".");
@@ -84,18 +90,22 @@ public class ExecutorCommandos {
                     Gasket.setTradingTestUser(strings[1].equalsIgnoreCase("true"));
                     ConsoleHelper.writeMessage("tradingTestUser === "
                             + Gasket.isTradingTestUser());
+                    break;
                 case "tradingTestII" :
                     Gasket.setTradingTestII(strings[1].equalsIgnoreCase("true"));
                     ConsoleHelper.writeMessage("tradingTestII === "
                             + Gasket.isTradingTestII());
+                    break;
                 case "tradingUser" :
                     Gasket.setTradingUser(strings[1].equalsIgnoreCase("true"));
                     ConsoleHelper.writeMessage("tradingUser === "
                             + Gasket.isTradingUser());
+                    break;
                 case "tradingII" :
                     Gasket.setTradingII(strings[1].equalsIgnoreCase("true"));
                     ConsoleHelper.writeMessage("tradingII === "
                             + Gasket.isTradingII());
+                    break;
                 case "secondsSleepTime" :
                     Gasket.setSecondsSleepTime(Integer.parseInt(strings[1]));
                         ConsoleHelper.writeMessage("secondsSleepTime === "
@@ -274,10 +284,12 @@ public class ExecutorCommandos {
                     if (strings[1].equalsIgnoreCase("RESTART")) parserSetting.writeSettings();
                     break;
                 default:
-                        ConsoleHelper.writeMessage("\nВы ввели неверную команду, попробуйте еще раз.\n");
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                                + " --- Вы ввели неверную команду, попробуйте еще раз === " + string + "\n");
             }
         } catch (Exception e) {
-                ConsoleHelper.writeMessage("\nОшибочка, повторите ввод.\n");
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        + " --- Ошибочка, повторите ввод === " + string + "\n");
         }
         parserSetting.writeSettings();
     }

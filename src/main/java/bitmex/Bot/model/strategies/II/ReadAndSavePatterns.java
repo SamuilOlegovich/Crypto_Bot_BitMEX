@@ -16,7 +16,7 @@ public class ReadAndSavePatterns {
 
     public static void createSavedPatterns() {
         SavedPatterns savedPatterns = Gasket.getSavedPatternsClass();
-        ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю SavedPatterns");
+        ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю Saved Patterns II");
         File file = new File(Gasket.getFilesAndPathCreator().getPathPatterns());
         ArrayList<String> arrayListOut = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class ReadAndSavePatterns {
                     arrayListOut.clear();
                 } else if (string.equalsIgnoreCase("END")) {
                     ConsoleHelper.writeMessage(DatesTimes.getDate()
-                            + " --- SavedPatterns востановлен");
+                            + " --- Saved Patterns II востановлен");
                     savedPatterns.seeLists();
                     arrayListOut.clear();
                     return;
@@ -41,7 +41,7 @@ public class ReadAndSavePatterns {
             arrayListOut.clear();
         } catch (Exception e) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Ошибка в ЧТЕНИИ файла Patterns.txt");
+                    + "Ошибка в ЧТЕНИИ файла iiPatterns.txt");
         }
     }
 

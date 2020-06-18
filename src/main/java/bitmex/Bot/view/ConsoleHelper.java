@@ -42,7 +42,7 @@ public class ConsoleHelper {
 
 
     public static String getStringInfoSettings() {
-        return "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ --- " + "\n"
+        return "--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ ---" + "\n"
                 + "\n"
                 + "timeBetweenOrders === " + Gasket.getTimeBetweenOrders()
                 + " ----- время в секундах между выставлениями ордеров по одной стратегии\n"
@@ -81,13 +81,13 @@ public class ConsoleHelper {
                 + " ----- true - два счета, можно играть в две стороны, false - только в одну сторону\n"
                 + "trading === " + Gasket.isTrading()
                 + " ----- торговать - true нет - false\n"
-                + "tradingTestII === " + Gasket.isTrading()
+                + "tradingTestII === " + Gasket.isTradingTestII()
                 + " ----- на реале торговать - true нет - false\n"
-                + "tradingTestUser === " + Gasket.isTrading()
+                + "tradingTestUser === " + Gasket.isTradingTestUser()
                 + " ----- на реале торговать - true нет - false\n"
-                + "tradingUser === " + Gasket.isTrading()
+                + "tradingUser === " + Gasket.isTradingUser()
                 + " ----- на реале торговать - true нет - false\n"
-                + "tradingII === " + Gasket.isTrading()
+                + "tradingII === " + Gasket.isTradingII()
                 + " ----- на реале торговать - true нет - false\n"
                 + "\n"
 

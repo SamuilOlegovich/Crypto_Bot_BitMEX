@@ -15,7 +15,7 @@ public class ReadAndSavePatternsUser {
 
     public static void createSavedPatternsUser() {
         SavedPatternsUser savedPatternsUser = Gasket.getSavedPatternsUserClass();
-        ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю SavedPatternsUser");
+        ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю Saved Patterns USER");
 
         File file = new File(Gasket.getFilesAndPathCreator().getPathPatternsUser());
 
@@ -32,7 +32,7 @@ public class ReadAndSavePatternsUser {
                     arrayListOut.clear();
                 } else if (string.equalsIgnoreCase("END")) {
                     ConsoleHelper.writeMessage(DatesTimes.getDate()
-                            + " --- SavedPatternsUser востановлен");
+                            + " --- Saved Patterns USER востановлен");
                     savedPatternsUser.seeListsUser();
                     arrayListOut.clear();
                     return;
@@ -41,7 +41,7 @@ public class ReadAndSavePatternsUser {
             arrayListOut.clear();
         } catch (Exception e) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Ошибка в ЧТЕНИИ файла PatternsUser.txt");
+                    + "Ошибка в ЧТЕНИИ файла uPatterns.txt");
         }
     }
 

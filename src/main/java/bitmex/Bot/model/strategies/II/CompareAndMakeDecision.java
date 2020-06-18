@@ -233,21 +233,44 @@ public class CompareAndMakeDecision extends Thread {
         String[] stringsPattern = patternArray.split(",");
         String[] stringsMarket = marketArray.split(",");
 
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + "---------------------------------------------------------------------------- 4 II");
+
         if (!stringsMarket[0].equals(stringsPattern[0])) {
+
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-1 II");
+
 //            return false;
         }
 
         if (!stringsMarket[1].equals(stringsPattern[1])) {
+
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-2 II");
+
 //            return false;
         }
 
         if (!stringsMarket[5].equals(stringsPattern[5])) {
+
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-3 II");
+
             return false;
         }
 
         if (!stringsMarket[7].equals(stringsPattern[7])) {
+
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-4 II");
+
             return false;
         }
+
+
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + "---------------------------------------------------------------------------- 4-5 II");
 
         return true;
     }

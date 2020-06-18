@@ -1,5 +1,6 @@
 package bitmex.Bot.model.serverAndParser;
 
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 import bitmex.Bot.view.ConsoleHelper;
 
@@ -14,7 +15,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage("СЕРВЕР ЗАПУЩЕН");
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + "СЕРВЕР ЗАПУЩЕН");
         ParserString parserString = new ParserString();
         ServerSocket server = null;
         Socket socket = null;
@@ -34,7 +35,8 @@ public class Server extends Thread {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            ConsoleHelper.writeMessage("Что-то навернулось в методе MAIN класса serverAndParser.Server.");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + "Что-то навернулось в методе MAIN класса serverAndParser.Server.");
         }
     }
 

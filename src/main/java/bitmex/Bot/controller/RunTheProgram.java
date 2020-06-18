@@ -1,5 +1,6 @@
 package bitmex.Bot.controller;
 
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
 import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
 import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
@@ -32,25 +33,25 @@ public class RunTheProgram extends Thread {
 
     @Override
     public void run() {
-        FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
+//        FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
 
-        SavedPatternsUser savedPatternsUser = SavedPatternsUser.getInstance();
-        SavedPatterns savedPatterns = SavedPatterns.getInstance();
-
-        Gasket.setSavedPatternsUserClass(savedPatternsUser);
-        ReadAndSavePatternsUser.createSavedPatternsUser();
-
-        Gasket.setSavedPatternsClass(savedPatterns);
-        ReadAndSavePatterns.createSavedPatterns();
-
+//        SavedPatternsUser savedPatternsUser = SavedPatternsUser.getInstance();
+//        SavedPatterns savedPatterns = SavedPatterns.getInstance();
+//
+//        Gasket.setSavedPatternsUserClass(savedPatternsUser);
+//        ReadAndSavePatternsUser.createSavedPatternsUser();
+//
+//        Gasket.setSavedPatternsClass(savedPatterns);
+//        ReadAndSavePatterns.createSavedPatterns();
+//
         ticker = new Ticker("XBTUSD");
-
-        ExecutorCommandos executorCommandos = new ExecutorCommandos();
-        ParserSetting parserSetting = new ParserSetting(executorCommandos);
+//
+//        ExecutorCommandos executorCommandos = new ExecutorCommandos();
+//        ParserSetting parserSetting = new ParserSetting(executorCommandos);
 
         bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), Gasket.isUseRealOrNotReal());
         bitmexClient = new BitmexClient(Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName(), ApiKey.getApiKey());
-        ControlConsoleSetting controlConsoleSetting = new ControlConsoleSetting(executorCommandos);
+        ControlConsoleSetting controlConsoleSetting = new ControlConsoleSetting(Gasket.getExecutorCommandos());
         bitmexClient.subscribeQuotes(ticker, bitmexClient);
         Gasket.setBitmexClient(bitmexClient);
         Gasket.setGameDirection(true);
@@ -68,7 +69,8 @@ public class RunTheProgram extends Thread {
                 bitmexClient2Accounts.subscribeQuotes(ticker, bitmexClient2Accounts);
                 Gasket.setBitmexClient2Accounts(bitmexClient2Accounts);
                 bitmexClient2Accounts.setID(2);
-            } else { ConsoleHelper.writeMessage("Данные второго счета отсутствуют или не верны"); }
+            } else { ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + "Данные второго счета отсутствуют или не верны"); }
         }
 
         ConsoleHelper.printInfoSettings();
@@ -76,25 +78,27 @@ public class RunTheProgram extends Thread {
         server.start();
 
         try {
-            Thread.sleep(1000*10);
+            Thread.sleep(1000 * 10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        ConsoleHelper.writeMessage("");
-        ConsoleHelper.writeMessage("ПРОГРАММА УСПЕШНО ЗАПУЩЕНА");
-        ConsoleHelper.writeMessage("ОЖИДАЙТЕ РЕЗУЛЬТАТОВ");
-        ConsoleHelper.writeMessage("");
+        ConsoleHelper.writeMessage("\n\n"
+                + DatesTimes.getDateTerminal()
+                + "ПРОГРАММА УСПЕШНО ЗАПУЩЕНА"
+                + "\n"
+                + "ОЖИДАЙТЕ РЕЗУЛЬТАТОВ"
+                + "\n\n");
 
-        List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
-                Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
-        double maxAverage = 0.0;
-        double max = 0.0;
-
-        for (BitmexChartData biData : list) {
-            max = Math.max(max, biData.getHigh());
-            maxAverage = maxAverage + biData.getHigh();
-            System.out.println(max + " ---- " + maxAverage);
-        }
+//        List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
+//                Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
+//        double maxAverage = 0.0;
+//        double max = 0.0;
+//
+//        for (BitmexChartData biData : list) {
+//            max = Math.max(max, biData.getHigh());
+//            maxAverage = maxAverage + biData.getHigh();
+//            System.out.println(max + " ---- " + maxAverage);
+//        }
     }
 }

@@ -33,21 +33,21 @@ public class RunTheProgram extends Thread {
 
     @Override
     public void run() {
-//        FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
+        FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
 
-//        SavedPatternsUser savedPatternsUser = SavedPatternsUser.getInstance();
-//        SavedPatterns savedPatterns = SavedPatterns.getInstance();
-//
-//        Gasket.setSavedPatternsUserClass(savedPatternsUser);
-//        ReadAndSavePatternsUser.createSavedPatternsUser();
-//
-//        Gasket.setSavedPatternsClass(savedPatterns);
-//        ReadAndSavePatterns.createSavedPatterns();
-//
+        SavedPatternsUser savedPatternsUser = SavedPatternsUser.getInstance();
+        SavedPatterns savedPatterns = SavedPatterns.getInstance();
+
+        Gasket.setSavedPatternsUserClass(savedPatternsUser);
+        ReadAndSavePatternsUser.createSavedPatternsUser();
+
+        Gasket.setSavedPatternsClass(savedPatterns);
+        ReadAndSavePatterns.createSavedPatterns();
+
         ticker = new Ticker("XBTUSD");
-//
-//        ExecutorCommandos executorCommandos = new ExecutorCommandos();
-//        ParserSetting parserSetting = new ParserSetting(executorCommandos);
+
+        ExecutorCommandos executorCommandos = new ExecutorCommandos();
+        ParserSetting parserSetting = new ParserSetting(executorCommandos);
 
         bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), Gasket.isUseRealOrNotReal());
         bitmexClient = new BitmexClient(Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName(), ApiKey.getApiKey());
@@ -85,9 +85,7 @@ public class RunTheProgram extends Thread {
 
         ConsoleHelper.writeMessage("\n\n"
                 + DatesTimes.getDateTerminal()
-                + "ПРОГРАММА УСПЕШНО ЗАПУЩЕНА"
-                + "\n"
-                + "ОЖИДАЙТЕ РЕЗУЛЬТАТОВ"
+                + " --- ПРОГРАММА УСПЕШНО ЗАПУЩЕНА - ОЖИДАЙТЕ РЕЗУЛЬТАТОВ"
                 + "\n\n");
 
 //        List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),

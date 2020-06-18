@@ -40,7 +40,7 @@ public class ParserSetting {
 
             for (String string : listSettings) {
                 if (string.equalsIgnoreCase("END")) {
-                    ConsoleHelper.writeMessage("Настройки УСПЕШНО считьаны.");
+                    ConsoleHelper.writeMessage("Настройки УСПЕШНО считаны.");
                     return;
                 }
 

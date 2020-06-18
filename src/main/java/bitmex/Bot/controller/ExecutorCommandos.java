@@ -84,7 +84,7 @@ public class ExecutorCommandos {
                 case "savedPatterns" :
                     Gasket.setSavedPatterns(strings[1].equalsIgnoreCase("true"));
                         ConsoleHelper.writeMessage("savedPatterns === "
-                                + Gasket.getLot() + "\n");
+                                + Gasket.isSavedPatterns() + "\n");
                     break;
                 case "tradingTestUser" :
                     Gasket.setTradingTestUser(strings[1].equalsIgnoreCase("true"));

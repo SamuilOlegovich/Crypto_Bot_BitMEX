@@ -35,7 +35,7 @@ public class ListensLooksAndCompares {
 
     private ListensLooksAndCompares() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Класс ListensLooksAndCompares начал работать");
+                + "Класс Listens Looks And Compares II начал работать");
 
         this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();

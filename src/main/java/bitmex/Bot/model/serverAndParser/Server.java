@@ -15,7 +15,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + "СЕРВЕР ЗАПУЩЕН");
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- СЕРВЕР ЗАПУЩЕН");
         ParserString parserString = new ParserString();
         ServerSocket server = null;
         Socket socket = null;

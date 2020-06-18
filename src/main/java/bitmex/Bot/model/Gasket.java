@@ -32,6 +32,7 @@ public class Gasket {
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
     private static double takeForCollectingPatterns = 20;           // тейк для сбора и накопления паттернов
+    private static int timeStopLiveForUserPatterns = 10;            // время за которое паттерн должен отработать
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
     private static ExecutorCommandos executorCommandos;
     private static int numberOfCandlesForAnalysis = 60;             // количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку
@@ -48,16 +49,20 @@ public class Gasket {
     private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
     private static boolean tradingPatterns = false;     // включить по патернам патернов
+    private static boolean tradingTestUser = true;
     private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
     private static volatile double PROFIT = 0.0;        // итоговый профит
     private static boolean savedPatterns = true;        // включить нахождение и запись патернов
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
+    private static boolean tradingTestII = true;
+    private static boolean tradingUser = false;
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
     private static double rangePriceMAX = 4.0;          // диапазон в долларах от уровней для срабатывания ордера
     private static double rangePriceMIN = 0.0;          // диапазон в долларах от уровней для отмены ордера
     private static String typeOrder = "Limit";          // тип первого открываемого ордера
     private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;
+    private static boolean tradingII = false;
     private static int secondsSleepTime = 13;        // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
     private static double priceActive = 3.0;        // цена тригер для стоп лимитов и тейк лимитов
     private static int strategyWorkOne = 2;         // количество стратегий одновременно работающих (можно еще допелить или убрать)
@@ -1330,5 +1335,47 @@ public class Gasket {
 
     public static void setListensToLooksAndFills(ListensToLooksAndFills listensToLooksAndFills) {
         Gasket.listensToLooksAndFills = listensToLooksAndFills;
+    }
+
+
+    public static int getTimeStopLiveForUserPatterns() {
+        return timeStopLiveForUserPatterns;
+    }
+
+    public static void setTimeStopLiveForUserPatterns(int timeStopLiveForUserPatterns) {
+        Gasket.timeStopLiveForUserPatterns = timeStopLiveForUserPatterns;
+    }
+
+
+    public static boolean isTradingTestUser() {
+        return tradingTestUser;
+    }
+
+    public static void setTradingTestUser(boolean tradingTestUser) {
+        Gasket.tradingTestUser = tradingTestUser;
+    }
+
+    public static boolean isTradingTestII() {
+        return tradingTestII;
+    }
+
+    public static void setTradingTestII(boolean tradingTestII) {
+        Gasket.tradingTestII = tradingTestII;
+    }
+
+    public static boolean isTradingUser() {
+        return tradingUser;
+    }
+
+    public static void setTradingUser(boolean tradingUser) {
+        Gasket.tradingUser = tradingUser;
+    }
+
+    public static boolean isTradingII() {
+        return tradingII;
+    }
+
+    public static void setTradingII(boolean tradingII) {
+        Gasket.tradingII = tradingII;
     }
 }

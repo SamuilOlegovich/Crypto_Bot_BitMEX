@@ -26,7 +26,9 @@ public class RunTheProgram extends Thread {
     private static BitmexClient bitmexClient;
     private static Ticker ticker;
 
-
+    public RunTheProgram() {
+        start();
+    }
 
     @Override
     public void run() {
@@ -42,8 +44,10 @@ public class RunTheProgram extends Thread {
         ReadAndSavePatterns.createSavedPatterns();
 
         ticker = new Ticker("XBTUSD");
+
         ExecutorCommandos executorCommandos = new ExecutorCommandos();
         ParserSetting parserSetting = new ParserSetting(executorCommandos);
+
         bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), Gasket.isUseRealOrNotReal());
         bitmexClient = new BitmexClient(Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName(), ApiKey.getApiKey());
         ControlConsoleSetting controlConsoleSetting = new ControlConsoleSetting(executorCommandos);

@@ -29,7 +29,7 @@ public class TestOrderSellPattern extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + ID + " --- RUN класса TestOrderSellPattern начал считать");
+                + ID + " --- RUN класса TestOrderSellPattern II начал считать");
 
         while (true) {
             double priceAsk = Gasket.getBitmexQuote().getAskPrice();
@@ -39,8 +39,23 @@ public class TestOrderSellPattern extends Thread {
                 flag();
                 setStop();
 
+                String[] strings = ID.split("===");
+                strings[1] = (Integer.parseInt(strings[1]) + 1) + "";
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (int i = 0; i < strings.length; i++) {
+                    stringBuilder.append(strings[i]);
+
+                    if (i != strings.length - 1) {
+                        stringBuilder.append("===");
+                    }
+                }
+
+                new UpdatingStatisticsData(stringBuilder.toString());
+
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + ID + " --- Сработал СТОП ЛОСС");
+                        + ID + " --- Сработал СТОП ЛОСС II");
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() - Gasket.getStop());
                 break;
             }
@@ -48,9 +63,23 @@ public class TestOrderSellPattern extends Thread {
             if (priceBid <= priseTakeOrder) {
                 flag();
                 setTake();
+                String[] strings = ID.split("===");
+                strings[3] = (Integer.parseInt(strings[3]) + 1) + "";
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (int i = 0; i < strings.length; i++) {
+                    stringBuilder.append(strings[i]);
+
+                    if (i != strings.length - 1) {
+                        stringBuilder.append("===");
+                    }
+                }
+
+                new UpdatingStatisticsData(stringBuilder.toString());
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + ID + " --- Сработал ТЕЙК ПРОФИТ");
+                        + ID + " --- Сработал ТЕЙК ПРОФИТ II");
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() + Gasket.getTake());
                 break;
             }
@@ -59,7 +88,7 @@ public class TestOrderSellPattern extends Thread {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + ID + " --- Не смогли проснуться в методе RUN класса TestOrderSellPattern");
+                        + ID + " --- Не смогли проснуться в методе RUN класса TestOrderSellPattern II");
             }
         }
         ConsoleHelper.printStatisticsPatterns();

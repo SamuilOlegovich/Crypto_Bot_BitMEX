@@ -61,6 +61,10 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("tradingPatterns === "
                                 + Gasket.isTradingPatternsUser() + "\n");
                     break;
+                case "timeStopLiveForUserPatterns" :
+                    Gasket.setTimeStopLiveForUserPatterns(Integer.parseInt(strings[1]));
+                    ConsoleHelper.writeMessage("timeStopLiveForUserPatterns === " +
+                            + Gasket.getTimeStopLiveForUserPatterns());
                 case "timeCalculationCombinationLevel" :
                     Gasket.setTimeCalculationCombinationLevel(Integer.parseInt(strings[1]));
                         ConsoleHelper.writeMessage("timeCalculationCombinationLevel === "
@@ -76,6 +80,22 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("savedPatterns === "
                                 + Gasket.getLot() + "\n");
                     break;
+                case "tradingTestUser" :
+                    Gasket.setTradingTestUser(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("tradingTestUser === "
+                            + Gasket.isTradingTestUser());
+                case "tradingTestII" :
+                    Gasket.setTradingTestII(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("tradingTestII === "
+                            + Gasket.isTradingTestII());
+                case "tradingUser" :
+                    Gasket.setTradingUser(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("tradingUser === "
+                            + Gasket.isTradingUser());
+                case "tradingII" :
+                    Gasket.setTradingII(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("tradingII === "
+                            + Gasket.isTradingII());
                 case "secondsSleepTime" :
                     Gasket.setSecondsSleepTime(Integer.parseInt(strings[1]));
                         ConsoleHelper.writeMessage("secondsSleepTime === "

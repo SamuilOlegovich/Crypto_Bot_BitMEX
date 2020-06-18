@@ -34,8 +34,12 @@ public class MakeDealUser extends Thread {
         if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
 
             if (conditionsAreMet(true)) {
-                if (Gasket.isTrading()) new TradeBuy(stringOut);
-                new TestOrderBuyPatternUser(stringOut, Gasket.getBitmexQuote().getAskPrice());
+                if (Gasket.isTradingUser()) {
+                    new TradeBuy(stringOut);
+                }
+                if (Gasket.isTradingTestUser()) {
+                    new TestOrderBuyPatternUser(stringOut, Gasket.getBitmexQuote().getAskPrice());
+                }
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + stringOut + " --- Согластно ПАТТЕРНУ " + strings[strings.length - 1]
@@ -49,8 +53,12 @@ public class MakeDealUser extends Thread {
         } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
 
             if (conditionsAreMet(false)) {
-                if (Gasket.isTrading()) new TradeSell(stringOut);
-                new TestOrderSellPatternUser(stringOut, Gasket.getBitmexQuote().getBidPrice());
+                if (Gasket.isTradingUser()) {
+                    new TradeSell(stringOut);
+                }
+                if (Gasket.isTradingTestUser()) {
+                    new TestOrderSellPatternUser(stringOut, Gasket.getBitmexQuote().getBidPrice());
+                }
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + stringOut + " --- Согластно ПАТТЕРНУ " + strings[strings.length - 1]
@@ -71,7 +79,7 @@ public class MakeDealUser extends Thread {
     // что бы сделать сделку иначе отбой
     private boolean conditionsAreMet(boolean b) {
         String[] strings = stringIn.split("===");
-        long timeStop = 1000 * 60 * 10;
+        long timeStop = 1000 * 60 * Gasket.getTimeStopLiveForUserPatterns();
         int blockSearch = 1;
         double price = 0.0;
         String type = "";
@@ -84,7 +92,7 @@ public class MakeDealUser extends Thread {
             }
 
             if (strings[i].equalsIgnoreCase("TYPE")) {
-                block = Integer.parseInt(strings[i + 1]);
+                type = strings[i + 1];
             }
         }
 
@@ -93,7 +101,7 @@ public class MakeDealUser extends Thread {
             if (!string.startsWith("BIAS") && !string.startsWith("BUY") && !string.startsWith("0")) {
                 String[] s = string.split("===");
 
-                if (block == blockSearch) {
+                if (block - 1 == blockSearch) {
                     if (s[11].equalsIgnoreCase(type)) {
                         price = Double.parseDouble(s[7]);
                     }

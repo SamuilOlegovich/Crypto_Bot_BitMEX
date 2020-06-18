@@ -33,16 +33,24 @@ public class MakeDeal extends Thread {
 
         if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
 
-            if (Gasket.isTrading()) new TradeBuy(stringOut);
-            new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
+            if (Gasket.isTradingII()) {
+                new TradeBuy(stringOut);
+            }
+            if (Gasket.isTradingTestUser()) {
+                new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
+            }
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + stringOut + " --- Согластно ПАТТЕРНУ II сделал сделку БАЙ");
 
         } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
 
-            if (Gasket.isTrading()) new TradeSell(stringOut);
-            new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getBidPrice());
+            if (Gasket.isTradingII()) {
+                new TradeSell(stringOut);
+            }
+            if (Gasket.isTradingTestII()) {
+                new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getBidPrice());
+            }
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + stringOut + " --- Согластно ПАТТЕРНУ II сделал сделку СЕЛЛ");

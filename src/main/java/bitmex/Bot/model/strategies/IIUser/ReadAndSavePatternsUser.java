@@ -33,7 +33,11 @@ public class ReadAndSavePatternsUser {
                 } else if (string.equalsIgnoreCase("END")) {
                     ConsoleHelper.writeMessage(DatesTimes.getDate()
                             + " --- Saved Patterns USER востановлен");
-                    savedPatternsUser.seeListsUser();
+
+                    if (Gasket.isShowLoadPatternsII()) {
+                        savedPatternsUser.seeListsUser();
+                    }
+
                     arrayListOut.clear();
                     return;
                 }

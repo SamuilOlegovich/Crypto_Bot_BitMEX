@@ -33,7 +33,11 @@ public class ReadAndSavePatterns {
                 } else if (string.equalsIgnoreCase("END")) {
                     ConsoleHelper.writeMessage(DatesTimes.getDate()
                             + " --- Saved Patterns II востановлен");
-                    savedPatterns.seeLists();
+
+                    if (Gasket.isShowLoadPatternsII()) {
+                        savedPatterns.seeLists();
+                    }
+
                     arrayListOut.clear();
                     return;
                 }

@@ -52,6 +52,16 @@ public class ExecutorCommandos {
                         ConsoleHelper.writeMessage("useRealOrNotReal === "
                                 + Gasket.isUseRealOrNotReal() + "\n");
                     break;
+                case "showLoadPatternsUser" :
+                    Gasket.setShowLoadPatternsUser(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("showLoadPatternsUser === "
+                            + Gasket.isShowLoadPatternsUser() + "\n");
+                    break;
+                case "showLoadPatternsII" :
+                    Gasket.setShowLoadPatternsII(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("showLoadPatternsUser === "
+                            + Gasket.isShowLoadPatternsII() + "\n");
+                    break;
                 case "maxAndMinAverage" :
                     Gasket.setMaxAndMinAverage(strings[1].equalsIgnoreCase("true"));
                         ConsoleHelper.writeMessage("maxAndMinAverage === "

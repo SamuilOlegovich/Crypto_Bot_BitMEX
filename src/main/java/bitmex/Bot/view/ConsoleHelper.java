@@ -151,7 +151,11 @@ public class ConsoleHelper {
                 + "timeStopLiveForUserPatterns === " + Gasket.getTimeStopLiveForUserPatterns()
                 + " ----- время за которое паттерн должен отработать\n"
                 + "numberOfHistoryBlocks === " + Gasket.getNumberOfHistoryBlocks()
-                + " ----- количество блоков истории выше которого обрезать историю\n";
+                + " ----- количество блоков истории выше которого обрезать историю\n"
+                + "showLoadPatternsUser === " + Gasket.isShowLoadPatternsUser()
+                + " ----- показывать загрузку паттернов при запуске программы"
+                + "showLoadPatternsII === " + Gasket.isShowLoadPatternsII()
+                + " ----- показывать загрузку паттернов при запуске программы";
     }
 
 
@@ -300,6 +304,8 @@ public class ConsoleHelper {
                 + "timeCalculationLevel\n"
                 + "tradingPatternsUser\n"
                 + "apiKeyName2Accounts\n"
+                + "showLoadPatternsUser\n"
+                + "showLoadPatternsII\n"
                 + "timeBetweenOrders\n"
                 + "gameAllDirection\n"
                 + "useRealOrNotReal\n"

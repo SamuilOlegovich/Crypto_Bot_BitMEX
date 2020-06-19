@@ -268,7 +268,6 @@ public class CompareAndMakeDecision extends Thread {
             return false;
         }
 
-
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "---------------------------------------------------------------------------- 4-5 II");
 

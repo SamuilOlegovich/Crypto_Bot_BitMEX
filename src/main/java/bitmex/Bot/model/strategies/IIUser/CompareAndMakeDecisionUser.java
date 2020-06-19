@@ -248,7 +248,7 @@ public class CompareAndMakeDecisionUser extends Thread {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "---------------------------------------------------------------------------- 4");
 
-        // period
+            // period
         if (!stringsPattern[1].equalsIgnoreCase("null")
                 && !stringsMarket[1].equals(stringsPattern[1])) {
 
@@ -256,47 +256,55 @@ public class CompareAndMakeDecisionUser extends Thread {
                     + "---------------------------------------------------------------------------- 4-1");
 
             return false;
+        }
+
             // preview
-        } else if (!stringsPattern[3].equalsIgnoreCase("null")
+        if (!stringsPattern[3].equalsIgnoreCase("null")
                 && !stringsMarket[3].equals(stringsPattern[3])) {
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-2");
 
             return false;
+        }
+
             // type
-        } else if (!stringsPattern[11].equalsIgnoreCase("null")
+        if (!stringsPattern[11].equalsIgnoreCase("null")
                 && !stringsMarket[11].equals(stringsPattern[11])) {
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-3");
 
             return false;
+        }
+
             // avg
-        } else if (!stringsPattern[13].equalsIgnoreCase("null")
+        if (!stringsPattern[13].equalsIgnoreCase("null")
                 && !stringsMarket[13].equals(stringsPattern[13])) {
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-4");
 
             return false;
+        }
+
             // dir
-        } else if (!stringsPattern[15].equalsIgnoreCase("null")
+        if (!stringsPattern[15].equalsIgnoreCase("null")
                 && !stringsMarket[15].equals(stringsPattern[15])) {
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-5");
 
             return false;
-        } else {
+        }
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-6");
 
-            return true;
-        }
+        return true;
     }
 }
+
 
 
 

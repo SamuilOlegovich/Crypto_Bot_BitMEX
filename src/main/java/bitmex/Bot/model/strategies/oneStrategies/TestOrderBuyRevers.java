@@ -52,7 +52,8 @@ public class TestOrderBuyRevers extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса TestOrderBuyRevers");
+                ConsoleHelper.writeMessage(ID
+                        + " --- Не смогли проснуться в методе RUN класса TestOrderBuyRevers");
                 e.printStackTrace();
             }
         }

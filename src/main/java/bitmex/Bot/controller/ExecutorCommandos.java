@@ -250,6 +250,7 @@ public class ExecutorCommandos {
                     Gasket.setPORT(Integer.parseInt(strings[1]));
                         ConsoleHelper.writeMessage("PORT === "
                                 + Gasket.getPORT() + "\n");
+                        Gasket.setServerRestart(false);
                     break;
                 case "PROFIT" :
                     Gasket.setPROFIT(Double.parseDouble(strings[1]));

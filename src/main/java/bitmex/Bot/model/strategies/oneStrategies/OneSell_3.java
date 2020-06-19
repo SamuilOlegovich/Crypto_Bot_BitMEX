@@ -203,8 +203,9 @@ public class OneSell_3 {
 
     // проверяем нет ли тут предварительных уровней
     private boolean isReal() {
-        return volume.getPreview() + ask.getPreview() + maxOpenInterestMinus.getPreview() + openInterestPlus.getPreview()
-                + maxDeltaMinus.getPreview() + maxDeltaPlus.getPreview() + maxDeltaPlus2.getPreview()
+        return volume.getPreview() + ask.getPreview() + maxOpenInterestMinus.getPreview()
+                + openInterestPlus.getPreview() + maxDeltaMinus.getPreview()
+                + maxDeltaPlus.getPreview() + maxDeltaPlus2.getPreview()
                 + deltaPlus.getPreview() == 0;
     }
 

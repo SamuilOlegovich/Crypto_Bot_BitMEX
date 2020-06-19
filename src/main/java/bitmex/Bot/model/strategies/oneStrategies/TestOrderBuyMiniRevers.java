@@ -55,7 +55,8 @@ public class TestOrderBuyMiniRevers extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ConsoleHelper.writeMessage(ID + " --- Не смогли проснуться в методе RUN класса TestOrderSellMiniRevers");
+                ConsoleHelper.writeMessage(ID
+                        + " --- Не смогли проснуться в методе RUN класса TestOrderSellMiniRevers");
                 e.printStackTrace();
             }
         }

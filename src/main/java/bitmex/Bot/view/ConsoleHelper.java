@@ -14,7 +14,7 @@ public class ConsoleHelper {
     public static void writeMessage(String string) {
         Gasket.getViewThread().updateInfoView(string);
         WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
-        System.out.println(string);
+//        System.out.println(string);
     }
 
 
@@ -153,9 +153,9 @@ public class ConsoleHelper {
                 + "numberOfHistoryBlocks === " + Gasket.getNumberOfHistoryBlocks()
                 + " ----- количество блоков истории выше которого обрезать историю\n"
                 + "showLoadPatternsUser === " + Gasket.isShowLoadPatternsUser()
-                + " ----- показывать загрузку паттернов при запуске программы"
+                + " ----- показывать загрузку паттернов при запуске программы\n"
                 + "showLoadPatternsII === " + Gasket.isShowLoadPatternsII()
-                + " ----- показывать загрузку паттернов при запуске программы";
+                + " ----- показывать загрузку паттернов при запуске программы\n";
     }
 
 

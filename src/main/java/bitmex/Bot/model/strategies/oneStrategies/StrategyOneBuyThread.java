@@ -63,7 +63,8 @@ public class StrategyOneBuyThread extends Thread {
                     return;
                 } else {
                     if (Gasket.isTrading()) new TradeBuy(ID);
-                    ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- " + DatesTimes.getDateTerminal());
+                    ConsoleHelper.writeMessage(ID + " --- Сделал сделку Бай ---- "
+                            + DatesTimes.getDateTerminal());
                     new TestOrderBuy(ID, close);
                     return;
                 }

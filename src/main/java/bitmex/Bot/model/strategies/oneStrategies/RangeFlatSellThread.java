@@ -62,5 +62,4 @@ public class RangeFlatSellThread extends Thread {
             }
         }
     }
-
 }

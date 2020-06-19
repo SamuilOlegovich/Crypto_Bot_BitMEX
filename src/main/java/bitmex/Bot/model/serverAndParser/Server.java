@@ -15,7 +15,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- СЕРВЕР ЗАПУЩЕН");
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- СЕРВЕР ЗАПУЩЕН" + "\n");
         ParserString parserString = new ParserString();
         ServerSocket server = null;
         Socket socket = null;
@@ -23,11 +23,17 @@ public class Server extends Thread {
         try {
             server = new ServerSocket(Gasket.getPORT());
 
-            while (true) {
+            while (Gasket.isServerRestart()) {
                 // Блокируется до возникновения нового соединения:
                 socket = server.accept();
                 new SocketThread(socket, parserString);
             }
+
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- СЕРВЕР ОСТАНОВЛЕН" + "\n");
+
+            Gasket.setServerRestart(true);
+            new Server().start();
+
         } catch (IOException e) {
             try {
                 server.close();

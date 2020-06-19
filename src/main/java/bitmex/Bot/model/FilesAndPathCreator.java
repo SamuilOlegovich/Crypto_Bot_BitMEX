@@ -24,6 +24,13 @@ public class FilesAndPathCreator {
 
     public FilesAndPathCreator() {
         Gasket.setFilesAndPathCreator(this);
+
+        try {
+            Thread.sleep(1000 * 10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         createdPath();
         createdFileLog();
         isTheFileInPlace();

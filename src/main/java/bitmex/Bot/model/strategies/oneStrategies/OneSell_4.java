@@ -245,5 +245,4 @@ public class OneSell_4 {
                 && (maxDeltaPlus.getTime().getTime() >= after.getTime())
                 && (deltaPlus.getTime().getTime() >= after.getTime());
     }
-
 }

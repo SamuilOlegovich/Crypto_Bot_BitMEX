@@ -53,6 +53,7 @@ public class Gasket {
     private static boolean tradingPatterns = false;     // включить по патернам патернов
     private static boolean tradingTestUser = true;
     private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
+    private static boolean serverRestart = true;        // перезапускаем сервер когда меняем номер порта из консоли
     private static volatile double PROFIT = 0.0;        // итоговый профит
     private static boolean savedPatterns = true;        // включить нахождение и запись патернов
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
@@ -1396,5 +1397,14 @@ public class Gasket {
 
     public static void setShowLoadPatternsII(boolean showLoadPatternsII) {
         Gasket.showLoadPatternsII = showLoadPatternsII;
+    }
+
+
+    public static boolean isServerRestart() {
+        return serverRestart;
+    }
+
+    public static void setServerRestart(boolean serverRestart) {
+        Gasket.serverRestart = serverRestart;
     }
 }

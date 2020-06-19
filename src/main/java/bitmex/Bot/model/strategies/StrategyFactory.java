@@ -116,7 +116,8 @@ public class StrategyFactory {
 
 
         if (Gasket.isTradingPatternsUser()) {
-            if (listensLooksAndComparesUser == null) listensLooksAndComparesUser = ListensLooksAndComparesUser.getInstance();
+            if (listensLooksAndComparesUser == null) listensLooksAndComparesUser
+                    = ListensLooksAndComparesUser.getInstance();
             listensLooksAndComparesUser.setInfoString(infoIndicator);
         }
     }

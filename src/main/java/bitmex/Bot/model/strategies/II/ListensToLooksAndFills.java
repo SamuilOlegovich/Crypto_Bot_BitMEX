@@ -407,17 +407,18 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-                /////////////////////////////////
-                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
-                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
-                /////////////////////////////////
+//                /////////////////////////////////
+//                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
+//                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
+//                /////////////////////////////////
                 return 0;
             } else {
-                //////////////////////////////////
-                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
-                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
-                /////////////////////////////////
-                return countPriseBuy.getPriceStartBuy() - result; // проверить что не то с результатом он равен нулю постоянно
+//                //////////////////////////////////
+//                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
+//                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
+//                /////////////////////////////////
+                // проверить что не то с результатом он равен нулю постоянно
+                return countPriseBuy.getPriceStartBuy() - result;
             }
         } else {
             ArrayList<Double> arrayList = new ArrayList<>(countPriseSell.getArrayListSell());
@@ -431,16 +432,16 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-                /////////////////////////////
-                System.out.println(result + " - " + countPriseSell.getPriceStartSell()
-                        + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
-                ////////////////////////////
+//                /////////////////////////////
+//                System.out.println(result + " - " + countPriseSell.getPriceStartSell()
+//                        + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
+//                ////////////////////////////
                 return 0;
             } else {
-                //////////////////////////
-                System.out.println(result + " - "
-                        + countPriseSell.getPriceStartSell() + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
-                //////////////////////////
+//                //////////////////////////
+//                System.out.println(result + " - "
+//                        + countPriseSell.getPriceStartSell() + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
+//                //////////////////////////
                 return result - countPriseSell.getPriceStartSell();
             }
         }
@@ -461,15 +462,16 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-                ////////////////////////////////////
-                System.out.println("---result==0");
-                ///////////////////////////////////
+//                ////////////////////////////////////
+//                System.out.println("---result==0");
+//                ///////////////////////////////////
                 return 0;
             } else {
-                //////////////////////////////////
-                System.out.println(countPriseBuy.getPriceStartBuy() - (result / arrayList.size()));
-                /////////////////////////////////
-                return countPriseBuy.getPriceStartBuy() - (result / arrayList.size()); // резулт иногда ноль как итог вылетает НАН
+//                //////////////////////////////////
+//                System.out.println(countPriseBuy.getPriceStartBuy() - (result / arrayList.size()));
+//                /////////////////////////////////
+                // резулт иногда ноль как итог вылетает НАН
+                return countPriseBuy.getPriceStartBuy() - (result / arrayList.size());
             }
         } else {
             ArrayList<Double> arrayList = countPriseSell.getArrayListSell();
@@ -479,15 +481,16 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-                ///////////////////////////////////////
-                System.out.println("---result==0===2");
-                //////////////////////////////////////
+//                ///////////////////////////////////////
+//                System.out.println("---result==0===2");
+//                //////////////////////////////////////
                 return 0;
             } else {
-                ///////////////////////////////////////////////
-                System.out.println((result / arrayList.size()) - countPriseSell.getPriceStartSell());
-                //////////////////////////////////////////////
-                return (result / arrayList.size()) - countPriseSell.getPriceStartSell(); // резулт иногда ноль как итог вылетает НАН
+//                ///////////////////////////////////////////////
+//                System.out.println((result / arrayList.size()) - countPriseSell.getPriceStartSell());
+//                //////////////////////////////////////////////
+                // резулт иногда ноль как итог вылетает НАН
+                return (result / arrayList.size()) - countPriseSell.getPriceStartSell();
             }
         }
     }

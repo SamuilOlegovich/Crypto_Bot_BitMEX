@@ -26,7 +26,7 @@ public class FilesAndPathCreator {
         Gasket.setFilesAndPathCreator(this);
 
         try {
-            Thread.sleep(1000 * 10);
+            Thread.sleep(1000 * 3);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

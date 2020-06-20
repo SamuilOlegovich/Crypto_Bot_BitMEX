@@ -34,7 +34,7 @@ public class ReadAndSavePatternsUser {
                     ConsoleHelper.writeMessage(DatesTimes.getDate()
                             + " --- Saved Patterns USER востановлен");
 
-                    if (Gasket.isShowLoadPatternsII()) {
+                    if (Gasket.isShowLoadPatternsUser()) {
                         savedPatternsUser.seeListsUser();
                     }
 

@@ -281,6 +281,7 @@ public class ExecutorCommandos {
                     ApiKey.setApiKeyName(strings[1]);
                     ConsoleHelper.writeMessage("apiKeyName === "
                             + ApiKey.getApiKeyName() + "\n");
+                    break;
                 case "apiKey2Accounts" :
                     ApiKey.setApiKey2Accounts(strings[1]);
                     ConsoleHelper.writeMessage("apiKey === "
@@ -290,6 +291,7 @@ public class ExecutorCommandos {
                     ApiKey.setApiKeyName2Accounts(strings[1]);
                     ConsoleHelper.writeMessage("apiKeyName === "
                             + ApiKey.getApiKeyName2Accounts() + "\n");
+                    break;
                 case "SETTINGS" :
                     // SETTINGS=RESTART программа перезапустит настройки не отключаясь
                     if (strings[1].equalsIgnoreCase("RESTART")) parserSetting.writeSettings();

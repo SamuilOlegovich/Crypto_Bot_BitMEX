@@ -9,8 +9,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server extends Thread {
+//    boolean startStop;
 
-    public Server() {}
+    public Server() {
+//        this.startStop = true;
+    }
 
 
     @Override
@@ -23,16 +26,17 @@ public class Server extends Thread {
         try {
             server = new ServerSocket(Gasket.getPORT());
 
-            while (Gasket.isServerRestart()) {
+            while (true) {
                 // Блокируется до возникновения нового соединения:
                 socket = server.accept();
                 new SocketThread(socket, parserString);
+//                startStop = Gasket.isServerRestart();
             }
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- СЕРВЕР ОСТАНОВЛЕН" + "\n");
-
-            Gasket.setServerRestart(true);
-            new Server().start();
+//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- СЕРВЕР ОСТАНОВЛЕН" + "\n");
+//            parserString = null;
+//            Gasket.setServerRestart(true);
+//            new Server().start();
 
         } catch (IOException e) {
             try {

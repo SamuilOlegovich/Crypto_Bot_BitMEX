@@ -97,18 +97,48 @@ public class MakeDealUser extends Thread {
             }
         }
 
-        for (String string : marketList) {
+        if (type.equalsIgnoreCase("NULL")) {
+            if (b) {
+                // если сделка бай и тайп null то сразу берем цену первой строки нужного блока
+                for (String string : marketList) {
 
-            if (!string.startsWith("BIAS") && !string.startsWith("BUY") && !string.startsWith("0")) {
-                String[] s = string.split("===");
-
-                if (block - 1 == blockSearch) {
-                    if (s[11].equalsIgnoreCase(type)) {
-                        price = Double.parseDouble(s[7]);
+                    if (string.startsWith("BIAS")) {
+                        blockSearch++;
+                        if (block == blockSearch) {
+                            String[] s = marketList.get(marketList.indexOf(string) + 1).split("===");
+                            price = Double.parseDouble(s[7]);
+                            break;
+                        }
                     }
                 }
-            } else if (string.startsWith("BIAS")) {
-                blockSearch++;
+            } else {
+                // если сделка селл и тайп null то сразу берем цену последней строки нужного блока
+                for (String string : marketList) {
+
+                    if (string.startsWith("BIAS")) {
+                        blockSearch++;
+                        if (block + 1 == blockSearch) {
+                            String[] s = marketList.get(marketList.indexOf(string) - 1).split("===");
+                            price = Double.parseDouble(s[7]);
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            for (String string : marketList) {
+
+                if (!string.startsWith("BIAS") && !string.startsWith("BUY") && !string.startsWith("0")) {
+                    String[] s = string.split("===");
+
+                    if (block == blockSearch) {
+                        if (s[11].equalsIgnoreCase(type)) {
+                            price = Double.parseDouble(s[7]);
+                        }
+                    }
+                } else if (string.startsWith("BIAS")) {
+                    blockSearch++;
+                }
             }
         }
 
@@ -117,13 +147,13 @@ public class MakeDealUser extends Thread {
             if (b) {
                 if (Gasket.getBitmexQuote().getBidPrice() > price) {
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- цена уровня " + type + " - " + price + " пробита");
+                            + " --- цена уровня - " + type + " - " + price + " - пробита");
                     return true;
                 }
             } else {
                 if (Gasket.getBitmexQuote().getAskPrice() < price) {
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- цена уровня " + type + " - " + price + " пробита");
+                            + " --- цена уровня - " + type + " - " + price + " - пробита");
                     return true;
                 }
             }

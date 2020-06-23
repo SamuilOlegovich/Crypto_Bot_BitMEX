@@ -81,6 +81,7 @@ public class ExecutorCommandos {
                     Gasket.setTimeStopLiveForUserPatterns(Integer.parseInt(strings[1]));
                     ConsoleHelper.writeMessage("timeStopLiveForUserPatterns === " +
                             + Gasket.getTimeStopLiveForUserPatterns());
+                    break;
                 case "timeCalculationCombinationLevel" :
                     Gasket.setTimeCalculationCombinationLevel(Integer.parseInt(strings[1]));
                         ConsoleHelper.writeMessage("timeCalculationCombinationLevel === "

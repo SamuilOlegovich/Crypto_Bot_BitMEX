@@ -11,13 +11,13 @@ import java.util.ArrayList;
 
 // Определяем какую сделку сделать и даем команду на ее исполнение
 public class MakeDealUser extends Thread {
-    private ArrayList<String> arrayListThis;
-    private String stringIn;
+    private ArrayList<String> marketList;
+    private String patternZeroString;
 
 
-    public MakeDealUser(ArrayList<String> arrayListThis, String string) {
-        this.arrayListThis = new ArrayList<>(arrayListThis);
-        this.stringIn = string;
+    public MakeDealUser(ArrayList<String> marketList, String patternZeroString) {
+        this.marketList = new ArrayList<>(marketList);
+        this.patternZeroString = patternZeroString;
         start();
     }
 
@@ -27,8 +27,9 @@ public class MakeDealUser extends Thread {
     public void run() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Определяю какую сделку сделать согласно ПАТТЕРНАМ USER");
-        String[] strings = stringIn.split("===");
-        String stringOut = stringIn;
+        
+        String[] strings = patternZeroString.split("===");
+        String stringOut = patternZeroString;
 
 
         if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
@@ -78,8 +79,8 @@ public class MakeDealUser extends Thread {
     // тут мы находим цену выше которой надо подняться или опустится в течении определенного времени
     // что бы сделать сделку иначе отбой
     private boolean conditionsAreMet(boolean b) {
-        String[] strings = stringIn.split("===");
-        long timeStop = 1000 * 60 * Gasket.getTimeStopLiveForUserPatterns();
+        String[] strings = patternZeroString.split("===");
+        long timeStop = 60 * Gasket.getTimeStopLiveForUserPatterns();
         int blockSearch = 1;
         double price = 0.0;
         String type = "";
@@ -96,7 +97,7 @@ public class MakeDealUser extends Thread {
             }
         }
 
-        for (String string : arrayListThis) {
+        for (String string : marketList) {
 
             if (!string.startsWith("BIAS") && !string.startsWith("BUY") && !string.startsWith("0")) {
                 String[] s = string.split("===");
@@ -115,10 +116,14 @@ public class MakeDealUser extends Thread {
 
             if (b) {
                 if (Gasket.getBitmexQuote().getBidPrice() > price) {
+                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            + " --- цена уровня " + type + " - " + price + " пробита");
                     return true;
                 }
             } else {
                 if (Gasket.getBitmexQuote().getAskPrice() < price) {
+                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            + " --- цена уровня " + type + " - " + price + " пробита");
                     return true;
                 }
             }

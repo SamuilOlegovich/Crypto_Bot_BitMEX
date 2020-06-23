@@ -139,16 +139,24 @@ public class CompareAndMakeDecisionUser extends Thread {
             if (readyMarketBlock.size() != patternStrings.size()) {
                 return false;
             } else {
+//                ArrayList<String> patternCompareNull = new ArrayList<>();
                 ArrayList<String> patternCompareAll = new ArrayList<>();
+//                ArrayList<String> marketCompareNull = new ArrayList<>();
                 ArrayList<String> marketCompareAll = new ArrayList<>();
                 ArrayList<String> patternCompare = new ArrayList<>();
                 ArrayList<String> marketCompare = new ArrayList<>();
+
 
 
                 // начинаем перебирать блоки строк и сравнивать их друг с другом
                 for (String sMarket : readyMarketBlock) {
                     String[] stringsPattern = patternStrings.get(readyMarketBlock.indexOf(sMarket)).split("===");
                     String[] stringsMarket = sMarket.split("===");
+
+//                    if (stringsMarket[7].equalsIgnoreCase("null")) {
+//                        patternCompareNull.add(patternStrings.get(readyMarketBlock.indexOf(sMarket)));
+//                        marketCompareNull.add(sMarket);
+//                    }
 
                     // если это не последняя строка в блоке то заглядываем на строку вперед
                     // и смотрим не ровны ли цены между ними

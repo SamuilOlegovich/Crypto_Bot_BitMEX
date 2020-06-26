@@ -317,7 +317,25 @@ public class ListensLooksAndComparesUser {
             }
 
             if (index > 0) {
-                inEdit.add(index, marketInfo.toStringUser());
+                if (!inEdit.get(index).startsWith("BIAS")) {
+                    inEdit.add(index, marketInfo.toStringUser());
+                } else {
+                    String[] stringBias = inEdit.get(index).split("===");
+                    long time = 0;
+
+                    for (int i = 0; i < stringBias.length; i++) {
+                        if (stringBias[i].equalsIgnoreCase("TIME")) {
+                            time = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+                            break;
+                        }
+                    }
+
+                    if (time != 0 && time <= marketInfo.getTime().getTime()) {
+                        inEdit.add(index, marketInfo.toStringUser());
+                    } else {
+                        inEdit.add(index - 1, marketInfo.toStringUser());
+                    }
+                }
             }
         }
 

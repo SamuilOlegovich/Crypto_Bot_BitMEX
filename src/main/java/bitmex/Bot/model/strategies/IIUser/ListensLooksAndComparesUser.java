@@ -331,9 +331,9 @@ public class ListensLooksAndComparesUser {
                     }
 
                     if (time != 0 && time <= marketInfo.getTime().getTime()) {
-                        inEdit.add(index, marketInfo.toStringUser());
+                        inEdit.add(index + 1, marketInfo.toStringUser());
                     } else {
-                        inEdit.add(index - 1, marketInfo.toStringUser());
+                        inEdit.add(index, marketInfo.toStringUser());
                     }
                 }
             }

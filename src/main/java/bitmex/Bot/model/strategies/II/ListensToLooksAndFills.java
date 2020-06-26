@@ -326,9 +326,9 @@ public class ListensToLooksAndFills {
                     }
 
                     if (time != 0 && time <= marketInfo.getTime().getTime()) {
-                        inEdit.add(index, marketInfo.toString());
+                        inEdit.add(index + 1, marketInfo.toString());
                     } else {
-                        inEdit.add(index - 1, marketInfo.toString());
+                        inEdit.add(index, marketInfo.toString());
                     }
                 }
             }

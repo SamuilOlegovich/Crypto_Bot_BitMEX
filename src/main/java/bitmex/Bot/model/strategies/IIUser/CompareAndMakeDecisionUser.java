@@ -147,6 +147,10 @@ public class CompareAndMakeDecisionUser extends Thread {
 
             } else {
 
+                ArrayList<String> patternCompareDataNullAll = new ArrayList<>();
+                ArrayList<String> marketCompareDataNullAll = new ArrayList<>();
+                ArrayList<String> patternCompareDataNull = new ArrayList<>();
+                ArrayList<String> marketCompareDataNull = new ArrayList<>();
                 ArrayList<String> patternCompareNullAll = new ArrayList<>();
                 ArrayList<String> marketCompareNullAll = new ArrayList<>();
                 ArrayList<String> patternCompareNull = new ArrayList<>();
@@ -164,7 +168,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                     String[] stringsPattern = stringPattern.split("===");
                     String[] stringsMarket = sMarket.split("===");
 
-                    if (stringsMarket[7].equalsIgnoreCase("null")) {
+                    if (stringsMarket[7].equalsIgnoreCase("NULL")) {
                             // если это не последняя строка в блоке то заглядываем на строку вперед
                             // и смотрим не ровны ли цены между ними
                         if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
@@ -176,6 +180,42 @@ public class CompareAndMakeDecisionUser extends Thread {
 
                             // если цены на шаг вперед ровны добавляем в списки
                             if (stringsPattern[7].equals(stringsPattern2[7])) {
+
+                                patternCompareNullAll.add(patternPlusOne);
+                                patternCompareNullAll.add(stringPattern);
+                                marketCompareNullAll.add(marketPlusOne);
+                                marketCompareNullAll.add(sMarket);
+
+                                patternCompareNull.add(stringsPattern2[11]);
+                                patternCompareNull.add(stringsPattern[11]);
+                                marketCompareNull.add(stringsMarket2[11]);
+                                marketCompareNull.add(stringsMarket[11]);
+                            }
+
+                        } else {
+
+                            patternCompareNullAll.add(stringPattern);
+                            marketCompareNullAll.add(sMarket);
+
+                            patternCompareNull.add(stringsPattern[11]);
+                            marketCompareNull.add(stringsMarket[11]);
+                        }
+
+                    } else if (stringsMarket[5].equalsIgnoreCase("NULL")) {
+                        // если это не последняя строка в блоке то заглядываем на строку вперед
+                        // и смотрим не ровны ли даты между ними а так же направление свечи
+                        if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
+                            String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(sMarket) + 1);
+                            String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(sMarket) + 1);
+
+                            String[] stringsPattern2 = patternPlusOne.split("===");
+                            String[] stringsMarket2 = marketPlusOne.split("===");
+
+                            // если цены на шаг вперед ровны добавляем в списки
+                            if (stringsPattern[5].equals(stringsPattern2[5])
+                                    && stringsMarket[5].equals(stringsMarket2[5])
+                                    && stringsMarket[15].equals(stringsMarket2[15])) {
+
                                 patternCompareNullAll.add(patternPlusOne);
                                 patternCompareNullAll.add(stringPattern);
                                 marketCompareNullAll.add(marketPlusOne);
@@ -327,6 +367,50 @@ public class CompareAndMakeDecisionUser extends Thread {
 
                         if (!finallyComparisonOnAllData(marketCompareNullAll
                                         .get(patternCompareNullAll.indexOf(stringPattern)), stringPattern)) {
+                            return false;
+                        }
+                    }
+                }
+
+                // если блоки одинаковы и больше нуля сравниваем их
+                if (marketCompareDataNullAll.size() > 0) {
+                    // вначале сортируем простые блоки и сравниваем их
+                    // если они ровны то можно сравнивать дальше построчно
+                    HashSet<String> hashSetPatternNull = new HashSet<>(patternCompareDataNull);
+                    HashSet<String> hashSetMarketNull = new HashSet<>(marketCompareDataNull);
+
+                    patternCompareDataNull.clear();
+                    marketCompareDataNull.clear();
+
+                    patternCompareDataNull.addAll(hashSetPatternNull);
+                    marketCompareDataNull.addAll(hashSetMarketNull);
+
+                    for (String string : marketCompareDataNull) {
+
+                        if (!string.equals(patternCompareDataNull.get(marketCompareDataNull.indexOf(string)))) {
+                            return false;
+                        }
+                    }
+
+                    hashSetPatternNull.clear();
+                    hashSetMarketNull.clear();
+
+                    hashSetPatternNull.addAll(patternCompareDataNullAll);
+                    hashSetMarketNull.addAll(marketCompareDataNullAll);
+
+                    patternCompareDataNullAll.clear();
+                    marketCompareDataNullAll.clear();
+
+                    patternCompareDataNullAll.addAll(hashSetPatternNull);
+                    marketCompareDataNullAll.addAll(hashSetMarketNull);
+
+                    hashSetPatternNull.clear();
+                    hashSetMarketNull.clear();
+
+                    for (String stringPattern : patternCompareDataNullAll) {
+
+                        if (!finallyComparisonOnAllData(marketCompareDataNullAll
+                                .get(patternCompareDataNullAll.indexOf(stringPattern)), stringPattern)) {
                             return false;
                         }
                     }

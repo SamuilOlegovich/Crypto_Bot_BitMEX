@@ -2,12 +2,12 @@ package bitmex.Bot.model.strategies.II;
 
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.strategies.StringHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -423,7 +423,7 @@ public class ListensLooksAndCompares {
                         && !patternString.startsWith("BUY") && !patternString.startsWith("BIAS")) {
                     String[] stringsPattern = patternString.split(",");
 
-                    if (getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
+                    if (StringHelper.getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
                         break;
                     }
@@ -439,7 +439,7 @@ public class ListensLooksAndCompares {
 
                     for (int i = 0; i < stringBias.length; i++) {
                         if (stringBias[i].equalsIgnoreCase("TIME")) {
-                            time = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+                            time = StringHelper.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
                             break;
                         }
                     }
@@ -475,22 +475,6 @@ public class ListensLooksAndCompares {
         intermediary.clear();
         inEdit.clear();
         return out;
-    }
-
-
-
-    private Date getDate(String string) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String inString = string.replaceAll("\"", "").replaceAll("time: ", "");
-        Date dateFromString = null;
-
-
-        try {
-            dateFromString = simpleDateFormat.parse(inString);
-        } catch (Exception e) {
-            ConsoleHelper.writeMessage("неверный формат даты --- " + inString);
-        }
-        return dateFromString;
     }
 
 

@@ -66,7 +66,8 @@ public class BitmexClient implements IBitmexClient {
     }
 
     @Override   // получить данные о свечках
-    public List<BitmexChartData> getChartData(Ticker ticker, int count, ChartDataBinSize binSize, String endTime, boolean getInprogressBar) {
+    public List<BitmexChartData> getChartData(Ticker ticker, int count,
+                                              ChartDataBinSize binSize, String endTime, boolean getInprogressBar) {
         return restClient.getChartData(ticker, count, binSize, endTime, getInprogressBar);
     }
 

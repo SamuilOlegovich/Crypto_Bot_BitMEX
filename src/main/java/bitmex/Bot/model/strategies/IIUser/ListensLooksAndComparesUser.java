@@ -24,6 +24,7 @@ public class ListensLooksAndComparesUser {
     private SortPriceUser sortPriceComparatorUser;
     private SavedPatternsUser savedPatternsUser;
     private SortSizeUser sortSizeUser;
+    private SortTimeUser sortTimeUser;
 
 
     private boolean stopStartFlag;
@@ -46,6 +47,7 @@ public class ListensLooksAndComparesUser {
         this.marketListsStrings = new ArrayList<>();
         this.listInfoIndicator = new ArrayList<>();
         this.sortSizeUser = new SortSizeUser();
+        this.sortTimeUser = new SortTimeUser();
         this.stopStartFlag = true;
         this.priceStart = NaN;
         this.priceNow = NaN;
@@ -158,6 +160,7 @@ public class ListensLooksAndComparesUser {
     // сортируем и наполняем лист сравнений листами строк
     // очищаем лист входящих объектов
     private synchronized void sortPrice(boolean b) {
+
         listInfoIndicatorWorkingCopy.sort(sortPriceComparatorUser);
 
 
@@ -198,6 +201,7 @@ public class ListensLooksAndComparesUser {
     // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
     // если есть то удаляем их из входящего листа и меняем их в листе направлений
     private synchronized ArrayList<String> getListString(ArrayList<String> arrayListIn) {
+
         ArrayList<InfoIndicator> infoIndicatorArrayListWorking = new ArrayList<>(listInfoIndicatorWorkingCopy);
         ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
         ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
@@ -285,56 +289,36 @@ public class ListensLooksAndComparesUser {
     // и потом конечно же сортируем массив по новому
     private synchronized ArrayList<String> insertRemainingLevels(ArrayList<String> edit,
                                                                  ArrayList<InfoIndicator> additionalLevels) {
+
         ArrayList<InfoIndicator> inAdditionalLevels = new ArrayList<>(additionalLevels);
         ArrayList<String> intermediary = new ArrayList<>();
         ArrayList<String> inEdit = new ArrayList<>(edit);
-        ArrayList<String> value = new ArrayList<>();
-        ArrayList<Integer> key = new ArrayList<>();
         ArrayList<String> out = new ArrayList<>();
 
 
-        // находим минимальную дату ниже которой у нас ничего нет
-        String[] strings = inEdit.get(0).split("==="); ////// java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
-        Date startData = new Date(getDate(strings[strings.length - 1]).getTime() - (5 * 60 * 1000));
+        // сортируем масив по времени от меньшего к большему
+        inAdditionalLevels.sort(sortTimeUser);
 
-        // перебираем пришедшие уровни и ищем куда бы их вставить
-        for (InfoIndicator inAdditionalLevel : inAdditionalLevels) {
-            Date date = inAdditionalLevel.getTime();
+        // вставляем оставшиеся объекты в нужный нам блок
+        for (InfoIndicator marketInfo : inAdditionalLevels) {
+            int index = -1;
 
-            // перебираем основные уровни паттернов
-            for (String stringInEdit : inEdit) {
+            for (String patternString : inEdit) {
 
-                // если это не первая и не промежуточная строка то находим ее время
-                if (!stringInEdit.startsWith("0") && !stringInEdit.startsWith("BIAS")
-                        && !stringInEdit.startsWith("BUY")) {
-                    String[] stringsInEdit = stringInEdit.split("===");
-                    Date date2 = getDate(stringsInEdit[5]);
+                if (!patternString.startsWith("0")
+                        && !patternString.startsWith("BUY") && !patternString.startsWith("BIAS")) {
+                    String[] stringsPattern = patternString.split("===");
 
-                    // если дата входящих объектов больше или ровна дате старта то работаем с ней дальше
-                    if (startData.getTime() <= date.getTime()) {
-                        if (date.getTime() <= date2.getTime()) {
-                            value.add(inAdditionalLevel.toStringUser());
-                            key.add(inEdit.indexOf(stringInEdit));
-                        }
+                    if (getDate(stringsPattern[5]).getTime() < marketInfo.getTime().getTime()) {
+                        index = inEdit.indexOf(patternString) - 1;
+                        break;
                     }
                 }
             }
-        }
 
-        HashSet<String> hashSetValue = new HashSet<>(value);
-        HashSet<Integer> hashSetKey = new HashSet<>(key);
-        inAdditionalLevels.clear();
-        value.clear();
-        key.clear();
-
-        value.addAll(hashSetValue);
-        key.addAll(hashSetKey);
-
-        Collections.reverse(value);
-        Collections.reverse(key);
-
-        for (int i = 0; i < value.size(); i++) {
-            inEdit.add(key.get(i), value.get(i));
+            if (index > 0) {
+                inEdit.add(index, marketInfo.toStringUser());
+            }
         }
 
         // сортируем по новому
@@ -554,6 +538,19 @@ public class ListensLooksAndComparesUser {
 
 
 
+    private class SortTimeUser implements Comparator<InfoIndicator> {
+        @Override
+        public int compare(InfoIndicator o1, InfoIndicator o2) {
+            long result = o1.getTime().getTime() - o2.getTime().getTime();
+
+            if (result > 0) return 1;
+            else if (result < 0) return -1;
+            else return 0;
+        }
+    }
+
+
+
     private class SortSizeUser implements Comparator<ArrayList<String>> {
         @Override
         public int compare(ArrayList<String> o1, ArrayList<String> o2) {
@@ -572,7 +569,12 @@ public class ListensLooksAndComparesUser {
             String[] strings1 = o1.split("===");
             String[] strings2 = o2.split("===");
 
+//            if (strings1.length < 8 || strings2.length < 8) {
+//                ConsoleHelper.writeMessage("\n\n" + o1 + "\n" + o2 + "\n");
+//            }
+
             double result = Double.parseDouble(strings2[7]) - Double.parseDouble(strings1[7]);
+
             if (result > 0) return 1;
             else if (result < 0) return -1;
             else return 0;

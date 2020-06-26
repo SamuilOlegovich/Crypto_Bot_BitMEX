@@ -110,6 +110,10 @@ public class CompareAndMakeDecisionUser extends Thread {
                 return false;
             }
         }
+
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + "---------------------------------------------------------------------------- 2-true");
+
         return true;
     }
 
@@ -121,7 +125,8 @@ public class CompareAndMakeDecisionUser extends Thread {
 
         ArrayList<String> readyMarketBlock = new ArrayList<>();
 
-        if (patternStrings != null && patternStrings.size() > 0 && marketStrings != null && marketStrings.size() > 0) {
+        if (patternStrings != null && patternStrings.size() > 0
+                && marketStrings != null && marketStrings.size() > 0) {
 
             // тут приводим в порядок маркет блок, все лишнее из него убираем
             for (String patternString : patternStrings) {
@@ -202,7 +207,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                             String[] stringsPattern2 = patternPlusOne.split("===");
                             String[] stringsMarket2 = marketPlusOne.split("===");
 
-                            // если цены на шаг вперед во всех блоках ровны до добавляем в списки
+                            // если цены на шаг вперед во всех блоках ровны то добавляем в списки
                             if (stringsPattern[7].equals(stringsPattern2[7])
                                     && stringsMarket[7].equals(stringsMarket2[7])) {
 
@@ -216,7 +221,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                                 marketCompareAll.add(marketPlusOne);
                                 marketCompareAll.add(sMarket);
 
-                                // если цены на шаг вперед во всех блоках не ровны до добавляем в списки
+                                // если цены на шаг вперед во всех блоках не ровны
                             } else if (!stringsPattern[7].equals(stringsPattern2[7])
                                     && !stringsMarket[7].equals(stringsMarket2[7])) {
 
@@ -276,8 +281,8 @@ public class CompareAndMakeDecisionUser extends Thread {
 
                     for (String stringPattern : patternCompareAll) {
 
-                        if (!finallyComparisonOnAllData(marketCompareAll.get(patternCompareAll.indexOf(stringPattern)),
-                                stringPattern)) {
+                        if (!finallyComparisonOnAllData(marketCompareAll
+                                .get(patternCompareAll.indexOf(stringPattern)), stringPattern)) {
                             return false;
                         }
                     }
@@ -328,6 +333,10 @@ public class CompareAndMakeDecisionUser extends Thread {
                 }
             }
         }
+
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                + "---------------------------------------------------------------------------- 3-true");
+
         return true;
     }
 
@@ -391,7 +400,7 @@ public class CompareAndMakeDecisionUser extends Thread {
         }
 
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-6");
+                    + "---------------------------------------------------------------------------- 4-true");
 
         return true;
     }

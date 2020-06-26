@@ -46,7 +46,7 @@ public class SavedPatterns implements Serializable {
     // ищем есть ли такие патерны если нет то добавляем,
     // если есть то устанавливаем приоритет
     private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Сравниваю ПАТТЕРН с имеющимися");
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- Сравниваю II ПАТТЕРН с имеющимися");
 
         // находим количество смещений и запоминаем индекс первого смещения
         ArrayList<String> inArrayList = new ArrayList<>(arrayList);
@@ -252,7 +252,7 @@ public class SavedPatterns implements Serializable {
                         // а так же прекращаем процесс поиска и сравнения
                         if (result) {
                             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                                    + " --- ПАТТЕРН такой есть - обновляю информацию");
+                                    + " --- II ПАТТЕРН такой есть - обновляю информацию");
                             String stringZero = setPriority(stringArrayList.get(0), inArrayListCopy.get(0));
                             stringArrayList.set(0, stringZero);
 
@@ -265,7 +265,7 @@ public class SavedPatterns implements Serializable {
 
                 // если совпадение не было найдено - добавляем данный патерн в массив
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                        + " --- Такого ПАТТЕРНА нет - ДОБАВЛЕН --- "
+                        + " --- Такого II ПАТТЕРНА нет - ДОБАВЛЕН --- "
                         + "SIZE --- " + inArrayList.size());
 
                 // проверяю есть ли такой айди и если есть меняю его на другой
@@ -364,6 +364,7 @@ public class SavedPatterns implements Serializable {
             for (String string : arrayList) {
                 stringBuilder.delete(0, stringBuilder.length());
                 stringBuilder.append(string).delete(stringBuilder.length() - "\n".length(), stringBuilder.length());
+
                 ConsoleHelper.writeMessage(stringBuilder.toString());
             }
         }
@@ -393,8 +394,10 @@ public class SavedPatterns implements Serializable {
             ReadAndSavePatterns.saveSavedPatterns();
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- ОБНОВИЛ нулевую стороку ПАТТЕРНОВ согласно исходу сделки");
+                    + " --- ОБНОВИЛ нулевую стороку II ПАТТЕРНОВ согласно исходу сделки");
+
         } else {
+
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- Такого номера ===" + in[in.length - 1] + "=== ПАТТЕРНА нет");
         }

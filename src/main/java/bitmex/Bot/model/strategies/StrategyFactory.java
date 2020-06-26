@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies;
 
 
-import bitmex.Bot.model.strategies.II.KeepsTrackOfFillingListInfoIndicator;
+import bitmex.Bot.model.strategies.II.KeepsTrackOfFillingListInfoIndicatorII;
 import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
 import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
@@ -14,7 +14,7 @@ import bitmex.Bot.model.Gasket;
 public class StrategyFactory {
     private static StrategyFactory strategyFactory;
 
-    private KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
+    private KeepsTrackOfFillingListInfoIndicatorII keepsTrackOfFillingListInfoIndicatorII;
     private ListensLooksAndComparesUser listensLooksAndComparesUser;
     private ListensLooksAndCompares listensLooksAndCompares;
     private ListensToLooksAndFills listensToLooksAndFills;
@@ -94,10 +94,10 @@ public class StrategyFactory {
         if (Gasket.isSavedPatterns()) {
             if (listensToLooksAndFills == null) {
                 listensToLooksAndFills = ListensToLooksAndFills.getInstance();
-                if (keepsTrackOfFillingListInfoIndicator == null) {
-                    keepsTrackOfFillingListInfoIndicator = KeepsTrackOfFillingListInfoIndicator.getInstance();
+                if (keepsTrackOfFillingListInfoIndicatorII == null) {
+                    keepsTrackOfFillingListInfoIndicatorII = KeepsTrackOfFillingListInfoIndicatorII.getInstance();
                 }
-                keepsTrackOfFillingListInfoIndicator.setListensToLooksAndFills(listensToLooksAndFills);
+                keepsTrackOfFillingListInfoIndicatorII.setListensToLooksAndFills(listensToLooksAndFills);
             }
             listensToLooksAndFills.setInfoString(infoIndicator);
         }
@@ -105,10 +105,10 @@ public class StrategyFactory {
         if (Gasket.isTradingPatterns()) {
             if (listensLooksAndCompares == null) {
                 listensLooksAndCompares = ListensLooksAndCompares.getInstance();
-                if (keepsTrackOfFillingListInfoIndicator == null) {
-                    keepsTrackOfFillingListInfoIndicator = KeepsTrackOfFillingListInfoIndicator.getInstance();
+                if (keepsTrackOfFillingListInfoIndicatorII == null) {
+                    keepsTrackOfFillingListInfoIndicatorII = KeepsTrackOfFillingListInfoIndicatorII.getInstance();
                 }
-                keepsTrackOfFillingListInfoIndicator.setListensLooksAndCompares(listensLooksAndCompares);
+                keepsTrackOfFillingListInfoIndicatorII.setListensLooksAndCompares(listensLooksAndCompares);
             }
             listensLooksAndCompares.setInfoString(infoIndicator);
         }

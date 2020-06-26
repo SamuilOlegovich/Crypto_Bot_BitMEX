@@ -13,25 +13,25 @@ import java.util.Date;
 
 
 
-public class KeepsTrackOfFillingListInfoIndicator extends Thread {
-    private static KeepsTrackOfFillingListInfoIndicator keepsTrackOfFillingListInfoIndicator;
+public class KeepsTrackOfFillingListInfoIndicatorII extends Thread {
+    private static KeepsTrackOfFillingListInfoIndicatorII keepsTrackOfFillingListInfoIndicatorII;
 
     private ListensLooksAndCompares listensLooksAndCompares;
     private ListensToLooksAndFills listensToLooksAndFills;
 
 
-    public KeepsTrackOfFillingListInfoIndicator() {
+    public KeepsTrackOfFillingListInfoIndicatorII() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- Класс KeepsTrackOfFillingListInfoIndicator начал работать");
+                + " --- Класс Keeps Track Of Filling List InfoIndicator II начал работать");
         start();
     }
 
 
-    public static KeepsTrackOfFillingListInfoIndicator getInstance() {
-        if (keepsTrackOfFillingListInfoIndicator == null) {
-            keepsTrackOfFillingListInfoIndicator = new KeepsTrackOfFillingListInfoIndicator();
+    public static KeepsTrackOfFillingListInfoIndicatorII getInstance() {
+        if (keepsTrackOfFillingListInfoIndicatorII == null) {
+            keepsTrackOfFillingListInfoIndicatorII = new KeepsTrackOfFillingListInfoIndicatorII();
         }
-        return keepsTrackOfFillingListInfoIndicator;
+        return keepsTrackOfFillingListInfoIndicatorII;
     }
 
     public void setListensLooksAndCompares(ListensLooksAndCompares listensLooksAndCompares) {

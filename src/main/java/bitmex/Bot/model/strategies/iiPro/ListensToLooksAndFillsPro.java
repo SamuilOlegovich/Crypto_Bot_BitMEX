@@ -1,19 +1,21 @@
-package bitmex.Bot.model.strategies.II;
+package bitmex.Bot.model.strategies.iiPro;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.TreeSet;
+
 
 
 import static java.lang.Double.NaN;
 
-
-
-public class ListensToLooksAndFills {
-    private static ListensToLooksAndFills listensToLooksAndFills;
+public class ListensToLooksAndFillsPro {
+    private static ListensToLooksAndFillsPro listensToLooksAndFillsPro;
 
     private ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
     private ArrayList<InfoIndicator> listInfoIndicator;                // лист для входящих объектов
@@ -22,9 +24,9 @@ public class ListensToLooksAndFills {
 
 
     private SortPriceRemainingLevels sortPriceRemainingLevels;
+    private SavedPatternsPro savedPatterns;
     private CountPriseSell countPriseSell;
     private CountPriseBuy countPriseBuy;
-    private SavedPatterns savedPatterns;
     private SortPrice sortPrice;
     private SortTime sortTime;
 
@@ -39,13 +41,13 @@ public class ListensToLooksAndFills {
 
 
 
-    private ListensToLooksAndFills() {
+    private ListensToLooksAndFillsPro() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                 + " --- " + "Начал работать класс сбора II Паттернов");
         this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
         this.priceNow = Gasket.getBitmexQuote().getBidPrice();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
-        this.savedPatterns = Gasket.getSavedPatternsClass();
+        this.savedPatterns = Gasket.getSavedPatternsProClass();
         this.listStringPriceSell = new ArrayList<>();
         this.listStringPriceBuy = new ArrayList<>();
         this.listInfoIndicator = new ArrayList<>();
@@ -61,12 +63,12 @@ public class ListensToLooksAndFills {
 
 
 
-    public static ListensToLooksAndFills getInstance() {
-        if (listensToLooksAndFills == null) {
-            listensToLooksAndFills = new ListensToLooksAndFills();
-            Gasket.setListensToLooksAndFills(listensToLooksAndFills);
+    public static ListensToLooksAndFillsPro getInstance() {
+        if (listensToLooksAndFillsPro == null) {
+            listensToLooksAndFillsPro = new ListensToLooksAndFillsPro();
+            Gasket.setListensToLooksAndFillsPro(listensToLooksAndFillsPro);
         }
-        return listensToLooksAndFills;
+        return listensToLooksAndFillsPro;
     }
 
 
@@ -96,13 +98,13 @@ public class ListensToLooksAndFills {
             // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
             // добавляем лист в стратегии,
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                        + " --- Добавляю лист в II ПАТТЕРН Бай");
+                    + " --- Добавляю лист в II ПАТТЕРН Бай");
 
             String stringZero = "BUY===1===SELL===0===AVERAGE===" + getAverageDeviations(true)
-                        + "===MAX===" + getMaxDeviations(true)
-                        + "===SIZE===" + (listStringPriceBuy.size() + 1)
-                        + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                        + "\n";
+                    + "===MAX===" + getMaxDeviations(true)
+                    + "===SIZE===" + (listStringPriceBuy.size() + 1)
+                    + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "\n";
 
             listStringPriceBuy.add(0, stringZero);
             savedPatterns.addListsPricePatterns(listStringPriceBuy);
@@ -132,16 +134,16 @@ public class ListensToLooksAndFills {
 
 
 
-            // тоже самое только для комбиначии СЕЛЛ
+        // тоже самое только для комбиначии СЕЛЛ
         if (priceEndSell >= priceNow && !oneStartFlag) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                        + " --- Добавляю лист в II ПАТТЕРН Селл");
+                    + " --- Добавляю лист в II Pro ПАТТЕРН Селл");
 
             String stringZero = "BUY===0===SELL===1===AVERAGE===" + getAverageDeviations(false)
-                        + "===MAX===" + getMaxDeviations(false)
-                        + "===SIZE===" + (listStringPriceSell.size() + 1)
-                        + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                        + "\n";
+                    + "===MAX===" + getMaxDeviations(false)
+                    + "===SIZE===" + (listStringPriceSell.size() + 1)
+                    + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "\n";
 
             listStringPriceSell.add(0, stringZero);
             savedPatterns.addListsPricePatterns(listStringPriceSell);
@@ -165,9 +167,10 @@ public class ListensToLooksAndFills {
         if (oneStartFlag) {
             priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
         }
+
         addStringsInListDirections(false);
 
-            // очищаем лист входящих объектов
+        // очищаем лист входящих объектов
         listInfoIndicatorWorkingCopy.clear();
         oneStartFlag = false;
     }
@@ -194,10 +197,13 @@ public class ListensToLooksAndFills {
     // объекты преобразовываем в строки а так же проверяем есть ли такие уровни,
     // если есть то удаляем их из входящего листа и меняем их в листе направлений
     private synchronized ArrayList<String> checkIfThereAreSuchLevels(ArrayList<String> arrayListIn) {
+
         ArrayList<InfoIndicator> infoIndicatorArrayListWorking = new ArrayList<>(listInfoIndicatorWorkingCopy);
         ArrayList<InfoIndicator> residualArrayList = new ArrayList<>();
+
         ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
         ArrayList<Integer> indexDelete = new ArrayList<>();
+
         int count = 0;
         long time;
 
@@ -376,17 +382,8 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-//                /////////////////////////////////
-//                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
-//                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
-//                /////////////////////////////////
                 return 0;
             } else {
-//                //////////////////////////////////
-//                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
-//                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
-//                /////////////////////////////////
-                // проверить что не то с результатом он равен нулю постоянно
                 return countPriseBuy.getPriceStartBuy() - result;
             }
         } else {
@@ -401,16 +398,8 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-//                /////////////////////////////
-//                System.out.println(result + " - " + countPriseSell.getPriceStartSell()
-//                        + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
-//                ////////////////////////////
                 return 0;
             } else {
-//                //////////////////////////
-//                System.out.println(result + " - "
-//                        + countPriseSell.getPriceStartSell() + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
-//                //////////////////////////
                 return result - countPriseSell.getPriceStartSell();
             }
         }
@@ -431,15 +420,8 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-//                ////////////////////////////////////
-//                System.out.println("---result==0");
-//                ///////////////////////////////////
                 return 0;
             } else {
-//                //////////////////////////////////
-//                System.out.println(countPriseBuy.getPriceStartBuy() - (result / arrayList.size()));
-//                /////////////////////////////////
-                // резулт иногда ноль как итог вылетает НАН
                 return countPriseBuy.getPriceStartBuy() - (result / arrayList.size());
             }
         } else {
@@ -450,15 +432,8 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-//                ///////////////////////////////////////
-//                System.out.println("---result==0===2");
-//                //////////////////////////////////////
                 return 0;
             } else {
-//                ///////////////////////////////////////////////
-//                System.out.println((result / arrayList.size()) - countPriseSell.getPriceStartSell());
-//                //////////////////////////////////////////////
-                // резулт иногда ноль как итог вылетает НАН
                 return (result / arrayList.size()) - countPriseSell.getPriceStartSell();
             }
         }
@@ -583,7 +558,7 @@ public class ListensToLooksAndFills {
 
         public CountPriseBuy() {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Начал фиксировать цену отклонения II Бай");
+                    + " --- Начал фиксировать цену отклонения II Pro Бай");
             this.arrayListOut = new ArrayList<>();
             this.arrayListBuy = new ArrayList<>();
             this.flag = false;
@@ -608,7 +583,7 @@ public class ListensToLooksAndFills {
                 } catch (InterruptedException e) {
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                             + " --- Не смог проснуться в методе countPriseBuy() "
-                            + "сласса ListensToLooksAndFills");
+                            + "сласса ListensToLooksAndFillsPro");
                 }
             }
         }
@@ -646,7 +621,7 @@ public class ListensToLooksAndFills {
 
         public CountPriseSell() {
             ConsoleHelper.writeMessage( DatesTimes.getDateTerminal()
-                    + " --- Начал фиксировать цену отклонения II Селл");
+                    + " --- Начал фиксировать цену отклонения II Pro Селл");
             this.arrayListSell = new ArrayList<>();
             this.arrayListOut = new ArrayList<>();
             this.flag = false;
@@ -670,7 +645,7 @@ public class ListensToLooksAndFills {
                 } catch (InterruptedException e) {
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                             + " --- Не смог проснуться в методе countPriseSell() "
-                            + "сласса ListensToLooksAndFills");
+                            + "сласса ListensToLooksAndFillsPro");
                 }
             }
         }

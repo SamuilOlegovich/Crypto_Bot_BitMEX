@@ -1,14 +1,16 @@
 package bitmex.Bot.model;
 
 import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
+import bitmex.Bot.model.strategies.iiPro.ListensLooksAndComparesPro;
+import bitmex.Bot.model.strategies.iiPro.ListensToLooksAndFillsPro;
 import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
 import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
 import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
+import bitmex.Bot.model.strategies.iiPro.SavedPatternsPro;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
-import bitmex.Bot.controller.ControlConsoleSetting;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.controller.ExecutorCommandos;
 import bitmex.Bot.view.View;
@@ -24,6 +26,8 @@ public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
+    private static ListensLooksAndComparesPro listensLooksAndComparesPro;
+    private static ListensToLooksAndFillsPro listensToLooksAndFillsPro;
     private static ListensLooksAndCompares listensLooksAndCompares;
     private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static ListensToLooksAndFills listensToLooksAndFills;
@@ -31,33 +35,38 @@ public class Gasket {
     private static String numberOfHistoryBlocks = "5-4-3-2";        // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
-    private static double takeForCollectingPatterns = 20;           // тейк для сбора и накопления паттернов
+    private static double takeForCollectingPatterns = 30;           // тейк для сбора и накопления паттернов
     private static int timeStopLiveForUserPatterns = 10;            // время за которое паттерн должен отработать
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
+    private static boolean tradingPatternsIIPro = true;            // включить по патернам патернов
     private static ExecutorCommandos executorCommandos;
     private static int numberOfCandlesForAnalysis = 60;             // количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку
     private static volatile boolean oneSellFLAG = true;
-    private static boolean tradingPatternsUser = false;             // включить по патернам User
     private static boolean showLoadPatternsUser = true;             // показывать загрузку паттернов при запуске программы
+    private static boolean tradingPatternsUser = true;              // включить по патернам User
     private static boolean showLoadPatternsII = false;              // показывать загрузку паттернов при запуске программы
     private static volatile boolean oneBuyFLAG = true;
     private static int useStopLevelOrNotStopTime = 10;              // сколько минут отслеживать сделку вышедшею за MIN уровни
     private static BitmexClient bitmexClient2Accounts;
-    private static volatile BitmexQuote bitmex2Quote;   // для получения данных по насущной котировке.
+    private static SavedPatternsPro savedPatternsPro;
+    private static volatile BitmexQuote bitmex2Quote;               // для получения данных по насущной котировке.
+    private static boolean savedPatternsIIPro = true;               // включить нахождение и запись патернов
     private static SavedPatterns savedPatternsClass;
     private static boolean gameAllDirection = false;    // true - играть во все стороны на одном счету
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
+    private static boolean tradingPatternsII = true;    // торговля по паттернам II
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
     private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
-    private static boolean tradingPatterns = false;     // включить по патернам патернов
+    private static boolean tradingTestIIPro = true;
     private static boolean tradingTestUser = true;
+    private static boolean savedPatternsII = true;      // включить нахождение и запись патернов
     private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
     private static boolean serverRestart = true;        // перезапускаем сервер когда меняем номер порта из консоли
     private static volatile double PROFIT = 0.0;        // итоговый профит
-    private static boolean savedPatterns = true;        // включить нахождение и запись патернов
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean tradingTestII = true;
+    private static boolean tradingIIPro = false;
     private static boolean tradingUser = false;
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
     private static double rangePriceMAX = 4.0;          // диапазон в долларах от уровней для срабатывания ордера
@@ -66,7 +75,7 @@ public class Gasket {
     private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;
     private static boolean tradingII = false;
-    private static int secondsSleepTime = 13;        // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
+    private static int secondsSleepTime = 13;       // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
     private static double priceActive = 3.0;        // цена тригер для стоп лимитов и тейк лимитов
     private static int strategyWorkOne = 2;         // количество стратегий одновременно работающих (можно еще допелить или убрать)
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
@@ -80,6 +89,7 @@ public class Gasket {
     private static View viewThread;
     private static int PORT = 4444;                 // порт подключения
     private static Ticker ticker;
+
 
 
             // флаги
@@ -1171,20 +1181,20 @@ public class Gasket {
 
 
 
-    public static boolean isTradingPatterns() {
-        return tradingPatterns;
+    public static boolean isTradingPatternsII() {
+        return tradingPatternsII;
     }
 
-    public static void setTradingPatterns(boolean tradingPatterns) {
-        Gasket.tradingPatterns = tradingPatterns;
+    public static void setTradingPatternsII(boolean tradingPatternsII) {
+        Gasket.tradingPatternsII = tradingPatternsII;
     }
 
-    public static boolean isSavedPatterns() {
-        return savedPatterns;
+    public static boolean isSavedPatternsII() {
+        return savedPatternsII;
     }
 
-    public static void setSavedPatterns(boolean savedPatterns) {
-        Gasket.savedPatterns = savedPatterns;
+    public static void setSavedPatternsII(boolean savedPatternsII) {
+        Gasket.savedPatternsII = savedPatternsII;
     }
 
 
@@ -1407,4 +1417,68 @@ public class Gasket {
     public static void setServerRestart(boolean serverRestart) {
         Gasket.serverRestart = serverRestart;
     }
+
+
+    public static SavedPatternsPro getSavedPatternsProClass() {
+        return savedPatternsPro;
+    }
+
+    public static void setSavedPatternsProClass(SavedPatternsPro savedPatternsPro) {
+        Gasket.savedPatternsPro = savedPatternsPro;
+    }
+
+
+    public static boolean isTradingTestIIPro() {
+        return tradingTestIIPro;
+    }
+
+    public static void setTradingTestIIPro(boolean tradingTestIIPro) {
+        Gasket.tradingTestIIPro = tradingTestIIPro;
+    }
+
+    public static boolean isTradingIIPro() {
+        return tradingIIPro;
+    }
+
+    public static void setTradingIIPro(boolean tradingIIPro) {
+        Gasket.tradingIIPro = tradingIIPro;
+    }
+
+
+    public static ListensToLooksAndFillsPro getListensToLooksAndFillsPro() {
+        return listensToLooksAndFillsPro;
+    }
+
+    public static void setListensToLooksAndFillsPro(ListensToLooksAndFillsPro listensToLooksAndFillsPro) {
+        Gasket.listensToLooksAndFillsPro = listensToLooksAndFillsPro;
+    }
+
+
+    public static ListensLooksAndComparesPro getListensLooksAndComparesPro() {
+        return listensLooksAndComparesPro;
+    }
+
+    public static void setListensLooksAndComparesPro(ListensLooksAndComparesPro listensLooksAndComparesPro) {
+        Gasket.listensLooksAndComparesPro = listensLooksAndComparesPro;
+    }
+
+    public static boolean isSavedPatternsIIPro() {
+        return savedPatternsIIPro;
+    }
+
+    public static void setSavedPatternsIIPro(boolean savedPatternsIIPro) {
+        Gasket.savedPatternsIIPro = savedPatternsIIPro;
+    }
+
+
+    public static boolean isTradingPatternsIIPro() {
+        return tradingPatternsIIPro;
+    }
+
+    public static void setTradingPatternsIIPro(boolean tradingPatternsIIPro) {
+        Gasket.tradingPatternsIIPro = tradingPatternsIIPro;
+    }
 }
+
+
+

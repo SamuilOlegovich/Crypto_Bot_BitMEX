@@ -1,7 +1,6 @@
 package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.strategies.StringHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -15,10 +14,6 @@ import static java.lang.Float.NaN;
 public class ListensLooksAndComparesUser {
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
 
-    private final ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
-    private final ArrayList<ArrayList<String>> marketListsStrings;
-    private final ArrayList<InfoIndicator> listInfoIndicator;
-
     private KeepsTrackOfFillingListInfoIndicatorUser keepsTrackOfFillingListInfoIndicatorUser;
     private SortPriceRemainingLevelsUser sortPriceRemainingLevelsUser;
     private SortPriceUser sortPriceComparatorUser;
@@ -26,6 +21,9 @@ public class ListensLooksAndComparesUser {
     private SortSizeUser sortSizeUser;
     private SortTimeUser sortTimeUser;
 
+    private final ArrayList<InfoIndicator> listInfoIndicatorWorkingCopy;
+    private final ArrayList<ArrayList<String>> marketListsStrings;
+    private final ArrayList<InfoIndicator> listInfoIndicator;
 
     private boolean stopStartFlag;
     private double priceStart;
@@ -309,7 +307,7 @@ public class ListensLooksAndComparesUser {
                         && !patternString.startsWith("BUY") && !patternString.startsWith("BIAS")) {
                     String[] stringsPattern = patternString.split("===");
 
-                    if (StringHelper.getDate(stringsPattern[5]).getTime() < marketInfo.getTime().getTime()) {
+                    if (DatesTimes.getDate(stringsPattern[5]).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
                         break;
                     }
@@ -325,7 +323,7 @@ public class ListensLooksAndComparesUser {
 
                     for (int i = 0; i < stringBias.length; i++) {
                         if (stringBias[i].equalsIgnoreCase("TIME")) {
-                            time = StringHelper.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
                             break;
                         }
                     }

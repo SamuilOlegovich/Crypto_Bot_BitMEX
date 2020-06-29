@@ -1,6 +1,5 @@
 package bitmex.Bot.view;
 
-import bitmex.Bot.model.FilesAndPathCreator;
 import java.io.InputStreamReader;
 import bitmex.Bot.model.Gasket;
 import java.io.BufferedReader;
@@ -137,16 +136,18 @@ public class ConsoleHelper {
                 + " ----- при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false\n"
                 + "activeNumberOfCandlesForAnalysis === " + Gasket.isActiveNumberOfCandlesForAnalysis()
                 + " ----- включаем отклюаем отслеживания диапазона в котором находится цена true - включено\n"
-                + "tradingPatterns === " + Gasket.isTradingPatterns()
+                + "tradingPatterns === " + Gasket.isTradingPatternsII()
                 + " ----- включить торговлю по патернам патернов\n"
                 + "takeForCollectingPatterns === " + Gasket.getTakeForCollectingPatterns()
                 + " ----- тейк для сбора и накопления паттернов\n"
                 + "tradingPatternsUser === " + Gasket.isTradingPatternsUser()
                 + " ----- торговля по паттернам USER\n"
 
-                + "tradingPatterns === " + Gasket.isTradingPatterns()
+                + "tradingPatterns === " + Gasket.isTradingPatternsII()
                 + " ----- включить по патернам патернов\n"
-                + "savedPatterns === " + Gasket.isSavedPatterns()
+                + "savedPatternsIIPro === " + Gasket.isSavedPatternsIIPro()
+                + " ----- включить нахождение и запись патернов\n"
+                + "savedPatterns === " + Gasket.isSavedPatternsII()
                 + " ----- включить нахождение и запись патернов\n"
                 + "timeStopLiveForUserPatterns === " + Gasket.getTimeStopLiveForUserPatterns()
                 + " ----- время за которое паттерн должен отработать\n"

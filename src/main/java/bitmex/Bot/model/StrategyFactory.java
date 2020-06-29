@@ -1,23 +1,29 @@
-package bitmex.Bot.model.strategies;
+package bitmex.Bot.model;
 
 
+import bitmex.Bot.model.strategies.iiPro.KeepsTrackOfFillingListInfoIndicatorIIPro;
 import bitmex.Bot.model.strategies.II.KeepsTrackOfFillingListInfoIndicatorII;
+import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
+import bitmex.Bot.model.strategies.iiPro.ListensLooksAndComparesPro;
+import bitmex.Bot.model.strategies.iiPro.ListensToLooksAndFillsPro;
 import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
 import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
 import bitmex.Bot.model.strategies.oneStrategies.*;
-import bitmex.Bot.model.Gasket;
 
 
 
 public class StrategyFactory {
     private static StrategyFactory strategyFactory;
 
+    private KeepsTrackOfFillingListInfoIndicatorIIPro keepsTrackOfFillingListInfoIndicatorIIPro;
     private KeepsTrackOfFillingListInfoIndicatorII keepsTrackOfFillingListInfoIndicatorII;
     private ListensLooksAndComparesUser listensLooksAndComparesUser;
+    private ListensLooksAndComparesPro listensLooksAndComparesPro;
+    private ListensToLooksAndFillsPro listensToLooksAndFillsPro;
     private ListensLooksAndCompares listensLooksAndCompares;
     private ListensToLooksAndFills listensToLooksAndFills;
+
     private OneSell_5 oneSell5;
     private OneSell_4 oneSell4;
     private OneSell_3 oneSell3;
@@ -91,7 +97,7 @@ public class StrategyFactory {
 
 
 
-        if (Gasket.isSavedPatterns()) {
+        if (Gasket.isSavedPatternsII()) {
             if (listensToLooksAndFills == null) {
                 listensToLooksAndFills = ListensToLooksAndFills.getInstance();
                 if (keepsTrackOfFillingListInfoIndicatorII == null) {
@@ -102,7 +108,7 @@ public class StrategyFactory {
             listensToLooksAndFills.setInfoString(infoIndicator);
         }
 
-        if (Gasket.isTradingPatterns()) {
+        if (Gasket.isTradingPatternsII()) {
             if (listensLooksAndCompares == null) {
                 listensLooksAndCompares = ListensLooksAndCompares.getInstance();
                 if (keepsTrackOfFillingListInfoIndicatorII == null) {
@@ -119,6 +125,30 @@ public class StrategyFactory {
             if (listensLooksAndComparesUser == null) listensLooksAndComparesUser
                     = ListensLooksAndComparesUser.getInstance();
             listensLooksAndComparesUser.setInfoString(infoIndicator);
+        }
+
+
+
+        if (Gasket.isSavedPatternsIIPro()) {
+            if (listensToLooksAndFillsPro == null) {
+                listensToLooksAndFillsPro = ListensToLooksAndFillsPro.getInstance();
+                if (keepsTrackOfFillingListInfoIndicatorIIPro == null) {
+                    keepsTrackOfFillingListInfoIndicatorIIPro = KeepsTrackOfFillingListInfoIndicatorIIPro.getInstance();
+                }
+                keepsTrackOfFillingListInfoIndicatorIIPro.setListensToLooksAndFillsPro(listensToLooksAndFillsPro);
+            }
+            listensToLooksAndFillsPro.setInfoString(infoIndicator);
+        }
+
+        if (Gasket.isTradingPatternsIIPro()) {
+            if (listensLooksAndComparesPro == null) {
+                listensLooksAndComparesPro = ListensLooksAndComparesPro.getInstance();
+                if (keepsTrackOfFillingListInfoIndicatorIIPro == null) {
+                    keepsTrackOfFillingListInfoIndicatorIIPro = KeepsTrackOfFillingListInfoIndicatorIIPro.getInstance();
+                }
+                keepsTrackOfFillingListInfoIndicatorIIPro.setListensLooksAndComparesPro(listensLooksAndComparesPro);
+            }
+            listensLooksAndComparesPro.setInfoString(infoIndicator);
         }
     }
 }

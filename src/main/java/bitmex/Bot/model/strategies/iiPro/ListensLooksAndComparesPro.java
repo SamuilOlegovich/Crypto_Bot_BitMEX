@@ -1,28 +1,27 @@
-package bitmex.Bot.model.strategies.II;
-
+package bitmex.Bot.model.strategies.iiPro;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.TreeSet;
 
-import java.util.*;
 
 
-
-
-
-public class ListensLooksAndCompares {
-    private static ListensLooksAndCompares listensLooksAndCompares;
+public class ListensLooksAndComparesPro {
+    private static ListensLooksAndComparesPro listensLooksAndComparesPro;
 
     private ArrayList<InfoIndicator> marketObjectInfoWorkingCopy;
     private ArrayList<ArrayList<String>> marketListInListString;
     private ArrayList<InfoIndicator> listInfoIndicator;
 
     private SortPriceRemainingLevels sortPriceRemainingLevels;
+    private SavedPatternsPro savedPatternsPro;
     private SortPrice sortPriceComparator;
-    private SavedPatterns savedPatterns;
     private SortSize sortSize;
     private SortTime sortTime;
 
@@ -33,13 +32,13 @@ public class ListensLooksAndCompares {
     private long timeNow;
 
 
-    private ListensLooksAndCompares() {
+    private ListensLooksAndComparesPro() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Класс Listens Looks And Compares II начал работать");
+                + "Класс Listens Looks And Compares II Pro начал работать");
 
         this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
+        this.savedPatternsPro = Gasket.getSavedPatternsProClass();
         this.marketObjectInfoWorkingCopy = new ArrayList<>();
-        this.savedPatterns = Gasket.getSavedPatternsClass();
         this.marketListInListString = new ArrayList<>();
         this.sortPriceComparator = new SortPrice();
         this.listInfoIndicator = new ArrayList<>();
@@ -51,12 +50,12 @@ public class ListensLooksAndCompares {
     }
 
 
-    public static ListensLooksAndCompares getInstance() {
-        if (listensLooksAndCompares == null) {
-            listensLooksAndCompares = new ListensLooksAndCompares();
-            Gasket.setListensLooksAndCompares(listensLooksAndCompares);
+    public static ListensLooksAndComparesPro getInstance() {
+        if (listensLooksAndComparesPro == null) {
+            listensLooksAndComparesPro = new ListensLooksAndComparesPro();
+            Gasket.setListensLooksAndComparesPro(listensLooksAndComparesPro);
         }
-        return listensLooksAndCompares;
+        return listensLooksAndComparesPro;
     }
 
 
@@ -93,7 +92,7 @@ public class ListensLooksAndCompares {
             // удаляем ненужное
             removeUnnecessaryLists();
             // сохраняю те патерны которые еще актуальны на данный момент
-            ReadAndSavePatterns.saveTemporarySavedPatterns(marketListInListString);
+            ReadAndSavePatternsPro.saveTemporarySavedPatterns(marketListInListString);
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "Сравниваю рынок с ПАТТЕРНАМИ II");
@@ -101,13 +100,13 @@ public class ListensLooksAndCompares {
             // сравниваем оставшееся с патернами
             for (ArrayList<String> marketListString : marketListInListString) {
                 // получаем равные по размеру патерны
-                ArrayList<ArrayList<String>> inListPatterns = savedPatterns.getListFoSize(marketListString.size());
+                ArrayList<ArrayList<String>> inListPatterns = savedPatternsPro.getListFoSize(marketListString.size());
 
                 // если равные по размеру патерны есть то начинаем сравнивать
                 if (inListPatterns != null && inListPatterns.size() > 0) {
 
                     for (ArrayList<String> patternListString : inListPatterns) {
-                        new CompareAndMakeDecision(marketListString, patternListString);
+                        new CompareAndMakeDecisionPro(marketListString, patternListString);
                     }
                 }
             }
@@ -119,7 +118,7 @@ public class ListensLooksAndCompares {
     // удаляем листы размеры которых длиннее паттернов
     private synchronized void removeUnnecessaryLists() {
         if (marketListInListString.size() > 0) {
-            int maxArraySize = savedPatterns.getMaxArraySize();
+            int maxArraySize = savedPatternsPro.getMaxArraySize();
             ArrayList<Integer> lineNumbersToDelete = new ArrayList<>();
             ArrayList<ArrayList<String>> arrayListArrayList = new ArrayList<>();
 
@@ -132,7 +131,7 @@ public class ListensLooksAndCompares {
 
             Collections.reverse(lineNumbersToDelete);
             // сохраняю удаленные патерны
-            ReadAndSavePatterns.saveSavedPatternsDelete(arrayListArrayList);
+            ReadAndSavePatternsPro.saveSavedPatternsDelete(arrayListArrayList);
 
             for (Integer integer : lineNumbersToDelete) {
                 marketListInListString.remove((int) integer);
@@ -197,35 +196,35 @@ public class ListensLooksAndCompares {
 
         if (patternListIn.size() > 0) {
 
-                // находим количество BIAS
+            // находим количество BIAS
             for (String s : patternListIn) {
                 if (s.startsWith("BIAS")) count++;
             }
 
-                // согласно количеству BIAS находим максимальный нужный нам промежуток времени
+            // согласно количеству BIAS находим максимальный нужный нам промежуток времени
             if (count >= 1) {
                 time = timeNow - (1000 * 60 * 5 * (count + 1));
             } else {
                 time = timeNow - (1000 * 60 * 6);
             }
 
-                // перебираем объекты и смотрим вписываются ли они в промежуток времени
+            // перебираем объекты и смотрим вписываются ли они в промежуток времени
             for (InfoIndicator marketObjectInfo : marketObjectList) {
 
-                    // если не вписались в промежуток удаляем объект и прирываем этот цикл
+                // если не вписались в промежуток удаляем объект и прирываем этот цикл
                 if (marketObjectInfo.getTime().getTime() < time) {
                     indexDelete.add(marketObjectList.indexOf(marketObjectInfo));
 
                 } else {
-                        // сравниваем строки объекта с строками в списке
+                    // сравниваем строки объекта с строками в списке
                     for (String string : patternListIn) {
                         String[] stringsMarket = marketObjectInfo.toString().split(",");
                         String[] stringsPattern = string.split(",");
 
-                            // если длина строки объекта и массива равны то ...
+                        // если длина строки объекта и массива равны то ...
                         if (stringsMarket.length == stringsPattern.length && stringsMarket.length > 2) {
 
-                                // если такая строка уже есть то заменяем ее на более новую
+                            // если такая строка уже есть то заменяем ее на более новую
                             if (stringsMarket[2].equals(stringsPattern[2]) && stringsMarket[3].equals(stringsPattern[3])
                                     && stringsMarket[5].equals(stringsPattern[5])
                                     && stringsMarket[7].equals(stringsPattern[7])) {
@@ -238,7 +237,7 @@ public class ListensLooksAndCompares {
                 }
             }
 
-                // удаляем строку
+            // удаляем строку
             TreeSet<Integer> treeSet = new TreeSet<>(indexDelete);
             indexDelete.clear();
             indexDelete.addAll(treeSet);
@@ -249,10 +248,10 @@ public class ListensLooksAndCompares {
             }
         }
 
-            // определяем пределы последнего блока
+        // определяем пределы последнего блока
         time = timeNow - (1000 * 60 * 6);
 
-            // если еще остались строки, то добаляем их в последний блок
+        // если еще остались строки, то добаляем их в последний блок
         if (marketObjectList.size() > 0) {
             for (InfoIndicator marketObjectInfo : marketObjectList) {
                 if (marketObjectInfo.getTime().getTime() > time) {

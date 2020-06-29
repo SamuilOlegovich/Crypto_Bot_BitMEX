@@ -68,14 +68,19 @@ public class ExecutorCommandos {
                                 + Gasket.isMaxAndMinAverage() + "\n");
                     break;
                 case "tradingPatterns" :
-                    Gasket.setTradingPatterns(strings[1].equalsIgnoreCase("true"));
+                    Gasket.setTradingPatternsII(strings[1].equalsIgnoreCase("true"));
                         ConsoleHelper.writeMessage("tradingPatterns === "
-                                + Gasket.isTradingPatterns() + "\n");
+                                + Gasket.isTradingPatternsII() + "\n");
                     break;
                 case "tradingPatternsUser" :
                     Gasket.setTradingPatternsUser(strings[1].equalsIgnoreCase("true"));
                         ConsoleHelper.writeMessage("tradingPatterns === "
                                 + Gasket.isTradingPatternsUser() + "\n");
+                    break;
+                case "savedPatternsIIPro" :
+                    Gasket.setSavedPatternsIIPro(strings[1].equalsIgnoreCase("true"));
+                    ConsoleHelper.writeMessage("savedPatternsIIPro === "
+                            + Gasket.isSavedPatternsIIPro() + "\n");
                     break;
                 case "timeStopLiveForUserPatterns" :
                     Gasket.setTimeStopLiveForUserPatterns(Integer.parseInt(strings[1]));
@@ -93,9 +98,9 @@ public class ExecutorCommandos {
                                 + Gasket.isGameDirection() + "\n");
                     break;
                 case "savedPatterns" :
-                    Gasket.setSavedPatterns(strings[1].equalsIgnoreCase("true"));
+                    Gasket.setSavedPatternsII(strings[1].equalsIgnoreCase("true"));
                         ConsoleHelper.writeMessage("savedPatterns === "
-                                + Gasket.isSavedPatterns() + "\n");
+                                + Gasket.isSavedPatternsII() + "\n");
                     break;
                 case "tradingTestUser" :
                     Gasket.setTradingTestUser(strings[1].equalsIgnoreCase("true"));

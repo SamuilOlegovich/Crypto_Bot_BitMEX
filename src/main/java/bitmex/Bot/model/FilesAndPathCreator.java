@@ -11,11 +11,16 @@ import java.io.File;
 
 
 public class FilesAndPathCreator {
+
+    private String pathPatternsTemporaryIIPro;
     private String pathPatternsTemporaryUser;
+    private String pathPatternsForUserIIPro;
+    private String pathPatternsDeleteIIPro;
     private String pathPatternsDeleteUser;
     private String pathPatternsTemporary;
     private String pathPatternsForUser;
     private String pathPatternsDelete;
+    private String pathPatternsIIPro;
     private String pathPatternsUser;
     private String pathSettings;
     private String pathPatterns;
@@ -50,7 +55,19 @@ public class FilesAndPathCreator {
 
 
         if (strings.length == 2) {
+
             if (System.getProperty("os.name").startsWith("Windows")) {
+
+                Path pathIIProPatterns = Paths.get(finish + "iiProPatterns");
+
+                if (!Files.exists(pathIIProPatterns)) {
+                    try {
+                        Files.createDirectories(Paths.get("iiProPatterns"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 Path pathIIPatterns = Paths.get(finish + "iiPatterns");
 
                 if (!Files.exists(pathIIPatterns)) {
@@ -93,18 +110,33 @@ public class FilesAndPathCreator {
                     }
                 }
 
-                pathPatternsTemporaryUser = finish + "uPatterns\\uTemporaryPatterns.txt";
                 pathLogs = finish  + "Logs\\" + DatesTimes.getDateLogs().replaceAll(":", "-")
                         + " Log.txt";
+                pathPatternsTemporaryIIPro = finish + "iiProPatterns\\iiProTemporaryPatterns.txt";
+                pathPatternsDeleteIIPro = finish + "iiProPatterns\\iiProTemporaryDelete.txt";
+                pathPatternsForUserIIPro = finish + "uPatterns\\iiProPatternsForUser.txt";
+                pathPatternsTemporaryUser = finish + "uPatterns\\uTemporaryPatterns.txt";
                 pathPatternsTemporary = finish + "iiPatterns\\iiTemporaryPatterns.txt";
                 pathPatternsDeleteUser = finish + "uPatterns\\uTemporaryDelete.txt";
                 pathPatternsDelete = finish + "iiPatterns\\iiTemporaryDelete.txt";
-                pathPatternsForUser = finish + "uPatterns\\uPatternsFor.txt";
+                pathPatternsForUser = finish + "uPatterns\\iiPatternsForUser.txt";
+                pathPatternsIIPro = finish + "iiProPatterns\\iiProPatterns.txt";
+                pathPatternsUser = finish + "iiProPatterns\\iiProPatterns.txt";
                 pathPatternsUser = finish + "uPatterns\\uPatterns.txt";
                 pathPatterns = finish + "iiPatterns\\iiPatterns.txt";
                 pathSettings = finish + "Settings\\Settings.txt";
 
             } else {
+                Path pathIIProPatterns = Paths.get(strings[0] + "iiProPatterns");
+
+                if (!Files.exists(pathIIProPatterns)) {
+                    try {
+                        Files.createDirectories(Paths.get("iiProPatterns"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 Path pathIIPatterns = Paths.get(strings[0] + "iiPatterns");
 
                 if (!Files.exists(pathIIPatterns)) {
@@ -147,12 +179,16 @@ public class FilesAndPathCreator {
                     }
                 }
 
+                pathPatternsTemporaryIIPro = finish + "iiProPatterns/iiProTemporaryPatterns.txt";
+                pathPatternsDeleteIIPro = finish + "iiProPatterns/iiProTemporaryDelete.txt";
                 pathPatternsTemporaryUser = finish + "uPatterns/uTemporaryPatterns.txt";
-                pathLogs = finish + "Logs/" + DatesTimes.getDateLogs() + " Log.txt";
                 pathPatternsTemporary = finish + "iiPatterns/iiTemporaryPatterns.txt";
+                pathPatternsForUserIIPro = finish + "uPatterns/iiProPatternsFor.txt";
+                pathLogs = finish + "Logs/" + DatesTimes.getDateLogs() + " Log.txt";
                 pathPatternsDeleteUser = finish + "uPatterns/uTemporaryDelete.txt";
                 pathPatternsDelete = finish + "iiPatterns/iiTemporaryDelete.txt";
-                pathPatternsForUser = finish + "uPatterns/uPatternsFor.txt";
+                pathPatternsIIPro = finish + "iiProPatterns/iiProPatterns.txt";
+                pathPatternsForUser = finish + "uPatterns/iiPatternsFor.txt";
                 pathPatternsUser = finish + "uPatterns/uPatterns.txt";
                 pathPatterns = finish + "iiPatterns/iiPatterns.txt";
                 pathSettings = finish + "Settings/Settings.txt";
@@ -162,19 +198,32 @@ public class FilesAndPathCreator {
                     .replaceAll("target/classes", "src/main/java")
                     .replaceAll("model/", "");
 
-            pathPatternsTemporaryUser = string + "Logs/PatternsUser/TemporaryPatternsUser.txt";
-            pathPatternsDeleteUser = string + "Logs/PatternsUser/TemporaryDeleteUser.txt";
+            pathPatternsTemporaryIIPro = string + "Logs/PatternsUser/iiProTemporaryPatterns.txt";
+            pathPatternsForUserIIPro = string + "Logs/PatternsUser/iiProPatternsForUser.txt";
+            pathPatternsTemporaryUser = string + "Logs/PatternsUser/uTemporaryPatterns.txt";
+            pathPatternsDeleteIIPro = string + "Logs/PatternsUser/iiProTemporaryDelete.txt";
+            pathPatternsDeleteUser = string + "Logs/PatternsUser/uTemporaryDelete.txt";
             pathLogs = string + "Logs/Log/" + DatesTimes.getDateLogs() + "===Log.txt";
-            pathPatternsForUser = string + "Logs/PatternsUser/PatternsForUser.txt";
+            pathPatternsForUser = string + "Logs/PatternsUser/iiPatternsForUser.txt";
             pathPatternsTemporary = string + "Logs/Patterns/TemporaryPatterns.txt";
+            pathPatternsIIPro = string + "Logs/PatternsUser/iiProPatterns.txt";
             pathPatternsDelete = string + "Logs/Patterns/TemporaryDelete.txt";
-            pathPatternsUser = string + "Logs/PatternsUser/PatternsUser.txt";
+            pathPatternsUser = string + "Logs/PatternsUser/uPatterns.txt";
             pathPatterns = string + "Logs/Patterns/Patterns.txt";
             pathSettings = string + "Logs/Settings.txt";
         }
 
         if (System.getProperty("os.name").startsWith("Windows")) {
+            pathPatternsTemporaryIIPro = pathPatternsTemporaryIIPro
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
             pathPatternsTemporaryUser = pathPatternsTemporaryUser
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
+            pathPatternsForUserIIPro = pathPatternsForUserIIPro
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
+            pathPatternsDeleteIIPro = pathPatternsDeleteIIPro
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
             pathPatternsDeleteUser = pathPatternsDeleteUser
@@ -187,6 +236,9 @@ public class FilesAndPathCreator {
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
             pathPatternsDelete = pathPatternsDelete
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
+            pathPatternsIIPro = pathPatternsIIPro
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
             pathPatternsUser = pathPatternsUser
@@ -206,11 +258,15 @@ public class FilesAndPathCreator {
 
 
     private void showPath() {
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryIIPro);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryUser);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsForUserIIPro);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsDeleteIIPro);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsDeleteUser);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporary);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsForUser);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsDelete);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsIIPro);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsUser);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathSettings);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatterns);
@@ -224,12 +280,24 @@ public class FilesAndPathCreator {
             createdFileTemporaryPatternsUser();
         }
 
+        if (!Files.exists(Paths.get(pathPatternsTemporaryIIPro))) {
+            createdFileTemporaryPatternsIIPro();
+        }
+
+        if (!Files.exists(Paths.get(pathPatternsForUserIIPro))) {
+            createdFilePatternsForUserIIPro();
+        }
+
         if (!Files.exists(Paths.get(pathPatternsTemporary))) {
             createdFileTemporaryPatterns();
         }
 
         if (!Files.exists(Paths.get(pathPatternsDeleteUser))) {
             createdFileDeletePatternsUser();
+        }
+
+        if (!Files.exists(Paths.get(pathPatternsDeleteIIPro))) {
+            createdFileDeletePatternsIIPro();
         }
 
         if (!Files.exists(Paths.get(pathPatternsForUser))) {
@@ -242,6 +310,10 @@ public class FilesAndPathCreator {
 
         if (!Files.exists(Paths.get(pathPatternsUser))) {
             createdFilePatternsUser();
+        }
+
+        if (!Files.exists(Paths.get(pathPatternsIIPro))) {
+            createdFilePatternsIIPro();
         }
 
         if (!Files.exists(Paths.get(pathSettings))) {
@@ -297,6 +369,20 @@ public class FilesAndPathCreator {
 
 
 
+    private void createdFilePatternsForUserIIPro() {
+        File file = new File(pathPatternsForUserIIPro);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл для FOR User Паттернов II Pro успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл FOR User II Pro Петтернов.");
+        }
+    }
+
+
+
     private void createdFilePatterns() {
         File file = new File(pathPatterns);
         try {
@@ -306,6 +392,20 @@ public class FilesAndPathCreator {
         } catch (IOException ex) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "Не удалось создать файл Петтернов.");
+        }
+    }
+
+
+
+    private void createdFilePatternsIIPro() {
+        File file = new File(pathPatternsIIPro);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл для Паттернов II Pro успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл Петтернов II Pro.");
         }
     }
 
@@ -339,6 +439,20 @@ public class FilesAndPathCreator {
 
 
 
+    private void createdFileDeletePatternsIIPro() {
+        File file = new File(pathPatternsDeleteIIPro);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл для Удаленных Паттернов II Pro успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл Удаленных Петтернов II Pro.");
+        }
+    }
+
+
+
     private void createdFileTemporaryPatternsUser() {
         File file = new File(pathPatternsTemporaryUser);
         try {
@@ -362,6 +476,20 @@ public class FilesAndPathCreator {
         } catch (IOException ex) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "Не удалось создать файл Временных Петтернов.");
+        }
+    }
+
+
+
+    private void createdFileTemporaryPatternsIIPro() {
+        File file = new File(pathPatternsTemporaryIIPro);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл для Временных Паттернов II Pro успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл Временных Петтернов II Pro.");
         }
     }
 
@@ -415,5 +543,21 @@ public class FilesAndPathCreator {
 
     public String getPathLogs() {
         return pathLogs;
+    }
+
+    public String getPathPatternsTemporaryIIPro() {
+        return pathPatternsTemporaryIIPro;
+    }
+
+    public String getPathPatternsForUserIIPro() {
+        return pathPatternsForUserIIPro;
+    }
+
+    public String getPathPatternsDeleteIIPro() {
+        return pathPatternsDeleteIIPro;
+    }
+
+    public String getPathPatternsIIPro() {
+        return pathPatternsIIPro;
     }
 }

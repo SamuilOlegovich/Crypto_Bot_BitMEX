@@ -1,7 +1,7 @@
 package bitmex.Bot.model.serverAndParser;
 
 
-import bitmex.Bot.model.strategies.StrategyFactory;
+import bitmex.Bot.model.StrategyFactory;
 import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.enums.BidAsk;

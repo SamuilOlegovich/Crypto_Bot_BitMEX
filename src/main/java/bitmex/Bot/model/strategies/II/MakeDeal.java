@@ -36,7 +36,7 @@ public class MakeDeal extends Thread {
             if (Gasket.isTradingII()) {
                 new TradeBuy(stringOut);
             }
-            if (Gasket.isTradingTestUser()) {
+            if (Gasket.isTradingTestII()) {
                 new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
             }
 

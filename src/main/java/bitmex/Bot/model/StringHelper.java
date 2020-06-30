@@ -14,9 +14,7 @@ public class StringHelper {
 
         } else {
             String[] strings = in.split("===");
-
             for (int i = 0; i < strings.length; i++) {
-
                 if (strings[i].equalsIgnoreCase(key)) {
                     out = strings[i + 1];
                     break;

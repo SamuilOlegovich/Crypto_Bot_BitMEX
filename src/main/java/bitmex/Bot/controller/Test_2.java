@@ -1,6 +1,9 @@
 package bitmex.Bot.controller;
 
 
+import bitmex.Bot.model.enums.BidAsk;
+import bitmex.Bot.model.enums.TypeOpenOrders;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -10,47 +13,44 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Test_2 {
 
     public static void main(String[] args) {
+    Test_2 test_2 = new Test_2();
+    SortTheAlphabet sortTheAlphabet = new SortTheAlphabet();
+
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add(BidAsk.OPEN_POS_ASK_MINUS.toString());
+        arrayList.add(BidAsk.ASK_SMALL.toString());
+        arrayList.add(BidAsk.OPEN_POS_MINUS_HL.toString());
+        arrayList.add(BidAsk.OPEN_POS_ASK_MINUS_SMALL.toString());
+        arrayList.add(BidAsk.ASK_SMALL.toString());
+        arrayList.add(BidAsk.DELTA_BID.toString());
+        arrayList.add(BidAsk.DELTA_BID_HL.toString());
+        arrayList.add(BidAsk.DELTA_MIN_VOL_BID_HL.toString());
+        arrayList.add(BidAsk.VOLUME_SMALL.toString());
+        arrayList.add(BidAsk.OPEN_POS_BID_PLUS.toString());
+
+        arrayList.sort(sortTheAlphabet);
+
+        System.out.println(arrayList);
+
     }
 
-    public class Crypt {
 
-        Cipher ecipher;
-        Cipher dcipher;
+    private static class SortTheAlphabet implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
 
-        /**
-         * Конструктор
-         */
-        public Crypt() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
-            // ВОТ КЛЮЧ, КОТОРЫМ ШИФРУЕМ
-            byte[] keyBytes = "paroli14".getBytes();
-            SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
-            ecipher = Cipher.getInstance("DES");
-            dcipher = Cipher.getInstance("DES");
-            ecipher.init(Cipher.ENCRYPT_MODE, key);
-            dcipher.init(Cipher.DECRYPT_MODE, key);
+            int result = o1.compareTo(o2);
+
+            if (result > 0) return 1;
+            else if (result < 0) return -1;
+            else return 0;
         }
-
-        /**
-         * Функция шифровнаия
-         */
-//        public String encrypt(String str) throws UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
-//            byte[] utf8 = str.getBytes("UTF8");
-//            byte[] enc = ecipher.doFinal(utf8);
-//            return new sun.misc.BASE64Encoder().encode(enc);
-//        }
-
-        /**
-         * Функция расшифрования
-         **/
-//        public String decrypt(String str) throws IOException, IllegalBlockSizeException, BadPaddingException {
-//            byte[] dec = new sun.misc.BASE64Decoder().decodeBuffer(str);
-//            byte[] utf8 = dcipher.doFinal(dec);
-//            return new String(utf8, "UTF8");
-//        }
     }
 }
 

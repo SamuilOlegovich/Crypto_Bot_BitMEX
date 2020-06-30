@@ -69,10 +69,13 @@ public class ListensLooksAndComparesUser {
     // если он уже запущен то просто кладем объекты в массив
     // так же получаем текущую цену
     public synchronized void setInfoString(InfoIndicator infoIndicator) {
+
         if (stopStartFlag) {
+
             if (Double.isNaN(priceStart)) {
                 priceStart = Gasket.getBitmexQuote().getBidPrice();
             }
+
             listInfoIndicator.add(infoIndicator);
         }
     }
@@ -519,6 +522,7 @@ public class ListensLooksAndComparesUser {
 
         }
     }
+
 
 
 

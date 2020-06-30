@@ -1,23 +1,31 @@
 package bitmex.Bot.model.strategies.IIUser;
 
 
+import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 
 // сравниваю и принимаю решение
 public class CompareAndMakeDecisionUser extends Thread {
+    private SortTheAlphabet sortTheAlphabet;
+
     private ArrayList<String> patternsList;
     private ArrayList<String> marketList;
+
 
 
 
     public CompareAndMakeDecisionUser(ArrayList<String> marketList, ArrayList<String> patternsList) {
         this.patternsList = new ArrayList<>(patternsList);
         this.marketList = new ArrayList<>(marketList);
+        this.sortTheAlphabet = new SortTheAlphabet();
         start();
     }
 
@@ -28,6 +36,7 @@ public class CompareAndMakeDecisionUser extends Thread {
         if (compareSheets()) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку");
+
             new MakeDealUser(marketList, patternsList.get(0));
         }
 
@@ -64,12 +73,11 @@ public class CompareAndMakeDecisionUser extends Thread {
         // если их размер равен то проверяем равны ли в них направления
         if (marketBias.size() != patternBias.size()) {
             return false;
-        } else if (marketBias.size() > 0){
+        } else if (marketBias.size() > 0) {
             for (String marketString : marketBias) {
-                String[] stringsPattern = patternBias.get(marketBias.indexOf(marketString)).split("===");
-                String[] stringsMarket = marketString.split("===");
-
-                if (!stringsPattern[1].equalsIgnoreCase(stringsMarket[1])) {
+                if (!StringHelper.giveData(TypeData.BIAS.toString(),
+                        patternBias.get(marketBias.indexOf(marketString)))
+                        .equalsIgnoreCase(StringHelper.giveData(TypeData.BIAS.toString(), marketString))) {
                     return false;
                 }
             }
@@ -120,22 +128,21 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 
     // сортируем, удаляем лишнее и сравниваем переданые блоки строк
-    private boolean removeAllUnnecessaryAndCheckForAMatch(ArrayList<String> marketStrings,
-                                                          ArrayList<String> patternStrings) {
+    private boolean removeAllUnnecessaryAndCheckForAMatch(ArrayList<String> inMarketStrings,
+                                                          ArrayList<String> inPatternStrings) {
 
-        ArrayList<String> readyMarketBlock = new ArrayList<>();
+        if (inPatternStrings != null && inPatternStrings.size() > 0
+                && inMarketStrings != null && inMarketStrings.size() > 0) {
 
-        if (patternStrings != null && patternStrings.size() > 0
-                && marketStrings != null && marketStrings.size() > 0) {
+            ArrayList<String> patternStrings = new ArrayList<>(inPatternStrings);
+            ArrayList<String> readyMarketBlock = new ArrayList<>();
+
 
             // тут приводим в порядок маркет блок, все лишнее из него убираем
             for (String patternString : patternStrings) {
-                String[] stringsPattern = patternString.split("===");
-
-                for (String marketString : marketStrings) {
-                    String[] stringsMarket = marketString.split("===");
-
-                    if (stringsPattern[11].equals(stringsMarket[11])) {
+                for (String marketString : inMarketStrings) {
+                    if (StringHelper.giveData(TypeData.type.toString(), patternString)
+                            .equals(StringHelper.giveData(TypeData.type.toString(), marketString))) {
                         readyMarketBlock.add(marketString);
                     }
                 }
@@ -144,34 +151,35 @@ public class CompareAndMakeDecisionUser extends Thread {
             // сравниваем размеры блоков
             if (readyMarketBlock.size() != patternStrings.size()) {
                 return false;
-
             } else {
+                ArrayList<String> patternComparePriceNullAll = new ArrayList<>();
+                ArrayList<String> marketComparePriceNullAll = new ArrayList<>();
+                ArrayList<String> patternComparePriceNull = new ArrayList<>();
+                ArrayList<String> marketComparePriceNull = new ArrayList<>();
 
                 ArrayList<String> patternCompareDataNullAll = new ArrayList<>();
                 ArrayList<String> marketCompareDataNullAll = new ArrayList<>();
                 ArrayList<String> patternCompareDataNull = new ArrayList<>();
                 ArrayList<String> marketCompareDataNull = new ArrayList<>();
-                ArrayList<String> patternCompareNullAll = new ArrayList<>();
-                ArrayList<String> marketCompareNullAll = new ArrayList<>();
-                ArrayList<String> patternCompareNull = new ArrayList<>();
-                ArrayList<String> marketCompareNull = new ArrayList<>();
-                ArrayList<String> patternCompareAll = new ArrayList<>();
-                ArrayList<String> marketCompareAll = new ArrayList<>();
-                ArrayList<String> patternCompare = new ArrayList<>();
-                ArrayList<String> marketCompare = new ArrayList<>();
 
 
                 // начинаем перебирать блоки строк и сравнивать их друг с другом
                 for (String sMarket : readyMarketBlock) {
+
                     String stringPattern = patternStrings.get(readyMarketBlock.indexOf(sMarket));
 
                     String[] stringsPattern = stringPattern.split("===");
                     String[] stringsMarket = sMarket.split("===");
 
+                    // price
                     if (stringsMarket[7].equalsIgnoreCase("NULL")) {
+                        // если прайс нул - то не важно в какой последовательности идут уровни,
+                        // но цена у уровней в списке маркет должна быть ровна
+
+                        if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
                             // если это не последняя строка в блоке то заглядываем на строку вперед
                             // и смотрим не ровны ли цены между ними
-                        if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
+
                             String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(sMarket) + 1);
                             String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(sMarket) + 1);
 
@@ -179,171 +187,149 @@ public class CompareAndMakeDecisionUser extends Thread {
                             String[] stringsMarket2 = marketPlusOne.split("===");
 
                             // если цены на шаг вперед ровны добавляем в списки
-                            if (stringsPattern[7].equals(stringsPattern2[7])) {
-
-                                patternCompareNullAll.add(patternPlusOne);
-                                patternCompareNullAll.add(stringPattern);
-                                marketCompareNullAll.add(marketPlusOne);
-                                marketCompareNullAll.add(sMarket);
-
-                                patternCompareNull.add(stringsPattern2[11]);
-                                patternCompareNull.add(stringsPattern[11]);
-                                marketCompareNull.add(stringsMarket2[11]);
-                                marketCompareNull.add(stringsMarket[11]);
-                            }
-
-                        } else {
-
-                            patternCompareNullAll.add(stringPattern);
-                            marketCompareNullAll.add(sMarket);
-
-                            patternCompareNull.add(stringsPattern[11]);
-                            marketCompareNull.add(stringsMarket[11]);
-                        }
-
-                    } else if (stringsMarket[5].equalsIgnoreCase("NULL")) {
-                        // если это не последняя строка в блоке то заглядываем на строку вперед
-                        // и смотрим не ровны ли даты между ними а так же направление свечи
-                        if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
-                            String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(sMarket) + 1);
-                            String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(sMarket) + 1);
-
-                            String[] stringsPattern2 = patternPlusOne.split("===");
-                            String[] stringsMarket2 = marketPlusOne.split("===");
-
-                            // если цены на шаг вперед ровны добавляем в списки
-                            if (stringsPattern[5].equals(stringsPattern2[5])
-                                    && stringsMarket[5].equals(stringsMarket2[5])
-                                    && stringsMarket[15].equals(stringsMarket2[15])) {
-
-                                patternCompareNullAll.add(patternPlusOne);
-                                patternCompareNullAll.add(stringPattern);
-                                marketCompareNullAll.add(marketPlusOne);
-                                marketCompareNullAll.add(sMarket);
-
-                                patternCompareNull.add(stringsPattern2[11]);
-                                patternCompareNull.add(stringsPattern[11]);
-                                marketCompareNull.add(stringsMarket2[11]);
-                                marketCompareNull.add(stringsMarket[11]);
-                            }
-
-                        } else {
-
-                            patternCompareNullAll.add(stringPattern);
-                            marketCompareNullAll.add(sMarket);
-
-                            patternCompareNull.add(stringsPattern[11]);
-                            marketCompareNull.add(stringsMarket[11]);
-                        }
-
-                    } else {
-
-                        // если это не последняя строка в блоке то заглядываем на строку вперед
-                        // и смотрим не ровны ли цены между ними
-                        if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
-                            String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(sMarket) + 1);
-                            String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(sMarket) + 1);
-
-                            String[] stringsPattern2 = patternPlusOne.split("===");
-                            String[] stringsMarket2 = marketPlusOne.split("===");
-
-                            // если цены на шаг вперед во всех блоках ровны то добавляем в списки
                             if (stringsPattern[7].equals(stringsPattern2[7])
                                     && stringsMarket[7].equals(stringsMarket2[7])) {
 
-                                patternCompare.add(stringsPattern2[11]);
-                                patternCompare.add(stringsPattern[11]);
-                                marketCompare.add(stringsMarket2[11]);
-                                marketCompare.add(stringsMarket[11]);
+                                patternComparePriceNullAll.add(patternPlusOne);
+                                patternComparePriceNullAll.add(stringPattern);
+                                marketComparePriceNullAll.add(marketPlusOne);
+                                marketComparePriceNullAll.add(sMarket);
 
-                                patternCompareAll.add(patternPlusOne);
-                                patternCompareAll.add(stringPattern);
-                                marketCompareAll.add(marketPlusOne);
-                                marketCompareAll.add(sMarket);
+                                patternComparePriceNull.add(stringsPattern2[11]);
+                                patternComparePriceNull.add(stringsPattern[11]);
+                                marketComparePriceNull.add(stringsMarket2[11]);
+                                marketComparePriceNull.add(stringsMarket[11]);
 
-                                // если цены на шаг вперед во всех блоках не ровны
-                            } else if (!stringsPattern[7].equals(stringsPattern2[7])
-                                    && !stringsMarket[7].equals(stringsMarket2[7])) {
-
-                                // отсылаем непосредственно строки на последнее сравнение между собой
-                                if (!finallyComparisonOnAllData(sMarket, stringPattern)) {
-                                    return false;
-                                }
-
-                            } else {
-
-                                return false;
                             }
-                        } else {
+                        }
+                        // Data
+                    } else if (stringsMarket[5].equalsIgnoreCase("NULL")) {
+                        // если время нулл - то у маркета должны быть в этом диапазоне все свечи на одной свече,
+                        // а именно время ровно, направление свечи дир тоже должно быть ровно
 
-                            if (!finallyComparisonOnAllData(sMarket, stringPattern)) {
-                                return false;
+                        if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
+                            // если это не последняя строка в блоке то заглядываем на строку вперед
+                            // и смотрим не ровны ли даты между ними
+
+                            String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(sMarket) + 1);
+                            String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(sMarket) + 1);
+
+                            String[] stringsPattern2 = patternPlusOne.split("===");
+                            String[] stringsMarket2 = marketPlusOne.split("===");
+
+                            // если даты на шаг вперед ровны добавляем в списки
+                            if (stringsPattern[5].equals(stringsPattern2[5])
+                                    && stringsMarket[5].equals(stringsMarket2[5])
+                                    && stringsPattern[15].equals(stringsPattern2[15])
+                                    && stringsMarket[15].equals(stringsMarket2[15])
+                                    && stringsPattern[15].equals(stringsMarket[15])) {
+
+                                patternCompareDataNullAll.add(patternPlusOne);
+                                patternCompareDataNullAll.add(stringPattern);
+                                marketCompareDataNullAll.add(marketPlusOne);
+                                marketCompareDataNullAll.add(sMarket);
+
+                                patternCompareDataNull.add(stringsPattern2[11]);
+                                patternCompareDataNull.add(stringsPattern[11]);
+                                marketCompareDataNull.add(stringsMarket2[11]);
+                                marketCompareDataNull.add(stringsMarket[11]);
                             }
                         }
                     }
                 }
 
+                // в этой части мы удаляем из входящих списков паттернов и маркеров строки которые были перенесены
+                // в другие списки сравнений согласно указанным требованиям
+                ArrayList<Integer> deleteIndex = new ArrayList<>();
 
-                // если блоки одинаковы и больше нуля сравниваем их
-                if (marketCompare.size() > 0) {
-                    // вначале сортируем простые блоки и сравниваем их
-                    // если они ровны то можно сравнивать дальше построчно
-                    HashSet<String> hashSetPattern = new HashSet<>(patternCompare);
-                    HashSet<String> hashSetMarket = new HashSet<>(marketCompare);
-
-                    patternCompare.clear();
-                    marketCompare.clear();
-
-                    patternCompare.addAll(hashSetPattern);
-                    marketCompare.addAll(hashSetMarket);
-
-                    for (String string : marketCompare) {
-
-                        if (!string.equals(patternCompare.get(marketCompare.indexOf(string)))) {
-                            return false;
-                        }
-                    }
-
-                    hashSetPattern.clear();
-                    hashSetMarket.clear();
-
-                    hashSetPattern.addAll(patternCompareAll);
-                    hashSetMarket.addAll(marketCompareAll);
-
-                    patternCompareAll.clear();
-                    marketCompareAll.clear();
-
-                    patternCompareAll.addAll(hashSetPattern);
-                    marketCompareAll.addAll(hashSetMarket);
-
-                    hashSetPattern.clear();
-                    hashSetMarket.clear();
-
-                    for (String stringPattern : patternCompareAll) {
-
-                        if (!finallyComparisonOnAllData(marketCompareAll
-                                .get(patternCompareAll.indexOf(stringPattern)), stringPattern)) {
-                            return false;
+                for (String stringNull : marketCompareDataNull) {
+                    for (String stringReady : readyMarketBlock) {
+                        if (StringHelper.giveData(TypeData.type.toString(), stringReady).equals(stringNull)) {
+                           deleteIndex.add(readyMarketBlock.indexOf(stringReady));
                         }
                     }
                 }
 
+                for (String stringNull : marketComparePriceNull) {
+                    for (String stringReady : readyMarketBlock) {
+                        if (StringHelper.giveData(TypeData.type.toString(), stringReady).equals(stringNull)) {
+                            deleteIndex.add(readyMarketBlock.indexOf(stringReady));
+                        }
+                    }
+                }
+
+                HashSet<Integer> deleteIndexHash = new HashSet<>(deleteIndex);
+                deleteIndex.addAll(deleteIndexHash);
+                Collections.reverse(deleteIndex);
+                deleteIndexHash.clear();
+
+                for (Integer index : deleteIndex) {
+                    readyMarketBlock.remove((int) index);
+                }
+
+                deleteIndex.clear();
+
+                for (String stringNull : patternCompareDataNull) {
+                    for (String stringReady : patternStrings) {
+
+                        if (StringHelper.giveData(TypeData.type.toString(), stringReady).equals(stringNull)) {
+                            deleteIndex.add(patternStrings.indexOf(stringReady));
+                        }
+                    }
+                }
+
+                for (String stringNull : patternComparePriceNull) {
+                    for (String stringReady : patternStrings) {
+
+                        if (StringHelper.giveData(TypeData.type.toString(), stringReady).equals(stringNull)) {
+                            deleteIndex.add(patternStrings.indexOf(stringReady));
+                        }
+                    }
+                }
+
+                deleteIndexHash.addAll(deleteIndex);
+                deleteIndex.addAll(deleteIndexHash);
+                Collections.reverse(deleteIndex);
+                deleteIndexHash.clear();
+
+                for (Integer index : deleteIndex) {
+                    patternStrings.remove((int) index);
+                }
+
                 // если блоки одинаковы и больше нуля сравниваем их
-                if (marketCompareNullAll.size() > 0) {
+                if (readyMarketBlock.size() == patternStrings.size() && patternStrings.size() > 0) {
+
+                    // сортируем блоки и сравниваем их дальше построчно
+                    readyMarketBlock.sort(sortTheAlphabet);
+                    patternStrings.sort(sortTheAlphabet);
+
+                    for (String stringReady : readyMarketBlock) {
+                        if (!finallyComparisonOnAllData(stringReady,
+                                patternStrings.get(readyMarketBlock.indexOf(stringReady)))) {
+                            return false;
+                        }
+                    }
+
+                } else if (readyMarketBlock.size() != patternStrings.size()) {
+                    return false;
+                }
+
+                // если блоки одинаковы и больше нуля сравниваем их
+                if (patternComparePriceNull.size() == marketComparePriceNull.size()
+                        && marketComparePriceNull.size() > 0) {
                     // вначале сортируем простые блоки и сравниваем их
                     // если они ровны то можно сравнивать дальше построчно
-                    HashSet<String> hashSetPatternNull = new HashSet<>(patternCompareNull);
-                    HashSet<String> hashSetMarketNull = new HashSet<>(marketCompareNull);
+                    HashSet<String> hashSetPatternNull = new HashSet<>(patternComparePriceNull);
+                    HashSet<String> hashSetMarketNull = new HashSet<>(marketComparePriceNull);
 
-                    patternCompareNull.clear();
-                    marketCompareNull.clear();
+                    patternComparePriceNull.clear();
+                    marketComparePriceNull.clear();
 
-                    patternCompareNull.addAll(hashSetPatternNull);
-                    marketCompareNull.addAll(hashSetMarketNull);
+                    patternComparePriceNull.addAll(hashSetPatternNull);
+                    marketComparePriceNull.addAll(hashSetMarketNull);
 
-                    for (String string : marketCompareNull) {
-
-                        if (!string.equals(patternCompareNull.get(marketCompareNull.indexOf(string)))) {
+                    for (String string : marketComparePriceNull) {
+                        if (!string.equals(patternComparePriceNull.get(marketComparePriceNull.indexOf(string)))) {
                             return false;
                         }
                     }
@@ -351,29 +337,22 @@ public class CompareAndMakeDecisionUser extends Thread {
                     hashSetPatternNull.clear();
                     hashSetMarketNull.clear();
 
-                    hashSetPatternNull.addAll(patternCompareNullAll);
-                    hashSetMarketNull.addAll(marketCompareNullAll);
+                    patternComparePriceNullAll.sort(sortTheAlphabet);
+                    marketComparePriceNullAll.sort(sortTheAlphabet);
 
-                    patternCompareNullAll.clear();
-                    marketCompareNullAll.clear();
-
-                    patternCompareNullAll.addAll(hashSetPatternNull);
-                    marketCompareNullAll.addAll(hashSetMarketNull);
-
-                    hashSetPatternNull.clear();
-                    hashSetMarketNull.clear();
-
-                    for (String stringPattern : patternCompareNullAll) {
-
-                        if (!finallyComparisonOnAllData(marketCompareNullAll
-                                        .get(patternCompareNullAll.indexOf(stringPattern)), stringPattern)) {
+                    for (String stringMarket : marketComparePriceNullAll) {
+                        if (!finallyComparisonOnAllData(stringMarket,
+                                patternComparePriceNullAll.get(marketComparePriceNullAll.indexOf(stringMarket)))) {
                             return false;
                         }
                     }
+                } else if (patternComparePriceNull.size() != marketComparePriceNull.size()) {
+                    return false;
                 }
 
                 // если блоки одинаковы и больше нуля сравниваем их
-                if (marketCompareDataNullAll.size() > 0) {
+                if (patternCompareDataNull.size() == marketCompareDataNull.size()
+                        && marketCompareDataNull.size() > 0) {
                     // вначале сортируем простые блоки и сравниваем их
                     // если они ровны то можно сравнивать дальше построчно
                     HashSet<String> hashSetPatternNull = new HashSet<>(patternCompareDataNull);
@@ -386,7 +365,6 @@ public class CompareAndMakeDecisionUser extends Thread {
                     marketCompareDataNull.addAll(hashSetMarketNull);
 
                     for (String string : marketCompareDataNull) {
-
                         if (!string.equals(patternCompareDataNull.get(marketCompareDataNull.indexOf(string)))) {
                             return false;
                         }
@@ -395,33 +373,26 @@ public class CompareAndMakeDecisionUser extends Thread {
                     hashSetPatternNull.clear();
                     hashSetMarketNull.clear();
 
-                    hashSetPatternNull.addAll(patternCompareDataNullAll);
-                    hashSetMarketNull.addAll(marketCompareDataNullAll);
+                    patternCompareDataNullAll.sort(sortTheAlphabet);
+                    marketCompareDataNullAll.sort(sortTheAlphabet);
 
-                    patternCompareDataNullAll.clear();
-                    marketCompareDataNullAll.clear();
-
-                    patternCompareDataNullAll.addAll(hashSetPatternNull);
-                    marketCompareDataNullAll.addAll(hashSetMarketNull);
-
-                    hashSetPatternNull.clear();
-                    hashSetMarketNull.clear();
-
-                    for (String stringPattern : patternCompareDataNullAll) {
-
-                        if (!finallyComparisonOnAllData(marketCompareDataNullAll
-                                .get(patternCompareDataNullAll.indexOf(stringPattern)), stringPattern)) {
+                    for (String stringMarket : marketCompareDataNullAll) {
+                        if (!finallyComparisonOnAllData(stringMarket,
+                                patternCompareDataNullAll.get(marketCompareDataNullAll.indexOf(stringMarket)))) {
                             return false;
                         }
                     }
+                } else if (patternCompareDataNull.size() != marketCompareDataNull.size()) {
+                    return false;
                 }
             }
+
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 3-true");
+
+            return true;
         }
-
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 3-true");
-
-        return true;
+        return false;
     }
 
 
@@ -434,6 +405,12 @@ public class CompareAndMakeDecisionUser extends Thread {
                 + "---------------------------------------------------------------------------- 4");
 
             // period
+//        if (!StringHelper.giveData(TypeData.period.toString(), patternArray)
+//                .equalsIgnoreCase(TypeData.NULL.toString()) && !StringHelper.giveData(TypeData.period.toString()
+//                , patternArray).equals(StringHelper.giveData(TypeData.period.toString(), marketArray))) {
+//            return false
+//        }
+
         if (!stringsPattern[1].equalsIgnoreCase("null")
                 && !stringsMarket[1].equals(stringsPattern[1])) {
 
@@ -487,6 +464,24 @@ public class CompareAndMakeDecisionUser extends Thread {
                     + "---------------------------------------------------------------------------- 4-true");
 
         return true;
+    }
+
+
+
+    /// === INNER CLASS === ///
+
+
+
+    private class SortTheAlphabet implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+
+            int result = StringHelper.giveData("type", o1).compareTo(StringHelper.giveData("type", o2));
+
+            if (result > 0) return 1;
+            else if (result < 0) return -1;
+            else return 0;
+        }
     }
 }
 

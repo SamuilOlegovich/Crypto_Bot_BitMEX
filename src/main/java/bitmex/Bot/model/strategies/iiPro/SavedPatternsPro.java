@@ -30,7 +30,6 @@ public class SavedPatternsPro {
     public static SavedPatternsPro getInstance() {
         if (savedPatternsPro == null) {
             savedPatternsPro = new SavedPatternsPro();
-            Gasket.setSavedPatternsProClass(savedPatternsPro);
         }
         return savedPatternsPro;
     }

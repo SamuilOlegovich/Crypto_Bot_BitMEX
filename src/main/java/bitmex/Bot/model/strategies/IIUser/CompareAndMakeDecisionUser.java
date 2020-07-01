@@ -34,16 +34,14 @@ public class CompareAndMakeDecisionUser extends Thread {
 
     @Override
     public void run() {
-
         writeMessage(getDateTerminal() + " --- Сравниваю паттерны USER --- "
                 + this.getName());
 
         if (compareSheets()) {
-
             writeMessage(getDateTerminal() + " --- "
                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку");
 
-//            new MakeDealUser(marketList, patternsList.get(0));
+            new MakeDealUser(marketList, patternsList.get(0));
         }
 
         patternsList.clear();

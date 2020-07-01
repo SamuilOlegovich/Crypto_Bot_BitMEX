@@ -95,7 +95,7 @@ public class ListensLooksAndComparesPro {
             ReadAndSavePatternsPro.saveTemporarySavedPatterns(marketListInListString);
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Сравниваю рынок с ПАТТЕРНАМИ II");
+                    + "Сравниваю рынок с паттернами II Pro");
 
             // сравниваем оставшееся с патернами
             for (ArrayList<String> marketListString : marketListInListString) {
@@ -167,10 +167,6 @@ public class ListensLooksAndComparesPro {
                     arrayListString.addAll(arrayListOut);
                 }
             }
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- В листе для сравнения уже - "
-                    + marketListInListString.size() + " - II паттернов");
 
             marketListInListString.sort(sortSize);
             marketObjectInfoWorkingCopy.clear();

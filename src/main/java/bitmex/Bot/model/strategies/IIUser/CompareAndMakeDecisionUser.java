@@ -1,15 +1,16 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-
-import bitmex.Bot.model.StringHelper;
-import bitmex.Bot.model.enums.TypeData;
-import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.DatesTimes;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.HashSet;
+
+import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
+import static bitmex.Bot.model.StringHelper.giveData;
+import static bitmex.Bot.model.enums.TypeData.*;
+
+
 
 
 // сравниваю и принимаю решение
@@ -33,11 +34,16 @@ public class CompareAndMakeDecisionUser extends Thread {
 
     @Override
     public void run() {
+
+        writeMessage(getDateTerminal() + " --- Сравниваю паттерны USER --- "
+                + this.getName());
+
         if (compareSheets()) {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+
+            writeMessage(getDateTerminal() + " --- "
                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку");
 
-            new MakeDealUser(marketList, patternsList.get(0));
+//            new MakeDealUser(marketList, patternsList.get(0));
         }
 
         patternsList.clear();
@@ -69,21 +75,20 @@ public class CompareAndMakeDecisionUser extends Thread {
             }
         }
 
-        // сравниваем размеры BIAS листов, если их размер не равен, то авттерны не равны
+        // сравниваем размеры BIAS листов, если их размер не равен, то паттерны не равны
         // если их размер равен то проверяем равны ли в них направления
         if (marketBias.size() != patternBias.size()) {
             return false;
         } else if (marketBias.size() > 0) {
             for (String marketString : marketBias) {
-                if (!StringHelper.giveData(TypeData.BIAS.toString(),
-                        patternBias.get(marketBias.indexOf(marketString)))
-                        .equalsIgnoreCase(StringHelper.giveData(TypeData.BIAS.toString(), marketString))) {
+                if (!giveData(BIAS.toString(), patternBias.get(marketBias.indexOf(marketString)))
+                        .equalsIgnoreCase(giveData(BIAS.toString(), marketString))) {
                     return false;
                 }
             }
         }
 
-        maxBias = marketBias.size();
+        maxBias = marketBias.size() + 1;
 
         // формируем блоки строк находящиеся между BIAS и нулевой строкой
         for (int i = 1; i <= (maxBias > 0 ? maxBias : 1); i++) {
@@ -98,6 +103,10 @@ public class CompareAndMakeDecisionUser extends Thread {
                         && bias == i - 1) {
                     marketStrings.add(string);
                 }
+
+                if (bias == i) {
+                    break;
+                }
             }
 
             bias = 0;
@@ -111,6 +120,10 @@ public class CompareAndMakeDecisionUser extends Thread {
                         && bias == i - 1) {
                     patternStrings.add(string);
                 }
+
+                if (bias == i) {
+                    break;
+                }
             }
 
             // отправляем полученые блоки на дальнейшую проверку
@@ -119,7 +132,7 @@ public class CompareAndMakeDecisionUser extends Thread {
             }
         }
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+        writeMessage(getDateTerminal() + " --- "
                 + "---------------------------------------------------------------------------- 2-true");
 
         return true;
@@ -141,9 +154,9 @@ public class CompareAndMakeDecisionUser extends Thread {
             // тут приводим в порядок маркет блок, все лишнее из него убираем
             for (String patternString : patternStrings) {
                 for (String marketString : inMarketStrings) {
-                    if (StringHelper.giveData(TypeData.type.toString(), patternString)
-                            .equals(StringHelper.giveData(TypeData.type.toString(), marketString))) {
+                    if (giveData(type.toString(), patternString).equals(giveData(type.toString(), marketString))) {
                         readyMarketBlock.add(marketString);
+                        break;
                     }
                 }
             }
@@ -164,75 +177,121 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 
                 // начинаем перебирать блоки строк и сравнивать их друг с другом
-                for (String sMarket : readyMarketBlock) {
+                for (String stringMarket : readyMarketBlock) {
 
-                    String stringPattern = patternStrings.get(readyMarketBlock.indexOf(sMarket));
-
-                    String[] stringsPattern = stringPattern.split("===");
-                    String[] stringsMarket = sMarket.split("===");
+                    String stringPattern = patternStrings.get(readyMarketBlock.indexOf(stringMarket));
 
                     // price
-                    if (stringsMarket[7].equalsIgnoreCase("NULL")) {
+                    if (giveData(price.toString(), stringPattern).equalsIgnoreCase(NULL.toString())) {
                         // если прайс нул - то не важно в какой последовательности идут уровни,
                         // но цена у уровней в списке маркет должна быть ровна
 
-                        if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
+                        if (readyMarketBlock.indexOf(stringMarket) != readyMarketBlock.size() - 1) {
                             // если это не последняя строка в блоке то заглядываем на строку вперед
                             // и смотрим не ровны ли цены между ними
 
-                            String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(sMarket) + 1);
-                            String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(sMarket) + 1);
+                            String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(stringMarket) + 1);
+                            String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(stringMarket) + 1);
 
-                            String[] stringsPattern2 = patternPlusOne.split("===");
-                            String[] stringsMarket2 = marketPlusOne.split("===");
 
-                            // если цены на шаг вперед ровны добавляем в списки
-                            if (stringsPattern[7].equals(stringsPattern2[7])
-                                    && stringsMarket[7].equals(stringsMarket2[7])) {
+
+                            if (giveData(price.toString(), stringPattern)
+                                    .equals(giveData(price.toString(), patternPlusOne))
+
+                                    && !giveData(price.toString(), stringMarket)
+                                    .equals(giveData(price.toString(), marketPlusOne))) {
+                                return false;
+
+                                // если цены на шаг вперед ровны добавляем в списки
+                            } else if (giveData(price.toString(), stringPattern)
+                                    .equals(giveData(price.toString(), patternPlusOne))
+
+                                    && giveData(price.toString(), stringMarket)
+                                    .equals(giveData(price.toString(), marketPlusOne))) {
+
+                                patternComparePriceNull.add(giveData(type.toString(), patternPlusOne));
+                                patternComparePriceNull.add(giveData(type.toString(), stringPattern));
+                                marketComparePriceNull.add(giveData(type.toString(), marketPlusOne));
+                                marketComparePriceNull.add(giveData(type.toString(), stringMarket));
 
                                 patternComparePriceNullAll.add(patternPlusOne);
                                 patternComparePriceNullAll.add(stringPattern);
                                 marketComparePriceNullAll.add(marketPlusOne);
-                                marketComparePriceNullAll.add(sMarket);
+                                marketComparePriceNullAll.add(stringMarket);
 
-                                patternComparePriceNull.add(stringsPattern2[11]);
-                                patternComparePriceNull.add(stringsPattern[11]);
-                                marketComparePriceNull.add(stringsMarket2[11]);
-                                marketComparePriceNull.add(stringsMarket[11]);
+                                // если цены на шаг впереди не ровны то проверяем на предыдущий шаг и добавляем
+                            } else if (!giveData(price.toString(), stringPattern)
+                                    .equals(giveData(price.toString(), patternPlusOne))) {
 
+                                String marketMinusOne = readyMarketBlock.get(readyMarketBlock
+                                        .indexOf(stringMarket) - 1);
+                                String patternMinusOne = patternStrings.get(readyMarketBlock
+                                        .indexOf(stringMarket) - 1);
+
+                                if (giveData(price.toString(), stringPattern)
+                                        .equals(giveData(price.toString(), patternMinusOne))
+
+                                        && giveData(price.toString(), stringMarket)
+                                        .equals(giveData(price.toString(), marketMinusOne))) {
+
+
+                                    patternComparePriceNull.add(giveData(type.toString(), stringPattern));
+                                    marketComparePriceNull.add(giveData(type.toString(), stringMarket));
+
+                                    patternComparePriceNullAll.add(stringPattern);
+                                    marketComparePriceNullAll.add(stringMarket);
+                                } else {
+                                    return false;
+                                }
                             }
                         }
+                    }
+
+                    if (giveData(time.toString(), stringPattern).equalsIgnoreCase(NULL.toString())) {
                         // Data
-                    } else if (stringsMarket[5].equalsIgnoreCase("NULL")) {
                         // если время нулл - то у маркета должны быть в этом диапазоне все свечи на одной свече,
                         // а именно время ровно, направление свечи дир тоже должно быть ровно
 
-                        if (readyMarketBlock.indexOf(sMarket) != readyMarketBlock.size() - 1) {
+                        if (readyMarketBlock.indexOf(stringMarket) != readyMarketBlock.size() - 1) {
                             // если это не последняя строка в блоке то заглядываем на строку вперед
                             // и смотрим не ровны ли даты между ними
 
-                            String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(sMarket) + 1);
-                            String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(sMarket) + 1);
-
-                            String[] stringsPattern2 = patternPlusOne.split("===");
-                            String[] stringsMarket2 = marketPlusOne.split("===");
+                            String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(stringMarket) + 1);
+                            String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(stringMarket) + 1);
 
                             // если даты на шаг вперед ровны добавляем в списки
-                            if (stringsPattern[5].equals(stringsPattern2[5])
-                                    && stringsMarket[5].equals(stringsMarket2[5])
-                                    && stringsPattern[15].equals(stringsPattern2[15])
-                                    && stringsMarket[15].equals(stringsMarket2[15])
-                                    && stringsPattern[15].equals(stringsMarket[15])) {
+                            if (giveData(time.toString(), stringPattern)
+                                    .equals(giveData(time.toString(), patternPlusOne))
+
+                                    && giveData(time.toString(), stringMarket)
+                                    .equals(giveData(time.toString(), marketPlusOne))
+
+                                    && giveData(dir.toString(), stringPattern)
+                                    .equals(giveData(dir.toString(), patternPlusOne))
+
+                                    && giveData(dir.toString(), stringMarket)
+                                    .equals(giveData(dir.toString(), marketPlusOne))
+
+                                    && giveData(dir.toString(), stringPattern)
+                                    .equals(giveData(dir.toString(), stringMarket))) {
 
                                 patternCompareDataNullAll.add(patternPlusOne);
                                 patternCompareDataNullAll.add(stringPattern);
                                 marketCompareDataNullAll.add(marketPlusOne);
-                                marketCompareDataNullAll.add(sMarket);
+                                marketCompareDataNullAll.add(stringMarket);
 
-                                patternCompareDataNull.add(stringsPattern2[11]);
-                                patternCompareDataNull.add(stringsPattern[11]);
-                                marketCompareDataNull.add(stringsMarket2[11]);
-                                marketCompareDataNull.add(stringsMarket[11]);
+                                patternCompareDataNull.add(giveData(type.toString(), patternPlusOne));
+                                patternCompareDataNull.add(giveData(type.toString(), stringPattern));
+                                marketCompareDataNull.add(giveData(type.toString(), marketPlusOne));
+                                marketCompareDataNull.add(giveData(type.toString(), stringMarket));
+
+                            } else if (giveData(time.toString(), stringPattern)
+                                    .equals(giveData(time.toString(), patternPlusOne))
+
+                                    && !giveData(time.toString(), stringMarket)
+                                    .equals(giveData(time.toString(), marketPlusOne))) {
+
+                                return false;
                             }
                         }
                     }
@@ -240,61 +299,68 @@ public class CompareAndMakeDecisionUser extends Thread {
 
                 // в этой части мы удаляем из входящих списков паттернов и маркеров строки которые были перенесены
                 // в другие списки сравнений согласно указанным требованиям
-                ArrayList<Integer> deleteIndex = new ArrayList<>();
+                if (patternComparePriceNull.size() > 0
+                        && marketCompareDataNull.size() == marketComparePriceNull.size()
+                        && marketComparePriceNull.size() == patternCompareDataNull.size()
+                        && patternCompareDataNull.size() == patternComparePriceNull.size()) {
 
-                for (String stringNull : marketCompareDataNull) {
-                    for (String stringReady : readyMarketBlock) {
-                        if (StringHelper.giveData(TypeData.type.toString(), stringReady).equals(stringNull)) {
-                           deleteIndex.add(readyMarketBlock.indexOf(stringReady));
+                    ArrayList<Integer> deleteIndex = new ArrayList<>();
+
+                    for (String stringNull : marketCompareDataNull) {
+                        for (String stringReady : readyMarketBlock) {
+                            if (giveData(type.toString(), stringReady).equals(stringNull)) {
+                                deleteIndex.add(readyMarketBlock.indexOf(stringReady));
+                            }
                         }
+                    }
+
+                    for (String stringNull : marketComparePriceNull) {
+                        for (String stringReady : readyMarketBlock) {
+                            if (giveData(type.toString(), stringReady).equals(stringNull)) {
+                                deleteIndex.add(readyMarketBlock.indexOf(stringReady));
+                            }
+                        }
+                    }
+
+                    HashSet<Integer> deleteIndexHash = new HashSet<>(deleteIndex);
+                    deleteIndex.addAll(deleteIndexHash);
+                    Collections.reverse(deleteIndex);
+                    deleteIndexHash.clear();
+
+                    for (Integer index : deleteIndex) {
+                        readyMarketBlock.remove((int) index);
+                    }
+
+                    deleteIndex.clear();
+
+                    for (String stringNull : patternCompareDataNull) {
+                        for (String stringReady : patternStrings) {
+
+                            if (giveData(type.toString(), stringReady).equals(stringNull)) {
+                                deleteIndex.add(patternStrings.indexOf(stringReady));
+                            }
+                        }
+                    }
+
+                    for (String stringNull : patternComparePriceNull) {
+                        for (String stringReady : patternStrings) {
+
+                            if (giveData(type.toString(), stringReady).equals(stringNull)) {
+                                deleteIndex.add(patternStrings.indexOf(stringReady));
+                            }
+                        }
+                    }
+
+                    deleteIndexHash.addAll(deleteIndex);
+                    deleteIndex.addAll(deleteIndexHash);
+                    Collections.reverse(deleteIndex);
+                    deleteIndexHash.clear();
+
+                    for (Integer index : deleteIndex) {
+                        patternStrings.remove((int) index);
                     }
                 }
 
-                for (String stringNull : marketComparePriceNull) {
-                    for (String stringReady : readyMarketBlock) {
-                        if (StringHelper.giveData(TypeData.type.toString(), stringReady).equals(stringNull)) {
-                            deleteIndex.add(readyMarketBlock.indexOf(stringReady));
-                        }
-                    }
-                }
-
-                HashSet<Integer> deleteIndexHash = new HashSet<>(deleteIndex);
-                deleteIndex.addAll(deleteIndexHash);
-                Collections.reverse(deleteIndex);
-                deleteIndexHash.clear();
-
-                for (Integer index : deleteIndex) {
-                    readyMarketBlock.remove((int) index);
-                }
-
-                deleteIndex.clear();
-
-                for (String stringNull : patternCompareDataNull) {
-                    for (String stringReady : patternStrings) {
-
-                        if (StringHelper.giveData(TypeData.type.toString(), stringReady).equals(stringNull)) {
-                            deleteIndex.add(patternStrings.indexOf(stringReady));
-                        }
-                    }
-                }
-
-                for (String stringNull : patternComparePriceNull) {
-                    for (String stringReady : patternStrings) {
-
-                        if (StringHelper.giveData(TypeData.type.toString(), stringReady).equals(stringNull)) {
-                            deleteIndex.add(patternStrings.indexOf(stringReady));
-                        }
-                    }
-                }
-
-                deleteIndexHash.addAll(deleteIndex);
-                deleteIndex.addAll(deleteIndexHash);
-                Collections.reverse(deleteIndex);
-                deleteIndexHash.clear();
-
-                for (Integer index : deleteIndex) {
-                    patternStrings.remove((int) index);
-                }
 
                 // если блоки одинаковы и больше нуля сравниваем их
                 if (readyMarketBlock.size() == patternStrings.size() && patternStrings.size() > 0) {
@@ -387,7 +453,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                 }
             }
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+            writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 3-true");
 
             return true;
@@ -398,69 +464,61 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 
     private boolean finallyComparisonOnAllData(String marketArray, String patternArray) {
-        String[] stringsPattern = patternArray.split("===");
-        String[] stringsMarket = marketArray.split("===");
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+        writeMessage(getDateTerminal() + " --- "
                 + "---------------------------------------------------------------------------- 4");
 
             // period
-//        if (!StringHelper.giveData(TypeData.period.toString(), patternArray)
-//                .equalsIgnoreCase(TypeData.NULL.toString()) && !StringHelper.giveData(TypeData.period.toString()
-//                , patternArray).equals(StringHelper.giveData(TypeData.period.toString(), marketArray))) {
-//            return false
-//        }
+        if (!giveData(period.toString(), patternArray).equalsIgnoreCase(NULL.toString()) && !giveData(period.toString()
+                , patternArray).equals(giveData(period.toString(), marketArray))) {
 
-        if (!stringsPattern[1].equalsIgnoreCase("null")
-                && !stringsMarket[1].equals(stringsPattern[1])) {
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+            writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-1");
 
             return false;
         }
 
             // preview
-        if (!stringsPattern[3].equalsIgnoreCase("null")
-                && !stringsMarket[3].equals(stringsPattern[3])) {
+        if (!giveData(preview.toString(), patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(preview.toString(), patternArray).equals(giveData(preview.toString(), marketArray))) {
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+            writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-2");
 
             return false;
         }
 
             // type
-        if (!stringsPattern[11].equalsIgnoreCase("null")
-                && !stringsMarket[11].equals(stringsPattern[11])) {
+        if (!giveData(type.toString(), patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(type.toString(), patternArray).equals(giveData(type.toString(), marketArray))) {
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+            writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-3");
 
             return false;
         }
 
             // avg
-        if (!stringsPattern[13].equalsIgnoreCase("null")
-                && !stringsMarket[13].equals(stringsPattern[13])) {
+        if (!giveData(avg.toString(), patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(avg.toString(), patternArray).equals(giveData(avg.toString(), marketArray))) {
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+            writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-4");
 
             return false;
         }
 
             // dir
-        if (!stringsPattern[15].equalsIgnoreCase("null")
-                && !stringsMarket[15].equals(stringsPattern[15])) {
+        if (!giveData(dir.toString(), patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(dir.toString(), patternArray).equals(giveData(dir.toString(), marketArray))) {
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+            writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-5");
 
             return false;
         }
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+        writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-true");
 
         return true;
@@ -476,13 +534,118 @@ public class CompareAndMakeDecisionUser extends Thread {
         @Override
         public int compare(String o1, String o2) {
 
-            int result = StringHelper.giveData("type", o1).compareTo(StringHelper.giveData("type", o2));
+            int result = giveData("type", o1).compareTo(giveData("type", o2));
 
             if (result > 0) return 1;
             else if (result < 0) return -1;
             else return 0;
         }
     }
+
+
+
+
+    /// === TEST === ///
+
+
+
+    public static void main(String[] args) {
+        ArrayList<String> pattern = new ArrayList<>();
+        ArrayList<String> market = new ArrayList<>();
+
+        pattern.add("BUY===1===SELL===0===AVERAGE===3.28===MAX===5.0===SIZE===220===BLOCK===1===TYPE===OPEN_POS_BID_PLUS_SMALL===ID===1");
+
+        pattern.add("period===M5===preview===null===time===2020-06-11 11:38:00===price===9781.0===value===69770===type===OPEN_POS_BID_PLUS_SMALL===avg===null===dir===null===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        pattern.add("period===M5===preview===null===time===2020-06-11 11:38:00===price===9780.5===value===-1088603===type===ASK_SMALL===avg===null===dir===null===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        pattern.add("period===M5===preview===null===time===2020-06-11 11:38:00===price===9778.0===value===69770===type===VOLUME_SMALL===avg===null===dir===null===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        pattern.add("period===M5===preview===null===time===2020-06-11 11:38:00===price===9777.5===value===-1088603===type===DELTA_ASK_SMALL===avg===null===dir===null===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        pattern.add("period===M5===preview===null===time===2020-06-11 11:37:00===price===9775.0===value===514702===type===BID_SMALL===avg===null===dir===null===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+
+        pattern.add("BIAS===SELL===4.5===2020-06-11 11:40:00");
+
+        pattern.add("period===null===preview===null===time===2020-06-11 11:37:00===price===9776.0===value===514702===type===OPEN_POS_PLUS===avg===null===dir===null===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+        pattern.add("period===null===preview===null===time===2020-06-11 11:37:00===price===9775.0===value===514702===type===OPEN_POS_ASK_PLUS===avg===null===dir===null===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+        pattern.add("period===null===preview===null===time===NULL===price===NULL===value===280876===type===ASK===avg===null===dir===-1===open===9777.5===close===9776.0===high===9778.0===low===9776.0");
+        pattern.add("period===null===preview===null===time===NULL===price===NULL===value===-1633222===type===VOLUME===avg===null===dir===-1===open===9776.0===close===9774.0===high===9776.5===low===9774.0");
+        pattern.add("period===null===preview===null===time===NULL===price===NULL===value===592200===type===BID===avg===null===dir===-1===open===9774.5===close===9774.5===high===9774.5===low===9774.0");
+        pattern.add("period===null===preview===null===time===2020-06-11 11:38:00===price===9769.5===value===-1088603===type===DELTA_BID===avg===null===dir===-1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        pattern.add("period===null===preview===null===time===2020-06-11 11:38:00===price===9768.5===value===69770===type===OPEN_POS_BID_MINUS===avg===null===dir===-1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        pattern.add("period===NULL===preview===null===time===2020-06-11 11:37:00===price===9767.0===value===514702===type===DELTA_ZS_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+
+
+
+        market.add("BUY===1===SELL===0===AVERAGE===3.28===MAX===5.0===SIZE===220===BLOCK===1===TYPE===OPEN_POS_BID_PLUS_SMALL===ID===1");
+
+
+        market.add("period===M5===preview===1===time===2020-06-11 11:38:00===price===9781.0===value===69770===type===OPEN_POS_BID_PLUS_SMALL===avg===null===dir===1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.5===value===377855===type===OPEN_POS_PLUS_HL===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-585140===type===DELTA_BID_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-194061===type===OPEN_POS_MINUS_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===276839===type===OI_ZS_MIN_MINUS===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.0===value===-585140===type===DELTA_ZS_MIN_PLUS===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+
+
+        market.add("period===M5===preview===0===time===2020-06-11 11:38:00===price===9780.5===value===-1088603===type===ASK_SMALL===avg===null===dir===0===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        market.add("period===M5===preview===0===time===2020-06-11 11:38:00===price===9778.0===value===69770===type===VOLUME_SMALL===avg===null===dir===-1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        market.add("period===M5===preview===1===time===2020-06-11 11:38:00===price===9777.5===value===-1088603===type===DELTA_ASK_SMALL===avg===null===dir===1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        market.add("period===M5===preview===1===time===2020-06-11 11:37:00===price===9775.0===value===514702===type===BID_SMALL===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+
+
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.5===value===377855===type===OPEN_POS_PLUS_HL===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-585140===type===DELTA_BID_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-194061===type===OPEN_POS_MINUS_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===276839===type===OI_ZS_MIN_MINUS===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.0===value===-585140===type===DELTA_ZS_MIN_PLUS===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+
+
+
+        market.add("BIAS===SELL===4.5===2020-06-11 11:40:00");
+
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.5===value===377855===type===OPEN_POS_PLUS_HL===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-585140===type===DELTA_BID_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-194061===type===OPEN_POS_MINUS_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===276839===type===OI_ZS_MIN_MINUS===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.0===value===-585140===type===DELTA_ZS_MIN_PLUS===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+
+
+        market.add("period===M15===preview===1===time===2020-06-11 11:37:00===price===9776.0===value===514702===type===OPEN_POS_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+        market.add("period===M15===preview===0===time===2020-06-11 11:37:00===price===9775.0===value===514702===type===OPEN_POS_ASK_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+        market.add("period===M5===preview===1===time===2020-06-11 11:38:00===price===9774.0===value===592200===type===BID===avg===null===dir===-1===open===9774.5===close===9774.5===high===9774.5===low===9774.0");
+        market.add("period===M15===preview===0===time===2020-06-11 11:38:00===price===9774.0===value===-1633222===type===VOLUME===avg===null===dir===-1===open===9776.0===close===9774.0===high===9776.5===low===9774.0");
+        market.add("period===M15===preview===0===time===2020-06-11 11:38:00===price===9774.0===value===280876===type===ASK===avg===null===dir===-1===open===9777.5===close===9776.0===high===9778.0===low===9776.0");
+
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.5===value===377855===type===OPEN_POS_PLUS_HL===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-585140===type===DELTA_BID_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-194061===type===OPEN_POS_MINUS_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===276839===type===OI_ZS_MIN_MINUS===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.0===value===-585140===type===DELTA_ZS_MIN_PLUS===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+
+
+        market.add("period===M5===preview===0===time===2020-06-11 11:37:00===price===9769.5===value===-1088603===type===DELTA_BID===avg===null===dir===-1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        market.add("period===M5===preview===1===time===2020-06-11 11:36:00===price===9768.5===value===69770===type===OPEN_POS_BID_MINUS===avg===null===dir===-1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        market.add("period===M5===preview===0===time===2020-06-11 11:37:00===price===9767.0===value===514702===type===DELTA_ZS_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+
+
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.5===value===377855===type===OPEN_POS_PLUS_HL===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-585140===type===DELTA_BID_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-194061===type===OPEN_POS_MINUS_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===276839===type===OI_ZS_MIN_MINUS===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
+        market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.0===value===-585140===type===DELTA_ZS_MIN_PLUS===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
+
+
+
+
+        new CompareAndMakeDecisionUser(market, pattern);
+
+    }
+
+
+
+
+
+
+
 }
 
 

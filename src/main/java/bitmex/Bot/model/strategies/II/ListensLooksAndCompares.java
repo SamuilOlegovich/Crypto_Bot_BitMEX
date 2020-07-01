@@ -1,6 +1,8 @@
 package bitmex.Bot.model.strategies.II;
 
 
+import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -96,7 +98,7 @@ public class ListensLooksAndCompares {
             ReadAndSavePatterns.saveTemporarySavedPatterns(marketListInListString);
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Сравниваю рынок с ПАТТЕРНАМИ II");
+                    + "Сравниваю рынок с паттернами II");
 
             // сравниваем оставшееся с патернами
             for (ArrayList<String> marketListString : marketListInListString) {
@@ -168,10 +170,6 @@ public class ListensLooksAndCompares {
                     arrayListString.addAll(arrayListOut);
                 }
             }
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- В листе для сравнения уже - "
-                    + marketListInListString.size() + " - II паттернов");
 
             marketListInListString.sort(sortSize);
             marketObjectInfoWorkingCopy.clear();
@@ -551,12 +549,15 @@ public class ListensLooksAndCompares {
     private class SortPriceRemainingLevels implements Comparator<String> {
         @Override
         public int compare(String o1, String o2) {
-            String[] strings1 = o1.split(",");
-            String[] strings2 = o2.split(",");
+//            String[] strings1 = o1.split(",");
+//            String[] strings2 = o2.split(",");
+//
+//            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
+//                    .replaceAll("price: ", "")) - Double.parseDouble(strings1[3]
+//                    .replaceAll("\"", "").replaceAll("price: ", ""));
 
-            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
-                    .replaceAll("price: ", "")) - Double.parseDouble(strings1[3]
-                    .replaceAll("\"", "").replaceAll("price: ", ""));
+            double result = Double.parseDouble(StringHelper.giveData(TypeData.price.toString(), o2))
+                    - Double.parseDouble(StringHelper.giveData(TypeData.price.toString(), o1));
 
             if (result > 0) return 1;
             else if (result < 0) return -1;

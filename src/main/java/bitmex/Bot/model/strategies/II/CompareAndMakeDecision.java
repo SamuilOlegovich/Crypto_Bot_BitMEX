@@ -76,7 +76,7 @@ public class CompareAndMakeDecision extends Thread {
             }
         }
 
-        maxBias = marketBias.size();
+        maxBias = marketBias.size() + 1;
 
         // формируем блоки строк находящиеся между BIAS и нулевой строкой
         for (int i = 1; i <= (maxBias > 0 ? maxBias : 1); i++) {

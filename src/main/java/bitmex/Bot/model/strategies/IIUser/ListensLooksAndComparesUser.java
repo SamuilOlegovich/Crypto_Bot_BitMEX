@@ -105,7 +105,7 @@ public class ListensLooksAndComparesUser {
             // сравниваем с патернами
             if (patternsListsStrings.size() > 0) {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + "Сравниваю рынок с ПАТТЕРНАМИ USER");
+                        + "Сравниваю рынок с паттернами USER");
 
                 for (ArrayList<String> marketListString : marketListsStrings) {
                     for (ArrayList<String> patternListString : patternsListsStrings) {
@@ -187,10 +187,6 @@ public class ListensLooksAndComparesUser {
                     arrayListString.addAll(arrayListOut);
                 }
             }
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- В листе для сравнения уже - "
-                    + marketListsStrings.size() + " - паттернов USER");
 
             marketListsStrings.sort(sortSizeUser);
             listInfoIndicatorWorkingCopy.clear();

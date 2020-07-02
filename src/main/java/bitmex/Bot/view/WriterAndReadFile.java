@@ -13,17 +13,6 @@ public class WriterAndReadFile {
 
     public static void writerFile(String string, String path, boolean reWrite) {
         File file = new File(path);
-//        String out;
-//
-//        if (System.getProperty("os.name").startsWith("Windows")) {
-//            Charset chSet = StandardCharsets.UTF_16;
-////            Charset chSet = Charset.forName("UTF_16");
-//            ByteBuffer buf = chSet.encode(string);
-//            byte[] b = buf.array();
-//            out = new String(b);
-//        } else {
-//            out = string;
-//        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, reWrite))) {
             writer.write(string);
@@ -42,20 +31,7 @@ public class WriterAndReadFile {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while (reader.ready()) {
-//                String out;
-//
-//
-//                if (System.getProperty("os.name").startsWith("Windows")) {
-//                    String string = reader.readLine();
-//                    Charset chSet = StandardCharsets.UTF_16;
-////                    Charset chSet = Charset.forName("UTF_16");
-//                    ByteBuffer buf = chSet.encode(string);
-//                    byte[] b = buf.array();
-//                    out = new String(b);
-//                    arrayList.add(out);
-//                } else {
-                    arrayList.add(reader.readLine());
-//                }
+                arrayList.add(reader.readLine());
             }
         } catch (Exception e) {
             ConsoleHelper.writeMessage("Ошибка в ЧТЕНИИ файла - " + path);

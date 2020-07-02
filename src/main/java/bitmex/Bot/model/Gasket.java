@@ -35,10 +35,11 @@ public class Gasket {
     private static String numberOfHistoryBlocks = "5-4-3-2";        // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
+    private static boolean showLoadPatternsIIPro = false;           // показывать загрузку паттернов при запуске программы
     private static double takeForCollectingPatterns = 30;           // тейк для сбора и накопления паттернов
     private static int timeStopLiveForUserPatterns = 10;            // время за которое паттерн должен отработать
     private static boolean useStopLevelOrNotStop = true;            // отменять или не отменять сделку вышедшею за MIN уровни
-    private static boolean tradingPatternsIIPro = true;            // включить по патернам патернов
+    private static boolean tradingPatternsIIPro = true;             // включить по патернам патернов
     private static ExecutorCommandos executorCommandos;
     private static int numberOfCandlesForAnalysis = 60;             // количество свечей для анализа диапазона где мы находимся и стоит ли делать сделку
     private static volatile boolean oneSellFLAG = true;
@@ -1477,6 +1478,15 @@ public class Gasket {
 
     public static void setTradingPatternsIIPro(boolean tradingPatternsIIPro) {
         Gasket.tradingPatternsIIPro = tradingPatternsIIPro;
+    }
+
+
+    public static boolean isShowLoadPatternsIIPro() {
+        return showLoadPatternsIIPro;
+    }
+
+    public static void setShowLoadPatternsIIPro(boolean showLoadPatternsIIPro) {
+        Gasket.showLoadPatternsIIPro = showLoadPatternsIIPro;
     }
 }
 

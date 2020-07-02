@@ -1,15 +1,21 @@
 package bitmex.Bot.model.strategies.iiPro;
 
-import bitmex.Bot.model.strategies.II.MakeDeal;
-import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.DatesTimes;
 
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
+import static bitmex.Bot.model.StringHelper.giveData;
+import static bitmex.Bot.model.enums.TypeData.*;
+
 
 
 
 public class CompareAndMakeDecisionPro extends Thread {
+    private SortTheAlphabet sortTheAlphabet;
+
     private ArrayList<String> patternsList;
     private ArrayList<String> marketList;
 
@@ -18,6 +24,7 @@ public class CompareAndMakeDecisionPro extends Thread {
     public CompareAndMakeDecisionPro(ArrayList<String> marketList, ArrayList<String> patternsList) {
         this.patternsList = new ArrayList<>(patternsList);
         this.marketList = new ArrayList<>(marketList);
+        this.sortTheAlphabet = new SortTheAlphabet();
         start();
     }
 
@@ -26,9 +33,9 @@ public class CompareAndMakeDecisionPro extends Thread {
     @Override
     public void run() {
         if (compareSheets()) {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ II передаю на сделку");
-            new MakeDeal(patternsList.get(0));
+            writeMessage(getDateTerminal() + " --- "
+                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ II Pro передаю на сделку");
+            new MakeDealPro(patternsList.get(0));
         }
 
         patternsList.clear();
@@ -48,14 +55,14 @@ public class CompareAndMakeDecisionPro extends Thread {
 
         // находим все BIAS в маркет листе
         for (String string : marketList) {
-            if (string.startsWith("BIAS")) {
+            if (string.startsWith(BIAS.toString())) {
                 marketBias.add(string);
             }
         }
 
         // находим все BIAS в паттерн листе
         for (String string : patternsList) {
-            if (string.startsWith("BIAS")) {
+            if (string.startsWith(BIAS.toString())) {
                 patternBias.add(string);
             }
         }
@@ -66,10 +73,9 @@ public class CompareAndMakeDecisionPro extends Thread {
             return false;
         } else if (marketBias.size() > 0){
             for (String marketString : marketBias) {
-                String[] stringsPattern = patternBias.get(marketBias.indexOf(marketString)).split("===");
-                String[] stringsMarket = marketString.split("===");
+                String patternString = patternBias.get(marketBias.indexOf(marketString));
 
-                if (!stringsPattern[1].equalsIgnoreCase(stringsMarket[1])) {
+                if (!giveData(BIAS.toString(), marketString).equals(giveData(BIAS.toString(), patternString))) {
                     return false;
                 }
             }
@@ -82,12 +88,13 @@ public class CompareAndMakeDecisionPro extends Thread {
             int bias = 0;
 
             for (String string : marketList) {
-                if (string.startsWith("BIAS")) {
+                if (string.startsWith(BIAS.toString())) {
                     bias++;
                 }
 
-                if (!string.startsWith("0") && !string.startsWith("BIAS") && !string.startsWith("BUY")
-                        && bias == i - 1) {
+                if (!string.startsWith("0") && !string.startsWith(BIAS.toString())
+                        && !string.startsWith(NULL.toString())
+                        && !string.startsWith(BUY.toString()) && bias == i - 1) {
                     marketStrings.add(string);
                 }
             }
@@ -95,12 +102,13 @@ public class CompareAndMakeDecisionPro extends Thread {
             bias = 0;
 
             for (String string : patternsList) {
-                if (string.startsWith("BIAS")) {
+                if (string.startsWith(BIAS.toString())) {
                     bias++;
                 }
 
-                if (!string.startsWith("0") && !string.startsWith("BIAS") && !string.startsWith("BUY")
-                        && bias == i - 1) {
+                if (!string.startsWith("0") && !string.startsWith(BIAS.toString())
+                        && !string.startsWith(NULL.toString())
+                        && !string.startsWith(BUY.toString()) && bias == i - 1) {
                     patternStrings.add(string);
                 }
             }
@@ -133,39 +141,39 @@ public class CompareAndMakeDecisionPro extends Thread {
 
 
                 // начинаем перебирать блоки строк и сравнивать их друг с другом
-                for (String sMarket : marketStrings) {
-                    String[] stringsPattern = patternStrings.get(marketStrings.indexOf(sMarket)).split(",");
-                    String[] stringsMarket = sMarket.split(",");
+                for (String stringMarket : marketStrings) {
+                    String stringPattern = patternStrings.get(marketStrings.indexOf(stringMarket));
 
                     // если это не последняя строка в блоке то заглядываем на строку вперед
                     // и смотрим не ровны ли цены между ними
-                    if (marketStrings.indexOf(sMarket) != marketStrings.size() - 1) {
-                        String[] stringsMarket2 = marketStrings.get(marketStrings.indexOf(sMarket) + 1)
-                                .split(",");
-                        String[] stringsPattern2 = patternStrings.get(marketStrings.indexOf(sMarket) + 1)
-                                .split(",");
+                    if (marketStrings.indexOf(stringMarket) != marketStrings.size() - 1) {
+                        String stringPattern2 = patternStrings.get(marketStrings.indexOf(stringMarket) + 1);
+                        String stringMarket2 = marketStrings.get(marketStrings.indexOf(stringMarket) + 1);
 
                         // если цены на шаг вперед во всех блоках ровны до добавляем в списки
-                        if (stringsPattern[3].equals(stringsPattern2[3])
-                                && stringsMarket[3].equals(stringsMarket2[3])) {
+                        if (giveData(price.toString(), stringPattern)
+                                .equals(giveData(price.toString(), stringPattern2))
+                                && giveData(price.toString(), stringMarket)
+                                .equals(giveData(price.toString(), stringMarket2))) {
 
-                            patternCompare.add(stringsPattern2[5]);
-                            patternCompare.add(stringsPattern[5]);
-                            marketCompare.add(stringsMarket2[5]);
-                            marketCompare.add(stringsMarket[5]);
+                            patternCompare.add(giveData(type.toString(), stringPattern2));
+                            patternCompare.add(giveData(type.toString(), stringPattern));
+                            marketCompare.add(giveData(type.toString(), stringMarket2));
+                            marketCompare.add(giveData(type.toString(), stringMarket));
 
-                            marketCompareAll.add(marketStrings.get(marketStrings.indexOf(sMarket) + 1));
-                            patternCompareAll.add(patternStrings.get(marketStrings.indexOf(sMarket) + 1));
-                            patternCompareAll.add(patternStrings.get(marketStrings.indexOf(sMarket)));
-                            marketCompareAll.add(sMarket);
+                            patternCompareAll.add(stringPattern2);
+                            patternCompareAll.add(stringPattern);
+                            marketCompareAll.add(stringMarket2);
+                            marketCompareAll.add(stringMarket);
 
                             // если цены на шаг вперед во всех блоках не ровны до добавляем в списки
-                        } else if (!stringsPattern[3].equals(stringsPattern2[3])
-                                && !stringsMarket[3].equals(stringsMarket2[3])) {
+                        } else if (!giveData(price.toString(), stringPattern)
+                                .equals(giveData(price.toString(), stringPattern2))
+                                && !giveData(price.toString(), stringMarket)
+                                .equals(giveData(price.toString(), stringMarket2))) {
 
                             // отсылаем непосредственно строки на последнее сравнение между собой
-                            if (!finallyComparisonOnAllData(sMarket, patternStrings.get(marketStrings
-                                    .indexOf(sMarket)))) {
+                            if (!finallyComparisonOnAllData(stringMarket, stringPattern)) {
                                 return false;
                             }
 
@@ -173,8 +181,7 @@ public class CompareAndMakeDecisionPro extends Thread {
                             return false;
                         }
                     } else {
-                        if (!finallyComparisonOnAllData(sMarket, patternStrings.get(marketStrings
-                                .indexOf(sMarket)))) {
+                        if (!finallyComparisonOnAllData(stringMarket, stringPattern)) {
                             return false;
                         }
                     }
@@ -202,21 +209,13 @@ public class CompareAndMakeDecisionPro extends Thread {
                     hashSetPattern.clear();
                     hashSetMarket.clear();
 
-                    hashSetPattern.addAll(patternCompareAll);
-                    hashSetMarket.addAll(marketCompareAll);
+                    patternCompareAll.sort(sortTheAlphabet);
+                    marketCompareAll.sort(sortTheAlphabet);
 
-                    patternCompareAll.clear();
-                    marketCompareAll.clear();
-
-                    patternCompareAll.addAll(hashSetPattern);
-                    marketCompareAll.addAll(hashSetMarket);
-
-                    hashSetPattern.clear();
-                    hashSetMarket.clear();
 
                     for (String stringPattern : patternCompareAll) {
-                        if (!finallyComparisonOnAllData(marketCompareAll.get(patternCompareAll.indexOf(stringPattern)),
-                                stringPattern)) {
+                        if (!finallyComparisonOnAllData(marketCompareAll.get(patternCompareAll
+                                        .indexOf(stringPattern)), stringPattern)) {
                             return false;
                         }
                     }
@@ -228,49 +227,139 @@ public class CompareAndMakeDecisionPro extends Thread {
 
 
 
-    private boolean finallyComparisonOnAllData(String marketArray, String patternArray) {
-        String[] stringsPattern = patternArray.split(",");
-        String[] stringsMarket = marketArray.split(",");
+    private boolean finallyComparisonOnAllData(String marketString, String patternString) {
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4 II");
+        writeMessage(getDateTerminal() + " --- "
+                + "---------------------------------------------------------------------------- 4 ii Pro");
 
-        if (!stringsMarket[0].equals(stringsPattern[0])) {
+        if (!giveData(period.toString(), marketString).equals(giveData(period.toString(), patternString))) {
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-1 II");
+            writeMessage(getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-1 ii Pro");
 
 //            return false;
         }
 
-        if (!stringsMarket[1].equals(stringsPattern[1])) {
+        if (!giveData(preview.toString(), marketString).equals(giveData(preview.toString(), patternString))) {
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-2 II");
+            writeMessage(getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-2 ii Pro");
 
 //            return false;
         }
 
-        if (!stringsMarket[5].equals(stringsPattern[5])) {
+        if (!giveData(type.toString(), marketString).equals(giveData(type.toString(), patternString))) {
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-3 II");
-
-            return false;
-        }
-
-        if (!stringsMarket[7].equals(stringsPattern[7])) {
-
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-4 II");
+            writeMessage(getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-3 ii Pro");
 
             return false;
         }
 
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4-5 II");
+        if (!giveData(dir.toString(), marketString).equals(giveData(dir.toString(), patternString))) {
+
+            writeMessage(getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-4 ii Pro");
+
+            return false;
+        }
+
+        writeMessage(getDateTerminal() + " --- "
+                + "---------------------------------------------------------------------------- 4-5 ii Pro");
 
         return true;
+    }
+
+
+
+    /// === INNER CLASS === ///
+
+
+
+    private class SortTheAlphabet implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+            int result = giveData(type.toString(), o1).compareTo(giveData(type.toString(), o2));
+            return Integer.compare(result, 0);
+        }
+    }
+
+
+
+
+
+
+    /// === TEST === ///
+
+
+
+
+    public static void main(String[] args) {
+        ArrayList<String> pattern = new ArrayList<>();
+        ArrayList<String> market = new ArrayList<>();
+
+        pattern.add("BUY===0===SELL===1===AVERAGE===0.5===MAX===0.5===SIZE===281===ID===1014\n");
+        pattern.add("{\"period\": \"M5\",\"preview\": \"0\",\"time\": \"2020-06-26 07:06:00\",\"price\": \"9173.0\",\"value\": \"-968678\",\"type\": \"DELTA_ZS_MIN_PLUS\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9174.0\",\"close\": \"9172.0\",\"high\": \"9174.5\",\"low\": \"9171.5\"}");
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:06:00\",\"price\": \"9172.0\",\"value\": \"475050\",\"type\": \"DELTA_ASK_HL\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9174.0\",\"close\": \"9172.0\",\"high\": \"9174.5\",\"low\": \"9171.5\"}");
+        pattern.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"2020-06-26 07:05:00\",\"price\": \"9164.5\",\"value\": \"14551995\",\"type\": \"ASK\",\"avg\": \"6690397\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        pattern.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"2020-06-26 07:05:00\",\"price\": \"9164.5\",\"value\": \"29086551\",\"type\": \"BID\",\"avg\": \"7188808\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        pattern.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"2020-06-26 07:05:00\",\"price\": \"9164.5\",\"value\": \"43638546\",\"type\": \"VOLUME\",\"avg\": \"13931647\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        pattern.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"2020-06-26 07:05:00\",\"price\": \"9164.5\",\"value\": \"-14534556\",\"type\": \"DELTA_BID\",\"avg\": \"-4440315\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        pattern.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"2020-06-26 07:05:00\",\"price\": \"9163.5\",\"value\": \"-2268771\",\"type\": \"OPEN_POS_MINUS_HL\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"0\",\"time\": \"2020-06-26 07:05:00\",\"price\": \"9163.5\",\"value\": \"747470\",\"type\": \"OI_ZS_MIN_MINUS\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:09:00\",\"price\": \"9163.0\",\"value\": \"537027\",\"type\": \"OPEN_POS_ASK_PLUS\",\"avg\": \"384893\",\"dir\": \"1\",\"open\": \"9160.5\",\"close\": \"9165.0\",\"high\": \"9165.0\",\"low\": \"9160.0\"}" );
+        pattern.add("BIAS===SELL===-6.5===AVERAGE===2.9746835443038435===MAX===3.0===TIME===2020-06-26 07:15:00" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"0\",\"time\": \"2020-06-26 07:10:00\",\"price\": \"9165.0\",\"value\": \"678184\",\"type\": \"DELTA_ASK_HL\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9165.0\",\"close\": \"9167.5\",\"high\": \"9168.0\",\"low\": \"9164.5\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"0\",\"time\": \"2020-06-26 07:14:00\",\"price\": \"9156.5\",\"value\": \"-899524\",\"type\": \"DELTA_ZS_MIN_PLUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9154.5\",\"close\": \"9158.5\",\"high\": \"9158.5\",\"low\": \"9154.5\"}" );
+        pattern.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"2020-06-26 07:14:00\",\"price\": \"9156.5\",\"value\": \"1318763\",\"type\": \"DELTA_ZS_PLUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9154.5\",\"close\": \"9158.5\",\"high\": \"9158.5\",\"low\": \"9154.5\"}" );
+        pattern.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"2020-06-26 07:13:00\",\"price\": \"9155.0\",\"value\": \"2022265\",\"type\": \"OPEN_POS_ASK_PLUS\",\"avg\": \"755337\",\"dir\": \"1\",\"open\": \"9150.0\",\"close\": \"9155.0\",\"high\": \"9155.0\",\"low\": \"9149.0\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"0\",\"time\": \"2020-06-26 07:12:00\",\"price\": \"9140.5\",\"value\": \"116301\",\"type\": \"OI_ZS_MIN_MINUS\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9167.5\",\"close\": \"9150.0\",\"high\": \"9167.5\",\"low\": \"9134.0\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"0\",\"time\": \"2020-06-26 07:12:00\",\"price\": \"9140.5\",\"value\": \"-977403\",\"type\": \"OPEN_POS_BID_MINUS\",\"avg\": \"-426882\",\"dir\": \"-1\",\"open\": \"9167.5\",\"close\": \"9150.0\",\"high\": \"9167.5\",\"low\": \"9134.0\"}" );
+        pattern.add("{\"period\": \"M15\",\"preview\": \"1\",\"time\": \"2020-06-26 07:12:00\",\"price\": \"9140.5\",\"value\": \"-1268917\",\"type\": \"OI_ZS_MINUS\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9167.5\",\"close\": \"9150.0\",\"high\": \"9167.5\",\"low\": \"9134.0\"}" );
+        pattern.add("BIAS===SELL===-19.0===AVERAGE===4.452554744526424===MAX===8.5===TIME===2020-06-26 07:20:00" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:16:00\",\"price\": \"9164.5\",\"value\": \"-34587\",\"type\": \"OI_ZS_MINUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9161.0\",\"close\": \"9164.5\",\"high\": \"9167.0\",\"low\": \"9160.5\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:16:00\",\"price\": \"9164.5\",\"value\": \"1884288\",\"type\": \"OI_ZS_MIN_MINUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9161.0\",\"close\": \"9164.5\",\"high\": \"9167.0\",\"low\": \"9160.5\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:16:00\",\"price\": \"9163.5\",\"value\": \"-1299409\",\"type\": \"DELTA_ZS_MIN_PLUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9161.0\",\"close\": \"9164.5\",\"high\": \"9167.0\",\"low\": \"9160.5\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:19:00\",\"price\": \"9140.0\",\"value\": \"802311\",\"type\": \"OPEN_POS_BID_PLUS\",\"avg\": \"360048\",\"dir\": \"-1\",\"open\": \"9151.5\",\"close\": \"9139.5\",\"high\": \"9151.5\",\"low\": \"9139.0\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:19:00\",\"price\": \"9140.0\",\"value\": \"611306\",\"type\": \"OPEN_POS_PLUS_HL\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9151.5\",\"close\": \"9139.5\",\"high\": \"9151.5\",\"low\": \"9139.0\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:19:00\",\"price\": \"9140.0\",\"value\": \"1884288\",\"type\": \"OPEN_POS_PLUS\",\"avg\": \"607601\",\"dir\": \"-1\",\"open\": \"9151.5\",\"close\": \"9139.5\",\"high\": \"9151.5\",\"low\": \"9139.0\"}" );
+        pattern.add("{\"period\": \"M5\",\"preview\": \"1\",\"time\": \"2020-06-26 07:19:00\",\"price\": \"9139.0\",\"value\": \"-1299409\",\"type\": \"DELTA_BID_HL\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9151.5\",\"close\": \"9139.5\",\"high\": \"9151.5\",\"low\": \"9139.0\"}" );
+
+
+
+
+
+
+
+        market.add("BUY===0===SELL===1===AVERAGE===0.5===MAX===0.5===SIZE===281===ID===1014");
+        market.add("{\"period\": \"M15\",\"preview\": \"01\",\"time\": \"2020-06-16 07:06:00\",\"price\": \"19173.0\",\"value\": \"-968678\",\"type\": \"DELTA_ZS_MIN_PLUS\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9174.0\",\"close\": \"9172.0\",\"high\": \"9174.5\",\"low\": \"9171.5\"}");
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:06:00\",\"price\": \"19172.0\",\"value\": \"475050\",\"type\": \"DELTA_ASK_HL\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9174.0\",\"close\": \"9172.0\",\"high\": \"9174.5\",\"low\": \"9171.5\"}");
+        market.add("{\"period\": \"M115\",\"preview\": \"11\",\"time\": \"2020-06-16 07:05:00\",\"price\": \"19164.5\",\"value\": \"14551995\",\"type\": \"ASK\",\"avg\": \"6690397\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        market.add("{\"period\": \"M115\",\"preview\": \"11\",\"time\": \"2020-06-16 07:05:00\",\"price\": \"19164.5\",\"value\": \"29086551\",\"type\": \"BID\",\"avg\": \"7188808\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        market.add("{\"period\": \"M115\",\"preview\": \"11\",\"time\": \"2020-06-16 07:05:00\",\"price\": \"19164.5\",\"value\": \"43638546\",\"type\": \"VOLUME\",\"avg\": \"13931647\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        market.add("{\"period\": \"M115\",\"preview\": \"11\",\"time\": \"2020-06-16 07:05:00\",\"price\": \"19164.5\",\"value\": \"-14534556\",\"type\": \"DELTA_BID\",\"avg\": \"-4440315\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        market.add("{\"period\": \"M115\",\"preview\": \"11\",\"time\": \"2020-06-16 07:05:00\",\"price\": \"19163.5\",\"value\": \"-2268771\",\"type\": \"OPEN_POS_MINUS_HL\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"01\",\"time\": \"2020-06-16 07:05:00\",\"price\": \"19163.5\",\"value\": \"747470\",\"type\": \"OI_ZS_MIN_MINUS\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9178.5\",\"close\": \"9174.0\",\"high\": \"9179.0\",\"low\": \"9150.0\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:09:00\",\"price\": \"19163.0\",\"value\": \"537027\",\"type\": \"OPEN_POS_ASK_PLUS\",\"avg\": \"384893\",\"dir\": \"1\",\"open\": \"9160.5\",\"close\": \"9165.0\",\"high\": \"9165.0\",\"low\": \"9160.0\"}" );
+        market.add("BIAS===SELL===-6.5===AVERAGE===2.9746835443038435===MAX===3.0===TIME===2020-06-26 07:19:00" );
+        market.add("{\"period\": \"M15\",\"preview\": \"01\",\"time\": \"2020-06-16 07:10:00\",\"price\": \"19165.0\",\"value\": \"678184\",\"type\": \"DELTA_ASK_HL\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9165.0\",\"close\": \"9167.5\",\"high\": \"9168.0\",\"low\": \"9164.5\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"01\",\"time\": \"2020-06-16 07:14:00\",\"price\": \"19156.5\",\"value\": \"-899524\",\"type\": \"DELTA_ZS_MIN_PLUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9154.5\",\"close\": \"9158.5\",\"high\": \"9158.5\",\"low\": \"9154.5\"}" );
+        market.add("{\"period\": \"M115\",\"preview\": \"11\",\"time\": \"2020-06-16 07:14:00\",\"price\": \"19156.5\",\"value\": \"1318763\",\"type\": \"DELTA_ZS_PLUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9154.5\",\"close\": \"9158.5\",\"high\": \"9158.5\",\"low\": \"9154.5\"}" );
+        market.add("{\"period\": \"M115\",\"preview\": \"11\",\"time\": \"2020-06-16 07:13:00\",\"price\": \"19155.0\",\"value\": \"2022265\",\"type\": \"OPEN_POS_ASK_PLUS\",\"avg\": \"755337\",\"dir\": \"1\",\"open\": \"9150.0\",\"close\": \"9155.0\",\"high\": \"9155.0\",\"low\": \"9149.0\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"01\",\"time\": \"2020-06-16 07:12:00\",\"price\": \"19140.5\",\"value\": \"116301\",\"type\": \"OI_ZS_MIN_MINUS\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9167.5\",\"close\": \"9150.0\",\"high\": \"9167.5\",\"low\": \"9134.0\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"01\",\"time\": \"2020-06-16 07:12:00\",\"price\": \"19140.5\",\"value\": \"-977403\",\"type\": \"OPEN_POS_BID_MINUS\",\"avg\": \"-426882\",\"dir\": \"-1\",\"open\": \"9167.5\",\"close\": \"9150.0\",\"high\": \"9167.5\",\"low\": \"9134.0\"}" );
+        market.add("{\"period\": \"M115\",\"preview\": \"11\",\"time\": \"2020-06-16 07:12:00\",\"price\": \"19140.5\",\"value\": \"-1268917\",\"type\": \"OI_ZS_MINUS\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9167.5\",\"close\": \"9150.0\",\"high\": \"9167.5\",\"low\": \"9134.0\"}" );
+        market.add("BIAS===SELL===-19.0===AVERAGE===4.452554744526424===MAX===8.5===TIME===2020-06-26 07:79:00" );
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:16:00\",\"price\": \"19164.5\",\"value\": \"-34587\",\"type\": \"OI_ZS_MINUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9161.0\",\"close\": \"9164.5\",\"high\": \"9167.0\",\"low\": \"9160.5\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:16:00\",\"price\": \"19164.5\",\"value\": \"1884288\",\"type\": \"OI_ZS_MIN_MINUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9161.0\",\"close\": \"9164.5\",\"high\": \"9167.0\",\"low\": \"9160.5\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:16:00\",\"price\": \"19163.5\",\"value\": \"-1299409\",\"type\": \"DELTA_ZS_MIN_PLUS\",\"avg\": \"0\",\"dir\": \"1\",\"open\": \"9161.0\",\"close\": \"9164.5\",\"high\": \"9167.0\",\"low\": \"9160.5\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:19:00\",\"price\": \"19140.0\",\"value\": \"802311\",\"type\": \"OPEN_POS_BID_PLUS\",\"avg\": \"360048\",\"dir\": \"-1\",\"open\": \"9151.5\",\"close\": \"9139.5\",\"high\": \"9151.5\",\"low\": \"9139.0\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:19:00\",\"price\": \"19140.0\",\"value\": \"611306\",\"type\": \"OPEN_POS_PLUS_HL\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9151.5\",\"close\": \"9139.5\",\"high\": \"9151.5\",\"low\": \"9139.0\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:19:00\",\"price\": \"19140.0\",\"value\": \"1884288\",\"type\": \"OPEN_POS_PLUS\",\"avg\": \"607601\",\"dir\": \"-1\",\"open\": \"9151.5\",\"close\": \"9139.5\",\"high\": \"9151.5\",\"low\": \"9139.0\"}" );
+        market.add("{\"period\": \"M15\",\"preview\": \"11\",\"time\": \"2020-06-16 07:19:00\",\"price\": \"19139.0\",\"value\": \"-1299409\",\"type\": \"DELTA_BID_HL\",\"avg\": \"0\",\"dir\": \"-1\",\"open\": \"9151.5\",\"close\": \"9139.5\",\"high\": \"9151.5\",\"low\": \"9139.0\"}" );
+
+
+        new CompareAndMakeDecisionPro(market, pattern);
     }
 }
 

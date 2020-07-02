@@ -1,6 +1,5 @@
 package bitmex.Bot.controller;
 
-import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
 import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
 import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
@@ -13,6 +12,7 @@ import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.serverAndParser.Server;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 import java.util.List;

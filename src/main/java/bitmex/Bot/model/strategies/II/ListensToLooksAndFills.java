@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.II;
 
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -8,6 +9,7 @@ import bitmex.Bot.model.Gasket;
 import java.util.*;
 
 
+import static bitmex.Bot.model.enums.TypeData.*;
 import static java.lang.Double.NaN;
 
 
@@ -98,11 +100,12 @@ public class ListensToLooksAndFills {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                         + " --- Добавляю лист в II ПАТТЕРН Бай");
 
-            String stringZero = "BUY===1===SELL===0===AVERAGE===" + getAverageDeviations(true)
-                        + "===MAX===" + getMaxDeviations(true)
-                        + "===SIZE===" + (listStringPriceBuy.size() + 1)
-                        + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                        + "\n";
+            String stringZero = BUY.toString() + "===1===" + SELL.toString() + "===0===" + AVERAGE.toString()
+                    + "===" + getAverageDeviations(true)
+                    + "===" + MAX.toString() + "===" + getMaxDeviations(true)
+                    + "===" + SIZE.toString() + "===" + (listStringPriceBuy.size() + 1)
+                    + "===" + ID.toString() + "===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "\n";
 
             listStringPriceBuy.add(0, stringZero);
             savedPatterns.addListsPricePatterns(listStringPriceBuy);
@@ -111,9 +114,10 @@ public class ListensToLooksAndFills {
         } else {
             // добавляем строку данных о поведении цены в промежутке между поступлениями уровней
             if (!oneStartFlag && flag) {
-                String stringBias = "BIAS===" + getBias(true) + "===AVERAGE===" + getAverageDeviations(true)
-                        + "===MAX===" + getMaxDeviations(true)
-                        + "===TIME===" + DatesTimes.getDateTerminal()
+                String stringBias = BIAS.toString() + "===" + getBias(true) + "===" + AVERAGE.toString()
+                        + "===" + getAverageDeviations(true)
+                        + "===" + MAX.toString() + "===" + getMaxDeviations(true)
+                        + "===" + TIME.toString() + "===" + DatesTimes.getDateTerminal()
                         + "\n";
                 listStringPriceBuy.add(stringBias);
             }
@@ -137,20 +141,22 @@ public class ListensToLooksAndFills {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                         + " --- Добавляю лист в II ПАТТЕРН Селл");
 
-            String stringZero = "BUY===0===SELL===1===AVERAGE===" + getAverageDeviations(false)
-                        + "===MAX===" + getMaxDeviations(false)
-                        + "===SIZE===" + (listStringPriceSell.size() + 1)
-                        + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
-                        + "\n";
+            String stringZero = BUY.toString() + "===0===" + SELL.toString() + "===1===" + AVERAGE.toString()
+                    + "===" + getAverageDeviations(false)
+                    + "===" + MAX.toString() + "===" + getMaxDeviations(false)
+                    + "===" + SIZE.toString() + "===" + (listStringPriceSell.size() + 1)
+                    + "===" + ID.toString() + "===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "\n";
 
             listStringPriceSell.add(0, stringZero);
             savedPatterns.addListsPricePatterns(listStringPriceSell);
             listStringPriceSell.clear();
         } else {
             if (!oneStartFlag && flag) {
-                String stringBias = "BIAS===" + getBias(false) + "===AVERAGE===" + getAverageDeviations(false)
-                        + "===MAX===" + getMaxDeviations(false)
-                        + "===TIME===" + DatesTimes.getDateTerminal()
+                String stringBias = BIAS.toString() + "===" + getBias(false) + "===" + AVERAGE.toString()
+                        + "===" + getAverageDeviations(false)
+                        + "===" + MAX.toString() + "===" + getMaxDeviations(false)
+                        + "===" + TIME.toString() + "===" + DatesTimes.getDateTerminal()
                         + "\n";
                 listStringPriceSell.add(stringBias);
                 countPriseSell.clearList();
@@ -206,7 +212,7 @@ public class ListensToLooksAndFills {
 
             // находим количество BIAS
             for (String s : inArrayList) {
-                if (s.startsWith("BIAS")) count++;
+                if (s.startsWith(BIAS.toString())) count++;
             }
 
             // согласно количеству BIAS находим максимальный нужный нам промежуток времени
@@ -298,8 +304,8 @@ public class ListensToLooksAndFills {
 
             for (String patternString : inEdit) {
 
-                if (!patternString.startsWith("0")
-                        && !patternString.startsWith("BUY") && !patternString.startsWith("BIAS")) {
+                if (!patternString.startsWith(NULL.toString())
+                        && !patternString.startsWith(BUY.toString()) && !patternString.startsWith(BIAS.toString())) {
                     String[] stringsPattern = patternString.split(",");
 
                     if (DatesTimes.getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
@@ -310,14 +316,14 @@ public class ListensToLooksAndFills {
             }
 
             if (index > 0) {
-                if (!inEdit.get(index).startsWith("BIAS")) {
+                if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toString());
                 } else {
                     String[] stringBias = inEdit.get(index).split("===");
                     long time = 0;
 
                     for (int i = 0; i < stringBias.length; i++) {
-                        if (stringBias[i].equalsIgnoreCase("TIME")) {
+                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
                             time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
                             break;
                         }
@@ -334,9 +340,9 @@ public class ListensToLooksAndFills {
 
         // сортируем по новому
         for (String string : inEdit) {
-            if (string.startsWith("BUY")) {
+            if (string.startsWith(BUY.toString())) {
                 out.add(string);
-            } else if (string.startsWith("BIAS")) {
+            } else if (string.startsWith(BIAS.toString())) {
                 intermediary.sort(sortPriceRemainingLevels);
                 intermediary.add(string);
                 out.addAll(intermediary);
@@ -479,11 +485,11 @@ public class ListensToLooksAndFills {
         }
 
         if (bias > 0) {
-            stringOut = "BUY===" + bias;
+            stringOut = BUY.toString() + "===" + bias;
         } else if (bias < 0) {
-            stringOut = "SELL===" + bias;
+            stringOut = SELL.toString() + "===" + bias;
         } else {
-            stringOut = "NULL===0";
+            stringOut = NULL.toString() + "===0";
         }
         return stringOut;
     }

@@ -15,5 +15,14 @@ public enum TypeData {
     low,
     NULL,
     BIAS,
-    BUY;
+    BUY,
+    SELL,
+    AVERAGE,
+    MAX,
+    SIZE,
+    ID,
+    START,
+    END,
+    NEXT,
+    TIME;
 }

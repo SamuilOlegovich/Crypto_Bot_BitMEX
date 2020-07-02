@@ -44,12 +44,8 @@ public class Test_2 {
     private static class SortTheAlphabet implements Comparator<String> {
         @Override
         public int compare(String o1, String o2) {
-
             int result = o1.compareTo(o2);
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
+            return Integer.compare(result, 0);
         }
     }
 }

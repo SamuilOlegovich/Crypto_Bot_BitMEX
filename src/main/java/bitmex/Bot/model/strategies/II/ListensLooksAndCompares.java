@@ -1,9 +1,9 @@
 package bitmex.Bot.model.strategies.II;
 
 
-import bitmex.Bot.model.StringHelper;
-import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.enums.TypeData;
+import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -11,6 +11,10 @@ import bitmex.Bot.model.Gasket;
 
 import java.util.*;
 
+import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.model.StringHelper.giveData;
+import static bitmex.Bot.model.DatesTimes.getDate;
+import static bitmex.Bot.model.enums.TypeData.*;
 
 
 
@@ -36,7 +40,7 @@ public class ListensLooksAndCompares {
 
 
     private ListensLooksAndCompares() {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+        ConsoleHelper.writeMessage(getDateTerminal() + " --- "
                 + "Класс Listens Looks And Compares II начал работать");
 
         this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
@@ -97,7 +101,7 @@ public class ListensLooksAndCompares {
             // сохраняю те патерны которые еще актуальны на данный момент
             ReadAndSavePatterns.saveTemporarySavedPatterns(marketListInListString);
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+            ConsoleHelper.writeMessage(getDateTerminal() + " --- "
                     + "Сравниваю рынок с паттернами II");
 
             // сравниваем оставшееся с патернами
@@ -151,13 +155,13 @@ public class ListensLooksAndCompares {
         if (b) {
             if (marketListInListString.size() > 0) {
                 for (ArrayList<String> arrayListString : marketListInListString) {
-                    String stringBias = "BIAS===" + getBias() + "===" + DatesTimes.getDateTerminal() + "\n";
+                    String stringBias = BIAS.toString() + "===" + getBias() + "===" + getDateTerminal() + "\n";
                     arrayListString.add(stringBias);
                 }
             }
 
             ArrayList<String> arrayListOut = new ArrayList<>();
-            arrayListOut.add("0===" + DatesTimes.getDateTerminal() + "\n");
+            arrayListOut.add(NULL.toString() + "===" + getDateTerminal() + "\n");
             marketListInListString.add(arrayListOut);
             priceStart = Gasket.getBitmexQuote().getBidPrice();
 
@@ -197,7 +201,7 @@ public class ListensLooksAndCompares {
 
                 // находим количество BIAS
             for (String s : patternListIn) {
-                if (s.startsWith("BIAS")) count++;
+                if (s.startsWith(BIAS.toString())) count++;
             }
 
                 // согласно количеству BIAS находим максимальный нужный нам промежуток времени
@@ -224,7 +228,8 @@ public class ListensLooksAndCompares {
                         if (stringsMarket.length == stringsPattern.length && stringsMarket.length > 2) {
 
                                 // если такая строка уже есть то заменяем ее на более новую
-                            if (stringsMarket[2].equals(stringsPattern[2]) && stringsMarket[3].equals(stringsPattern[3])
+                            if (stringsMarket[2].equals(stringsPattern[2])
+                                    && stringsMarket[3].equals(stringsPattern[3])
                                     && stringsMarket[5].equals(stringsPattern[5])
                                     && stringsMarket[7].equals(stringsPattern[7])) {
 
@@ -279,7 +284,7 @@ public class ListensLooksAndCompares {
                 int bias = 0;
 
                 // если строка не ровна нулевой строке или промежуточной
-                if (!stringOne.startsWith("0") && !stringOne.startsWith("BIAS")) {
+                if (!stringOne.startsWith(BIAS.toString()) && !stringOne.startsWith(NULL.toString())) {
                     // разбиваем строку на запчасти
                     String[] oneStrings = stringOne.split(",");
                     String[] twoStrings;
@@ -288,7 +293,7 @@ public class ListensLooksAndCompares {
                     for (int i = inArrayList.indexOf(stringOne) + 1; i < inArrayList.size(); i++) {
                         String stringTwo = inArrayList.get(i);
 
-                        bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
+                        bias = bias + (stringTwo.startsWith(BIAS.toString()) ? 1 : 0);
 
                         if (bias == 1) {
                             // если мы сюда заши то значит мы перешли в нужны нам блок
@@ -416,11 +421,11 @@ public class ListensLooksAndCompares {
 
             for (String patternString : inEdit) {
 
-                if (!patternString.startsWith("0")
-                        && !patternString.startsWith("BUY") && !patternString.startsWith("BIAS")) {
+                if (!patternString.startsWith(NULL.toString())
+                        && !patternString.startsWith(BUY.toString()) && !patternString.startsWith(BIAS.toString())) {
                     String[] stringsPattern = patternString.split(",");
 
-                    if (DatesTimes.getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
+                    if (getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
                         break;
                     }
@@ -428,15 +433,15 @@ public class ListensLooksAndCompares {
             }
 
             if (index > 0) {
-                if (!inEdit.get(index).startsWith("BIAS")) {
+                if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toString());
                 } else {
                     String[] stringBias = inEdit.get(index).split("===");
                     long time = 0;
 
                     for (int i = 0; i < stringBias.length; i++) {
-                        if (stringBias[i].equalsIgnoreCase("TIME")) {
-                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
+                            time = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
                             break;
                         }
                     }
@@ -452,9 +457,9 @@ public class ListensLooksAndCompares {
 
         // сортируем по новому
         for (String string : inEdit) {
-            if (string.startsWith("0")) {
+            if (string.startsWith(NULL.toString())) {
                 out.add(string);
-            } else if (string.startsWith("BIAS")) {
+            } else if (string.startsWith(BIAS.toString())) {
                 intermediary.sort(sortPriceRemainingLevels);
                 intermediary.add(string);
                 out.addAll(intermediary);
@@ -556,8 +561,8 @@ public class ListensLooksAndCompares {
 //                    .replaceAll("price: ", "")) - Double.parseDouble(strings1[3]
 //                    .replaceAll("\"", "").replaceAll("price: ", ""));
 
-            double result = Double.parseDouble(StringHelper.giveData(TypeData.price.toString(), o2))
-                    - Double.parseDouble(StringHelper.giveData(TypeData.price.toString(), o1));
+            double result = Double.parseDouble(giveData(price.toString(), o2))
+                    - Double.parseDouble(giveData(price.toString(), o1));
 
             if (result > 0) return 1;
             else if (result < 0) return -1;

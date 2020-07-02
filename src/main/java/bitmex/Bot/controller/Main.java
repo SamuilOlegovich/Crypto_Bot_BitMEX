@@ -24,6 +24,9 @@ public class Main {
 
         FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
 
+        ExecutorCommandos executorCommandos = new ExecutorCommandos();
+        ParserSetting parserSetting = new ParserSetting(executorCommandos);
+
         SavedPatternsUser savedPatternsUser = SavedPatternsUser.getInstance();
         SavedPatternsPro savedPatternsPro = SavedPatternsPro.getInstance();
         SavedPatterns savedPatterns = SavedPatterns.getInstance();
@@ -36,8 +39,5 @@ public class Main {
 
         Gasket.setSavedPatternsClass(savedPatterns);
         ReadAndSavePatterns.createSavedPatterns();
-
-        ExecutorCommandos executorCommandos = new ExecutorCommandos();
-        ParserSetting parserSetting = new ParserSetting(executorCommandos);
     }
 }

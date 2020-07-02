@@ -8,7 +8,6 @@ public class StringHelper {
 
 
     public static synchronized String giveData(String key, String in) {
-        String out = null;
 
         if (in.startsWith("{") && in.endsWith("}")) {
             String string = in.replaceAll("\\{", "").replaceAll("}", "")
@@ -18,19 +17,17 @@ public class StringHelper {
 
             for (String s : strings) {
                 if (s.startsWith(key)) {
-                    out = s.replaceAll(key, "").trim();
-                    break;
+                    return s.replaceAll(key, "").trim();
                 }
             }
         } else {
             String[] strings = in.split("===");
             for (int i = 0; i < strings.length; i++) {
                 if (strings[i].equalsIgnoreCase(key)) {
-                    out = strings[i + 1];
-                    break;
+                    return strings[i + 1];
                 }
             }
         }
-        return out;
+        return null;
     }
 }

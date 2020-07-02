@@ -1,8 +1,11 @@
 package bitmex.Bot.controller;
 
-import bitmex.Bot.model.DatesTimes;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
+
+import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
+import static bitmex.Bot.model.Gasket.*;
+
 
 
 public class ExecutorCommandos {
@@ -10,7 +13,7 @@ public class ExecutorCommandos {
 
 
     public ExecutorCommandos() {
-        Gasket.setExecutorCommandos(this);
+        setExecutorCommandos(this);
     }
 
 
@@ -23,7 +26,7 @@ public class ExecutorCommandos {
             if (string.equalsIgnoreCase("--- В ДАННЫЙ МОМЕНТ ПРОГРАММА ИМЕЕТ ТАКИЕ НАСТРОЙКИ ---")) {
                 return;
             }
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+            writeMessage(getDateTerminal()
                     + " --- Вы допустили ошибку, повторите ввод === " + string + "\n");
             return;
         } else {
@@ -33,269 +36,275 @@ public class ExecutorCommandos {
         try {
             switch (strings[0]) {
                 case "activeNumberOfCandlesForAnalysis" :
-                    Gasket.setActiveNumberOfCandlesForAnalysis(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("activeNumberOfCandlesForAnalysis === "
-                                + Gasket.isActiveNumberOfCandlesForAnalysis() + "\n");
+                    setActiveNumberOfCandlesForAnalysis(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("activeNumberOfCandlesForAnalysis === "
+                                + isActiveNumberOfCandlesForAnalysis() + "\n");
                     break;
                 case "useStopLevelOrNotStop" :
-                    Gasket.setUseStopLevelOrNotStop(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("useStopLevelOrNotStop === "
-                                + Gasket.isUseStopLevelOrNotStop() + "\n");
+                    setUseStopLevelOrNotStop(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("useStopLevelOrNotStop === "
+                                + isUseStopLevelOrNotStop() + "\n");
                     break;
                 case "gameAllDirection":
-                    Gasket.setGameAllDirection(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("gameAllDirection === "
-                                + Gasket.isGameAllDirection() + "\n");
+                    setGameAllDirection(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("gameAllDirection === "
+                                + isGameAllDirection() + "\n");
                     break;
                 case "useRealOrNotReal":
-                    Gasket.setUseRealOrNotReal(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("useRealOrNotReal === "
-                                + Gasket.isUseRealOrNotReal() + "\n");
+                    setUseRealOrNotReal(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("useRealOrNotReal === "
+                                + isUseRealOrNotReal() + "\n");
                     break;
                 case "showLoadPatternsUser" :
-                    Gasket.setShowLoadPatternsUser(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("showLoadPatternsUser === "
-                            + Gasket.isShowLoadPatternsUser() + "\n");
+                    setShowLoadPatternsUser(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("showLoadPatternsUser === "
+                            + isShowLoadPatternsUser() + "\n");
                     break;
                 case "showLoadPatternsII" :
-                    Gasket.setShowLoadPatternsII(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("showLoadPatternsUser === "
-                            + Gasket.isShowLoadPatternsII() + "\n");
+                    setShowLoadPatternsII(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("showLoadPatternsII === "
+                            + isShowLoadPatternsII() + "\n");
+                    break;
+
+                    case "showLoadPatternsIIPro" :
+                    setShowLoadPatternsIIPro(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("showLoadPatternsIIPro === "
+                            + isShowLoadPatternsIIPro() + "\n");
                     break;
                 case "maxAndMinAverage" :
-                    Gasket.setMaxAndMinAverage(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("maxAndMinAverage === "
-                                + Gasket.isMaxAndMinAverage() + "\n");
+                    setMaxAndMinAverage(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("maxAndMinAverage === "
+                                + isMaxAndMinAverage() + "\n");
                     break;
                 case "tradingPatterns" :
                     Gasket.setTradingPatternsII(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("tradingPatterns === "
+                        writeMessage("tradingPatterns === "
                                 + Gasket.isTradingPatternsII() + "\n");
                     break;
                 case "tradingPatternsUser" :
                     Gasket.setTradingPatternsUser(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("tradingPatterns === "
+                        writeMessage("tradingPatterns === "
                                 + Gasket.isTradingPatternsUser() + "\n");
                     break;
                 case "savedPatternsIIPro" :
                     Gasket.setSavedPatternsIIPro(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("savedPatternsIIPro === "
+                    writeMessage("savedPatternsIIPro === "
                             + Gasket.isSavedPatternsIIPro() + "\n");
                     break;
                 case "timeStopLiveForUserPatterns" :
                     Gasket.setTimeStopLiveForUserPatterns(Integer.parseInt(strings[1]));
-                    ConsoleHelper.writeMessage("timeStopLiveForUserPatterns === " +
+                    writeMessage("timeStopLiveForUserPatterns === " +
                             + Gasket.getTimeStopLiveForUserPatterns());
                     break;
                 case "timeCalculationCombinationLevel" :
                     Gasket.setTimeCalculationCombinationLevel(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("timeCalculationCombinationLevel === "
+                        writeMessage("timeCalculationCombinationLevel === "
                                 + Gasket.getTimeCalculationCombinationLevel() + "\n");
                     break;
                 case "gameDirection":
                     Gasket.setGameDirection(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("gameDirection === "
+                        writeMessage("gameDirection === "
                                 + Gasket.isGameDirection() + "\n");
                     break;
                 case "savedPatterns" :
                     Gasket.setSavedPatternsII(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("savedPatterns === "
+                        writeMessage("savedPatterns === "
                                 + Gasket.isSavedPatternsII() + "\n");
                     break;
                 case "tradingTestUser" :
                     Gasket.setTradingTestUser(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("tradingTestUser === "
+                    writeMessage("tradingTestUser === "
                             + Gasket.isTradingTestUser());
                     break;
                 case "tradingTestII" :
                     Gasket.setTradingTestII(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("tradingTestII === "
+                    writeMessage("tradingTestII === "
                             + Gasket.isTradingTestII());
                     break;
                 case "tradingUser" :
                     Gasket.setTradingUser(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("tradingUser === "
+                    writeMessage("tradingUser === "
                             + Gasket.isTradingUser());
                     break;
                 case "tradingII" :
                     Gasket.setTradingII(strings[1].equalsIgnoreCase("true"));
-                    ConsoleHelper.writeMessage("tradingII === "
+                    writeMessage("tradingII === "
                             + Gasket.isTradingII());
                     break;
                 case "secondsSleepTime" :
                     Gasket.setSecondsSleepTime(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("secondsSleepTime === "
+                        writeMessage("secondsSleepTime === "
                                 + Gasket.getSecondsSleepTime() + "\n");
                     break;
                 case "twoAccounts":
                     Gasket.setTwoAccounts(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("twoAccounts === "
+                        writeMessage("twoAccounts === "
                                 + Gasket.isTwoAccounts() + "\n");
                     break;
                 case "takeForCollectingPatterns" :
                     Gasket.setTakeForCollectingPatterns(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("takeForCollectingPatterns === "
+                        writeMessage("takeForCollectingPatterns === "
                                 + Gasket.getTakeForCollectingPatterns() + "\n");
                     break;
                 case "numberOfCandlesForAnalysis" :
                     Gasket.setNumberOfCandlesForAnalysis(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("numberOfCandlesForAnalysis === "
+                        writeMessage("numberOfCandlesForAnalysis === "
                                 + Gasket.getNumberOfCandlesForAnalysis() + "\n");
                     break;
                 case "useStopLevelOrNotStopTime" :
                     Gasket.setUseStopLevelOrNotStopTime(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("useStopLevelOrNotStopTime === "
+                        writeMessage("useStopLevelOrNotStopTime === "
                                 + Gasket.getUseStopLevelOrNotStopTime() + "\n");
                     break;
                 case "trading":
                     Gasket.setTrading(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("trading === "
+                        writeMessage("trading === "
                                 + Gasket.isTrading() + "\n");
                     break;
                 case "obs_2":
                     Gasket.setObs_2(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("strategyOne === "
+                        writeMessage("strategyOne === "
                                 + Gasket.isObs_2() + "\n");
                     break;
                 case "obs_4":
                     Gasket.setObs_4(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("strategyOneTime === "
+                        writeMessage("strategyOneTime === "
                                 + Gasket.isObs_4() + "\n");
                     break;
                 case "obs_5":
                     Gasket.setObs_5(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("strategyOneTime === "
+                        writeMessage("strategyOneTime === "
                                 + Gasket.isObs_5() + "\n");
                     break;
                 case "timeCalculationLevel" :
                     Gasket.setTimeCalculationLevel(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("timeCalculationLevel === "
+                        writeMessage("timeCalculationLevel === "
                                 + Gasket.getTimeCalculationLevel() + "\n");
                     break;
                 case "timeBetweenOrders":
                     Gasket.setTimeBetweenOrders(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("timeBetweenOrders === "
+                        writeMessage("timeBetweenOrders === "
                                 + Gasket.getTimeBetweenOrders() + "\n");
                     break;
                 case "obs_3":
                     Gasket.setObs_3(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("strategyOneRange === "
+                        writeMessage("strategyOneRange === "
                                 + Gasket.isObs_3() + "\n");
                     break;
                 case "obs":
                     Gasket.setObs(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("one === "
+                        writeMessage("one === "
                                 + Gasket.isObs() + "\n");
                     break;
                 case "oneBuyFLAG" :
                     Gasket.setOneBuyFLAG(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("one === "
+                        writeMessage("one === "
                                 + Gasket.isOneBuyFLAG() + "\n");
                     break;
                 case "oneSellFLAG" :
                     Gasket.setOneSellFLAG(strings[1].equalsIgnoreCase("true"));
-                        ConsoleHelper.writeMessage("one === "
+                        writeMessage("one === "
                                 + Gasket.isOneSellFLAG() + "\n");
                     break;
                 case "numberOfHistoryBlocks" :
                     Gasket.setNumberOfHistoryBlocks(strings[1]);
-                        ConsoleHelper.writeMessage("numberOfHistoryBlocks === "
+                        writeMessage("numberOfHistoryBlocks === "
                                 + Gasket.getNumberOfHistoryBlocks() + "\n");
                     break;
                 case "strategyWorkOne":
                     Gasket.setStrategyWorkOne(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("strategyWorkOne === "
+                        writeMessage("strategyWorkOne === "
                                 + Gasket.getStrategyWorkOne() + "\n");
                     break;
                 case "dateDifference":
                     Gasket.setDateDifference(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("dateDifference === "
+                        writeMessage("dateDifference === "
                                 + Gasket.getDateDifference() + "\n");
                     break;
                 case "rangePriceMIN":
                     Gasket.setRangePriceMIN(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("rangePriceMIN === "
+                        writeMessage("rangePriceMIN === "
                                 + Gasket.getRangePriceMIN() + "\n");
                     break;
                 case "rangePriceMAX":
                     Gasket.setRangePriceMAX(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("rangePriceMAX === "
+                        writeMessage("rangePriceMAX === "
                                 + Gasket.getRangePriceMAX() + "\n");
                     break;
                 case "priceActive":
                     Gasket.setPriceActive(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("priceActive === "
+                        writeMessage("priceActive === "
                                 + Gasket.getPriceActive() + "\n");
                     break;
                 case "rangeLevel":
                     Gasket.setRangeLevel(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("rangeLevel === "
+                        writeMessage("rangeLevel === "
                                 + Gasket.getRangeLevel() + "\n");
                     break;
                 case "typeOrder":
                     Gasket.setTypeOrder(strings[1].trim());
-                        ConsoleHelper.writeMessage("typeOrder === "
+                        writeMessage("typeOrder === "
                                 + Gasket.getTypeOrder() + "\n");
                     break;
                 case "visible":
                     Gasket.setVisible(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("visible === "
+                        writeMessage("visible === "
                                 + Gasket.getVisible() + "\n");
                     break;
                 case "take":
                     Gasket.setTake(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("take === "
+                        writeMessage("take === "
                                 + Gasket.getTake() + "\n");
                     break;
                 case "stop":
                     Gasket.setStop(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("stop === "
+                        writeMessage("stop === "
                                 + Gasket.getStop() + "\n");
                     break;
                 case "PORT":
                     Gasket.setPORT(Integer.parseInt(strings[1]));
-                        ConsoleHelper.writeMessage("PORT === "
+                        writeMessage("PORT === "
                                 + Gasket.getPORT() + "\n");
                         Gasket.setServerRestart(false);
                     break;
                 case "PROFIT" :
                     Gasket.setPROFIT(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("PROFIT === "
+                        writeMessage("PROFIT === "
                                 + Gasket.getPROFIT() + "\n");
                     break;
                 case "PROFIT_Sell" :
                     Gasket.setPROFIT_Sell(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("PROFIT === "
+                        writeMessage("PROFIT === "
                                 + Gasket.getPROFIT_Sell() + "\n");
                     break;
                 case "PROFIT_Buy" :
                     Gasket.setPROFIT_Buy(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("PROFIT === "
+                        writeMessage("PROFIT === "
                                 + Gasket.getPROFIT_Buy() + "\n");
                     break;
                 case "lot":
                     Gasket.setLot(Double.parseDouble(strings[1]));
-                        ConsoleHelper.writeMessage("lot === "
+                        writeMessage("lot === "
                                 + Gasket.getLot() + "\n");
                     break;
                 case "apiKey" :
                     ApiKey.setApiKey(strings[1]);
-                    ConsoleHelper.writeMessage("apiKey === "
+                    writeMessage("apiKey === "
                             + ApiKey.getApiKey() + "\n");
                     break;
                 case "apiKeyName" :
                     ApiKey.setApiKeyName(strings[1]);
-                    ConsoleHelper.writeMessage("apiKeyName === "
+                    writeMessage("apiKeyName === "
                             + ApiKey.getApiKeyName() + "\n");
                     break;
                 case "apiKey2Accounts" :
                     ApiKey.setApiKey2Accounts(strings[1]);
-                    ConsoleHelper.writeMessage("apiKey === "
+                    writeMessage("apiKey === "
                             + ApiKey.getApiKey2Accounts() + "\n");
                     break;
                 case "apiKeyName2Accounts" :
                     ApiKey.setApiKeyName2Accounts(strings[1]);
-                    ConsoleHelper.writeMessage("apiKeyName === "
+                    writeMessage("apiKeyName === "
                             + ApiKey.getApiKeyName2Accounts() + "\n");
                     break;
                 case "SETTINGS" :
@@ -303,11 +312,11 @@ public class ExecutorCommandos {
                     if (strings[1].equalsIgnoreCase("RESTART")) parserSetting.writeSettings();
                     break;
                 default:
-                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                        writeMessage(getDateTerminal()
                                 + " --- Вы ввели неверную команду, попробуйте еще раз === " + string + "\n");
             }
         } catch (Exception e) {
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                writeMessage(getDateTerminal()
                         + " --- Ошибочка, повторите ввод === " + string + "\n");
         }
         parserSetting.writeSettings();

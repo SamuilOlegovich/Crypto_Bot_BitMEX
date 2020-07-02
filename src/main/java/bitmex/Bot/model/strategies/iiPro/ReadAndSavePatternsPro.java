@@ -34,7 +34,7 @@ public class ReadAndSavePatternsPro {
                     ConsoleHelper.writeMessage(DatesTimes.getDate()
                             + " --- Saved Patterns II Pro востановлен");
 
-                    if (Gasket.isShowLoadPatternsII()) {
+                    if (Gasket.isShowLoadPatternsIIPro()) {
                         savedPatternsPro.seeLists();
                     }
 

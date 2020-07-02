@@ -11,9 +11,9 @@ public class ConsoleHelper {
 
 
     public static void writeMessage(String string) {
-        Gasket.getViewThread().updateInfoView(string);
-        WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
-//        System.out.println(string);
+//        Gasket.getViewThread().updateInfoView(string);
+//        WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
+        System.out.println(string);
     }
 
 
@@ -156,6 +156,8 @@ public class ConsoleHelper {
                 + "showLoadPatternsUser === " + Gasket.isShowLoadPatternsUser()
                 + " ----- показывать загрузку паттернов при запуске программы\n"
                 + "showLoadPatternsII === " + Gasket.isShowLoadPatternsII()
+                + " ----- показывать загрузку паттернов при запуске программы\n"
+                + "showLoadPatternsIIPro === " + Gasket.isShowLoadPatternsIIPro()
                 + " ----- показывать загрузку паттернов при запуске программы\n";
     }
 

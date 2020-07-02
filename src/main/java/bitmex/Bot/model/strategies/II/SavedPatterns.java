@@ -2,6 +2,8 @@ package bitmex.Bot.model.strategies.II;
 
 
 import bitmex.Bot.model.FilesAndPathCreator;
+import bitmex.Bot.model.enums.TimeFrame;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -12,6 +14,10 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.io.*;
+
+import static bitmex.Bot.model.enums.TimeFrame.M5;
+import static bitmex.Bot.model.enums.TypeData.BIAS;
+import static bitmex.Bot.model.enums.TypeData.BUY;
 
 
 public class SavedPatterns implements Serializable {
@@ -55,7 +61,7 @@ public class SavedPatterns implements Serializable {
         int indexBias = 0;
 
         for (String string : inArrayList) {
-            if (string.startsWith("BIAS")) {
+            if (string.startsWith(BIAS.toString())) {
                 if (indexBias == 0) {
                     indexBias = inArrayList.indexOf(string);
                 }
@@ -83,7 +89,7 @@ public class SavedPatterns implements Serializable {
                     int index = 0;
 
                     for (int i = inArrayListCopy.size() - 1; i > 0; i--) {
-                        if (inArrayListCopy.get(i).startsWith("BIAS")) {
+                        if (inArrayListCopy.get(i).startsWith(BIAS.toString())) {
                             count++;
                             if (count == block) {
                                 index = i;
@@ -103,14 +109,14 @@ public class SavedPatterns implements Serializable {
                 for (String stringOne : inArrayListCopy) {
                     int bias = 0;
 
-                    if (!stringOne.startsWith("BUY") && !stringOne.startsWith("BIAS")) {
+                    if (!stringOne.startsWith(BUY.toString()) && !stringOne.startsWith(BIAS.toString())) {
                         String[] oneStrings = stringOne.split(",");
                         String[] twoStrings;
 
                         for (int i = inArrayListCopy.indexOf(stringOne) + 1; i < inArrayListCopy.size(); i++) {
                             String stringTwo = inArrayList.get(i);
 
-                            bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
+                            bias = bias + (stringTwo.startsWith(BIAS.toString()) ? 1 : 0);
 
 //
                             if (bias == 1) {
@@ -148,14 +154,14 @@ public class SavedPatterns implements Serializable {
 
                                             // M5 != M5(M15)  1 == 1  ASK == ASK
                                         } else if ((!oneStrings[0].equals(twoStrings[0])
-                                                && oneStrings[0].equals("M5"))
+                                                && oneStrings[0].equals(M5.toString()))
                                                 && oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[5].equals(twoStrings[5])) {
                                             indexArrayList.add(inArrayListCopy.indexOf(stringOne));
 
                                             // M5 != M5(M15)  1 != 1(0)  ASK == ASK
                                         } else if ((!oneStrings[0].equals(twoStrings[0])
-                                                && oneStrings[0].equals("M5"))
+                                                && oneStrings[0].equals(M5.toString()))
                                                 && (!oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[1].equals("1"))
                                                 && oneStrings[5].equals(twoStrings[5])) {
@@ -163,7 +169,7 @@ public class SavedPatterns implements Serializable {
 
                                             // M5 != M5(M15)  (0)1 != 1  ASK == ASK
                                         } else if ((!oneStrings[0].equals(twoStrings[0])
-                                                && oneStrings[0].equals("M5"))
+                                                && oneStrings[0].equals(M5.toString()))
                                                 && (!oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[1].equals("0"))
                                                 && oneStrings[5].equals(twoStrings[5])) {
@@ -171,7 +177,7 @@ public class SavedPatterns implements Serializable {
 
                                             // M5 != M5(M15)  (0)1 != 1  ASK == ASK
                                         } else if ((!oneStrings[0].equals(twoStrings[0])
-                                                && twoStrings[0].equals("M5"))
+                                                && twoStrings[0].equals(M5.toString()))
                                                 && (!oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[1].equals("0"))
                                                 && oneStrings[5].equals(twoStrings[5])) {

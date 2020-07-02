@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.II;
 
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -10,6 +11,8 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.File;
+
+import static bitmex.Bot.model.enums.TypeData.*;
 
 
 public class ReadAndSavePatterns {
@@ -25,12 +28,12 @@ public class ReadAndSavePatterns {
             while (reader.ready()) {
                 String string = reader.readLine();
 
-                if (string.length() > 4 && !string.equals("START")) {
+                if (string.length() > 4 && !string.equals(START.toString())) {
                     arrayListOut.add(string + "\n");
                 } else if (string.equals("NEXT")) {
                     savedPatterns.setPatternsInListsPricePatterns(arrayListOut);
                     arrayListOut.clear();
-                } else if (string.equalsIgnoreCase("END")) {
+                } else if (string.equalsIgnoreCase(END.toString())) {
                     ConsoleHelper.writeMessage(DatesTimes.getDate()
                             + " --- Saved Patterns II востановлен");
 
@@ -54,8 +57,8 @@ public class ReadAndSavePatterns {
     public static void saveSavedPatterns() {
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
-        String next = "NEXT" + lineBreak;
-        stringBuilder.append("START").append(lineBreak);
+        String next = NEXT.toString() + lineBreak;
+        stringBuilder.append(START.toString()).append(lineBreak);
         ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
 
 
@@ -66,7 +69,7 @@ public class ReadAndSavePatterns {
             }
             stringBuilder.append(next);
         }
-        stringBuilder.append("END").append(lineBreak);
+        stringBuilder.append(END.toString()).append(lineBreak);
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),
                 Gasket.getFilesAndPathCreator().getPathPatterns(), false);
@@ -78,15 +81,15 @@ public class ReadAndSavePatterns {
     public static void saveSavedPatternsFromUser() {
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
-        String next = "NEXT" + lineBreak;
-        stringBuilder.append("START").append(lineBreak);
+        String next = NEXT.toString() + lineBreak;
+        stringBuilder.append(START.toString()).append(lineBreak);
         ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
 
 
         for (ArrayList<String> arr : arrayLists) {
 
             for (String s : arr) {
-                if (!s.startsWith("BIAS") && !s.startsWith("BUY")) {
+                if (!s.startsWith(BIAS.toString()) && !s.startsWith(BUY.toString())) {
                     stringBuilder.append(convertStringForUser(s));
                 } else {
                     stringBuilder.append(s);
@@ -94,7 +97,7 @@ public class ReadAndSavePatterns {
             }
             stringBuilder.append(next);
         }
-        stringBuilder.append("END").append(lineBreak);
+        stringBuilder.append(END.toString()).append(lineBreak);
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),
                 Gasket.getFilesAndPathCreator().getPathPatternsForUser(), false);
@@ -106,8 +109,8 @@ public class ReadAndSavePatterns {
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
-        String next = "NEXT" + lineBreak;
-        stringBuilder.append("START").append(lineBreak);
+        String next = NEXT.toString() + lineBreak;
+        stringBuilder.append(START.toString()).append(lineBreak);
 
 
         for (ArrayList<String> arr : arrayLists) {
@@ -117,7 +120,7 @@ public class ReadAndSavePatterns {
             stringBuilder.append(next);
         }
         //stringBuilder.delete(stringBuilder.length() - next.length(), stringBuilder.length());
-        stringBuilder.append("END").append(lineBreak);
+        stringBuilder.append(END.toString()).append(lineBreak);
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),
                 Gasket.getFilesAndPathCreator().getPathPatternsTemporary(), false);
@@ -131,8 +134,8 @@ public class ReadAndSavePatterns {
         if (arrayLists.size() > 0) {
             StringBuilder stringBuilder = new StringBuilder();
             String lineBreak = "\n";
-            String next = "NEXT" + lineBreak;
-            stringBuilder.append("START").append(lineBreak);
+            String next = NEXT.toString() + lineBreak;
+            stringBuilder.append(START.toString()).append(lineBreak);
 
             for (ArrayList<String> arr : arrayLists) {
                 for (String s : arr) {

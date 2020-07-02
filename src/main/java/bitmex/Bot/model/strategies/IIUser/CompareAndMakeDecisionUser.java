@@ -34,8 +34,7 @@ public class CompareAndMakeDecisionUser extends Thread {
 
     @Override
     public void run() {
-        writeMessage(getDateTerminal() + " --- Сравниваю паттерны USER --- "
-                + this.getName());
+        writeMessage(getDateTerminal() + " --- Сравниваю паттерны USER");
 
         if (compareSheets()) {
             writeMessage(getDateTerminal() + " --- "
@@ -79,8 +78,8 @@ public class CompareAndMakeDecisionUser extends Thread {
             return false;
         } else if (marketBias.size() > 0) {
             for (String marketString : marketBias) {
-                if (!giveData(BIAS.toString(), patternBias.get(marketBias.indexOf(marketString)))
-                        .equalsIgnoreCase(giveData(BIAS.toString(), marketString))) {
+                if (!giveData(BIAS, patternBias.get(marketBias.indexOf(marketString)))
+                        .equalsIgnoreCase(giveData(BIAS, marketString))) {
                     return false;
                 }
             }
@@ -152,7 +151,7 @@ public class CompareAndMakeDecisionUser extends Thread {
             // тут приводим в порядок маркет блок, все лишнее из него убираем
             for (String patternString : patternStrings) {
                 for (String marketString : inMarketStrings) {
-                    if (giveData(type.toString(), patternString).equals(giveData(type.toString(), marketString))) {
+                    if (giveData(type, patternString).equals(giveData(type, marketString))) {
                         readyMarketBlock.add(marketString);
                         break;
                     }
@@ -173,14 +172,33 @@ public class CompareAndMakeDecisionUser extends Thread {
                 ArrayList<String> patternCompareDataNull = new ArrayList<>();
                 ArrayList<String> marketCompareDataNull = new ArrayList<>();
 
+////////////////////////////
+                ArrayList<String> patternNullNull = new ArrayList<>();
+                ArrayList<String> marketNullNull = new ArrayList<>();
+////////////////////////////
+
 
                 // начинаем перебирать блоки строк и сравнивать их друг с другом
                 for (String stringMarket : readyMarketBlock) {
                     String stringPattern = patternStrings.get(readyMarketBlock.indexOf(stringMarket));
 
 
+////////////////////////////
+                    // если цена NULL-NULL то не важно где и как стоит этот элемент (Тест)
+                    if (giveData(price, stringPattern).equalsIgnoreCase(NULL_NULL.toString())) {
+
+                        for (String stringPatternSearch : patternStrings) {
+
+                            if (giveData(type, stringPatternSearch).equals(giveData(type, stringMarket))){
+                                patternNullNull.add(stringPatternSearch);
+                                marketNullNull.add(stringMarket);
+                            }
+                        }
+                    }
+////////////////////////////
+
                     // price
-                    if (giveData(price.toString(), stringPattern).equalsIgnoreCase(NULL.toString())) {
+                    if (giveData(price, stringPattern).equalsIgnoreCase(NULL.toString())) {
                         // если прайс нул - то не важно в какой последовательности идут уровни,
                         // но цена у уровней в списке маркет должна быть ровна
 
@@ -191,24 +209,18 @@ public class CompareAndMakeDecisionUser extends Thread {
                             String marketPlusOne = readyMarketBlock.get(readyMarketBlock.indexOf(stringMarket) + 1);
                             String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(stringMarket) + 1);
 
-                            if (giveData(price.toString(), stringPattern)
-                                    .equals(giveData(price.toString(), patternPlusOne))
-
-                                    && !giveData(price.toString(), stringMarket)
-                                    .equals(giveData(price.toString(), marketPlusOne))) {
+                            if (giveData(price, stringPattern).equals(giveData(price, patternPlusOne))
+                                    && !giveData(price, stringMarket).equals(giveData(price, marketPlusOne))) {
                                 return false;
 
                                 // если цены на шаг вперед ровны добавляем в списки
-                            } else if (giveData(price.toString(), stringPattern)
-                                    .equals(giveData(price.toString(), patternPlusOne))
+                            } else if (giveData(price, stringPattern).equals(giveData(price, patternPlusOne))
+                                    && giveData(price, stringMarket).equals(giveData(price, marketPlusOne))) {
 
-                                    && giveData(price.toString(), stringMarket)
-                                    .equals(giveData(price.toString(), marketPlusOne))) {
-
-                                patternComparePriceNull.add(giveData(type.toString(), patternPlusOne));
-                                patternComparePriceNull.add(giveData(type.toString(), stringPattern));
-                                marketComparePriceNull.add(giveData(type.toString(), marketPlusOne));
-                                marketComparePriceNull.add(giveData(type.toString(), stringMarket));
+                                patternComparePriceNull.add(giveData(type, patternPlusOne));
+                                patternComparePriceNull.add(giveData(type, stringPattern));
+                                marketComparePriceNull.add(giveData(type, marketPlusOne));
+                                marketComparePriceNull.add(giveData(type, stringMarket));
 
                                 patternComparePriceNullAll.add(patternPlusOne);
                                 patternComparePriceNullAll.add(stringPattern);
@@ -216,22 +228,19 @@ public class CompareAndMakeDecisionUser extends Thread {
                                 marketComparePriceNullAll.add(stringMarket);
 
                                 // если цены на шаг впереди не ровны то проверяем на предыдущий шаг и добавляем
-                            } else if (!giveData(price.toString(), stringPattern)
-                                    .equals(giveData(price.toString(), patternPlusOne))) {
+                            } else if (!giveData(price, stringPattern).equals(giveData(price, patternPlusOne))) {
 
                                 String marketMinusOne = readyMarketBlock.get(readyMarketBlock
                                         .indexOf(stringMarket) - 1);
                                 String patternMinusOne = patternStrings.get(readyMarketBlock
                                         .indexOf(stringMarket) - 1);
 
-                                if (giveData(price.toString(), stringPattern)
-                                        .equals(giveData(price.toString(), patternMinusOne))
+                                if (giveData(price, stringPattern).equals(giveData(price, patternMinusOne))
 
-                                        && giveData(price.toString(), stringMarket)
-                                        .equals(giveData(price.toString(), marketMinusOne))) {
+                                        && giveData(price, stringMarket).equals(giveData(price, marketMinusOne))) {
 
-                                    patternComparePriceNull.add(giveData(type.toString(), stringPattern));
-                                    marketComparePriceNull.add(giveData(type.toString(), stringMarket));
+                                    patternComparePriceNull.add(giveData(type, stringPattern));
+                                    marketComparePriceNull.add(giveData(type, stringMarket));
 
                                     patternComparePriceNullAll.add(stringPattern);
                                     marketComparePriceNullAll.add(stringMarket);
@@ -243,7 +252,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                     }
 
                         // Data
-                    if (giveData(time.toString(), stringPattern).equalsIgnoreCase(NULL.toString())) {
+                    if (giveData(time, stringPattern).equalsIgnoreCase(NULL.toString())) {
                         // если время нулл - то у маркета должны быть в этом диапазоне все свечи на одной свече,
                         // а именно время ровно, направление свечи дир тоже должно быть ровно
 
@@ -255,36 +264,24 @@ public class CompareAndMakeDecisionUser extends Thread {
                             String patternPlusOne = patternStrings.get(readyMarketBlock.indexOf(stringMarket) + 1);
 
                             // если даты на шаг вперед ровны добавляем в списки
-                            if (giveData(time.toString(), stringPattern)
-                                    .equals(giveData(time.toString(), patternPlusOne))
+                            if (giveData(time, stringPattern).equals(giveData(time, patternPlusOne))
+                                    && giveData(time, stringMarket).equals(giveData(time, marketPlusOne))
+                                    && giveData(dir, stringPattern).equals(giveData(dir, patternPlusOne))
+                                    && giveData(dir, stringMarket).equals(giveData(dir, marketPlusOne))
+                                    && giveData(dir, stringPattern).equals(giveData(dir, stringMarket))) {
 
-                                    && giveData(time.toString(), stringMarket)
-                                    .equals(giveData(time.toString(), marketPlusOne))
-
-                                    && giveData(dir.toString(), stringPattern)
-                                    .equals(giveData(dir.toString(), patternPlusOne))
-
-                                    && giveData(dir.toString(), stringMarket)
-                                    .equals(giveData(dir.toString(), marketPlusOne))
-
-                                    && giveData(dir.toString(), stringPattern)
-                                    .equals(giveData(dir.toString(), stringMarket))) {
-
-                                patternCompareDataNull.add(giveData(type.toString(), patternPlusOne));
-                                patternCompareDataNull.add(giveData(type.toString(), stringPattern));
-                                marketCompareDataNull.add(giveData(type.toString(), marketPlusOne));
-                                marketCompareDataNull.add(giveData(type.toString(), stringMarket));
+                                patternCompareDataNull.add(giveData(type, patternPlusOne));
+                                patternCompareDataNull.add(giveData(type, stringPattern));
+                                marketCompareDataNull.add(giveData(type, marketPlusOne));
+                                marketCompareDataNull.add(giveData(type, stringMarket));
 
                                 patternCompareDataNullAll.add(patternPlusOne);
                                 patternCompareDataNullAll.add(stringPattern);
                                 marketCompareDataNullAll.add(marketPlusOne);
                                 marketCompareDataNullAll.add(stringMarket);
 
-                            } else if (giveData(time.toString(), stringPattern)
-                                    .equals(giveData(time.toString(), patternPlusOne))
-
-                                    && !giveData(time.toString(), stringMarket)
-                                    .equals(giveData(time.toString(), marketPlusOne))) {
+                            } else if (giveData(time, stringPattern).equals(giveData(time, patternPlusOne))
+                                    && !giveData(time, stringMarket).equals(giveData(time, marketPlusOne))) {
 
                                 return false;
                             }
@@ -303,7 +300,7 @@ public class CompareAndMakeDecisionUser extends Thread {
 
                     for (String stringNull : marketCompareDataNull) {
                         for (String stringReady : readyMarketBlock) {
-                            if (giveData(type.toString(), stringReady).equals(stringNull)) {
+                            if (giveData(type, stringReady).equals(stringNull)) {
                                 deleteIndex.add(readyMarketBlock.indexOf(stringReady));
                             }
                         }
@@ -311,7 +308,7 @@ public class CompareAndMakeDecisionUser extends Thread {
 
                     for (String stringNull : marketComparePriceNull) {
                         for (String stringReady : readyMarketBlock) {
-                            if (giveData(type.toString(), stringReady).equals(stringNull)) {
+                            if (giveData(type, stringReady).equals(stringNull)) {
                                 deleteIndex.add(readyMarketBlock.indexOf(stringReady));
                             }
                         }
@@ -331,7 +328,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                     for (String stringNull : patternCompareDataNull) {
                         for (String stringReady : patternStrings) {
 
-                            if (giveData(type.toString(), stringReady).equals(stringNull)) {
+                            if (giveData(type, stringReady).equals(stringNull)) {
                                 deleteIndex.add(patternStrings.indexOf(stringReady));
                             }
                         }
@@ -340,7 +337,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                     for (String stringNull : patternComparePriceNull) {
                         for (String stringReady : patternStrings) {
 
-                            if (giveData(type.toString(), stringReady).equals(stringNull)) {
+                            if (giveData(type, stringReady).equals(stringNull)) {
                                 deleteIndex.add(patternStrings.indexOf(stringReady));
                             }
                         }
@@ -445,6 +442,22 @@ public class CompareAndMakeDecisionUser extends Thread {
                 } else if (patternCompareDataNull.size() != marketCompareDataNull.size()) {
                     return false;
                 }
+
+////////////////////////////
+                if (patternNullNull.size() == marketNullNull.size() && patternNullNull.size() > 0) {
+                    patternNullNull.sort(sortTheAlphabet);
+                    marketNullNull.sort(sortTheAlphabet);
+
+                    for (String stringMarket : marketNullNull) {
+                        if (!finallyComparisonOnAllData(stringMarket,
+                                patternNullNull.get(marketNullNull.indexOf(stringMarket)))) {
+                            return false;
+                        }
+                    }
+                } else if (patternNullNull.size() != marketNullNull.size()) {
+                    return false;
+                }
+/////////////////////////////
             }
 
             writeMessage(getDateTerminal() + " --- "
@@ -463,8 +476,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                 + "---------------------------------------------------------------------------- 4");
 
             // period
-        if (!giveData(period.toString(), patternArray).equalsIgnoreCase(NULL.toString())
-                && !giveData(period.toString(), patternArray).equals(giveData(period.toString(), marketArray))) {
+        if (!giveData(period, patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(period, patternArray).equals(giveData(period, marketArray))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-1");
@@ -473,8 +486,8 @@ public class CompareAndMakeDecisionUser extends Thread {
         }
 
             // preview
-        if (!giveData(preview.toString(), patternArray).equalsIgnoreCase(NULL.toString())
-                && !giveData(preview.toString(), patternArray).equals(giveData(preview.toString(), marketArray))) {
+        if (!giveData(preview, patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(preview, patternArray).equals(giveData(preview, marketArray))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-2");
@@ -483,8 +496,8 @@ public class CompareAndMakeDecisionUser extends Thread {
         }
 
             // type
-        if (!giveData(type.toString(), patternArray).equalsIgnoreCase(NULL.toString())
-                && !giveData(type.toString(), patternArray).equals(giveData(type.toString(), marketArray))) {
+        if (!giveData(type, patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(type, patternArray).equals(giveData(type, marketArray))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-3");
@@ -493,8 +506,8 @@ public class CompareAndMakeDecisionUser extends Thread {
         }
 
             // avg
-        if (!giveData(avg.toString(), patternArray).equalsIgnoreCase(NULL.toString())
-                && !giveData(avg.toString(), patternArray).equals(giveData(avg.toString(), marketArray))) {
+        if (!giveData(avg, patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(avg, patternArray).equals(giveData(avg, marketArray))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-4");
@@ -503,8 +516,8 @@ public class CompareAndMakeDecisionUser extends Thread {
         }
 
             // dir
-        if (!giveData(dir.toString(), patternArray).equalsIgnoreCase(NULL.toString())
-                && !giveData(dir.toString(), patternArray).equals(giveData(dir.toString(), marketArray))) {
+        if (!giveData(dir, patternArray).equalsIgnoreCase(NULL.toString())
+                && !giveData(dir, patternArray).equals(giveData(dir, marketArray))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-5");
@@ -527,7 +540,7 @@ public class CompareAndMakeDecisionUser extends Thread {
     private class SortTheAlphabet implements Comparator<String> {
         @Override
         public int compare(String o1, String o2) {
-            int result = giveData(type.toString(), o1).compareTo(giveData(type.toString(), o2));
+            int result = giveData(type, o1).compareTo(giveData(type, o2));
             return Integer.compare(result, 0);
         }
     }
@@ -565,8 +578,6 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 
         market.add("BUY===1===SELL===0===AVERAGE===3.28===MAX===5.0===SIZE===220===BLOCK===1===TYPE===OPEN_POS_BID_PLUS_SMALL===ID===1");
-
-
         market.add("period===M5===preview===1===time===2020-06-11 11:38:00===price===9781.0===value===69770===type===OPEN_POS_BID_PLUS_SMALL===avg===null===dir===1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
 
         market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.5===value===377855===type===OPEN_POS_PLUS_HL===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
@@ -574,8 +585,6 @@ public class CompareAndMakeDecisionUser extends Thread {
         market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-194061===type===OPEN_POS_MINUS_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
         market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===276839===type===OI_ZS_MIN_MINUS===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
         market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.0===value===-585140===type===DELTA_ZS_MIN_PLUS===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
-
-
         market.add("period===M5===preview===0===time===2020-06-11 11:38:00===price===9780.5===value===-1088603===type===ASK_SMALL===avg===null===dir===0===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
         market.add("period===M5===preview===0===time===2020-06-11 11:38:00===price===9778.0===value===69770===type===VOLUME_SMALL===avg===null===dir===-1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
         market.add("period===M5===preview===1===time===2020-06-11 11:38:00===price===9777.5===value===-1088603===type===DELTA_ASK_SMALL===avg===null===dir===1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
@@ -591,7 +600,6 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 
         market.add("BIAS===SELL===4.5===2020-06-11 11:40:00");
-
         market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.5===value===377855===type===OPEN_POS_PLUS_HL===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
         market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-585140===type===DELTA_BID_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
         market.add("period===M5===preview===0===time===2020-06-26 05:08:00===price===9254.0===value===-194061===type===OPEN_POS_MINUS_HL===avg===0===dir===-1===open===9254.5===close===9254.0===high===9254.5===low===9254.0");
@@ -599,8 +607,8 @@ public class CompareAndMakeDecisionUser extends Thread {
         market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.0===value===-585140===type===DELTA_ZS_MIN_PLUS===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");
 
 
-        market.add("period===M15===preview===1===time===2020-06-11 11:37:00===price===9776.0===value===514702===type===OPEN_POS_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
         market.add("period===M15===preview===0===time===2020-06-11 11:37:00===price===9775.0===value===514702===type===OPEN_POS_ASK_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
+        market.add("period===M15===preview===1===time===2020-06-11 11:39:00===price===9774.0===value===514702===type===OPEN_POS_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
         market.add("period===M0===preview===1===time===2020-06-11 11:38:00===price===9774.0===value===592200===type===BID===avg===null===dir===-1===open===9774.5===close===9774.5===high===9774.5===low===9774.0");
         market.add("period===M15===preview===0===time===2020-06-11 11:38:00===price===9774.0===value===-1633222===type===VOLUME===avg===null===dir===-1===open===9776.0===close===9774.0===high===9776.5===low===9774.0");
         market.add("period===M5===preview===0===time===2020-06-11 11:38:00===price===9774.0===value===280876===type===ASK===avg===null===dir===-1===open===9777.5===close===9776.0===high===9778.0===low===9776.0");
@@ -613,8 +621,8 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 
         market.add("period===M5===preview===0===time===2020-06-11 11:37:00===price===9769.5===value===-1088603===type===DELTA_BID===avg===null===dir===-1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
+        market.add("period===M15===preview===1===time===2020-06-11 11:37:00===price===9769.0===value===514702===type===DELTA_ZS_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
         market.add("period===M5===preview===1===time===2020-06-11 11:36:00===price===9768.5===value===69770===type===OPEN_POS_BID_MINUS===avg===null===dir===-1===open===9782.0===close===9779.0===high===9782.0===low===9778.5");
-        market.add("period===M15===preview===1===time===2020-06-11 11:37:00===price===9767.0===value===514702===type===DELTA_ZS_PLUS===avg===null===dir===1===open===9769.5===close===9781.5===high===9782.0===low===9769.0");
 
 
         market.add("period===M5===preview===0===time===2020-06-26 05:05:00===price===9254.5===value===377855===type===OPEN_POS_PLUS_HL===avg===0===dir===1===open===9253.5===close===9254.0===high===9254.5===low===9253.5");

@@ -75,7 +75,7 @@ public class CompareAndMakeDecisionPro extends Thread {
             for (String marketString : marketBias) {
                 String patternString = patternBias.get(marketBias.indexOf(marketString));
 
-                if (!giveData(BIAS.toString(), marketString).equals(giveData(BIAS.toString(), patternString))) {
+                if (!giveData(BIAS, marketString).equals(giveData(BIAS, patternString))) {
                     return false;
                 }
             }
@@ -150,16 +150,14 @@ public class CompareAndMakeDecisionPro extends Thread {
                         String stringPattern2 = patternStrings.get(marketStrings.indexOf(stringMarket) + 1);
                         String stringMarket2 = marketStrings.get(marketStrings.indexOf(stringMarket) + 1);
 
-                        // если цены на шаг вперед во всех блоках ровны до добавляем в списки
-                        if (giveData(price.toString(), stringPattern)
-                                .equals(giveData(price.toString(), stringPattern2))
-                                && giveData(price.toString(), stringMarket)
-                                .equals(giveData(price.toString(), stringMarket2))) {
+                        // если цены на шаг вперед во всех блоках ровны то добавляем в списки
+                        if (giveData(price, stringPattern).equals(giveData(price, stringPattern2)) ///////////////////////
+                                && giveData(price, stringMarket).equals(giveData(price, stringMarket2))) {
 
-                            patternCompare.add(giveData(type.toString(), stringPattern2));
-                            patternCompare.add(giveData(type.toString(), stringPattern));
-                            marketCompare.add(giveData(type.toString(), stringMarket2));
-                            marketCompare.add(giveData(type.toString(), stringMarket));
+                            patternCompare.add(giveData(type, stringPattern2));
+                            patternCompare.add(giveData(type, stringPattern));
+                            marketCompare.add(giveData(type, stringMarket2));
+                            marketCompare.add(giveData(type, stringMarket));
 
                             patternCompareAll.add(stringPattern2);
                             patternCompareAll.add(stringPattern);
@@ -167,10 +165,8 @@ public class CompareAndMakeDecisionPro extends Thread {
                             marketCompareAll.add(stringMarket);
 
                             // если цены на шаг вперед во всех блоках не ровны до добавляем в списки
-                        } else if (!giveData(price.toString(), stringPattern)
-                                .equals(giveData(price.toString(), stringPattern2))
-                                && !giveData(price.toString(), stringMarket)
-                                .equals(giveData(price.toString(), stringMarket2))) {
+                        } else if (!giveData(price, stringPattern).equals(giveData(price, stringPattern2))
+                                && !giveData(price, stringMarket).equals(giveData(price, stringMarket2))) {
 
                             // отсылаем непосредственно строки на последнее сравнение между собой
                             if (!finallyComparisonOnAllData(stringMarket, stringPattern)) {
@@ -232,7 +228,7 @@ public class CompareAndMakeDecisionPro extends Thread {
         writeMessage(getDateTerminal() + " --- "
                 + "---------------------------------------------------------------------------- 4 ii Pro");
 
-        if (!giveData(period.toString(), marketString).equals(giveData(period.toString(), patternString))) {
+        if (!giveData(period, marketString).equals(giveData(period, patternString))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-1 ii Pro");
@@ -240,7 +236,7 @@ public class CompareAndMakeDecisionPro extends Thread {
 //            return false;
         }
 
-        if (!giveData(preview.toString(), marketString).equals(giveData(preview.toString(), patternString))) {
+        if (!giveData(preview, marketString).equals(giveData(preview, patternString))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-2 ii Pro");
@@ -248,7 +244,7 @@ public class CompareAndMakeDecisionPro extends Thread {
 //            return false;
         }
 
-        if (!giveData(type.toString(), marketString).equals(giveData(type.toString(), patternString))) {
+        if (!giveData(type, marketString).equals(giveData(type, patternString))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-3 ii Pro");
@@ -256,7 +252,7 @@ public class CompareAndMakeDecisionPro extends Thread {
             return false;
         }
 
-        if (!giveData(dir.toString(), marketString).equals(giveData(dir.toString(), patternString))) {
+        if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
 
             writeMessage(getDateTerminal() + " --- "
                     + "---------------------------------------------------------------------------- 4-4 ii Pro");
@@ -279,7 +275,7 @@ public class CompareAndMakeDecisionPro extends Thread {
     private class SortTheAlphabet implements Comparator<String> {
         @Override
         public int compare(String o1, String o2) {
-            int result = giveData(type.toString(), o1).compareTo(giveData(type.toString(), o2));
+            int result = giveData(type, o1).compareTo(giveData(type, o2));
             return Integer.compare(result, 0);
         }
     }

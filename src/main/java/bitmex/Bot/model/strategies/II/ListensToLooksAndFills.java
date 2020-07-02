@@ -1,6 +1,5 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -9,7 +8,12 @@ import bitmex.Bot.model.Gasket;
 import java.util.*;
 
 
+import static bitmex.Bot.model.DatesTimes.getDate;
+import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.model.Gasket.getBitmexQuote;
+import static bitmex.Bot.model.Gasket.getTakeForCollectingPatterns;
 import static bitmex.Bot.model.enums.TypeData.*;
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 import static java.lang.Double.NaN;
 
 
@@ -42,10 +46,10 @@ public class ListensToLooksAndFills {
 
 
     private ListensToLooksAndFills() {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+        writeMessage(getDateTerminal()
                 + " --- " + "Начал работать класс сбора II Паттернов");
         this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
-        this.priceNow = Gasket.getBitmexQuote().getBidPrice();
+        this.priceNow = getBitmexQuote().getBidPrice();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsClass();
         this.listStringPriceSell = new ArrayList<>();
@@ -97,7 +101,7 @@ public class ListensToLooksAndFills {
         if (priceEndBuy <= priceNow && !oneStartFlag && flag) {
             // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
             // добавляем лист в стратегии,
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+            writeMessage(getDateTerminal()
                         + " --- Добавляю лист в II ПАТТЕРН Бай");
 
             String stringZero = BUY.toString() + "===1===" + SELL.toString() + "===0===" + AVERAGE.toString()
@@ -117,19 +121,19 @@ public class ListensToLooksAndFills {
                 String stringBias = BIAS.toString() + "===" + getBias(true) + "===" + AVERAGE.toString()
                         + "===" + getAverageDeviations(true)
                         + "===" + MAX.toString() + "===" + getMaxDeviations(true)
-                        + "===" + TIME.toString() + "===" + DatesTimes.getDateTerminal()
+                        + "===" + TIME.toString() + "===" + getDateTerminal()
                         + "\n";
                 listStringPriceBuy.add(stringBias);
             }
         }
 
         if (flag) {
-            priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+            priceEndBuy = getBitmexQuote().getAskPrice() + getTakeForCollectingPatterns();
             countPriseBuy.clearList();
         }
 
         if (oneStartFlag) {
-            priceEndBuy = Gasket.getBitmexQuote().getAskPrice() + Gasket.getTakeForCollectingPatterns();
+            priceEndBuy = getBitmexQuote().getAskPrice() + getTakeForCollectingPatterns();
         }
 
         addStringsInListDirections(true);
@@ -138,7 +142,7 @@ public class ListensToLooksAndFills {
 
             // тоже самое только для комбиначии СЕЛЛ
         if (priceEndSell >= priceNow && !oneStartFlag) {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+            writeMessage(getDateTerminal()
                         + " --- Добавляю лист в II ПАТТЕРН Селл");
 
             String stringZero = BUY.toString() + "===0===" + SELL.toString() + "===1===" + AVERAGE.toString()
@@ -156,7 +160,7 @@ public class ListensToLooksAndFills {
                 String stringBias = BIAS.toString() + "===" + getBias(false) + "===" + AVERAGE.toString()
                         + "===" + getAverageDeviations(false)
                         + "===" + MAX.toString() + "===" + getMaxDeviations(false)
-                        + "===" + TIME.toString() + "===" + DatesTimes.getDateTerminal()
+                        + "===" + TIME.toString() + "===" + getDateTerminal()
                         + "\n";
                 listStringPriceSell.add(stringBias);
                 countPriseSell.clearList();
@@ -164,12 +168,12 @@ public class ListensToLooksAndFills {
         }
 
         if (flag) {
-            priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+            priceEndSell = getBitmexQuote().getBidPrice() - getTakeForCollectingPatterns();
             countPriseSell.clearList();
         }
 
         if (oneStartFlag) {
-            priceEndSell = Gasket.getBitmexQuote().getBidPrice() - Gasket.getTakeForCollectingPatterns();
+            priceEndSell = getBitmexQuote().getBidPrice() - getTakeForCollectingPatterns();
         }
         addStringsInListDirections(false);
 
@@ -308,7 +312,7 @@ public class ListensToLooksAndFills {
                         && !patternString.startsWith(BUY.toString()) && !patternString.startsWith(BIAS.toString())) {
                     String[] stringsPattern = patternString.split(",");
 
-                    if (DatesTimes.getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
+                    if (getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
                         break;
                     }
@@ -324,7 +328,7 @@ public class ListensToLooksAndFills {
 
                     for (int i = 0; i < stringBias.length; i++) {
                         if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
-                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+                            time = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
                             break;
                         }
                     }
@@ -588,7 +592,7 @@ public class ListensToLooksAndFills {
 
 
         public CountPriseBuy() {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+            writeMessage(getDateTerminal()
                     + " --- Начал фиксировать цену отклонения II Бай");
             this.arrayListOut = new ArrayList<>();
             this.arrayListBuy = new ArrayList<>();
@@ -602,7 +606,7 @@ public class ListensToLooksAndFills {
 
             while (true) {
                 if (flag) {
-                    double price = Gasket.getBitmexQuote().getBidPrice();
+                    double price = getBitmexQuote().getBidPrice();
 
                     if (price < priceStartBuy) {
                         this.arrayListBuy.add(price);
@@ -612,7 +616,7 @@ public class ListensToLooksAndFills {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    writeMessage(getDateTerminal()
                             + " --- Не смог проснуться в методе countPriseBuy() "
                             + "сласса ListensToLooksAndFills");
                 }
@@ -629,7 +633,7 @@ public class ListensToLooksAndFills {
 
 
         private void clearList() {
-            this.priceStartBuy = Gasket.getBitmexQuote().getAskPrice();
+            this.priceStartBuy = getBitmexQuote().getAskPrice();
             this.arrayListOut.clear();
             this.flag = true;
         }
@@ -651,7 +655,7 @@ public class ListensToLooksAndFills {
 
 
         public CountPriseSell() {
-            ConsoleHelper.writeMessage( DatesTimes.getDateTerminal()
+            writeMessage( getDateTerminal()
                     + " --- Начал фиксировать цену отклонения II Селл");
             this.arrayListSell = new ArrayList<>();
             this.arrayListOut = new ArrayList<>();
@@ -664,7 +668,7 @@ public class ListensToLooksAndFills {
         public void run() {
             while (true) {
                 if (flag) {
-                    double price = Gasket.getBitmexQuote().getBidPrice();
+                    double price = getBitmexQuote().getBidPrice();
 
                     if (price > priceStartSell) {
                         this.arrayListSell.add(price);
@@ -674,7 +678,7 @@ public class ListensToLooksAndFills {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    writeMessage(getDateTerminal()
                             + " --- Не смог проснуться в методе countPriseSell() "
                             + "сласса ListensToLooksAndFills");
                 }
@@ -691,7 +695,7 @@ public class ListensToLooksAndFills {
 
 
         private void clearList() {
-            this.priceStartSell = Gasket.getBitmexQuote().getBidPrice();
+            this.priceStartSell = getBitmexQuote().getBidPrice();
             this.arrayListOut.clear();
             this.flag = true;
         }

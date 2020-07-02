@@ -5,15 +5,21 @@ import bitmex.Bot.model.Gasket;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import static bitmex.Bot.model.Gasket.getFilesAndPathCreator;
+import static bitmex.Bot.view.WriterAndReadFile.writerFile;
+import static bitmex.Bot.model.Gasket.getViewThread;
+
+
+
 
 public class ConsoleHelper {
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 
     public static void writeMessage(String string) {
-//        Gasket.getViewThread().updateInfoView(string);
-//        WriterAndReadFile.writerFile(string + "\n", Gasket.getFilesAndPathCreator().getPathLogs(), true);
-        System.out.println(string);
+        getViewThread().updateInfoView(string);
+        writerFile(string + "\n", getFilesAndPathCreator().getPathLogs(), true);
+//        System.out.println(string);
     }
 
 
@@ -164,8 +170,8 @@ public class ConsoleHelper {
 
 
     public static void printInfoSettings() {
-        ConsoleHelper.writeMessage("\n\n"
-                + ConsoleHelper.getStringInfoSettings()
+        writeMessage("\n\n"
+                + getStringInfoSettings()
 
                 + "\n"
 
@@ -178,7 +184,7 @@ public class ConsoleHelper {
 
 
     public static void printStatistics() {
-        ConsoleHelper.writeMessage("\n"
+        writeMessage("\n"
                 + " --- ИТОГО на счету CEЛЛ --- " + Gasket.getPROFIT_Sell() + "\n"
                 + " --- ИТОГО на счету БАЙ --- " + Gasket.getPROFIT_Buy() + "\n"
                 + "OB_5_TAKE === " + Gasket.getOb5Take() + "\n"
@@ -207,7 +213,7 @@ public class ConsoleHelper {
 
 
     public static void printStatisticsMr() {
-        ConsoleHelper.writeMessage("\n"
+        writeMessage("\n"
                 + " --- ИТОГО на счету CEЛЛ MR --- " + Gasket.getPROFIT_Sell_MR() + "\n"
                 + " --- ИТОГО на счету БАЙ MR --- " + Gasket.getPROFIT_Buy_MR() + "\n"
                 + "OB_5_TAKE_MR === " + Gasket.getOb5TakeMr() + "\n"
@@ -236,7 +242,7 @@ public class ConsoleHelper {
 
 
     public static void printStatisticsR() {
-        ConsoleHelper.writeMessage("\n"
+        writeMessage("\n"
                 + " --- ИТОГО на счету CEЛЛ R --- " + Gasket.getPROFIT_Sell_R() + "\n"
                 + " --- ИТОГО на счету БАЙ R --- " + Gasket.getPROFIT_Buy_R() + "\n"
                 + "OB_5_TAKE_R === " + Gasket.getOb5TakeR() + "\n"
@@ -265,7 +271,7 @@ public class ConsoleHelper {
 
 
     public static void printStatisticsPatterns() {
-        ConsoleHelper.writeMessage("\n"
+        writeMessage("\n"
                 + " --- ИТОГО на счету CEЛЛ ПАТТЕРН --- " + Gasket.getPROFIT_Sell_PAT() + "\n"
                 + " --- ИТОГО на счету БАЙ ПАТТЕРН --- " + Gasket.getPROFIT_Buy_PAT() + "\n"
                 + "OB_TAKE_PAT === " + Gasket.getObTakePat() + "\n"
@@ -278,7 +284,7 @@ public class ConsoleHelper {
 
 
     public static void printFlag() {
-        ConsoleHelper.writeMessage("\n"
+        writeMessage("\n"
                 + "OB_5 === " + Gasket.isObFlag_5() + "\n"
                 + "OS_5 === " + Gasket.isOsFlag_5() + "\n"
                 + "OB_4 === " + Gasket.isObFlag_4() + "\n"
@@ -294,7 +300,7 @@ public class ConsoleHelper {
 
 
     public static void showCommands() {
-        ConsoleHelper.writeMessage("\n\n"
+        writeMessage("\n\n"
                 + "SETTINGS=RESTART программа перезапустит настройки не отключаясь\n"
                 + "activeNumberOfCandlesForAnalysis\n"
                 + "timeCalculationCombinationLevel\n"

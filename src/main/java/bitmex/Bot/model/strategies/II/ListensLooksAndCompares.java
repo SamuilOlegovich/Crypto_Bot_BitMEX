@@ -554,15 +554,15 @@ public class ListensLooksAndCompares {
     private class SortPriceRemainingLevels implements Comparator<String> {
         @Override
         public int compare(String o1, String o2) {
-//            String[] strings1 = o1.split(",");
-//            String[] strings2 = o2.split(",");
-//
-//            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
-//                    .replaceAll("price: ", "")) - Double.parseDouble(strings1[3]
-//                    .replaceAll("\"", "").replaceAll("price: ", ""));
+            String[] strings1 = o1.split(",");
+            String[] strings2 = o2.split(",");
 
-            double result = Double.parseDouble(giveData(price.toString(), o2))
-                    - Double.parseDouble(giveData(price.toString(), o1));
+            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
+                    .replaceAll("price: ", "")) - Double.parseDouble(strings1[3]
+                    .replaceAll("\"", "").replaceAll("price: ", ""));
+
+//            double result = Double.parseDouble(giveData(price.toString(), o2))
+//                    - Double.parseDouble(giveData(price.toString(), o1));
 
             if (result > 0) return 1;
             else if (result < 0) return -1;

@@ -24,5 +24,6 @@ public enum TypeData {
     START,
     END,
     NEXT,
+    NULL_NULL,
     TIME;
 }

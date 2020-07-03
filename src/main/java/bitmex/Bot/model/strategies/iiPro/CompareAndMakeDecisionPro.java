@@ -1,11 +1,12 @@
 package bitmex.Bot.model.strategies.iiPro;
 
 
+
 import java.util.Comparator;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.model.Gasket.getLevelsToCompare;
 import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
@@ -18,10 +19,12 @@ public class CompareAndMakeDecisionPro extends Thread {
 
     private ArrayList<String> patternsList;
     private ArrayList<String> marketList;
+    private String[] levelsToCompare;
 
 
 
     public CompareAndMakeDecisionPro(ArrayList<String> marketList, ArrayList<String> patternsList) {
+        this.levelsToCompare = getLevelsToCompare().split("-");
         this.patternsList = new ArrayList<>(patternsList);
         this.marketList = new ArrayList<>(marketList);
         this.sortTheAlphabet = new SortTheAlphabet();
@@ -92,8 +95,7 @@ public class CompareAndMakeDecisionPro extends Thread {
                     bias++;
                 }
 
-                if (!string.startsWith("0") && !string.startsWith(BIAS.toString())
-                        && !string.startsWith(NULL.toString())
+                if (!string.startsWith(BIAS.toString()) && !string.startsWith(NULL.toString())
                         && !string.startsWith(BUY.toString()) && bias == i - 1) {
                     marketStrings.add(string);
                 }
@@ -106,8 +108,7 @@ public class CompareAndMakeDecisionPro extends Thread {
                     bias++;
                 }
 
-                if (!string.startsWith("0") && !string.startsWith(BIAS.toString())
-                        && !string.startsWith(NULL.toString())
+                if (!string.startsWith(BIAS.toString()) && !string.startsWith(NULL.toString())
                         && !string.startsWith(BUY.toString()) && bias == i - 1) {
                     patternStrings.add(string);
                 }
@@ -134,86 +135,48 @@ public class CompareAndMakeDecisionPro extends Thread {
             if (marketStrings.size() != patternStrings.size()) {
                 return false;
             } else {
-                ArrayList<String> patternCompareAll = new ArrayList<>();
-                ArrayList<String> marketCompareAll = new ArrayList<>();
                 ArrayList<String> patternCompare = new ArrayList<>();
                 ArrayList<String> marketCompare = new ArrayList<>();
+                ArrayList<String> patternAll = new ArrayList<>();
+                ArrayList<String> marketAll = new ArrayList<>();
 
 
                 // начинаем перебирать блоки строк и сравнивать их друг с другом
                 for (String stringMarket : marketStrings) {
                     String stringPattern = patternStrings.get(marketStrings.indexOf(stringMarket));
+                    boolean flag = true;
 
-                    // если это не последняя строка в блоке то заглядываем на строку вперед
-                    // и смотрим не ровны ли цены между ними
-                    if (marketStrings.indexOf(stringMarket) != marketStrings.size() - 1) {
-                        String stringPattern2 = patternStrings.get(marketStrings.indexOf(stringMarket) + 1);
-                        String stringMarket2 = marketStrings.get(marketStrings.indexOf(stringMarket) + 1);
-
-                        // если цены на шаг вперед во всех блоках ровны то добавляем в списки
-                        if (giveData(price, stringPattern).equals(giveData(price, stringPattern2)) ///////////////////////
-                                && giveData(price, stringMarket).equals(giveData(price, stringMarket2))) {
-
-                            patternCompare.add(giveData(type, stringPattern2));
-                            patternCompare.add(giveData(type, stringPattern));
-                            marketCompare.add(giveData(type, stringMarket2));
-                            marketCompare.add(giveData(type, stringMarket));
-
-                            patternCompareAll.add(stringPattern2);
-                            patternCompareAll.add(stringPattern);
-                            marketCompareAll.add(stringMarket2);
-                            marketCompareAll.add(stringMarket);
-
-                            // если цены на шаг вперед во всех блоках не ровны до добавляем в списки
-                        } else if (!giveData(price, stringPattern).equals(giveData(price, stringPattern2))
-                                && !giveData(price, stringMarket).equals(giveData(price, stringMarket2))) {
-
-                            // отсылаем непосредственно строки на последнее сравнение между собой
-                            if (!finallyComparisonOnAllData(stringMarket, stringPattern)) {
-                                return false;
-                            }
-
-                        } else {
-                            return false;
+                    for (String string : levelsToCompare) {
+                        if (giveData(type, stringMarket).equals(giveData(type, stringPattern))
+                                && giveData(type, stringMarket).equals(string)) {
+                            patternCompare.add(stringPattern);
+                            marketCompare.add(stringMarket);
+                            flag = false;
+                            break;
                         }
-                    } else {
-                        if (!finallyComparisonOnAllData(stringMarket, stringPattern)) {
-                            return false;
-                        }
+                    }
+
+                    if (flag) {
+                        patternAll.add(stringPattern);
+                        marketAll.add(stringMarket);
+                    }
+
+                }
+
+                patternAll.sort(sortTheAlphabet);
+                marketAll.sort(sortTheAlphabet);
+
+                for (String pattern : patternCompare) {
+                    String market = marketCompare.get(patternCompare.indexOf(pattern));
+                    if (!finallyComparisonOnAllData(market, pattern)) {
+                        return false;
                     }
                 }
 
-                // если блоки одинаковых ен напонены сравниваем их
-                if (marketCompare.size() > 0) {
-                    // вначале сортируем простые блоки и сравниваем их
-                    // если они ровны то можно сравнивать дальше построчно
-                    HashSet<String> hashSetPattern = new HashSet<>(patternCompare);
-                    HashSet<String> hashSetMarket = new HashSet<>(marketCompare);
-
-                    patternCompare.clear();
-                    marketCompare.clear();
-
-                    patternCompare.addAll(hashSetPattern);
-                    marketCompare.addAll(hashSetMarket);
-
-                    for (String string : marketCompare) {
-                        if (!string.equals(patternCompare.get(marketCompare.indexOf(string)))) {
-                            return false;
-                        }
-                    }
-
-                    hashSetPattern.clear();
-                    hashSetMarket.clear();
-
-                    patternCompareAll.sort(sortTheAlphabet);
-                    marketCompareAll.sort(sortTheAlphabet);
-
-
-                    for (String stringPattern : patternCompareAll) {
-                        if (!finallyComparisonOnAllData(marketCompareAll.get(patternCompareAll
-                                        .indexOf(stringPattern)), stringPattern)) {
-                            return false;
-                        }
+                for (String pattern : patternAll) {
+                    String market = marketAll.get(patternAll.indexOf(pattern));
+                    if (!finallyComparisonOnAllData(market, pattern)) {
+                        return false;
                     }
                 }
             }
@@ -228,21 +191,6 @@ public class CompareAndMakeDecisionPro extends Thread {
         writeMessage(getDateTerminal() + " --- "
                 + "---------------------------------------------------------------------------- 4 ii Pro");
 
-        if (!giveData(period, marketString).equals(giveData(period, patternString))) {
-
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-1 ii Pro");
-
-//            return false;
-        }
-
-        if (!giveData(preview, marketString).equals(giveData(preview, patternString))) {
-
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-2 ii Pro");
-
-//            return false;
-        }
 
         if (!giveData(type, marketString).equals(giveData(type, patternString))) {
 
@@ -252,12 +200,17 @@ public class CompareAndMakeDecisionPro extends Thread {
             return false;
         }
 
-        if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
+        // направление свечи сравниваем только на избранных уровнях, на остальных это не важно
+        for (String string : levelsToCompare) {
+            if (string.equals(giveData(type, marketString)) && string.equals(giveData(type, patternString))) {
+                if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
 
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-4 ii Pro");
+                    writeMessage(getDateTerminal() + " --- "
+                            + "---------------------------------------------------------------------------- 4-4 ii Pro");
 
-            return false;
+                    return false;
+                }
+            }
         }
 
         writeMessage(getDateTerminal() + " --- "

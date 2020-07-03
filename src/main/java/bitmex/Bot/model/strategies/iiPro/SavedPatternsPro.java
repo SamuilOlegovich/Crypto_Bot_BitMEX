@@ -9,22 +9,34 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import static bitmex.Bot.model.Gasket.getLevelsToCompare;
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
+import static bitmex.Bot.model.StringHelper.giveData;
+import static bitmex.Bot.model.enums.TypeData.*;
+
+
 
 
 public class SavedPatternsPro {
 
     private static SavedPatternsPro savedPatternsPro;
+    private SortTheAlphabet sortTheAlphabet;
     private SortSize sortSize;
 
     private ArrayList<ArrayList<String>> listsPricePatterns;
+    private String[] levelsToCompare;
     private int maxArraySize;
 
 
+
     private SavedPatternsPro() {
+        this.levelsToCompare = getLevelsToCompare().split("-");
+        this.sortTheAlphabet = new SortTheAlphabet();
         this.listsPricePatterns = new ArrayList<>();
         this.sortSize = new SortSize();
         this.maxArraySize = 0;
     }
+
 
 
     public static SavedPatternsPro getInstance() {
@@ -33,6 +45,7 @@ public class SavedPatternsPro {
         }
         return savedPatternsPro;
     }
+
 
 
     public synchronized void addListsPricePatterns(ArrayList<String> listsPricePatterns) {
@@ -44,11 +57,12 @@ public class SavedPatternsPro {
     // ищем есть ли такие патерны если нет то добавляем,
     // если есть то устанавливаем приоритет
     private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+        writeMessage(DatesTimes.getDateTerminal()
                 + " --- Сравниваю II Pro ПАТТЕРН с имеющимися");
 
         // находим количество смещений и запоминаем индекс первого смещения
         ArrayList<String> inArrayList = new ArrayList<>(arrayList);
+
         int countBias = 0;
         int indexBias = 0;
 
@@ -71,7 +85,7 @@ public class SavedPatternsPro {
             String[] strings = Gasket.getNumberOfHistoryBlocks().split("-");
 
             for (String sBlock : strings) {
-                ArrayList<String> inArrayListCopy = new ArrayList<>(inArrayList);
+                ArrayList<String> marketListCopy = new ArrayList<>(inArrayList);
 
                 int block = Integer.parseInt(sBlock);
 
@@ -80,8 +94,8 @@ public class SavedPatternsPro {
                     int count = 0;
                     int index = 0;
 
-                    for (int i = inArrayListCopy.size() - 1; i > 0; i--) {
-                        if (inArrayListCopy.get(i).startsWith("BIAS")) {
+                    for (int i = marketListCopy.size() - 1; i > 0; i--) {
+                        if (marketListCopy.get(i).startsWith(BIAS.toString())) {
                             count++;
                             if (count == block) {
                                 index = i;
@@ -91,28 +105,28 @@ public class SavedPatternsPro {
                     }
 
                     for (int i = index; i > 0; i--) {
-                        inArrayListCopy.remove(i);
+                        marketListCopy.remove(i);
                     }
                 }
 
                 // чистим от оставшихся предварительных исчезнувших уровняй
                 ArrayList<Integer> indexArrayList = new ArrayList<>();
 
-                for (String stringOne : inArrayListCopy) {
+                for (String stringOne : marketListCopy) {
                     int bias = 0;
 
-                    if (!stringOne.startsWith("BUY") && !stringOne.startsWith("BIAS")) {
+                    if (!stringOne.startsWith(BUY.toString()) && !stringOne.startsWith(BIAS.toString())) {
                         String[] oneStrings = stringOne.split(",");
                         String[] twoStrings;
 
-                        for (int i = inArrayListCopy.indexOf(stringOne) + 1; i < inArrayListCopy.size(); i++) {
+                        for (int i = marketListCopy.indexOf(stringOne) + 1; i < marketListCopy.size(); i++) {
                             String stringTwo = inArrayList.get(i);
 
-                            bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
+                            bias = bias + (stringTwo.startsWith(BIAS.toString()) ? 1 : 0);
 
 //
                             if (bias == 1) {
-                                // если мы сюда заши то значит мы перешли в нужны нам блок
+                                // если мы сюда зашли то значит мы перешли в нужны нам блок
                                 // начинаем сравнения с его строками
                                 twoStrings = stringTwo.split(",");
 
@@ -128,28 +142,28 @@ public class SavedPatternsPro {
                                         if (oneStrings[0].equals(twoStrings[0])
                                                 && oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringOne));
+                                            indexArrayList.add(marketListCopy.indexOf(stringOne));
 
                                             // M5 == M5  1 != 1(0)  ASK == ASK
                                         } else if (oneStrings[0].equals(twoStrings[0])
                                                 && (!oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[1].equals("1"))
                                                 && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringOne));
+                                            indexArrayList.add(marketListCopy.indexOf(stringOne));
 
                                             // M5 == M5  (0)1 != 1  ASK == ASK
                                         } else if (oneStrings[0].equals(twoStrings[0])
                                                 && (!oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[1].equals("0"))
                                                 && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringTwo));
+                                            indexArrayList.add(marketListCopy.indexOf(stringTwo));
 
                                             // M5 != M5(M15)  1 == 1  ASK == ASK
                                         } else if ((!oneStrings[0].equals(twoStrings[0])
                                                 && oneStrings[0].equals("M5"))
                                                 && oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringOne));
+                                            indexArrayList.add(marketListCopy.indexOf(stringOne));
 
                                             // M5 != M5(M15)  1 != 1(0)  ASK == ASK
                                         } else if ((!oneStrings[0].equals(twoStrings[0])
@@ -157,7 +171,7 @@ public class SavedPatternsPro {
                                                 && (!oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[1].equals("1"))
                                                 && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringOne));
+                                            indexArrayList.add(marketListCopy.indexOf(stringOne));
 
                                             // M5 != M5(M15)  (0)1 != 1  ASK == ASK
                                         } else if ((!oneStrings[0].equals(twoStrings[0])
@@ -165,7 +179,7 @@ public class SavedPatternsPro {
                                                 && (!oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[1].equals("0"))
                                                 && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringTwo));
+                                            indexArrayList.add(marketListCopy.indexOf(stringTwo));
 
                                             // M5 != M5(M15)  (0)1 != 1  ASK == ASK
                                         } else if ((!oneStrings[0].equals(twoStrings[0])
@@ -173,7 +187,7 @@ public class SavedPatternsPro {
                                                 && (!oneStrings[1].equals(twoStrings[1])
                                                 && oneStrings[1].equals("0"))
                                                 && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringTwo));
+                                            indexArrayList.add(marketListCopy.indexOf(stringTwo));
                                         }
                                     }
                                 }
@@ -191,58 +205,63 @@ public class SavedPatternsPro {
                 Collections.reverse(indexArrayList);
 
                 for (Integer index : indexArrayList) {
-                    inArrayListCopy.remove((int) index);
+                    marketListCopy.remove((int) index);
                 }
 
 
                 // перебираем массив стратегий и сравниваем с пришедшим
-                for (ArrayList<String> stringArrayList : listsPricePatterns) {
+                for (ArrayList<String> patternListIn : listsPricePatterns) {
+                    ArrayList<String> patternBias = new ArrayList<>();
+                    ArrayList<String> marketBias = new ArrayList<>();
+
                     boolean result = true;
 
                     // проверяем совпадает ли их размер
-                    if (stringArrayList.size() == inArrayListCopy.size()) {
+                    if (patternListIn.size() == marketListCopy.size()) {
 
-                        // если размер совпал то начинаем сравнивать построчно
-                        // не считая 0-вой строки так как там инфа о паттерне
-                        for (int i = 1; i < inArrayListCopy.size(); i++) {
-                            String[] strings1;
-                            String[] strings2;
-                            String[] arr1;
-                            String[] arr2;
+                        for (String pattern : patternListIn) {
+                            if (pattern.startsWith(BIAS.toString())) {
+                                patternBias.add(pattern);
+                            }
+                        }
 
-                            // Тут мы так же определяем не строка ли это направления и сравниваем либо ее либо строки уровней
-                            // BIAS===BUY===10===AVERAGE===3===MAX===5   <----- строка направления
-                            if (inArrayList.get(i).startsWith("BIAS") && stringArrayList.get(i).startsWith("BIAS")) {
-                                arr1 = stringArrayList.get(i).split("===");
-                                arr2 = inArrayListCopy.get(i).split("===");
+                        for (String market : marketListCopy) {
+                            if (market.startsWith(BIAS.toString())) {
+                                marketBias.add(market);
+                            }
+                        }
 
-                                // если хоть один объект не равен то прирываем цикл
-                                if (!arr1[1].equals(arr2[1])) {
-                                    result = false;
-                                    break;
+                        if (marketBias.size() == patternBias.size()) {
+                            for (String market : marketBias) {
+                                String pattern = patternBias.get(marketBias.indexOf(market));
+
+                                if (!giveData(BIAS, market).equals(giveData(BIAS, pattern))) {
+                                      result = false;
                                 }
+                            }
+                        } else {
+                            result = false;
+                        }
 
-                            } else if ((inArrayListCopy.get(i).startsWith("BIAS")
-                                    && !stringArrayList.get(i).startsWith("BIAS"))
-                                    || (!inArrayListCopy.get(i).startsWith("BIAS")
-                                    && stringArrayList.get(i).startsWith("BIAS"))) {
 
-                                // если под одним и тем же номером находятся разные по значимости строки то прирываем цикл
+                        if (result) {
+                            ArrayList<String> patternList = new ArrayList<>();
+                            ArrayList<String> marketList = new ArrayList<>();
+
+                            for (String pattern : patternListIn) {
+                                if (!pattern.startsWith(BIAS.toString()) && !pattern.startsWith(BUY.toString())) {
+                                    patternList.add(pattern);
+                                }
+                            }
+
+                            for (String market : marketListCopy) {
+                                if (market.startsWith(BIAS.toString()) && !market.startsWith(BUY.toString())) {
+                                    marketList.add(market);
+                                }
+                            }
+
+                            if (!compareLineSheets(marketList, patternList)) {
                                 result = false;
-                                break;
-                            } else if (!inArrayListCopy.get(i).startsWith("BIAS")
-                                    && !stringArrayList.get(i).startsWith("BIAS")) {
-
-                                arr1 = stringArrayList.get(i).split("\"type\": \"");
-                                arr2 = inArrayListCopy.get(i).split("\"type\": \"");
-                                strings1 = arr1[1].split("\"");
-                                strings2 = arr2[1].split("\"");
-
-                                // если хоть один объект не равен то прирываем цикл
-                                if (!strings1[0].equals(strings2[0])) {
-                                    result = false;
-                                    break;
-                                }
                             }
                         }
 
@@ -250,10 +269,10 @@ public class SavedPatternsPro {
                         // с учетом информации пришедшего паттерна
                         // а так же прекращаем процесс поиска и сравнения
                         if (result) {
-                            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                            writeMessage(DatesTimes.getDateTerminal()
                                     + " --- II Pro ПАТТЕРН такой есть - обновляю информацию");
-                            String stringZero = setPriority(stringArrayList.get(0), inArrayListCopy.get(0));
-                            stringArrayList.set(0, stringZero);
+                            String stringZero = setPriority(patternListIn.get(0), marketListCopy.get(0));
+                            patternListIn.set(0, stringZero);
 
                             ReadAndSavePatternsPro.saveSavedPatternsFromUser();
                             ReadAndSavePatternsPro.saveSavedPatterns();
@@ -263,15 +282,15 @@ public class SavedPatternsPro {
                 }
 
                 // если совпадение не было найдено - добавляем данный патерн в массив
-                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                writeMessage(DatesTimes.getDateTerminal()
                         + " --- Такого II Pro ПАТТЕРНА нет - ДОБАВЛЕН --- "
                         + "SIZE --- " + inArrayList.size());
 
                 // проверяю есть ли такой айди и если есть меняю его на другой
-                inArrayList.set(0, checkingID(inArrayListCopy.get(0)));
+                inArrayList.set(0, checkingID(marketListCopy.get(0)));
 
-                listsPricePatterns.add(0, inArrayListCopy);
-                maxArraySize = Math.max(inArrayListCopy.size(), maxArraySize);
+                listsPricePatterns.add(0, marketListCopy);
+                maxArraySize = Math.max(marketListCopy.size(), maxArraySize);
 
                 listsPricePatterns.sort(sortSize);
 
@@ -282,6 +301,78 @@ public class SavedPatternsPro {
             inArrayList.clear();
         }
     }
+
+
+
+    private boolean compareLineSheets(ArrayList<String> marketListIn, ArrayList<String> patternListIn) {
+        ArrayList<String> patternCompare = new ArrayList<>();
+        ArrayList<String> marketCompare = new ArrayList<>();
+        ArrayList<String> patternAll = new ArrayList<>();
+        ArrayList<String> marketAll = new ArrayList<>();
+
+        // начинаем перебирать блоки строк и сравнивать их друг с другом
+        for (String stringMarket : marketListIn) {
+            String stringPattern = patternListIn.get(marketListIn.indexOf(stringMarket));
+            boolean flag = true;
+
+            for (String string : levelsToCompare) {
+                if (giveData(type, stringMarket).equals(giveData(type, stringPattern))
+                        && giveData(type, stringMarket).equals(string)) {
+                    patternCompare.add(stringPattern);
+                    marketCompare.add(stringMarket);
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (flag) {
+                patternAll.add(stringPattern);
+                marketAll.add(stringMarket);
+            }
+
+        }
+
+        // эти уровни без разницы как стоят, потому их сортируем по алфавиту
+        patternAll.sort(sortTheAlphabet);
+        marketAll.sort(sortTheAlphabet);
+
+        // а эти должны быть в четкой последовательности
+        for (String pattern : patternCompare) {
+            String market = marketCompare.get(patternCompare.indexOf(pattern));
+            if (!finallyComparisonOnAllData(market, pattern)) {
+                return false;
+            }
+        }
+
+        for (String pattern : patternAll) {
+            String market = marketAll.get(patternAll.indexOf(pattern));
+            if (!finallyComparisonOnAllData(market, pattern)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+
+    private boolean finallyComparisonOnAllData(String marketString, String patternString) {
+
+        if (!giveData(type, marketString).equals(giveData(type, patternString))) {
+            return false;
+        }
+
+        // направление свечи сравниваем только на избранных уровнях, на остальных это не важно
+        for (String string : levelsToCompare) {
+            if (string.equals(giveData(type, marketString)) && string.equals(giveData(type, patternString))) {
+                if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
 
     // обновляем информационные данные в строке информации
@@ -304,6 +395,7 @@ public class SavedPatternsPro {
     }
 
 
+
     // находим и отдаем массивы нужной длины - размера
     public ArrayList<ArrayList<String>> getListFoSize(int size) {
         ArrayList<ArrayList<String>> listFoSize = new ArrayList<>();
@@ -319,21 +411,26 @@ public class SavedPatternsPro {
     }
 
 
+
     // возвращаем самую большую длину имеющегося паттерна
     public int getMaxArraySize() {
         return maxArraySize;
     }
 
 
+
     public ArrayList<ArrayList<String>> getListsPricePatterns() {
         return listsPricePatterns;
     }
+
+
 
     public void setPatternsInListsPricePatterns(ArrayList<String> arrayList) {
         ArrayList<String> strings = new ArrayList<>(arrayList);
         listsPricePatterns.add(strings);
         maxArraySize = Math.max(strings.size(), maxArraySize);
     }
+
 
 
     private String checkingID(String string) {
@@ -349,26 +446,28 @@ public class SavedPatternsPro {
     }
 
 
+
     public void seeLists() {
-        ConsoleHelper.writeMessage("\n"
+        writeMessage("\n"
                 + "Востановленный лист патернов имеет размер --- "
                 + listsPricePatterns.size());
 
         StringBuilder stringBuilder = new StringBuilder();
 
         for (ArrayList<String> arrayList : listsPricePatterns) {
-            ConsoleHelper.writeMessage("\n"
+            writeMessage("\n"
                     + "Размер паттерна --- " + arrayList.size()
                     + "\n");
             for (String string : arrayList) {
                 stringBuilder.delete(0, stringBuilder.length());
                 stringBuilder.append(string).delete(stringBuilder.length() - "\n".length(), stringBuilder.length());
 
-                ConsoleHelper.writeMessage(stringBuilder.toString());
+                writeMessage(stringBuilder.toString());
             }
         }
-        ConsoleHelper.writeMessage("");
+        writeMessage("");
     }
+
 
 
     public synchronized void updateFirstRowData(String string) {
@@ -392,19 +491,22 @@ public class SavedPatternsPro {
         if (count > 0) {
             ReadAndSavePatternsPro.saveSavedPatterns();
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+            writeMessage(DatesTimes.getDateTerminal()
                     + " --- ОБНОВИЛ нулевую стороку II Pro ПАТТЕРНОВ согласно исходу сделки");
 
         } else {
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+            writeMessage(DatesTimes.getDateTerminal()
                     + " --- Такого номера ===" + in[in.length - 1] + "=== II Pro ПАТТЕРНА нет");
         }
     }
 
 
 
+
     /// === INNER CLASSES === ///
+
+
 
 
 
@@ -415,6 +517,16 @@ public class SavedPatternsPro {
             if (result > 0) return 1;
             else if (result < 0) return -1;
             else return 0;
+        }
+    }
+
+
+
+    private class SortTheAlphabet implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+            int result = giveData(type, o1).compareTo(giveData(type, o2));
+            return Integer.compare(result, 0);
         }
     }
 }

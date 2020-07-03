@@ -91,6 +91,10 @@ public class Gasket {
     private static int PORT = 4444;                 // порт подключения
     private static Ticker ticker;
 
+    private static String levelsToCompare = "OPEN_POS_BID_MINUS" + "-OPEN_POS_ASK_MINUS" + "-OPEN_POS_ASK_PLUS"
+            + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS" + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
+            + "-ASK" + "-BID";                      // уровни для сравнения в II Pro
+
 
 
             // флаги
@@ -1487,6 +1491,15 @@ public class Gasket {
 
     public static void setShowLoadPatternsIIPro(boolean showLoadPatternsIIPro) {
         Gasket.showLoadPatternsIIPro = showLoadPatternsIIPro;
+    }
+
+
+    public static String getLevelsToCompare() {
+        return levelsToCompare;
+    }
+
+    public static void setLevelsToCompare(String levelsToCompare) {
+        Gasket.levelsToCompare = levelsToCompare;
     }
 }
 

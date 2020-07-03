@@ -34,7 +34,6 @@ public class CompareAndMakeDecisionUser extends Thread {
 
     @Override
     public void run() {
-        writeMessage(getDateTerminal() + " --- Сравниваю паттерны USER");
 
         if (compareSheets()) {
             writeMessage(getDateTerminal() + " --- "

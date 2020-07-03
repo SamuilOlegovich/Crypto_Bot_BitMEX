@@ -164,7 +164,9 @@ public class ConsoleHelper {
                 + "showLoadPatternsII === " + Gasket.isShowLoadPatternsII()
                 + " ----- показывать загрузку паттернов при запуске программы\n"
                 + "showLoadPatternsIIPro === " + Gasket.isShowLoadPatternsIIPro()
-                + " ----- показывать загрузку паттернов при запуске программы\n";
+                + " ----- показывать загрузку паттернов при запуске программы\n"
+                + "levelsToCompare === " + Gasket.getLevelsToCompare()
+                + " ----- уровни для сравнения II Pro\n";
     }
 
 
@@ -324,6 +326,7 @@ public class ConsoleHelper {
                 + "strategyWorkOne\n"
                 + "apiKey2Accounts\n"
                 + "tradingTestUser\n"
+                + "levelsToCompare\n"
                 + "dateDifference\n"
                 + "rangePriceMIN\n"
                 + "rangePriceMAX\n"

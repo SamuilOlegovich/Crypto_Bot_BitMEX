@@ -65,11 +65,15 @@ public class ExecutorCommandos {
                     writeMessage("showLoadPatternsII === "
                             + isShowLoadPatternsII() + "\n");
                     break;
-
-                    case "showLoadPatternsIIPro" :
+                case "showLoadPatternsIIPro" :
                     setShowLoadPatternsIIPro(strings[1].equalsIgnoreCase("true"));
                     writeMessage("showLoadPatternsIIPro === "
                             + isShowLoadPatternsIIPro() + "\n");
+                    break;
+                case "levelsToCompare" :
+                    setLevelsToCompare(strings[1]);
+                    writeMessage("levelsToCompare === "
+                            + getLevelsToCompare() + "\n");
                     break;
                 case "maxAndMinAverage" :
                     setMaxAndMinAverage(strings[1].equalsIgnoreCase("true"));
@@ -321,14 +325,6 @@ public class ExecutorCommandos {
         }
         parserSetting.writeSettings();
     }
-
-//    public boolean isFlag() {
-//        return flag;
-//    }
-
-//    public void setFlag(boolean flag) {
-//        this.flag = flag;
-//    }
 
     public void setParserSetting(ParserSetting parserSetting) {
         this.parserSetting = parserSetting;

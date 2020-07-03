@@ -1,10 +1,12 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.CompareHelper;
+
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static bitmex.Bot.model.CompareHelper.getSortTheAlphabet;
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
 import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 import static bitmex.Bot.model.StringHelper.giveData;
@@ -15,7 +17,6 @@ import static bitmex.Bot.model.enums.TypeData.*;
 
 // сравниваю и принимаю решение
 public class CompareAndMakeDecisionUser extends Thread {
-    private SortTheAlphabet sortTheAlphabet;
 
     private ArrayList<String> patternsList;
     private ArrayList<String> marketList;
@@ -26,7 +27,6 @@ public class CompareAndMakeDecisionUser extends Thread {
     public CompareAndMakeDecisionUser(ArrayList<String> marketList, ArrayList<String> patternsList) {
         this.patternsList = new ArrayList<>(patternsList);
         this.marketList = new ArrayList<>(marketList);
-        this.sortTheAlphabet = new SortTheAlphabet();
         start();
     }
 
@@ -91,11 +91,12 @@ public class CompareAndMakeDecisionUser extends Thread {
             int bias = 0;
 
             for (String string : marketList) {
-                if (string.startsWith("BIAS")) {
+                if (string.startsWith(BIAS.toString())) {
                     bias++;
                 }
 
-                if (!string.startsWith("0") && !string.startsWith("BIAS") && !string.startsWith("BUY")
+                if (!string.startsWith(NULL.toString()) && !string.startsWith(BIAS.toString())
+                        && !string.startsWith(BUY.toString())
                         && bias == i - 1) {
                     marketStrings.add(string);
                 }
@@ -108,11 +109,12 @@ public class CompareAndMakeDecisionUser extends Thread {
             bias = 0;
 
             for (String string : patternsList) {
-                if (string.startsWith("BIAS")) {
+                if (string.startsWith(BIAS.toString())) {
                     bias++;
                 }
 
-                if (!string.startsWith("0") && !string.startsWith("BIAS") && !string.startsWith("BUY")
+                if (!string.startsWith(NULL.toString()) && !string.startsWith(BIAS.toString())
+                        && !string.startsWith(BUY.toString())
                         && bias == i - 1) {
                     patternStrings.add(string);
                 }
@@ -356,8 +358,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                 if (readyMarketBlock.size() == patternStrings.size() && patternStrings.size() > 0) {
 
                     // сортируем блоки и сравниваем их дальше построчно
-                    readyMarketBlock.sort(sortTheAlphabet);
-                    patternStrings.sort(sortTheAlphabet);
+                    readyMarketBlock.sort(getSortTheAlphabet());
+                    patternStrings.sort(getSortTheAlphabet());
 
                     for (String stringReady : readyMarketBlock) {
                         if (!finallyComparisonOnAllData(stringReady,
@@ -393,8 +395,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                     hashSetPatternNull.clear();
                     hashSetMarketNull.clear();
 
-                    patternComparePriceNullAll.sort(sortTheAlphabet);
-                    marketComparePriceNullAll.sort(sortTheAlphabet);
+                    patternComparePriceNullAll.sort(getSortTheAlphabet());
+                    marketComparePriceNullAll.sort(getSortTheAlphabet());
 
                     for (String stringMarket : marketComparePriceNullAll) {
                         if (!finallyComparisonOnAllData(stringMarket,
@@ -429,8 +431,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                     hashSetPatternNull.clear();
                     hashSetMarketNull.clear();
 
-                    patternCompareDataNullAll.sort(sortTheAlphabet);
-                    marketCompareDataNullAll.sort(sortTheAlphabet);
+                    patternCompareDataNullAll.sort(getSortTheAlphabet());
+                    marketCompareDataNullAll.sort(getSortTheAlphabet());
 
                     for (String stringMarket : marketCompareDataNullAll) {
                         if (!finallyComparisonOnAllData(stringMarket,
@@ -444,8 +446,8 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 ////////////////////////////
                 if (patternNullNull.size() == marketNullNull.size() && patternNullNull.size() > 0) {
-                    patternNullNull.sort(sortTheAlphabet);
-                    marketNullNull.sort(sortTheAlphabet);
+                    patternNullNull.sort(getSortTheAlphabet());
+                    marketNullNull.sort(getSortTheAlphabet());
 
                     for (String stringMarket : marketNullNull) {
                         if (!finallyComparisonOnAllData(stringMarket,
@@ -528,20 +530,6 @@ public class CompareAndMakeDecisionUser extends Thread {
                     + "---------------------------------------------------------------------------- 4-true");
 
         return true;
-    }
-
-
-
-    /// === INNER CLASS === ///
-
-
-
-    private class SortTheAlphabet implements Comparator<String> {
-        @Override
-        public int compare(String o1, String o2) {
-            int result = giveData(type, o1).compareTo(giveData(type, o2));
-            return Integer.compare(result, 0);
-        }
     }
 
 

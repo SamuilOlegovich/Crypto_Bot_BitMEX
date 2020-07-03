@@ -25,5 +25,7 @@ public enum TypeData {
     END,
     NEXT,
     NULL_NULL,
+    BLOCK,
+    TYPE,
     TIME;
 }

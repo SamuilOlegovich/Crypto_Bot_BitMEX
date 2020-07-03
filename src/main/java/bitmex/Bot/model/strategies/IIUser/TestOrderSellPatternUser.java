@@ -16,8 +16,6 @@ public class TestOrderSellPatternUser extends Thread {
     public TestOrderSellPatternUser(String id, double priseOpenOrder) {
         this.priseTakeOrder = priseOpenOrder - Gasket.getTake();
         this.priseStopOrder = priseOpenOrder + Gasket.getStop();
-//        new TestOrderSellMiniRevers(id, priseOpenOrder);
-//        new TestOrderSellRevers(id, priseOpenOrder);
         this.priseOpenOrder = priseOpenOrder;
         this.ID = id;
         start();

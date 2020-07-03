@@ -2,6 +2,8 @@ package bitmex.Bot.model.strategies.iiPro;
 
 
 
+import bitmex.Bot.model.CompareHelper;
+
 import java.util.Comparator;
 import java.util.ArrayList;
 
@@ -15,7 +17,6 @@ import static bitmex.Bot.model.enums.TypeData.*;
 
 
 public class CompareAndMakeDecisionPro extends Thread {
-    private SortTheAlphabet sortTheAlphabet;
 
     private ArrayList<String> patternsList;
     private ArrayList<String> marketList;
@@ -27,7 +28,6 @@ public class CompareAndMakeDecisionPro extends Thread {
         this.levelsToCompare = getLevelsToCompare().split("-");
         this.patternsList = new ArrayList<>(patternsList);
         this.marketList = new ArrayList<>(marketList);
-        this.sortTheAlphabet = new SortTheAlphabet();
         start();
     }
 
@@ -163,8 +163,8 @@ public class CompareAndMakeDecisionPro extends Thread {
 
                 }
 
-                patternAll.sort(sortTheAlphabet);
-                marketAll.sort(sortTheAlphabet);
+                patternAll.sort(CompareHelper.getSortTheAlphabet());
+                marketAll.sort(CompareHelper.getSortTheAlphabet());
 
                 for (String pattern : patternCompare) {
                     String market = marketCompare.get(patternCompare.indexOf(pattern));
@@ -217,20 +217,6 @@ public class CompareAndMakeDecisionPro extends Thread {
                 + "---------------------------------------------------------------------------- 4-5 ii Pro");
 
         return true;
-    }
-
-
-
-    /// === INNER CLASS === ///
-
-
-
-    private class SortTheAlphabet implements Comparator<String> {
-        @Override
-        public int compare(String o1, String o2) {
-            int result = giveData(type, o1).compareTo(giveData(type, o2));
-            return Integer.compare(result, 0);
-        }
     }
 
 

@@ -10,6 +10,9 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import static bitmex.Bot.model.CompareHelper.*;
+import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.model.enums.TypeData.*;
 
 
 public class ListensLooksAndComparesPro {
@@ -21,9 +24,6 @@ public class ListensLooksAndComparesPro {
 
     private SortPriceRemainingLevels sortPriceRemainingLevels;
     private SavedPatternsPro savedPatternsPro;
-    private SortPrice sortPriceComparator;
-    private SortSize sortSize;
-    private SortTime sortTime;
 
 
     private boolean stopStartFlag;
@@ -33,17 +33,14 @@ public class ListensLooksAndComparesPro {
 
 
     private ListensLooksAndComparesPro() {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+        ConsoleHelper.writeMessage(getDateTerminal() + " --- "
                 + "Класс Listens Looks And Compares II Pro начал работать");
 
         this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
         this.savedPatternsPro = Gasket.getSavedPatternsProClass();
         this.marketObjectInfoWorkingCopy = new ArrayList<>();
         this.marketListInListString = new ArrayList<>();
-        this.sortPriceComparator = new SortPrice();
         this.listInfoIndicator = new ArrayList<>();
-        this.sortSize = new SortSize();
-        this.sortTime = new SortTime();
         this.priceStart = Float.NaN;
         this.priceNow = Float.NaN;
         this.stopStartFlag = true;
@@ -94,7 +91,7 @@ public class ListensLooksAndComparesPro {
             // сохраняю те патерны которые еще актуальны на данный момент
             ReadAndSavePatternsPro.saveTemporarySavedPatterns(marketListInListString);
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+            ConsoleHelper.writeMessage(getDateTerminal() + " --- "
                     + "Сравниваю рынок с паттернами II Pro");
 
             // сравниваем оставшееся с патернами
@@ -143,18 +140,18 @@ public class ListensLooksAndComparesPro {
     // сортируем и наполняем лист сравнений листами строк
     // очищаем лист входящих объектов
     private synchronized void sortPrice(boolean b) {
-        marketObjectInfoWorkingCopy.sort(sortPriceComparator);
+        marketObjectInfoWorkingCopy.sort(getSortPrice());
 
         if (b) {
             if (marketListInListString.size() > 0) {
                 for (ArrayList<String> arrayListString : marketListInListString) {
-                    String stringBias = "BIAS===" + getBias() + "===" + DatesTimes.getDateTerminal() + "\n";
+                    String stringBias = BIAS.toString() + "===" + getBias() + "===" + getDateTerminal() + "\n";
                     arrayListString.add(stringBias);
                 }
             }
 
             ArrayList<String> arrayListOut = new ArrayList<>();
-            arrayListOut.add("0===" + DatesTimes.getDateTerminal() + "\n");
+            arrayListOut.add(NULL.toString() + "===" + getDateTerminal() + "\n");
             marketListInListString.add(arrayListOut);
             priceStart = Gasket.getBitmexQuote().getBidPrice();
 
@@ -168,7 +165,7 @@ public class ListensLooksAndComparesPro {
                 }
             }
 
-            marketListInListString.sort(sortSize);
+            marketListInListString.sort(getSortSize());
             marketObjectInfoWorkingCopy.clear();
         }
     }
@@ -194,7 +191,7 @@ public class ListensLooksAndComparesPro {
 
             // находим количество BIAS
             for (String s : patternListIn) {
-                if (s.startsWith("BIAS")) count++;
+                if (s.startsWith(BIAS.toString())) count++;
             }
 
             // согласно количеству BIAS находим максимальный нужный нам промежуток времени
@@ -276,7 +273,7 @@ public class ListensLooksAndComparesPro {
                 int bias = 0;
 
                 // если строка не ровна нулевой строке или промежуточной
-                if (!stringOne.startsWith("0") && !stringOne.startsWith("BIAS")) {
+                if (!stringOne.startsWith(NULL.toString()) && !stringOne.startsWith(BIAS.toString())) {
                     // разбиваем строку на запчасти
                     String[] oneStrings = stringOne.split(",");
                     String[] twoStrings;
@@ -285,7 +282,7 @@ public class ListensLooksAndComparesPro {
                     for (int i = inArrayList.indexOf(stringOne) + 1; i < inArrayList.size(); i++) {
                         String stringTwo = inArrayList.get(i);
 
-                        bias = bias + (stringTwo.startsWith("BIAS") ? 1 : 0);
+                        bias = bias + (stringTwo.startsWith(BIAS.toString()) ? 1 : 0);
 
                         if (bias == 1) {
                             // если мы сюда заши то значит мы перешли в нужны нам блок
@@ -381,11 +378,11 @@ public class ListensLooksAndComparesPro {
         String stringOut;
 
         if (bias > 0) {
-            stringOut = "BUY===" + bias;
+            stringOut = BUY.toString() + "===" + bias;
         } else if (bias < 0) {
-            stringOut = "SELL===" + bias;
+            stringOut = SELL.toString() + "===" + bias;
         } else {
-            stringOut = "NULL===0";
+            stringOut = NULL.toString() + "===0";
         }
         return stringOut;
     }
@@ -405,7 +402,7 @@ public class ListensLooksAndComparesPro {
 
 
         // сортируем масив по времени от меньшего к большему
-        inAdditionalLevels.sort(sortTime);
+        inAdditionalLevels.sort(getSortTime());
 
         // вставляем оставшиеся объекты в нужный нам блок
         for (InfoIndicator marketInfo : inAdditionalLevels) {
@@ -413,8 +410,8 @@ public class ListensLooksAndComparesPro {
 
             for (String patternString : inEdit) {
 
-                if (!patternString.startsWith("0")
-                        && !patternString.startsWith("BUY") && !patternString.startsWith("BIAS")) {
+                if (!patternString.startsWith(NULL.toString()) && !patternString.startsWith(BUY.toString())
+                        && !patternString.startsWith(BIAS.toString())) {
                     String[] stringsPattern = patternString.split(",");
 
                     if (DatesTimes.getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
@@ -425,14 +422,14 @@ public class ListensLooksAndComparesPro {
             }
 
             if (index > 0) {
-                if (!inEdit.get(index).startsWith("BIAS")) {
+                if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toString());
                 } else {
                     String[] stringBias = inEdit.get(index).split("===");
                     long time = 0;
 
                     for (int i = 0; i < stringBias.length; i++) {
-                        if (stringBias[i].equalsIgnoreCase("TIME")) {
+                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
                             time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
                             break;
                         }
@@ -449,9 +446,9 @@ public class ListensLooksAndComparesPro {
 
         // сортируем по новому
         for (String string : inEdit) {
-            if (string.startsWith("0")) {
+            if (string.startsWith(NULL.toString())) {
                 out.add(string);
-            } else if (string.startsWith("BIAS")) {
+            } else if (string.startsWith(BIAS.toString())) {
                 intermediary.sort(sortPriceRemainingLevels);
                 intermediary.add(string);
                 out.addAll(intermediary);
@@ -500,46 +497,6 @@ public class ListensLooksAndComparesPro {
     }
 
 /// === INNER CLASSES === ///
-
-
-
-
-    private class SortPrice implements Comparator<InfoIndicator> {
-        @Override
-        public int compare(InfoIndicator o1, InfoIndicator o2) {
-            double result = o2.getPrice() - o1.getPrice();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
-    private class SortSize implements Comparator<ArrayList<String>> {
-        @Override
-        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
-            double result = o1.size() - o2.size();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
-    private class SortTime implements Comparator<InfoIndicator> {
-        @Override
-        public int compare(InfoIndicator o1, InfoIndicator o2) {
-            long result = o1.getTime().getTime() - o2.getTime().getTime();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
 
 
 

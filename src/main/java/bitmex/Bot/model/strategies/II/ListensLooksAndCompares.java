@@ -2,19 +2,16 @@ package bitmex.Bot.model.strategies.II;
 
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.model.enums.TypeData;
-import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 
 import java.util.*;
 
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
-import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.DatesTimes.getDate;
 import static bitmex.Bot.model.enums.TypeData.*;
+import static bitmex.Bot.model.CompareHelper.*;
 
 
 
@@ -27,10 +24,7 @@ public class ListensLooksAndCompares {
     private ArrayList<InfoIndicator> listInfoIndicator;
 
     private SortPriceRemainingLevels sortPriceRemainingLevels;
-    private SortPrice sortPriceComparator;
     private SavedPatterns savedPatterns;
-    private SortSize sortSize;
-    private SortTime sortTime;
 
 
     private boolean stopStartFlag;
@@ -47,10 +41,7 @@ public class ListensLooksAndCompares {
         this.marketObjectInfoWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsClass();
         this.marketListInListString = new ArrayList<>();
-        this.sortPriceComparator = new SortPrice();
         this.listInfoIndicator = new ArrayList<>();
-        this.sortSize = new SortSize();
-        this.sortTime = new SortTime();
         this.priceStart = Float.NaN;
         this.priceNow = Float.NaN;
         this.stopStartFlag = true;
@@ -150,7 +141,7 @@ public class ListensLooksAndCompares {
     // сортируем и наполняем лист сравнений листами строк
     // очищаем лист входящих объектов
     private synchronized void sortPrice(boolean b) {
-        marketObjectInfoWorkingCopy.sort(sortPriceComparator);
+        marketObjectInfoWorkingCopy.sort(getSortPrice());
 
         if (b) {
             if (marketListInListString.size() > 0) {
@@ -175,11 +166,10 @@ public class ListensLooksAndCompares {
                 }
             }
 
-            marketListInListString.sort(sortSize);
+            marketListInListString.sort(getSortSize());
             marketObjectInfoWorkingCopy.clear();
         }
     }
-
 
 
 
@@ -389,11 +379,11 @@ public class ListensLooksAndCompares {
         String stringOut;
 
         if (bias > 0) {
-            stringOut = "BUY===" + bias;
+            stringOut = BUY.toString() + "===" + bias;
         } else if (bias < 0) {
-            stringOut = "SELL===" + bias;
+            stringOut = SELL.toString() + "===" + bias;
         } else {
-            stringOut = "NULL===0";
+            stringOut = NULL.toString() + "===0";
         }
         return stringOut;
     }
@@ -413,7 +403,7 @@ public class ListensLooksAndCompares {
 
 
         // сортируем масив по времени от меньшего к большему
-        inAdditionalLevels.sort(sortTime);
+        inAdditionalLevels.sort(getSortTime());
 
         // вставляем оставшиеся объекты в нужный нам блок
         for (InfoIndicator marketInfo : inAdditionalLevels) {
@@ -507,47 +497,11 @@ public class ListensLooksAndCompares {
         }
     }
 
+
+
+
 /// === INNER CLASSES === ///
 
-
-
-
-    private class SortPrice implements Comparator<InfoIndicator> {
-        @Override
-        public int compare(InfoIndicator o1, InfoIndicator o2) {
-            double result = o2.getPrice() - o1.getPrice();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
-    private class SortSize implements Comparator<ArrayList<String>> {
-        @Override
-        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
-            double result = o1.size() - o2.size();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
-    private class SortTime implements Comparator<InfoIndicator> {
-        @Override
-        public int compare(InfoIndicator o1, InfoIndicator o2) {
-            long result = o1.getTime().getTime() - o2.getTime().getTime();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
 
 
 
@@ -560,9 +514,6 @@ public class ListensLooksAndCompares {
             double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
                     .replaceAll("price: ", "")) - Double.parseDouble(strings1[3]
                     .replaceAll("\"", "").replaceAll("price: ", ""));
-
-//            double result = Double.parseDouble(giveData(price.toString(), o2))
-//                    - Double.parseDouble(giveData(price.toString(), o1));
 
             if (result > 0) return 1;
             else if (result < 0) return -1;

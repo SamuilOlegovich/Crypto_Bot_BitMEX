@@ -1,6 +1,7 @@
 package bitmex.Bot.model.strategies.II;
 
 
+import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.enums.TypeData;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 import java.io.*;
 
+import static bitmex.Bot.model.CompareHelper.getSortSize;
 import static bitmex.Bot.model.enums.TimeFrame.M5;
 import static bitmex.Bot.model.enums.TypeData.BIAS;
 import static bitmex.Bot.model.enums.TypeData.BUY;
@@ -24,7 +26,6 @@ public class SavedPatterns implements Serializable {
 
     private static final long serialVersionUID = 908198101052020L;
     private static SavedPatterns savedPatterns;
-    private SortSize sortSize;
 
     private ArrayList<ArrayList<String>> listsPricePatterns;
     private int maxArraySize;
@@ -32,7 +33,6 @@ public class SavedPatterns implements Serializable {
 
     private SavedPatterns() {
         this.listsPricePatterns = new ArrayList<>();
-        this.sortSize = new SortSize();
         this.maxArraySize = 0;
     }
 
@@ -118,7 +118,6 @@ public class SavedPatterns implements Serializable {
 
                             bias = bias + (stringTwo.startsWith(BIAS.toString()) ? 1 : 0);
 
-//
                             if (bias == 1) {
                                 // если мы сюда заши то значит мы перешли в нужны нам блок
                                 // начинаем сравнения с его строками
@@ -220,7 +219,9 @@ public class SavedPatterns implements Serializable {
 
                             // Тут мы так же определяем не строка ли это направления и сравниваем либо ее либо строки уровней
                             // BIAS===BUY===10===AVERAGE===3===MAX===5   <----- строка направления
-                            if (inArrayList.get(i).startsWith("BIAS") && stringArrayList.get(i).startsWith("BIAS")) {
+                            if (inArrayList.get(i).startsWith(BIAS.toString())
+                                    && stringArrayList.get(i).startsWith(BIAS.toString())) {
+
                                 arr1 = stringArrayList.get(i).split("===");
                                 arr2 = inArrayListCopy.get(i).split("===");
 
@@ -230,16 +231,16 @@ public class SavedPatterns implements Serializable {
                                     break;
                                 }
 
-                            } else if ((inArrayListCopy.get(i).startsWith("BIAS")
-                                    && !stringArrayList.get(i).startsWith("BIAS"))
-                                    || (!inArrayListCopy.get(i).startsWith("BIAS")
-                                    && stringArrayList.get(i).startsWith("BIAS"))) {
+                            } else if ((inArrayListCopy.get(i).startsWith(BIAS.toString())
+                                    && !stringArrayList.get(i).startsWith(BIAS.toString()))
+                                    || (!inArrayListCopy.get(i).startsWith(BIAS.toString())
+                                    && stringArrayList.get(i).startsWith(BIAS.toString()))) {
 
                                 // если под одним и тем же номером находятся разные по значимости строки то прирываем цикл
                                 result = false;
                                 break;
-                            } else if (!inArrayListCopy.get(i).startsWith("BIAS")
-                                    && !stringArrayList.get(i).startsWith("BIAS")) {
+                            } else if (!inArrayListCopy.get(i).startsWith(BIAS.toString())
+                                    && !stringArrayList.get(i).startsWith(BIAS.toString())) {
 
                                 arr1 = stringArrayList.get(i).split("\"type\": \"");
                                 arr2 = inArrayListCopy.get(i).split("\"type\": \"");
@@ -281,7 +282,7 @@ public class SavedPatterns implements Serializable {
                 listsPricePatterns.add(0, inArrayListCopy);
                 maxArraySize = Math.max(inArrayListCopy.size(), maxArraySize);
 
-                listsPricePatterns.sort(sortSize);
+                listsPricePatterns.sort(getSortSize());
 
                 ReadAndSavePatterns.saveSavedPatternsFromUser();
                 ReadAndSavePatterns.saveSavedPatterns();
@@ -402,27 +403,9 @@ public class SavedPatterns implements Serializable {
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- ОБНОВИЛ нулевую стороку II ПАТТЕРНОВ согласно исходу сделки");
-
         } else {
-
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- Такого номера ===" + in[in.length - 1] + "=== ПАТТЕРНА нет");
-        }
-    }
-
-
-
-    /// === INNER CLASSES === ///
-
-
-
-    private class SortSize implements Comparator<ArrayList<String>> {
-        @Override
-        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
-            double result = o1.size() - o2.size();
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
         }
     }
 }

@@ -1,19 +1,18 @@
 package bitmex.Bot.model.strategies.II;
 
+import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
-import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 import java.util.*;
 
 
-import static bitmex.Bot.model.DatesTimes.getDate;
-import static bitmex.Bot.model.DatesTimes.getDateTerminal;
-import static bitmex.Bot.model.Gasket.getBitmexQuote;
 import static bitmex.Bot.model.Gasket.getTakeForCollectingPatterns;
-import static bitmex.Bot.model.enums.TypeData.*;
+import static bitmex.Bot.model.DatesTimes.getDateTerminal;
 import static bitmex.Bot.view.ConsoleHelper.writeMessage;
+import static bitmex.Bot.model.Gasket.getBitmexQuote;
+import static bitmex.Bot.model.DatesTimes.getDate;
+import static bitmex.Bot.model.enums.TypeData.*;
 import static java.lang.Double.NaN;
 
 
@@ -31,8 +30,6 @@ public class ListensToLooksAndFills {
     private CountPriseSell countPriseSell;
     private CountPriseBuy countPriseBuy;
     private SavedPatterns savedPatterns;
-    private SortPrice sortPrice;
-    private SortTime sortTime;
 
 
     private boolean stopStartFlag;
@@ -57,8 +54,6 @@ public class ListensToLooksAndFills {
         this.listInfoIndicator = new ArrayList<>();
         this.countPriseSell = new CountPriseSell();
         this.countPriseBuy = new CountPriseBuy();
-        this.sortPrice = new SortPrice();
-        this.sortTime = new SortTime();
         this.stopStartFlag = true;
         this.oneStartFlag = true;
         this.priceEndSell = NaN;
@@ -96,7 +91,7 @@ public class ListensToLooksAndFills {
             listInfoIndicator.remove(i);
         }
 
-        listInfoIndicatorWorkingCopy.sort(sortPrice);
+        listInfoIndicatorWorkingCopy.sort(CompareHelper.getSortPrice());
 
         if (priceEndBuy <= priceNow && !oneStartFlag && flag) {
             // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
@@ -300,7 +295,7 @@ public class ListensToLooksAndFills {
 
 
         // сортируем масив по времени от меньшего к большему
-        inAdditionalLevels.sort(sortTime);
+        inAdditionalLevels.sort(CompareHelper.getSortTime());
 
         // вставляем оставшиеся объекты в нужный нам блок
         for (InfoIndicator marketInfo : inAdditionalLevels) {
@@ -386,16 +381,8 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-//                /////////////////////////////////
-//                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
-//                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
-//                /////////////////////////////////
                 return 0;
             } else {
-//                //////////////////////////////////
-//                System.out.println(countPriseBuy.getPriceStartBuy() + " - " + result
-//                        + " = " + (countPriseBuy.getPriceStartBuy() - result));
-//                /////////////////////////////////
                 // проверить что не то с результатом он равен нулю постоянно
                 return countPriseBuy.getPriceStartBuy() - result;
             }
@@ -411,16 +398,8 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-//                /////////////////////////////
-//                System.out.println(result + " - " + countPriseSell.getPriceStartSell()
-//                        + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
-//                ////////////////////////////
                 return 0;
             } else {
-//                //////////////////////////
-//                System.out.println(result + " - "
-//                        + countPriseSell.getPriceStartSell() + " = " + (result - countPriseSell.getPriceStartSell())); //тут тоже резулт иногда ноль
-//                //////////////////////////
                 return result - countPriseSell.getPriceStartSell();
             }
         }
@@ -441,14 +420,8 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-//                ////////////////////////////////////
-//                System.out.println("---result==0");
-//                ///////////////////////////////////
                 return 0;
             } else {
-//                //////////////////////////////////
-//                System.out.println(countPriseBuy.getPriceStartBuy() - (result / arrayList.size()));
-//                /////////////////////////////////
                 // резулт иногда ноль как итог вылетает НАН
                 return countPriseBuy.getPriceStartBuy() - (result / arrayList.size());
             }
@@ -460,14 +433,8 @@ public class ListensToLooksAndFills {
             }
 
             if (result == 0) {
-//                ///////////////////////////////////////
-//                System.out.println("---result==0===2");
-//                //////////////////////////////////////
                 return 0;
             } else {
-//                ///////////////////////////////////////////////
-//                System.out.println((result / arrayList.size()) - countPriseSell.getPriceStartSell());
-//                //////////////////////////////////////////////
                 // резулт иногда ноль как итог вылетает НАН
                 return (result / arrayList.size()) - countPriseSell.getPriceStartSell();
             }
@@ -539,31 +506,6 @@ public class ListensToLooksAndFills {
 
 
 
-    private class SortPrice implements Comparator<InfoIndicator> {
-        @Override
-        public int compare(InfoIndicator o1, InfoIndicator o2) {
-            double result = o2.getPrice() - o1.getPrice();
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
-    private class SortTime implements Comparator<InfoIndicator> {
-        @Override
-        public int compare(InfoIndicator o1, InfoIndicator o2) {
-            long result = o1.getTime().getTime() - o2.getTime().getTime();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
     private class SortPriceRemainingLevels implements Comparator<String> {
         @Override
         public int compare(String o1, String o2) {
@@ -623,7 +565,6 @@ public class ListensToLooksAndFills {
             }
         }
 
-
         private ArrayList<Double> getArrayListBuy() {
             this.flag = false;
             this.arrayListOut.addAll(arrayListBuy);
@@ -631,13 +572,11 @@ public class ListensToLooksAndFills {
             return this.arrayListOut;
         }
 
-
         private void clearList() {
             this.priceStartBuy = getBitmexQuote().getAskPrice();
             this.arrayListOut.clear();
             this.flag = true;
         }
-
 
         private double getPriceStartBuy() {
             return this.priceStartBuy;
@@ -699,7 +638,6 @@ public class ListensToLooksAndFills {
             this.arrayListOut.clear();
             this.flag = true;
         }
-
 
         private double getPriceStartSell() {
             return this.priceStartSell;

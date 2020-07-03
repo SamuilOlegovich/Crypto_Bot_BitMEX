@@ -1,10 +1,13 @@
 package bitmex.Bot.model.strategies.II;
 
 
+import bitmex.Bot.model.CompareHelper;
+
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static bitmex.Bot.model.CompareHelper.getSortTheAlphabet;
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
 import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 import static bitmex.Bot.model.StringHelper.giveData;
@@ -15,7 +18,6 @@ import static bitmex.Bot.model.enums.TypeData.*;
 
 
 public class CompareAndMakeDecision extends Thread {
-    private SortTheAlphabet sortTheAlphabet;
 
     private ArrayList<String> patternsList;
     private ArrayList<String> marketList;
@@ -25,7 +27,6 @@ public class CompareAndMakeDecision extends Thread {
     public CompareAndMakeDecision(ArrayList<String> marketList, ArrayList<String> patternsList) {
         this.patternsList = new ArrayList<>(patternsList);
         this.marketList = new ArrayList<>(marketList);
-        this.sortTheAlphabet = new SortTheAlphabet();
         start();
     }
 
@@ -93,8 +94,7 @@ public class CompareAndMakeDecision extends Thread {
                     bias++;
                 }
 
-                if (!string.startsWith("0") && !string.startsWith(BIAS.toString())
-                        && !string.startsWith(NULL.toString())
+                if (!string.startsWith(BIAS.toString()) && !string.startsWith(NULL.toString())
                         && !string.startsWith(BUY.toString()) && bias == i - 1) {
                     marketStrings.add(string);
                 }
@@ -107,8 +107,7 @@ public class CompareAndMakeDecision extends Thread {
                     bias++;
                 }
 
-                if (!string.startsWith("0") && !string.startsWith(BIAS.toString())
-                        && !string.startsWith(NULL.toString())
+                if (!string.startsWith(BIAS.toString()) && !string.startsWith(NULL.toString())
                         && !string.startsWith(BUY.toString()) && bias == i - 1) {
                     patternStrings.add(string);
                 }
@@ -206,8 +205,8 @@ public class CompareAndMakeDecision extends Thread {
                     hashSetPattern.clear();
                     hashSetMarket.clear();
 
-                    patternCompareAll.sort(sortTheAlphabet);
-                    marketCompareAll.sort(sortTheAlphabet);
+                    patternCompareAll.sort(getSortTheAlphabet());
+                    marketCompareAll.sort(getSortTheAlphabet());
 
 
                     for (String stringPattern : patternCompareAll) {
@@ -226,59 +225,15 @@ public class CompareAndMakeDecision extends Thread {
 
     private boolean finallyComparisonOnAllData(String marketString, String patternString) {
 
-        writeMessage(getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4 II");
-
-        if (!giveData(period, marketString).equals(giveData(period, patternString))) {
-
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-1 II");
-
-//            return false;
-        }
-
-        if (!giveData(preview, marketString).equals(giveData(preview, patternString))) {
-
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-2 II");
-
-//            return false;
-        }
-
         if (!giveData(type, marketString).equals(giveData(type, patternString))) {
-
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-3 II");
-
             return false;
         }
 
         if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
-
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-4 II");
-
             return false;
         }
 
-        writeMessage(getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4-5 II");
-
         return true;
-    }
-
-
-
-    /// === INNER CLASS === ///
-
-
-
-    private class SortTheAlphabet implements Comparator<String> {
-        @Override
-        public int compare(String o1, String o2) {
-            int result = giveData(type, o1).compareTo(giveData(type, o2));
-            return Integer.compare(result, 0);
-        }
     }
 
 

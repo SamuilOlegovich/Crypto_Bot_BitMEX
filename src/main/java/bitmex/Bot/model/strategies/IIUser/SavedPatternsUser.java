@@ -5,7 +5,7 @@ import bitmex.Bot.model.DatesTimes;
 
 import java.util.ArrayList;
 
-
+import static bitmex.Bot.model.enums.TypeData.BIAS;
 
 
 public class SavedPatternsUser {
@@ -55,7 +55,7 @@ public class SavedPatternsUser {
         int countBias = 0;
 
         for (String s : strings) {
-            if (s.startsWith("BIAS")) {
+            if (s.startsWith(BIAS.toString())) {
                 countBias++;
             }
         }

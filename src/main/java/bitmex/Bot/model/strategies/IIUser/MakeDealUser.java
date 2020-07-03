@@ -8,6 +8,8 @@ import bitmex.Bot.model.Gasket;
 
 import java.util.ArrayList;
 
+import static bitmex.Bot.model.enums.TypeData.*;
+
 
 // Определяем какую сделку сделать и даем команду на ее исполнение
 public class MakeDealUser extends Thread {
@@ -88,7 +90,7 @@ public class MakeDealUser extends Thread {
         int block = 0;
 
         for (int i = 0; i < strings.length; i++) {
-            if (strings[i].equalsIgnoreCase("BLOCK")) {
+            if (strings[i].equalsIgnoreCase(BLOCK.toString())) {
                 block = Integer.parseInt(strings[i + 1]);
             }
 
@@ -97,12 +99,12 @@ public class MakeDealUser extends Thread {
             }
         }
 
-        if (type.equalsIgnoreCase("NULL")) {
+        if (type.equalsIgnoreCase(NULL.toString())) {
             if (b) {
                 // если сделка бай и тайп null то сразу берем цену первой строки нужного блока
                 for (String string : marketList) {
 
-                    if (string.startsWith("BIAS")) {
+                    if (string.startsWith(BIAS.toString())) {
                         blockSearch++;
                         if (block == blockSearch) {
                             String[] s = marketList.get(marketList.indexOf(string) + 1).split("===");
@@ -115,7 +117,7 @@ public class MakeDealUser extends Thread {
                 // если сделка селл и тайп null то сразу берем цену последней строки нужного блока
                 for (String string : marketList) {
 
-                    if (string.startsWith("BIAS")) {
+                    if (string.startsWith(BIAS.toString())) {
                         blockSearch++;
                         if (block + 1 == blockSearch) {
                             String[] s = marketList.get(marketList.indexOf(string) - 1).split("===");
@@ -128,7 +130,8 @@ public class MakeDealUser extends Thread {
         } else {
             for (String string : marketList) {
 
-                if (!string.startsWith("BIAS") && !string.startsWith("BUY") && !string.startsWith("0")) {
+                if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
+                        && !string.startsWith(NULL.toString())) {
                     String[] s = string.split("===");
 
                     if (block == blockSearch) {
@@ -136,7 +139,7 @@ public class MakeDealUser extends Thread {
                             price = Double.parseDouble(s[7]);
                         }
                     }
-                } else if (string.startsWith("BIAS")) {
+                } else if (string.startsWith(BIAS.toString())) {
                     blockSearch++;
                 }
             }

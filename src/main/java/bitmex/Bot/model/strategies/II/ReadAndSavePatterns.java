@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.view.WriterAndReadFile;
+import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -148,6 +148,27 @@ public class ReadAndSavePatterns {
 
             WriterAndReadFile.writerFile(stringBuilder.toString(),
                     Gasket.getFilesAndPathCreator().getPathPatternsDelete(), true);
+        }
+    }
+
+
+
+    public static void savePureHistoryOfPatternsIn(ArrayList<String> arrayListArrayList) {
+        ArrayList<String> arrayLists = new ArrayList<>(arrayListArrayList);
+
+        if (arrayLists.size() > 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String lineBreak = "\n";
+            String next = NEXT.toString() + lineBreak;
+            stringBuilder.append(START.toString()).append(lineBreak);
+
+            for (String string : arrayLists) {
+                stringBuilder.append(string);
+            }
+            stringBuilder.append(next);
+
+            WriterAndReadFile.writerFile(stringBuilder.toString(),
+                    Gasket.getFilesAndPathCreator().getPathPureHistoryOfPatternsIn(), true);
         }
     }
 }

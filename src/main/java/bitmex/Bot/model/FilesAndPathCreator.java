@@ -12,6 +12,7 @@ import java.io.File;
 
 public class FilesAndPathCreator {
 
+    private String pathPureHistoryOfPatternsIn;
     private String pathPatternsTemporaryIIPro;
     private String pathPatternsTemporaryUser;
     private String pathPatternsForUserIIPro;
@@ -57,6 +58,15 @@ public class FilesAndPathCreator {
         if (strings.length == 2) {
 
             if (System.getProperty("os.name").startsWith("Windows")) {
+                Path pureHistoryOfPatternsIn = Paths.get(finish + "PureHistoryOfPatternsIn");
+
+                if (!Files.exists(pureHistoryOfPatternsIn)) {
+                    try {
+                        Files.createDirectories(Paths.get("PureHistoryOfPatternsIn"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 Path pathIIProPatterns = Paths.get(finish + "iiProPatterns");
 
@@ -112,6 +122,7 @@ public class FilesAndPathCreator {
 
                 pathLogs = finish  + "Logs\\" + DatesTimes.getDateLogs().replaceAll(":", "-")
                         + " Log.txt";
+                pathPureHistoryOfPatternsIn = finish + "PureHistoryOfPatternsIn\\PureHistoryOfPatternsIn.txt";
                 pathPatternsTemporaryIIPro = finish + "iiProPatterns\\iiProTemporaryPatterns.txt";
                 pathPatternsDeleteIIPro = finish + "iiProPatterns\\iiProTemporaryDelete.txt";
                 pathPatternsForUserIIPro = finish + "uPatterns\\iiProPatternsForUser.txt";
@@ -127,6 +138,16 @@ public class FilesAndPathCreator {
                 pathSettings = finish + "Settings\\Settings.txt";
 
             } else {
+                Path pureHistoryOfPatternsIn = Paths.get(strings[0] + "PureHistoryOfPatternsIn");
+
+                if (!Files.exists(pureHistoryOfPatternsIn)) {
+                    try {
+                        Files.createDirectories(Paths.get("PureHistoryOfPatternsIn"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 Path pathIIProPatterns = Paths.get(strings[0] + "iiProPatterns");
 
                 if (!Files.exists(pathIIProPatterns)) {
@@ -179,6 +200,7 @@ public class FilesAndPathCreator {
                     }
                 }
 
+                pathPureHistoryOfPatternsIn = finish + "PureHistoryOfPatternsIn/PureHistoryOfPatternsIn.txt";
                 pathPatternsTemporaryIIPro = finish + "iiProPatterns/iiProTemporaryPatterns.txt";
                 pathPatternsDeleteIIPro = finish + "iiProPatterns/iiProTemporaryDelete.txt";
                 pathPatternsTemporaryUser = finish + "uPatterns/uTemporaryPatterns.txt";
@@ -198,6 +220,7 @@ public class FilesAndPathCreator {
                     .replaceAll("target/classes", "src/main/java")
                     .replaceAll("model/", "");
 
+            pathPureHistoryOfPatternsIn = string + "Logs/PureHistoryOfPatternsIn/PureHistoryOfPatternsIn.txt";
             pathPatternsTemporaryIIPro = string + "Logs/PatternsUser/iiProTemporaryPatterns.txt";
             pathPatternsForUserIIPro = string + "Logs/PatternsUser/iiProPatternsForUser.txt";
             pathPatternsTemporaryUser = string + "Logs/PatternsUser/uTemporaryPatterns.txt";
@@ -214,6 +237,9 @@ public class FilesAndPathCreator {
         }
 
         if (System.getProperty("os.name").startsWith("Windows")) {
+            pathPureHistoryOfPatternsIn = pathPureHistoryOfPatternsIn
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
             pathPatternsTemporaryIIPro = pathPatternsTemporaryIIPro
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
@@ -258,6 +284,7 @@ public class FilesAndPathCreator {
 
 
     private void showPath() {
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPureHistoryOfPatternsIn);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryIIPro);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryUser);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsForUserIIPro);
@@ -276,6 +303,10 @@ public class FilesAndPathCreator {
 
 
     private void isTheFileInPlace() {
+        if (!Files.exists(Paths.get(pathPureHistoryOfPatternsIn))) {
+            createdFilePureHistoryOfPatternsIn();
+        }
+
         if (!Files.exists(Paths.get(pathPatternsTemporaryUser))) {
             createdFileTemporaryPatternsUser();
         }
@@ -322,6 +353,20 @@ public class FilesAndPathCreator {
 
         if (!Files.exists(Paths.get(pathPatterns))) {
             createdFilePatterns();
+        }
+    }
+
+
+
+    private void createdFilePureHistoryOfPatternsIn() {
+        File file = new File(pathPureHistoryOfPatternsIn);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл Настроек успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл Настроек.");
         }
     }
 
@@ -559,5 +604,9 @@ public class FilesAndPathCreator {
 
     public String getPathPatternsIIPro() {
         return pathPatternsIIPro;
+    }
+
+    public String getPathPureHistoryOfPatternsIn() {
+        return pathPureHistoryOfPatternsIn;
     }
 }

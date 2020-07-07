@@ -145,9 +145,10 @@ public class CompareHelper {
         @Override
         public int compare(ArrayList<String> o1, ArrayList<String> o2) {
             double result = o1.size() - o2.size();
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
+//            if (result > 0) return 1;
+//            if (result < 0) return -1;
+//            return 0;
+            return Double.compare(result, 0);
         }
     }
 
@@ -157,10 +158,10 @@ public class CompareHelper {
         @Override
         public int compare(InfoIndicator o1, InfoIndicator o2) {
             double result = o2.getPrice() - o1.getPrice();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
+//            if (result > 0) return 1;
+//            if (result < 0) return -1;
+//            return 0;
+            return Double.compare(result, 0);
         }
     }
 
@@ -170,10 +171,10 @@ public class CompareHelper {
         @Override
         public int compare(InfoIndicator o1, InfoIndicator o2) {
             long result = o1.getTime().getTime() - o2.getTime().getTime();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
+//            if (result > 0) return 1;
+//            if (result < 0) return -1;
+//            return 0;
+            return Long.compare(result, 0);
         }
     }
 
@@ -192,10 +193,10 @@ public class CompareHelper {
 
             double result = Double.parseDouble(StringHelper.giveData(price, o2))
                     - Double.parseDouble(StringHelper.giveData(price, o1));
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
+//            if (result > 0) return 1;
+//            if (result < 0) return -1;
+//            return 0;
+            return Double.compare(result, 0);
         }
     }
 

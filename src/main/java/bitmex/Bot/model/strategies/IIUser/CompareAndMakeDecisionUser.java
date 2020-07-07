@@ -163,25 +163,27 @@ public class CompareAndMakeDecisionUser extends Thread {
                 ArrayList<String> marketCompareDataNullAll = new ArrayList<>();
                 ArrayList<String> patternCompareDataNull = new ArrayList<>();
                 ArrayList<String> marketCompareDataNull = new ArrayList<>();
-
 ////////////////////////////
                 ArrayList<String> patternNullNull = new ArrayList<>();
                 ArrayList<String> marketNullNull = new ArrayList<>();
 ////////////////////////////
+                ArrayList<Integer> deleteIndexMarket = new ArrayList<>();
+                ArrayList<Integer> deleteIndexPattern = new ArrayList<>();
+
 
 
                 // начинаем перебирать блоки строк и сравнивать их друг с другом
                 for (String stringMarket : readyMarketBlock) {
                     String stringPattern = patternStrings.get(readyMarketBlock.indexOf(stringMarket));
 
-
 ////////////////////////////
                     // если цена NULL-NULL то не важно где и как стоит этот элемент (Тест)
                     if (giveData(price, stringPattern).equalsIgnoreCase(NULL_NULL.toString())) {
-
                         for (String stringPatternSearch : patternStrings) {
-
                             if (giveData(type, stringPatternSearch).equals(giveData(type, stringMarket))) {
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
+
                                 patternNullNull.add(stringPatternSearch);
                                 marketNullNull.add(stringMarket);
                             }
@@ -209,10 +211,16 @@ public class CompareAndMakeDecisionUser extends Thread {
                             } else if (giveData(price, stringPattern).equals(giveData(price, patternPlusOne))
                                     && giveData(price, stringMarket).equals(giveData(price, marketPlusOne))) {
 
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket + 1));
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern + 1));
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
+
                                 patternComparePriceNull.add(giveData(type, patternPlusOne));
                                 patternComparePriceNull.add(giveData(type, stringPattern));
                                 marketComparePriceNull.add(giveData(type, marketPlusOne));
                                 marketComparePriceNull.add(giveData(type, stringMarket));
+
 
                                 patternComparePriceNullAll.add(patternPlusOne);
                                 patternComparePriceNullAll.add(stringPattern);
@@ -228,8 +236,10 @@ public class CompareAndMakeDecisionUser extends Thread {
                                         .indexOf(stringMarket) - 1);
 
                                 if (giveData(price, stringPattern).equals(giveData(price, patternMinusOne))
-
                                         && giveData(price, stringMarket).equals(giveData(price, marketMinusOne))) {
+
+                                    deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
+                                    deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
 
                                     patternComparePriceNull.add(giveData(type, stringPattern));
                                     marketComparePriceNull.add(giveData(type, stringMarket));
@@ -262,6 +272,11 @@ public class CompareAndMakeDecisionUser extends Thread {
                                     && giveData(dir, stringMarket).equals(giveData(dir, marketPlusOne))
                                     && giveData(dir, stringPattern).equals(giveData(dir, stringMarket))) {
 
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket + 1));
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern + 1));
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
+
                                 patternCompareDataNull.add(giveData(type, patternPlusOne));
                                 patternCompareDataNull.add(giveData(type, stringPattern));
                                 marketCompareDataNull.add(giveData(type, marketPlusOne));
@@ -274,7 +289,6 @@ public class CompareAndMakeDecisionUser extends Thread {
 
                             } else if (giveData(time, stringPattern).equals(giveData(time, patternPlusOne))
                                     && !giveData(time, stringMarket).equals(giveData(time, marketPlusOne))) {
-
                                 return false;
                             }
                         }
@@ -288,61 +302,68 @@ public class CompareAndMakeDecisionUser extends Thread {
                         && marketComparePriceNull.size() == patternCompareDataNull.size()
                         && patternCompareDataNull.size() == patternComparePriceNull.size()) {
 
-                    ArrayList<Integer> deleteIndex = new ArrayList<>();
+//                    for (String stringNull : marketCompareDataNullAll) {
+//                        for (String stringReady : readyMarketBlock) {
+//                            if (giveData(type, stringReady).equals(stringNull)) {
+//                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringReady));
+//                            }
+//                        }
+//                    }
+//
+//                    for (String stringNull : marketComparePriceNullAll) {
+//                        for (String stringReady : readyMarketBlock) {
+//                            if (giveData(type, stringReady).equals(stringNull)) {
+//                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringReady));
+//                            }
+//                        }
+//                    }
 
-                    for (String stringNull : marketCompareDataNull) {
-                        for (String stringReady : readyMarketBlock) {
-                            if (giveData(type, stringReady).equals(stringNull)) {
-                                deleteIndex.add(readyMarketBlock.indexOf(stringReady));
-                            }
-                        }
-                    }
+                    HashSet<Integer> deleteIndexHash = new HashSet<>();
 
-                    for (String stringNull : marketComparePriceNull) {
-                        for (String stringReady : readyMarketBlock) {
-                            if (giveData(type, stringReady).equals(stringNull)) {
-                                deleteIndex.add(readyMarketBlock.indexOf(stringReady));
-                            }
-                        }
-                    }
-
-                    HashSet<Integer> deleteIndexHash = new HashSet<>(deleteIndex);
-                    deleteIndex.addAll(deleteIndexHash);
-                    Collections.reverse(deleteIndex);
+                    deleteIndexHash.addAll(deleteIndexMarket);
+                    deleteIndexMarket.clear();
+                    deleteIndexMarket.addAll(deleteIndexHash);
+                    Collections.reverse(deleteIndexMarket);
                     deleteIndexHash.clear();
 
-                    for (Integer index : deleteIndex) {
+                    for (Integer index : deleteIndexMarket) {
                         readyMarketBlock.remove((int) index);
                     }
 
-                    deleteIndex.clear();
+                    deleteIndexMarket.clear();
 
-                    for (String stringNull : patternCompareDataNull) {
-                        for (String stringReady : patternStrings) {
-
-                            if (giveData(type, stringReady).equals(stringNull)) {
-                                deleteIndex.add(patternStrings.indexOf(stringReady));
-                            }
-                        }
-                    }
-
-                    for (String stringNull : patternComparePriceNull) {
-                        for (String stringReady : patternStrings) {
-
-                            if (giveData(type, stringReady).equals(stringNull)) {
-                                deleteIndex.add(patternStrings.indexOf(stringReady));
-                            }
-                        }
-                    }
-
-                    deleteIndexHash.addAll(deleteIndex);
-                    deleteIndex.addAll(deleteIndexHash);
-                    Collections.reverse(deleteIndex);
+                    deleteIndexHash.addAll(deleteIndexPattern);
+                    deleteIndexPattern.clear();
+                    deleteIndexPattern.addAll(deleteIndexHash);
+                    Collections.reverse(deleteIndexPattern);
                     deleteIndexHash.clear();
 
-                    for (Integer index : deleteIndex) {
+//                    for (String stringNull : patternCompareDataNull) {
+//                        for (String stringReady : patternStrings) {
+//                            if (giveData(type, stringReady).equals(stringNull)) {
+//                                deleteIndexMarket.add(patternStrings.indexOf(stringReady));
+//                            }
+//                        }
+//                    }
+//
+//                    for (String stringNull : patternComparePriceNull) {
+//                        for (String stringReady : patternStrings) {
+//                            if (giveData(type, stringReady).equals(stringNull)) {
+//                                deleteIndexMarket.add(patternStrings.indexOf(stringReady));
+//                            }
+//                        }
+//                    }
+
+//                    deleteIndexHash.addAll(deleteIndexMarket);
+//                    deleteIndexMarket.addAll(deleteIndexHash);
+//                    Collections.reverse(deleteIndexMarket);
+//                    deleteIndexHash.clear();
+
+                    for (Integer index : deleteIndexMarket) {
                         patternStrings.remove((int) index);
                     }
+
+                    deleteIndexPattern.clear();
                 }
 
                 // если блоки одинаковы и больше нуля сравниваем их

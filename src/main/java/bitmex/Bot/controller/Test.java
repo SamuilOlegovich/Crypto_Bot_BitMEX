@@ -15,6 +15,12 @@ public class Test {
 //        System.out.println(giveData(TypeData.type, string));
 //        System.out.println(giveData(TypeData.avg, string));
 //        System.out.println(giveData(TypeData.dir, string));
+
+
+
+        System.out.println(Double.compare(00.0, 0));
+
+
     }
 
 

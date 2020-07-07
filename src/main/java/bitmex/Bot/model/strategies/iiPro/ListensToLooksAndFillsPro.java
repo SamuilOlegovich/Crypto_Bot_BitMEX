@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.iiPro;
 
-import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -15,6 +15,9 @@ import java.util.TreeSet;
 import static bitmex.Bot.model.enums.TypeData.*;
 import static java.lang.Double.NaN;
 
+
+
+
 public class ListensToLooksAndFillsPro {
     private static ListensToLooksAndFillsPro listensToLooksAndFillsPro;
 
@@ -24,7 +27,6 @@ public class ListensToLooksAndFillsPro {
     private ArrayList<String> listStringPriceBuy;                      // лист для формирования бай паттерна
 
 
-    private SortPriceRemainingLevels sortPriceRemainingLevels;
     private SavedPatternsPro savedPatterns;
     private CountPriseSell countPriseSell;
     private CountPriseBuy countPriseBuy;
@@ -45,7 +47,6 @@ public class ListensToLooksAndFillsPro {
     private ListensToLooksAndFillsPro() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                 + " --- " + "Начал работать класс сбора II Паттернов");
-        this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
         this.priceNow = Gasket.getBitmexQuote().getBidPrice();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsProClass();
@@ -348,13 +349,13 @@ public class ListensToLooksAndFillsPro {
             if (string.startsWith(BUY.toString())) {
                 out.add(string);
             } else if (string.startsWith(BIAS.toString())) {
-                intermediary.sort(sortPriceRemainingLevels);
+                intermediary.sort(CompareHelper.getSortPriceRemainingLevels());
                 intermediary.add(string);
                 out.addAll(intermediary);
                 intermediary.clear();
             } else if (inEdit.indexOf(string) == inEdit.size() - 1) {
                 intermediary.add(string);
-                intermediary.sort(sortPriceRemainingLevels);
+                intermediary.sort(CompareHelper.getSortPriceRemainingLevels());
                 out.addAll(intermediary);
                 intermediary.clear();
             } else {
@@ -525,25 +526,6 @@ public class ListensToLooksAndFillsPro {
         @Override
         public int compare(InfoIndicator o1, InfoIndicator o2) {
             long result = o1.getTime().getTime() - o2.getTime().getTime();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
-    private class SortPriceRemainingLevels implements Comparator<String> {
-        @Override
-        public int compare(String o1, String o2) {
-            String[] strings1 = o1.split(",");
-            String[] strings2 = o2.split(",");
-
-            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
-                    .replaceAll("price: ", ""))
-                    - Double.parseDouble(strings1[3].replaceAll("\"", "")
-                    .replaceAll("price: ", ""));
 
             if (result > 0) return 1;
             else if (result < 0) return -1;

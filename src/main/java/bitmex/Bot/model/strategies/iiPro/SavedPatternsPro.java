@@ -107,6 +107,9 @@ public class SavedPatternsPro {
                 marketListCopy.clear();
                 marketListCopy.addAll(temporaryList);
                 temporaryList.clear();
+
+
+
 //                ArrayList<Integer> indexArrayList = new ArrayList<>();
 //
 //                for (String stringOne : marketListCopy) {

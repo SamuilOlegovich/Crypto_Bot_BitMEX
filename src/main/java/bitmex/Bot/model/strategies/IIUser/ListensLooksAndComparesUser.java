@@ -94,7 +94,7 @@ public class ListensLooksAndComparesUser {
             // сортируем и добавляем
             sortPrice(false);
             // приводим паттерны в порядок
-            setThePatternsInOrder();
+//            setThePatternsInOrder();
 
             // получаем патерны
             ArrayList<ArrayList<String>> patternsListsStrings = savedPatternsUser.getListsPricePatternsUser();
@@ -363,7 +363,7 @@ public class ListensLooksAndComparesUser {
     // приводим паттерны в порядок
     // чистим от оставшихся предварительных исчезнувших уровняй
     private synchronized void setThePatternsInOrder() {
-        // перебираем все листы листов
+         // перебираем все листы листов
         for (ArrayList<String> inArrayList : marketListsStrings) {
             // индекса строк в массиве которые надо будет удалить
             ArrayList<Integer> indexArrayList = new ArrayList<>();
@@ -372,7 +372,7 @@ public class ListensLooksAndComparesUser {
                 int bias = 0;
 
                 // если строка не ровна нулевой строке или промежуточной
-                if (!stringOne.startsWith("0") && !stringOne.startsWith(BIAS.toString())) {
+                if (!stringOne.startsWith(NULL.toString()) && !stringOne.startsWith(BIAS.toString())) {
                     // разбиваем строку на запчасти
                     String[] oneStrings = stringOne.split("===");
                     String[] twoStrings;

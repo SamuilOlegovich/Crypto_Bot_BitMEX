@@ -163,13 +163,13 @@ public class CompareAndMakeDecisionUser extends Thread {
                 ArrayList<String> marketCompareDataNullAll = new ArrayList<>();
                 ArrayList<String> patternCompareDataNull = new ArrayList<>();
                 ArrayList<String> marketCompareDataNull = new ArrayList<>();
+
+                ArrayList<Integer> deleteIndexPattern = new ArrayList<>();
+                ArrayList<Integer> deleteIndexMarket = new ArrayList<>();
 ////////////////////////////
                 ArrayList<String> patternNullNull = new ArrayList<>();
                 ArrayList<String> marketNullNull = new ArrayList<>();
 ////////////////////////////
-                ArrayList<Integer> deleteIndexMarket = new ArrayList<>();
-                ArrayList<Integer> deleteIndexPattern = new ArrayList<>();
-
 
 
                 // начинаем перебирать блоки строк и сравнивать их друг с другом
@@ -211,8 +211,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                             } else if (giveData(price, stringPattern).equals(giveData(price, patternPlusOne))
                                     && giveData(price, stringMarket).equals(giveData(price, marketPlusOne))) {
 
-                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket + 1));
-                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern + 1));
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket) + 1);
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern) + 1);
                                 deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
                                 deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
 
@@ -272,8 +272,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                                     && giveData(dir, stringMarket).equals(giveData(dir, marketPlusOne))
                                     && giveData(dir, stringPattern).equals(giveData(dir, stringMarket))) {
 
-                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket + 1));
-                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern + 1));
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket) + 1);
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern) + 1);
                                 deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
                                 deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
 
@@ -359,7 +359,7 @@ public class CompareAndMakeDecisionUser extends Thread {
 //                    Collections.reverse(deleteIndexMarket);
 //                    deleteIndexHash.clear();
 
-                    for (Integer index : deleteIndexMarket) {
+                    for (Integer index : deleteIndexPattern) {
                         patternStrings.remove((int) index);
                     }
 
@@ -467,7 +467,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                             return false;
                         }
                     }
-                } else if (patternNullNull.size() != marketNullNull.size()) {
+                } else {
                     return false;
                 }
 /////////////////////////////
@@ -479,9 +479,6 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 
     private boolean finallyComparisonOnAllData(String marketArray, String patternArray) {
-
-        writeMessage(getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4");
 
         // period
         if (!giveData(period, patternArray).equalsIgnoreCase(NULL.toString())

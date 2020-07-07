@@ -2,13 +2,18 @@ package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
 import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 import java.util.ArrayList;
 
 import static bitmex.Bot.model.enums.TypeData.*;
+
+
+
 
 
 // Определяем какую сделку сделать и даем команду на ее исполнение
@@ -81,62 +86,54 @@ public class MakeDealUser extends Thread {
     // тут мы находим цену выше которой надо подняться или опустится в течении определенного времени
     // что бы сделать сделку иначе отбой
     private boolean conditionsAreMet(boolean b) {
-        String[] strings = patternZeroString.split("===");
         long timeStop = 60 * Gasket.getTimeStopLiveForUserPatterns();
         int blockSearch = 1;
-        double price = 0.0;
-        String type = "";
+        double prices = 0.0;
+        String types = "";
         long time = 0;
-        int block = 0;
+        int blocks = 0;
 
-        for (int i = 0; i < strings.length; i++) {
-            if (strings[i].equalsIgnoreCase(BLOCK.toString())) {
-                block = Integer.parseInt(strings[i + 1]);
-            }
+        blocks = Integer.parseInt(StringHelper.giveData(TypeData.BLOCK, patternZeroString));
+        types = StringHelper.giveData(TypeData.TYPE, patternZeroString);
 
-            if (strings[i].equalsIgnoreCase("TYPE")) {
-                type = strings[i + 1];
-            }
-        }
-
-        if (type.equalsIgnoreCase(NULL.toString())) {
+        if (types.equalsIgnoreCase(NULL.toString())) {
             if (b) {
                 // если сделка бай и тайп null то сразу берем цену первой строки нужного блока
                 for (String string : marketList) {
-
                     if (string.startsWith(BIAS.toString())) {
                         blockSearch++;
-                        if (block == blockSearch) {
-                            String[] s = marketList.get(marketList.indexOf(string) + 1).split("===");
-                            price = Double.parseDouble(s[7]);
-                            break;
-                        }
                     }
+
+                    if (blocks == blockSearch) {
+//                        String[] s = marketList.get(marketList.indexOf(string) + 1).split("===");
+                        prices = Double.parseDouble(StringHelper
+                                .giveData(TypeData.price, marketList.get(marketList.indexOf(string) + 1)));
+                        break;
+                    }
+
                 }
             } else {
                 // если сделка селл и тайп null то сразу берем цену последней строки нужного блока
                 for (String string : marketList) {
-
                     if (string.startsWith(BIAS.toString())) {
                         blockSearch++;
-                        if (block + 1 == blockSearch) {
-                            String[] s = marketList.get(marketList.indexOf(string) - 1).split("===");
-                            price = Double.parseDouble(s[7]);
-                            break;
-                        }
+                    }
+
+                    if (blocks + 1 == blockSearch) {
+                        prices = Double.parseDouble(StringHelper
+                                .giveData(TypeData.price, marketList.get(marketList.indexOf(string) - 1)));
+                        break;
                     }
                 }
             }
         } else {
             for (String string : marketList) {
-
                 if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
                         && !string.startsWith(NULL.toString())) {
-                    String[] s = string.split("===");
 
-                    if (block == blockSearch) {
-                        if (s[11].equalsIgnoreCase(type)) {
-                            price = Double.parseDouble(s[7]);
+                    if (blocks == blockSearch) {
+                        if (StringHelper.giveData(TypeData.type, string).equalsIgnoreCase(types)) {
+                            prices = Double.parseDouble(StringHelper.giveData(TypeData.price, string));
                         }
                     }
                 } else if (string.startsWith(BIAS.toString())) {
@@ -148,15 +145,15 @@ public class MakeDealUser extends Thread {
         while (time < timeStop) {
 
             if (b) {
-                if (Gasket.getBitmexQuote().getBidPrice() > price) {
+                if (Gasket.getBitmexQuote().getBidPrice() > prices) {
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- цена уровня - " + type + " - " + price + " - пробита");
+                            + " --- цена уровня - " + types + " - " + prices + " - пробита");
                     return true;
                 }
             } else {
-                if (Gasket.getBitmexQuote().getAskPrice() < price) {
+                if (Gasket.getBitmexQuote().getAskPrice() < prices) {
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- цена уровня - " + type + " - " + price + " - пробита");
+                            + " --- цена уровня - " + types + " - " + prices + " - пробита");
                     return true;
                 }
             }

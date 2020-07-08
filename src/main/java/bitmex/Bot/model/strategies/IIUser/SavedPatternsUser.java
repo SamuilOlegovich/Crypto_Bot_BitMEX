@@ -1,11 +1,13 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 
 import java.util.ArrayList;
 
 import static bitmex.Bot.model.enums.TypeData.BIAS;
+import static bitmex.Bot.model.enums.TypeData.ID;
 
 
 public class SavedPatternsUser {
@@ -87,20 +89,17 @@ public class SavedPatternsUser {
 
 
     public synchronized void updateFirstRowData(String string) {
-        String stringSet = string;
-        String[] in = stringSet.split("===");
-        String[] thIs;
+        String stringSet = string.replaceAll("\n", "");
+        String thIs;
 
         int count = 0;
 
         for (ArrayList<String> stringArrayList : listsPricePatternsUser) {
-            thIs = stringArrayList.get(0).split("===");
+            thIs = stringArrayList.get(0).replaceAll("\n", "");
 
-            if (in.length == thIs.length) {
-                if (in[in.length - 1].equals(thIs[thIs.length - 1])) {
-                    stringArrayList.set(0, stringSet);
-                    count++;
-                }
+            if (StringHelper.giveData(ID, stringSet).equalsIgnoreCase(StringHelper.giveData(ID, thIs))) {
+                stringArrayList.set(0, stringSet);
+                count++;
             }
         }
 
@@ -111,7 +110,7 @@ public class SavedPatternsUser {
                     + " --- ОБНОВИЛ нулевую стороку ПАТТЕРНОВ USER согласно исходу сделки");
         } else {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Такого номера ===" + in[in.length - 1] + "=== ПАТТЕРНА USER нет");
+                    + " --- Такого номера ===" + StringHelper.giveData(ID, stringSet) + "=== ПАТТЕРНА USER нет");
         }
     }
 

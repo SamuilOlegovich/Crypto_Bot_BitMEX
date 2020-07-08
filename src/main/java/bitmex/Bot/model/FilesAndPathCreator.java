@@ -23,6 +23,7 @@ public class FilesAndPathCreator {
     private String pathPatternsDelete;
     private String pathPatternsIIPro;
     private String pathPatternsUser;
+    private String pathFullHistory;
     private String pathSettings;
     private String pathPatterns;
     private String pathLogs;
@@ -63,6 +64,16 @@ public class FilesAndPathCreator {
                 if (!Files.exists(pureHistoryOfPatternsIn)) {
                     try {
                         Files.createDirectories(Paths.get("PureHistoryOfPatternsIn"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Path  fullHistory = Paths.get(finish + "FullHistory");
+
+                if (!Files.exists(fullHistory)) {
+                    try {
+                        Files.createDirectories(Paths.get("FullHistory"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -133,6 +144,7 @@ public class FilesAndPathCreator {
                 pathPatternsForUser = finish + "uPatterns\\iiPatternsForUser.txt";
                 pathPatternsIIPro = finish + "iiProPatterns\\iiProPatterns.txt";
                 pathPatternsUser = finish + "iiProPatterns\\iiProPatterns.txt";
+                pathFullHistory = finish + "FullHistory\\FullHistory.txt";
                 pathPatternsUser = finish + "uPatterns\\uPatterns.txt";
                 pathPatterns = finish + "iiPatterns\\iiPatterns.txt";
                 pathSettings = finish + "Settings\\Settings.txt";
@@ -143,6 +155,16 @@ public class FilesAndPathCreator {
                 if (!Files.exists(pureHistoryOfPatternsIn)) {
                     try {
                         Files.createDirectories(Paths.get("PureHistoryOfPatternsIn"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Path fullHistory = Paths.get(strings[0] + "FullHistory");
+
+                if (!Files.exists(fullHistory)) {
+                    try {
+                        Files.createDirectories(Paths.get("FullHistory"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -211,6 +233,7 @@ public class FilesAndPathCreator {
                 pathPatternsDelete = finish + "iiPatterns/iiTemporaryDelete.txt";
                 pathPatternsIIPro = finish + "iiProPatterns/iiProPatterns.txt";
                 pathPatternsForUser = finish + "uPatterns/iiPatternsFor.txt";
+                pathFullHistory = finish + "FullHistory/FullHistory.txt";
                 pathPatternsUser = finish + "uPatterns/uPatterns.txt";
                 pathPatterns = finish + "iiPatterns/iiPatterns.txt";
                 pathSettings = finish + "Settings/Settings.txt";
@@ -232,12 +255,16 @@ public class FilesAndPathCreator {
             pathPatternsIIPro = string + "Logs/PatternsUser/iiProPatterns.txt";
             pathPatternsDelete = string + "Logs/Patterns/TemporaryDelete.txt";
             pathPatternsUser = string + "Logs/PatternsUser/uPatterns.txt";
+            pathFullHistory = string + "Logs/FullHistory/FullHistory.txt";
             pathPatterns = string + "Logs/Patterns/Patterns.txt";
             pathSettings = string + "Logs/Settings.txt";
         }
 
         if (System.getProperty("os.name").startsWith("Windows")) {
             pathPureHistoryOfPatternsIn = pathPureHistoryOfPatternsIn
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
+            pathFullHistory = pathFullHistory
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
             pathPatternsTemporaryIIPro = pathPatternsTemporaryIIPro
@@ -295,6 +322,7 @@ public class FilesAndPathCreator {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsDelete);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsIIPro);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsUser);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathFullHistory);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathSettings);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatterns);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathLogs);
@@ -305,6 +333,10 @@ public class FilesAndPathCreator {
     private void isTheFileInPlace() {
         if (!Files.exists(Paths.get(pathPureHistoryOfPatternsIn))) {
             createdFilePureHistoryOfPatternsIn();
+        }
+
+        if (!Files.exists(Paths.get(pathFullHistory))) {
+            createdFileFullHistory();
         }
 
         if (!Files.exists(Paths.get(pathPatternsTemporaryUser))) {
@@ -363,10 +395,24 @@ public class FilesAndPathCreator {
         try {
             boolean newFile = file.createNewFile();
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Новый файл Настроек успешно создан.");
+                    + "Новый файл PureHistoryOfPatternsIn успешно создан.");
         } catch (IOException ex) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Не удалось создать файл Настроек.");
+                    + "Не удалось создать файл PureHistoryOfPatternsIn.");
+        }
+    }
+
+
+
+    private void createdFileFullHistory() {
+        File file = new File(pathFullHistory);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл FullHistory успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл FullHistory.");
         }
     }
 
@@ -608,5 +654,9 @@ public class FilesAndPathCreator {
 
     public String getPathPureHistoryOfPatternsIn() {
         return pathPureHistoryOfPatternsIn;
+    }
+
+    public String getPathFullHistory() {
+        return pathFullHistory;
     }
 }

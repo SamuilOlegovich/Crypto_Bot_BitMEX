@@ -18,7 +18,7 @@ public class Test {
 
 
 
-        System.out.println(Double.compare(00.0, 0));
+        System.out.println("tttta\n".endsWith("a\n"));
 
 
     }

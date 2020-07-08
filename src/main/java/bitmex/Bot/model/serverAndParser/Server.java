@@ -9,10 +9,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server extends Thread {
-//    boolean startStop;
 
     public Server() {
-//        this.startStop = true;
     }
 
 
@@ -30,13 +28,7 @@ public class Server extends Thread {
                 // Блокируется до возникновения нового соединения:
                 socket = server.accept();
                 new SocketThread(socket, parserString);
-//                startStop = Gasket.isServerRestart();
             }
-
-//            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- СЕРВЕР ОСТАНОВЛЕН" + "\n");
-//            parserString = null;
-//            Gasket.setServerRestart(true);
-//            new Server().start();
 
         } catch (IOException e) {
             try {

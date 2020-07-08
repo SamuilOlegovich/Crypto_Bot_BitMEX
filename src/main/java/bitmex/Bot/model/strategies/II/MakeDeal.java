@@ -17,7 +17,7 @@ public class MakeDeal extends Thread {
 
 
     public MakeDeal(String stringIn) {
-        this.stringIn = stringIn;
+        this.stringIn = stringIn.replaceAll("\n", "");
         start();
     }
 
@@ -40,8 +40,8 @@ public class MakeDeal extends Thread {
                 new TestOrderBuyPattern(stringOut, Gasket.getBitmexQuote().getAskPrice());
             }
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ II сделал сделку БАЙ");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + stringOut
+                    + " --- Согластно ПАТТЕРНУ II сделал сделку БАЙ");
 
         } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
 
@@ -52,8 +52,8 @@ public class MakeDeal extends Thread {
                 new TestOrderSellPattern(stringOut, Gasket.getBitmexQuote().getBidPrice());
             }
 
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ II сделал сделку СЕЛЛ");
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + stringOut
+                    + " --- Согластно ПАТТЕРНУ II сделал сделку СЕЛЛ");
 
         }
     }

@@ -8,6 +8,7 @@ public enum TypeData {
     NULL,
     BIAS,
     SELL,
+    TEST,
     NEXT,
     SIZE,
     TYPE,

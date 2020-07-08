@@ -2,10 +2,7 @@ package bitmex.Bot.model;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.*;
 
 import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.BIAS;
@@ -117,9 +114,9 @@ public class CompareHelper {
         }
 
         // если каким-то образом будет два одинаковых индекса, так мы их нивилируем
-        TreeSet<Integer> treeSet = new TreeSet<>(indexArrayList);
+        HashSet<Integer> hashSet = new HashSet<>(indexArrayList);
         indexArrayList.clear();
-        indexArrayList.addAll(treeSet);
+        indexArrayList.addAll(hashSet);
         Collections.reverse(indexArrayList);
 
         for (Integer index : indexArrayList) {

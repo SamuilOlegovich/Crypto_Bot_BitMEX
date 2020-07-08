@@ -41,6 +41,7 @@ public class SocketThread extends Thread {
                 String conection = in.readLine();
                 String space = in.readLine();
                 String out;
+
                 int len = Integer.parseInt(contentLength.replaceAll("Content-Length: ", ""));
                 bytes = new byte[len];
                 inputStream.read(bytes, 0, len);

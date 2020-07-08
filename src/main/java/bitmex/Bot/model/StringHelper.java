@@ -40,12 +40,9 @@ public class StringHelper {
 
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " === " + key.toString() + " --- "
                 + in + "=============================================================================================");
+
         return null;
     }
-
-
-
-    /////////// PARSER ///////////
 
 
 

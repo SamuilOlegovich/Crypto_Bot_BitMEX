@@ -55,14 +55,14 @@ public class CompareAndMakeDecisionUser extends Thread {
 
         // находим все BIAS в маркет листе
         for (String string : marketList) {
-            if (string.startsWith("BIAS")) {
+            if (string.startsWith(BIAS.toString())) {
                 marketBias.add(string);
             }
         }
 
         // находим все BIAS в паттерн листе
         for (String string : patternsList) {
-            if (string.startsWith("BIAS")) {
+            if (string.startsWith(BIAS.toString())) {
                 patternBias.add(string);
             }
         }
@@ -302,68 +302,30 @@ public class CompareAndMakeDecisionUser extends Thread {
                         && marketComparePriceNull.size() == patternCompareDataNull.size()
                         && patternCompareDataNull.size() == patternComparePriceNull.size()) {
 
-//                    for (String stringNull : marketCompareDataNullAll) {
-//                        for (String stringReady : readyMarketBlock) {
-//                            if (giveData(type, stringReady).equals(stringNull)) {
-//                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringReady));
-//                            }
-//                        }
-//                    }
-//
-//                    for (String stringNull : marketComparePriceNullAll) {
-//                        for (String stringReady : readyMarketBlock) {
-//                            if (giveData(type, stringReady).equals(stringNull)) {
-//                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringReady));
-//                            }
-//                        }
-//                    }
+                    HashSet<Integer> deleteIndexHashPattern = new HashSet<>(deleteIndexPattern);
+                    HashSet<Integer> deleteIndexHashMarket = new HashSet<>(deleteIndexMarket);
 
-                    HashSet<Integer> deleteIndexHash = new HashSet<>();
-
-                    deleteIndexHash.addAll(deleteIndexMarket);
-                    deleteIndexMarket.clear();
-                    deleteIndexMarket.addAll(deleteIndexHash);
-                    Collections.reverse(deleteIndexMarket);
-                    deleteIndexHash.clear();
-
-                    for (Integer index : deleteIndexMarket) {
-                        readyMarketBlock.remove((int) index);
-                    }
-
-                    deleteIndexMarket.clear();
-
-                    deleteIndexHash.addAll(deleteIndexPattern);
                     deleteIndexPattern.clear();
-                    deleteIndexPattern.addAll(deleteIndexHash);
+                    deleteIndexMarket.clear();
+
+                    deleteIndexPattern.addAll(deleteIndexHashPattern);
+                    deleteIndexMarket.addAll(deleteIndexHashMarket);
+
                     Collections.reverse(deleteIndexPattern);
-                    deleteIndexHash.clear();
-
-//                    for (String stringNull : patternCompareDataNull) {
-//                        for (String stringReady : patternStrings) {
-//                            if (giveData(type, stringReady).equals(stringNull)) {
-//                                deleteIndexMarket.add(patternStrings.indexOf(stringReady));
-//                            }
-//                        }
-//                    }
-//
-//                    for (String stringNull : patternComparePriceNull) {
-//                        for (String stringReady : patternStrings) {
-//                            if (giveData(type, stringReady).equals(stringNull)) {
-//                                deleteIndexMarket.add(patternStrings.indexOf(stringReady));
-//                            }
-//                        }
-//                    }
-
-//                    deleteIndexHash.addAll(deleteIndexMarket);
-//                    deleteIndexMarket.addAll(deleteIndexHash);
-//                    Collections.reverse(deleteIndexMarket);
-//                    deleteIndexHash.clear();
+                    Collections.reverse(deleteIndexMarket);
 
                     for (Integer index : deleteIndexPattern) {
                         patternStrings.remove((int) index);
                     }
 
+                    for (Integer index : deleteIndexMarket) {
+                        readyMarketBlock.remove((int) index);
+                    }
+
+                    deleteIndexHashPattern.clear();
+                    deleteIndexHashMarket.clear();
                     deleteIndexPattern.clear();
+                    deleteIndexMarket.clear();
                 }
 
                 // если блоки одинаковы и больше нуля сравниваем их

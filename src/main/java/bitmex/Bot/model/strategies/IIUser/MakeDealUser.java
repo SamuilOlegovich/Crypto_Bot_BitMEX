@@ -4,12 +4,12 @@ import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
 import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 import java.util.ArrayList;
 
+import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
 
 
@@ -23,8 +23,8 @@ public class MakeDealUser extends Thread {
 
 
     public MakeDealUser(ArrayList<String> marketList, String patternZeroString) {
+        this.patternZeroString = patternZeroString.replaceAll("\n", "");
         this.marketList = new ArrayList<>(marketList);
-        this.patternZeroString = patternZeroString;
         start();
     }
 
@@ -35,47 +35,49 @@ public class MakeDealUser extends Thread {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Определяю какую сделку сделать согласно ПАТТЕРНАМ USER");
         
-        String[] strings = patternZeroString.split("===");
         String stringOut = patternZeroString;
 
 
-        if (Integer.parseInt(strings[1]) > Integer.parseInt(strings[3])) {
-
+        if (Integer.parseInt(giveData(BUY, patternZeroString))
+                > Integer.parseInt(giveData(SELL, patternZeroString))) {
             if (conditionsAreMet(true)) {
-                if (Gasket.isTradingUser()) {
+                if (Gasket.isTradingUser() && !patternZeroString.endsWith(TEST.toString())) {
                     new TradeBuy(stringOut);
                 }
+
                 if (Gasket.isTradingTestUser()) {
                     new TestOrderBuyPatternUser(stringOut, Gasket.getBitmexQuote().getAskPrice());
                 }
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + stringOut + " --- Согластно ПАТТЕРНУ " + strings[strings.length - 1]
+                        + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
                         + " сделал сделку БАЙ USER");
             } else {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + stringOut + " --- Согластно ПАТТЕРНУ " + strings[strings.length - 1]
+                        + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
                         + " сделку БАЙ USER отменил по истечению времени");
             }
 
-        } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
-
+        } else if (Integer.parseInt(giveData(BUY, patternZeroString))
+                < Integer.parseInt(giveData(SELL, patternZeroString))) {
             if (conditionsAreMet(false)) {
-                if (Gasket.isTradingUser()) {
+
+                if (Gasket.isTradingUser() && !patternZeroString.endsWith(TEST.toString())) {
                     new TradeSell(stringOut);
                 }
+
                 if (Gasket.isTradingTestUser()) {
                     new TestOrderSellPatternUser(stringOut, Gasket.getBitmexQuote().getBidPrice());
                 }
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + stringOut + " --- Согластно ПАТТЕРНУ " + strings[strings.length - 1]
+                        + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
                         + " сделал сделку СЕЛЛ USER");
 
             }
         } else {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ " + strings[strings.length - 1]
+                    + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
                     + " сделку СЕЛЛ USER отменил по истечению времени");
         }
     }
@@ -90,11 +92,11 @@ public class MakeDealUser extends Thread {
         int blockSearch = 1;
         double prices = 0.0;
         String types = "";
-        long time = 0;
         int blocks = 0;
+        long time = 0;
 
-        blocks = Integer.parseInt(StringHelper.giveData(TypeData.BLOCK, patternZeroString));
-        types = StringHelper.giveData(TypeData.TYPE, patternZeroString);
+        blocks = Integer.parseInt(giveData(TypeData.BLOCK, patternZeroString));
+        types = giveData(TypeData.TYPE, patternZeroString);
 
         if (types.equalsIgnoreCase(NULL.toString())) {
             if (b) {
@@ -105,9 +107,8 @@ public class MakeDealUser extends Thread {
                     }
 
                     if (blocks == blockSearch) {
-//                        String[] s = marketList.get(marketList.indexOf(string) + 1).split("===");
-                        prices = Double.parseDouble(StringHelper
-                                .giveData(TypeData.price, marketList.get(marketList.indexOf(string) + 1)));
+                        prices = Double.parseDouble(giveData(TypeData.price,
+                                marketList.get(marketList.indexOf(string) + 1)));
                         break;
                     }
 
@@ -120,8 +121,8 @@ public class MakeDealUser extends Thread {
                     }
 
                     if (blocks + 1 == blockSearch) {
-                        prices = Double.parseDouble(StringHelper
-                                .giveData(TypeData.price, marketList.get(marketList.indexOf(string) - 1)));
+                        prices = Double.parseDouble(giveData(TypeData.price,
+                                marketList.get(marketList.indexOf(string) - 1)));
                         break;
                     }
                 }
@@ -132,8 +133,8 @@ public class MakeDealUser extends Thread {
                         && !string.startsWith(NULL.toString())) {
 
                     if (blocks == blockSearch) {
-                        if (StringHelper.giveData(TypeData.type, string).equalsIgnoreCase(types)) {
-                            prices = Double.parseDouble(StringHelper.giveData(TypeData.price, string));
+                        if (giveData(TypeData.type, string).equalsIgnoreCase(types)) {
+                            prices = Double.parseDouble(giveData(TypeData.price, string));
                         }
                     }
                 } else if (string.startsWith(BIAS.toString())) {

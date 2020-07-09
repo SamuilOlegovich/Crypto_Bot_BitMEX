@@ -7,7 +7,6 @@ import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -30,8 +29,6 @@ public class ListensToLooksAndFillsPro {
     private SavedPatternsPro savedPatterns;
     private CountPriseSell countPriseSell;
     private CountPriseBuy countPriseBuy;
-    private SortPrice sortPrice;
-    private SortTime sortTime;
 
 
     private boolean stopStartFlag;
@@ -55,8 +52,6 @@ public class ListensToLooksAndFillsPro {
         this.listInfoIndicator = new ArrayList<>();
         this.countPriseSell = new CountPriseSell();
         this.countPriseBuy = new CountPriseBuy();
-        this.sortPrice = new SortPrice();
-        this.sortTime = new SortTime();
         this.stopStartFlag = true;
         this.oneStartFlag = true;
         this.priceEndSell = NaN;
@@ -94,7 +89,7 @@ public class ListensToLooksAndFillsPro {
             listInfoIndicator.remove(i);
         }
 
-        listInfoIndicatorWorkingCopy.sort(sortPrice);
+        listInfoIndicatorWorkingCopy.sort(CompareHelper.getSortPrice());
 
         if (priceEndBuy <= priceNow && !oneStartFlag && flag) {
             // если же нынешняя цена вышла за пределы планируемой цены то назначаем следующую желаемую цену движения
@@ -147,7 +142,7 @@ public class ListensToLooksAndFillsPro {
                     + "===" + getAverageDeviations(false)
                     + "===" + MAX.toString() + "===" + getMaxDeviations(false)
                     + "===" + SIZE.toString() + "===" + (listStringPriceSell.size() + 1)
-                    + "===ID===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "===" + ID.toString() + "===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
                     + "\n";
 
             listStringPriceSell.add(0, stringZero);
@@ -302,7 +297,7 @@ public class ListensToLooksAndFillsPro {
 
 
         // сортируем масив по времени от меньшего к большему
-        inAdditionalLevels.sort(sortTime);
+        inAdditionalLevels.sort(CompareHelper.getSortTime());
 
         // вставляем оставшиеся объекты в нужный нам блок
         for (InfoIndicator marketInfo : inAdditionalLevels) {
@@ -506,32 +501,6 @@ public class ListensToLooksAndFillsPro {
 
 
 /// === INNER CLASSES === ///
-
-
-
-
-    private class SortPrice implements Comparator<InfoIndicator> {
-        @Override
-        public int compare(InfoIndicator o1, InfoIndicator o2) {
-            double result = o2.getPrice() - o1.getPrice();
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
-
-
-
-    private class SortTime implements Comparator<InfoIndicator> {
-        @Override
-        public int compare(InfoIndicator o1, InfoIndicator o2) {
-            long result = o1.getTime().getTime() - o2.getTime().getTime();
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
 
 
 

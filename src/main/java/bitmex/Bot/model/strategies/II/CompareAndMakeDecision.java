@@ -1,8 +1,10 @@
 package bitmex.Bot.model.strategies.II;
 
 
+import bitmex.Bot.model.StringHelper;
+
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 import static bitmex.Bot.model.CompareHelper.getSortTheAlphabet;
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
@@ -33,7 +35,8 @@ public class CompareAndMakeDecision extends Thread {
     public void run() {
         if (compareSheets()) {
             writeMessage(getDateTerminal() + " --- "
-                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ II передаю на сделку");
+                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ II передаю на сделку--- ID-"
+                    + StringHelper.giveData(ID, patternsList.get(0)));
             new MakeDeal(patternsList.get(0));
         }
 
@@ -184,14 +187,14 @@ public class CompareAndMakeDecision extends Thread {
                 if (marketCompare.size() > 0) {
                     // вначале сортируем простые блоки и сравниваем их
                     // если они ровны то можно сравнивать дальше построчно
-                    HashSet<String> hashSetPattern = new HashSet<>(patternCompare);
-                    HashSet<String> hashSetMarket = new HashSet<>(marketCompare);
+                    TreeSet<String> setPattern = new TreeSet<>(patternCompare);
+                    TreeSet<String> setMarket = new TreeSet<>(marketCompare);
 
                     patternCompare.clear();
                     marketCompare.clear();
 
-                    patternCompare.addAll(hashSetPattern);
-                    marketCompare.addAll(hashSetMarket);
+                    patternCompare.addAll(setPattern);
+                    marketCompare.addAll(setMarket);
 
                     for (String string : marketCompare) {
                         if (!string.equals(patternCompare.get(marketCompare.indexOf(string)))) {
@@ -199,8 +202,8 @@ public class CompareAndMakeDecision extends Thread {
                         }
                     }
 
-                    hashSetPattern.clear();
-                    hashSetMarket.clear();
+                    setPattern.clear();
+                    setMarket.clear();
 
                     patternCompareAll.sort(getSortTheAlphabet());
                     marketCompareAll.sort(getSortTheAlphabet());

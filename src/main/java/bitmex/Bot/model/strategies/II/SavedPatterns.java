@@ -106,103 +106,10 @@ public class SavedPatterns implements Serializable {
                 }
 
                 // чистим от оставшихся предварительных исчезнувших уровняй
-                ArrayList<Integer> indexArrayList = new ArrayList<>();
-
-                for (String stringOne : inArrayListCopy) {
-                    int bias = 0;
-
-                    if (!stringOne.startsWith(BUY.toString()) && !stringOne.startsWith(BIAS.toString())) {
-                        String[] oneStrings = stringOne.split(",");
-                        String[] twoStrings;
-
-                        for (int i = inArrayListCopy.indexOf(stringOne) + 1; i < inArrayListCopy.size(); i++) {
-                            String stringTwo = inArrayList.get(i);
-
-                            bias = bias + (stringTwo.startsWith(BIAS.toString()) ? 1 : 0);
-
-                            if (bias == 1) {
-                                // если мы сюда заши то значит мы перешли в нужны нам блок
-                                // начинаем сравнения с его строками
-                                twoStrings = stringTwo.split(",");
-
-                                if (oneStrings.length == twoStrings.length) {
-
-                                    // эти уровни есть всегда их не надо уничтожать
-                                    if (!oneStrings[5].equals("\"type\": \"OI_ZS_MIN_MINUS\"")
-                                            && !oneStrings[5].equals("\"type\": \"OI_ZS_MIN_PLUS\"")
-                                            && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_PLUS\"")
-                                            && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_MINUS\"")) {
-
-                                        // M5 == M5  1 == 1  ASK == ASK
-                                        if (oneStrings[0].equals(twoStrings[0])
-                                                && oneStrings[1].equals(twoStrings[1])
-                                                && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringOne));
-
-                                            // M5 == M5  1 != 1(0)  ASK == ASK
-                                        } else if (oneStrings[0].equals(twoStrings[0])
-                                                && (!oneStrings[1].equals(twoStrings[1])
-                                                && oneStrings[1].equals("1"))
-                                                && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringOne));
-
-                                            // M5 == M5  (0)1 != 1  ASK == ASK
-                                        } else if (oneStrings[0].equals(twoStrings[0])
-                                                && (!oneStrings[1].equals(twoStrings[1])
-                                                && oneStrings[1].equals("0"))
-                                                && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringTwo));
-
-                                            // M5 != M5(M15)  1 == 1  ASK == ASK
-                                        } else if ((!oneStrings[0].equals(twoStrings[0])
-                                                && oneStrings[0].equals(M5.toString()))
-                                                && oneStrings[1].equals(twoStrings[1])
-                                                && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringOne));
-
-                                            // M5 != M5(M15)  1 != 1(0)  ASK == ASK
-                                        } else if ((!oneStrings[0].equals(twoStrings[0])
-                                                && oneStrings[0].equals(M5.toString()))
-                                                && (!oneStrings[1].equals(twoStrings[1])
-                                                && oneStrings[1].equals("1"))
-                                                && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringOne));
-
-                                            // M5 != M5(M15)  (0)1 != 1  ASK == ASK
-                                        } else if ((!oneStrings[0].equals(twoStrings[0])
-                                                && oneStrings[0].equals(M5.toString()))
-                                                && (!oneStrings[1].equals(twoStrings[1])
-                                                && oneStrings[1].equals("0"))
-                                                && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringTwo));
-
-                                            // M5 != M5(M15)  (0)1 != 1  ASK == ASK
-                                        } else if ((!oneStrings[0].equals(twoStrings[0])
-                                                && twoStrings[0].equals(M5.toString()))
-                                                && (!oneStrings[1].equals(twoStrings[1])
-                                                && oneStrings[1].equals("0"))
-                                                && oneStrings[5].equals(twoStrings[5])) {
-                                            indexArrayList.add(inArrayListCopy.indexOf(stringTwo));
-                                        }
-                                    }
-                                }
-                            } else if (bias == 2) {
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                // если каким-то образом будет два одинаковых индекса, так мы их нивилируем
-                TreeSet<Integer> treeSet = new TreeSet<>(indexArrayList);
-                indexArrayList.clear();
-                indexArrayList.addAll(treeSet);
-                Collections.reverse(indexArrayList);
-
-                for (Integer index : indexArrayList) {
-                    inArrayListCopy.remove((int) index);
-                }
-
+                ArrayList<String> tempList = new ArrayList<>(CompareHelper.removeExtraLevels(inArrayListCopy));
+                inArrayListCopy.clear();
+                inArrayListCopy.addAll(tempList);
+                tempList.clear();
 
                 // перебираем массив стратегий и сравниваем с пришедшим
                 for (ArrayList<String> stringArrayList : listsPricePatterns) {

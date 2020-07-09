@@ -2,6 +2,7 @@ package bitmex.Bot.model.strategies.II;
 
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -23,7 +24,6 @@ public class ListensLooksAndCompares {
     private ArrayList<ArrayList<String>> marketListInListString;
     private ArrayList<InfoIndicator> listInfoIndicator;
 
-    private SortPriceRemainingLevels sortPriceRemainingLevels;
     private SavedPatterns savedPatterns;
 
 
@@ -37,7 +37,6 @@ public class ListensLooksAndCompares {
         ConsoleHelper.writeMessage(getDateTerminal() + " --- "
                 + "Класс Listens Looks And Compares II начал работать");
 
-        this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
         this.marketObjectInfoWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsClass();
         this.marketListInListString = new ArrayList<>();
@@ -267,107 +266,10 @@ public class ListensLooksAndCompares {
     private synchronized void setThePatternsInOrder() {
         // перебираем все листы листов
         for (ArrayList<String> inArrayList : marketListInListString) {
-            // индекса строк в массиве которые надо будет удалить
-            ArrayList<Integer> indexArrayList = new ArrayList<>();
-
-            for (String stringOne : inArrayList) {
-                int bias = 0;
-
-                // если строка не ровна нулевой строке или промежуточной
-                if (!stringOne.startsWith(BIAS.toString()) && !stringOne.startsWith(NULL.toString())) {
-                    // разбиваем строку на запчасти
-                    String[] oneStrings = stringOne.split(",");
-                    String[] twoStrings;
-
-                    // начинаем шагать по тому же массиву и искать ближайший BIAS
-                    for (int i = inArrayList.indexOf(stringOne) + 1; i < inArrayList.size(); i++) {
-                        String stringTwo = inArrayList.get(i);
-
-                        bias = bias + (stringTwo.startsWith(BIAS.toString()) ? 1 : 0);
-
-                        if (bias == 1) {
-                            // если мы сюда заши то значит мы перешли в нужны нам блок
-                            // начинаем сравнения с его строками
-                            twoStrings = stringTwo.split(",");
-
-                            if (oneStrings.length == twoStrings.length) {
-
-                                // эти уровни есть всегда их не надо уничтожать
-                                if (!oneStrings[5].equals("\"type\": \"OI_ZS_MIN_MINUS\"")
-                                        && !oneStrings[5].equals("\"type\": \"OI_ZS_MIN_PLUS\"")
-                                        && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_PLUS\"")
-                                        && !oneStrings[5].equals("\"type\": \"DELTA_ZS_MIN_MINUS\"")) {
-
-                                    // M5 == M5  1 == 1  ASK == ASK
-                                    if (oneStrings[0].equals(twoStrings[0])
-                                            && oneStrings[1].equals(twoStrings[1])
-                                            && oneStrings[5].equals(twoStrings[5])) {
-                                        indexArrayList.add(inArrayList.indexOf(stringOne));
-
-                                        // M5 == M5  1 != 1(0)  ASK == ASK
-                                    } else if (oneStrings[0].equals(twoStrings[0])
-                                            && (!oneStrings[1].equals(twoStrings[1])
-                                            && oneStrings[1].equals("1"))
-                                            && oneStrings[5].equals(twoStrings[5])) {
-                                        indexArrayList.add(inArrayList.indexOf(stringOne));
-
-                                        // M5 == M5  (0)1 != 1  ASK == ASK
-                                    } else if (oneStrings[0].equals(twoStrings[0])
-                                            && (!oneStrings[1].equals(twoStrings[1])
-                                            && oneStrings[1].equals("0"))
-                                            && oneStrings[5].equals(twoStrings[5])) {
-                                        indexArrayList.add(inArrayList.indexOf(stringTwo));
-
-                                        // M5 != M5(M15)  1 == 1  ASK == ASK
-                                    } else if ((!oneStrings[0].equals(twoStrings[0])
-                                            && oneStrings[0].equals("M5"))
-                                            && oneStrings[1].equals(twoStrings[1])
-                                            && oneStrings[5].equals(twoStrings[5])) {
-                                        indexArrayList.add(inArrayList.indexOf(stringOne));
-
-                                        // M5 != M5(M15)  1 != 1(0)  ASK == ASK
-                                    } else if ((!oneStrings[0].equals(twoStrings[0])
-                                            && oneStrings[0].equals("M5"))
-                                            && (!oneStrings[1].equals(twoStrings[1])
-                                            && oneStrings[1].equals("1"))
-                                            && oneStrings[5].equals(twoStrings[5])) {
-                                        indexArrayList.add(inArrayList.indexOf(stringOne));
-
-                                        // M5 != M5(M15)  (0)1 != 1  ASK == ASK
-                                    } else if ((!oneStrings[0].equals(twoStrings[0])
-                                            && oneStrings[0].equals("M5"))
-                                            && (!oneStrings[1].equals(twoStrings[1])
-                                            && oneStrings[1].equals("0"))
-                                            && oneStrings[5].equals(twoStrings[5])) {
-                                        indexArrayList.add(inArrayList.indexOf(stringTwo));
-
-                                        // M5 != M5(M15)  (0)1 != 1  ASK == ASK
-                                    } else if ((!oneStrings[0].equals(twoStrings[0])
-                                            && twoStrings[0].equals("M5"))
-                                            && (!oneStrings[1].equals(twoStrings[1])
-                                            && oneStrings[1].equals("0"))
-                                            && oneStrings[5].equals(twoStrings[5])) {
-                                        indexArrayList.add(inArrayList.indexOf(stringTwo));
-                                    }
-                                }
-                            }
-                        } else if (bias == 2) {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // если каким-то образом будет два одинаковых индекса, так мы их нивилируем
-            TreeSet<Integer> treeSet = new TreeSet<>(indexArrayList);
-
-            indexArrayList.clear();
-            indexArrayList.addAll(treeSet);
-            Collections.reverse(indexArrayList);
-
-            for (Integer index : indexArrayList) {
-                inArrayList.remove((int) index);
-            }
+            ArrayList<String> tmpList = new ArrayList<>(CompareHelper.removeExtraLevels(inArrayList));
+            inArrayList.clear();
+            inArrayList.addAll(tmpList);
+            tmpList.clear();
         }
     }
 
@@ -450,13 +352,13 @@ public class ListensLooksAndCompares {
             if (string.startsWith(NULL.toString())) {
                 out.add(string);
             } else if (string.startsWith(BIAS.toString())) {
-                intermediary.sort(sortPriceRemainingLevels);
+                intermediary.sort(CompareHelper.getSortPriceRemainingLevels());
                 intermediary.add(string);
                 out.addAll(intermediary);
                 intermediary.clear();
             } else if (inEdit.indexOf(string) == inEdit.size() - 1) {
                 intermediary.add(string);
-                intermediary.sort(sortPriceRemainingLevels);
+                intermediary.sort(CompareHelper.getSortPriceRemainingLevels());
                 out.addAll(intermediary);
                 intermediary.clear();
             } else {
@@ -494,30 +396,6 @@ public class ListensLooksAndCompares {
             marketObjectInfoWorkingCopy.clear();
             marketListInListString.clear();
             listInfoIndicator.clear();
-        }
-    }
-
-
-
-
-/// === INNER CLASSES === ///
-
-
-
-
-    private class SortPriceRemainingLevels implements Comparator<String> {
-        @Override
-        public int compare(String o1, String o2) {
-            String[] strings1 = o1.split(",");
-            String[] strings2 = o2.split(",");
-
-            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
-                    .replaceAll("price: ", "")) - Double.parseDouble(strings1[3]
-                    .replaceAll("\"", "").replaceAll("price: ", ""));
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
         }
     }
 }

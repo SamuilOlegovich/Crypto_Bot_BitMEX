@@ -1,10 +1,10 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.CompareHelper;
+import bitmex.Bot.model.StringHelper;
 
 import java.util.Collections;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 import static bitmex.Bot.model.CompareHelper.getSortTheAlphabet;
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
@@ -34,7 +34,8 @@ public class CompareAndMakeDecisionUser extends Thread {
 
         if (compareSheets()) {
             writeMessage(getDateTerminal() + " --- "
-                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку");
+                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку --- ID-"
+                    + StringHelper.giveData(ID, patternsList.get(0)));
 
             new MakeDealUser(marketList, patternsList.get(0));
         }
@@ -71,10 +72,12 @@ public class CompareAndMakeDecisionUser extends Thread {
         // если их размер равен то проверяем равны ли в них направления
         if (marketBias.size() != patternBias.size()) {
             return false;
-        } else if (marketBias.size() > 0) {
-            for (String marketString : marketBias) {
-                if (!giveData(BIAS, patternBias.get(marketBias.indexOf(marketString)))
-                        .equalsIgnoreCase(giveData(BIAS, marketString))) {
+        } else if (patternBias.size() > 0) {
+            for (String patternBi : patternBias) {
+                // если нул_нул то не важно равны ли строки направления
+                if (!patternBi.equalsIgnoreCase(NULL_NULL.toString())
+                        && !giveData(BIAS, patternBi).equals(giveData(BIAS,
+                        marketBias.get(patternBias.indexOf(patternBi))))) {
                     return false;
                 }
             }
@@ -302,8 +305,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                         && marketComparePriceNull.size() == patternCompareDataNull.size()
                         && patternCompareDataNull.size() == patternComparePriceNull.size()) {
 
-                    HashSet<Integer> deleteIndexHashPattern = new HashSet<>(deleteIndexPattern);
-                    HashSet<Integer> deleteIndexHashMarket = new HashSet<>(deleteIndexMarket);
+                    TreeSet<Integer> deleteIndexHashPattern = new TreeSet<>(deleteIndexPattern);
+                    TreeSet<Integer> deleteIndexHashMarket = new TreeSet<>(deleteIndexMarket);
 
                     deleteIndexPattern.clear();
                     deleteIndexMarket.clear();
@@ -351,8 +354,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                         && marketComparePriceNull.size() > 0) {
                     // вначале сортируем простые блоки и сравниваем их
                     // если они ровны то можно сравнивать дальше построчно
-                    HashSet<String> hashSetPatternNull = new HashSet<>(patternComparePriceNull);
-                    HashSet<String> hashSetMarketNull = new HashSet<>(marketComparePriceNull);
+                    TreeSet<String> hashSetPatternNull = new TreeSet<>(patternComparePriceNull);
+                    TreeSet<String> hashSetMarketNull = new TreeSet<>(marketComparePriceNull);
 
                     patternComparePriceNull.clear();
                     marketComparePriceNull.clear();
@@ -387,8 +390,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                         && marketCompareDataNull.size() > 0) {
                     // вначале сортируем простые блоки и сравниваем их
                     // если они ровны то можно сравнивать дальше построчно
-                    HashSet<String> hashSetPatternNull = new HashSet<>(patternCompareDataNull);
-                    HashSet<String> hashSetMarketNull = new HashSet<>(marketCompareDataNull);
+                    TreeSet<String> hashSetPatternNull = new TreeSet<>(patternCompareDataNull);
+                    TreeSet<String> hashSetMarketNull = new TreeSet<>(marketCompareDataNull);
 
                     patternCompareDataNull.clear();
                     marketCompareDataNull.clear();

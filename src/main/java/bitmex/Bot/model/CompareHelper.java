@@ -24,9 +24,8 @@ public class CompareHelper {
 
 
 
-    public static ArrayList<String> removeExtraLevels(ArrayList<String> in1, ArrayList<String> in2) {
+    public static ArrayList<String> removeExtraLevels(ArrayList<String> in1) {
         ArrayList<String> listIn = new ArrayList<>(in1);
-        ArrayList<String> listIn2 = new ArrayList<>(in2);
 
         // чистим от оставшихся предварительных исчезнувших уровняй
         ArrayList<Integer> indexArrayList = new ArrayList<>();
@@ -38,7 +37,7 @@ public class CompareHelper {
                     && !stringOne.startsWith(BIAS.toString())) {
 
                 for (int i = listIn.indexOf(stringOne) + 1; i < listIn.size(); i++) {
-                    String stringTwo = listIn2.get(i);
+                    String stringTwo = listIn.get(i);
                     bias = bias + (stringTwo.startsWith(BIAS.toString()) ? 1 : 0);
 
                     if (bias == 1) {
@@ -114,9 +113,9 @@ public class CompareHelper {
         }
 
         // если каким-то образом будет два одинаковых индекса, так мы их нивилируем
-        HashSet<Integer> hashSet = new HashSet<>(indexArrayList);
+        TreeSet<Integer> treeSet = new TreeSet<>(indexArrayList);
         indexArrayList.clear();
-        indexArrayList.addAll(hashSet);
+        indexArrayList.addAll(treeSet);
         Collections.reverse(indexArrayList);
 
         for (Integer index : indexArrayList) {
@@ -142,9 +141,6 @@ public class CompareHelper {
         @Override
         public int compare(ArrayList<String> o1, ArrayList<String> o2) {
             double result = o1.size() - o2.size();
-//            if (result > 0) return 1;
-//            if (result < 0) return -1;
-//            return 0;
             return Double.compare(result, 0);
         }
     }
@@ -155,9 +151,6 @@ public class CompareHelper {
         @Override
         public int compare(InfoIndicator o1, InfoIndicator o2) {
             double result = o2.getPrice() - o1.getPrice();
-//            if (result > 0) return 1;
-//            if (result < 0) return -1;
-//            return 0;
             return Double.compare(result, 0);
         }
     }
@@ -168,9 +161,6 @@ public class CompareHelper {
         @Override
         public int compare(InfoIndicator o1, InfoIndicator o2) {
             long result = o1.getTime().getTime() - o2.getTime().getTime();
-//            if (result > 0) return 1;
-//            if (result < 0) return -1;
-//            return 0;
             return Long.compare(result, 0);
         }
     }
@@ -180,19 +170,8 @@ public class CompareHelper {
     private static class SortPriceRemainingLevels implements Comparator<String> {
         @Override
         public synchronized int compare(String o1, String o2) {
-//            String[] strings1 = o1.split(",");
-//            String[] strings2 = o2.split(",");
-
-//            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
-//                    .replaceAll("price: ", ""))
-//                    - Double.parseDouble(strings1[3].replaceAll("\"", "")
-//                    .replaceAll("price: ", ""));
-
             double result = Double.parseDouble(StringHelper.giveData(price, o2))
                     - Double.parseDouble(StringHelper.giveData(price, o1));
-//            if (result > 0) return 1;
-//            if (result < 0) return -1;
-//            return 0;
             return Double.compare(result, 0);
         }
     }

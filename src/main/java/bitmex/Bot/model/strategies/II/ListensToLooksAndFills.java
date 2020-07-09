@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.model.Gasket;
 
 import java.util.*;
@@ -26,7 +26,6 @@ public class ListensToLooksAndFills {
     private ArrayList<String> listStringPriceBuy;                      // лист для формирования бай паттерна
 
 
-    private SortPriceRemainingLevels sortPriceRemainingLevels;
     private CountPriseSell countPriseSell;
     private CountPriseBuy countPriseBuy;
     private SavedPatterns savedPatterns;
@@ -45,7 +44,6 @@ public class ListensToLooksAndFills {
     private ListensToLooksAndFills() {
         writeMessage(getDateTerminal()
                 + " --- " + "Начал работать класс сбора II Паттернов");
-        this.sortPriceRemainingLevels = new SortPriceRemainingLevels();
         this.priceNow = getBitmexQuote().getBidPrice();
         this.listInfoIndicatorWorkingCopy = new ArrayList<>();
         this.savedPatterns = Gasket.getSavedPatternsClass();
@@ -103,7 +101,8 @@ public class ListensToLooksAndFills {
                     + "===" + getAverageDeviations(true)
                     + "===" + MAX.toString() + "===" + getMaxDeviations(true)
                     + "===" + SIZE.toString() + "===" + (listStringPriceBuy.size() + 1)
-                    + "===" + ID.toString() + "===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "===" + ID.toString() + "==="
+                    + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
                     + "\n";
 
             listStringPriceBuy.add(0, stringZero);
@@ -144,7 +143,8 @@ public class ListensToLooksAndFills {
                     + "===" + getAverageDeviations(false)
                     + "===" + MAX.toString() + "===" + getMaxDeviations(false)
                     + "===" + SIZE.toString() + "===" + (listStringPriceSell.size() + 1)
-                    + "===" + ID.toString() + "===" + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
+                    + "===" + ID.toString() + "==="
+                    + ((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39))
                     + "\n";
 
             listStringPriceSell.add(0, stringZero);
@@ -342,13 +342,13 @@ public class ListensToLooksAndFills {
             if (string.startsWith(BUY.toString())) {
                 out.add(string);
             } else if (string.startsWith(BIAS.toString())) {
-                intermediary.sort(sortPriceRemainingLevels);
+                intermediary.sort(CompareHelper.getSortPriceRemainingLevels());
                 intermediary.add(string);
                 out.addAll(intermediary);
                 intermediary.clear();
             } else if (inEdit.indexOf(string) == inEdit.size() - 1) {
                 intermediary.add(string);
-                intermediary.sort(sortPriceRemainingLevels);
+                intermediary.sort(CompareHelper.getSortPriceRemainingLevels());
                 out.addAll(intermediary);
                 intermediary.clear();
             } else {
@@ -503,25 +503,6 @@ public class ListensToLooksAndFills {
 
 /// === INNER CLASSES === ///
 
-
-
-
-    private class SortPriceRemainingLevels implements Comparator<String> {
-        @Override
-        public int compare(String o1, String o2) {
-            String[] strings1 = o1.split(",");
-            String[] strings2 = o2.split(",");
-
-            double result = Double.parseDouble(strings2[3].replaceAll("\"", "")
-                    .replaceAll("price: ", ""))
-                    - Double.parseDouble(strings1[3].replaceAll("\"", "")
-                    .replaceAll("price: ", ""));
-
-            if (result > 0) return 1;
-            else if (result < 0) return -1;
-            else return 0;
-        }
-    }
 
 
 

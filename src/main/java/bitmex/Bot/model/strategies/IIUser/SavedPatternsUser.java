@@ -98,7 +98,7 @@ public class SavedPatternsUser {
             thIs = stringArrayList.get(0).replaceAll("\n", "");
 
             if (StringHelper.giveData(ID, stringSet).equalsIgnoreCase(StringHelper.giveData(ID, thIs))) {
-                stringArrayList.set(0, stringSet);
+                stringArrayList.set(0, stringSet + "\n");
                 count++;
             }
         }

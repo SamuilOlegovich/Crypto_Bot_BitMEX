@@ -103,7 +103,7 @@ public class SavedPatternsPro {
                 }
 
                 // чистим от оставшихся предварительных исчезнувших уровняй
-                ArrayList<String> temporaryList = new ArrayList<>(removeExtraLevels(marketListCopy, inArrayList));
+                ArrayList<String> temporaryList = new ArrayList<>(removeExtraLevels(marketListCopy));
                 marketListCopy.clear();
                 marketListCopy.addAll(temporaryList);
                 temporaryList.clear();

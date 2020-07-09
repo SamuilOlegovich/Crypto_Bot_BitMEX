@@ -1,6 +1,7 @@
 package bitmex.Bot.model.strategies.IIUser;
 
 
+import bitmex.Bot.model.serverAndParser.WriterString;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -47,6 +48,9 @@ public class KeepsTrackOfFillingListInfoIndicatorUser extends Thread {
                 listensLooksAndComparesUser.setPriceNow(Gasket.getBitmexQuote().getBidPrice());
                 listensLooksAndComparesUser.setTimeNow(DatesTimes.getDateTerminalLong());
                 listensLooksAndComparesUser.startListSortedAndCompares(true);
+                new WriterString(DatesTimes.getDateTerminal()
+                        + "-----------------------------------------------------------------------------------------"
+                        + "---------------------------------------------------------------------------------------");
             }
         }, timeStart, 1000 * 60 * 5);
 

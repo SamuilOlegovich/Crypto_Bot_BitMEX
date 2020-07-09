@@ -20,12 +20,12 @@ public class StringHelper {
 
             for (int i = 0; i < strings.length; i++) {
                 strings[i] = strings[i].replaceAll("\"", "");
-                strings[i] = strings[i].replaceAll(":", "");
+                strings[i] = strings[i].replaceAll(": ", "");
             }
 
             for (String s : strings) {
                 if (s.startsWith(key.toString())) {
-                    return s.replaceAll(key.toString(), "").trim();
+                    return s.replaceAll(key.toString(), "").replaceAll(",", ".");
                 }
             }
         } else {

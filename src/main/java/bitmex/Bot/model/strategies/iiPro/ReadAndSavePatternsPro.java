@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.iiPro;
 
-import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.view.WriterAndReadFile;
+import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -12,6 +12,8 @@ import java.io.FileReader;
 import java.io.File;
 
 import static bitmex.Bot.model.enums.TypeData.*;
+
+
 
 
 public class ReadAndSavePatternsPro {

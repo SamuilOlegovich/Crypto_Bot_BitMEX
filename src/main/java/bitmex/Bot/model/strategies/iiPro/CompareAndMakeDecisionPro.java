@@ -3,6 +3,7 @@ package bitmex.Bot.model.strategies.iiPro;
 
 
 import bitmex.Bot.model.CompareHelper;
+import bitmex.Bot.model.StringHelper;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,8 @@ public class CompareAndMakeDecisionPro extends Thread {
     public void run() {
         if (compareSheets()) {
             writeMessage(getDateTerminal() + " --- "
-                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ II Pro передаю на сделку");
+                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ II Pro передаю на сделку --- ID-"
+                    + StringHelper.giveData(ID, patternsList.get(0)));
             new MakeDealPro(patternsList.get(0));
         }
 

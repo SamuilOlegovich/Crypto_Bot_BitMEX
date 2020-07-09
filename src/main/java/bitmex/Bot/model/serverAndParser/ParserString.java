@@ -32,7 +32,7 @@ public class ParserString {
     }
 
     public synchronized void parserStringJson(String string) {
-        WriterAndReadFile.writerFile(string, Gasket.getFilesAndPathCreator().getPathFullHistory(), true);
+        new WriterString(string);
 
         if (linkWithIndicator) {
             if (string.length() > 20) {
@@ -49,7 +49,7 @@ public class ParserString {
 //        in = in.replaceAll("}", "");
 //        in = in.replaceAll("\"", " ");
 //        String[] strings = in.split(" , ");
-
+//
 //        TimeFrame period = getTimeFrame(strings[0].trim().replaceAll("period : {2}",""));
 //        int preview = Integer.parseInt(strings[1].trim().replaceAll("preview : {2}", ""));
 //        Date time = getDate(strings[2].trim().replaceAll("time : {2}", ""));

@@ -2,6 +2,7 @@ package bitmex.Bot.model.strategies.iiPro;
 
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.StringHelper;
 
 import java.util.ArrayList;
 
@@ -168,10 +169,12 @@ public class SavedPatternsPro {
                         // с учетом информации пришедшего паттерна
                         // а так же прекращаем процесс поиска и сравнения
                         if (result) {
-                            writeMessage(DatesTimes.getDateTerminal()
-                                    + " --- II Pro ПАТТЕРН такой есть - обновляю информацию");
                             String stringZero = setPriority(patternListIn.get(0), marketListCopy.get(0));
                             patternListIn.set(0, stringZero);
+
+                            writeMessage(DatesTimes.getDateTerminal()
+                                    + " --- II Pro ПАТТЕРН такой есть - обновляю информацию по === "
+                                    + giveData(ID, stringZero));
 
                             ReadAndSavePatternsPro.saveSavedPatternsFromUser();
                             ReadAndSavePatternsPro.saveSavedPatterns();
@@ -334,10 +337,10 @@ public class SavedPatternsPro {
 
     private String checkingID(String string) {
         StringBuilder stringOut = new StringBuilder(string);
-        String[] strings = stringOut.toString().split("===");
+//        String[] strings = stringOut.toString().split("===");
 
         for (ArrayList<String> stringArrayList : listsPricePatterns) {
-            if (strings[11].equals(stringArrayList.get(0))) {
+            if (StringHelper.giveData(ID, stringOut.toString()).equals(stringArrayList.get(0))) {
                 stringOut.append((int) (Math.round(Math.abs(Math.random() * 200 - 100)) * 39));
             }
         }
@@ -370,33 +373,36 @@ public class SavedPatternsPro {
 
 
     public synchronized void updateFirstRowData(String string) {
-        String stringSet = string;
-        String[] in = stringSet.split("===");
-        String[] thIs;
+//        String stringSet = string;
+//        String[] in = stringSet.split("===");
+//        String[] thIs;
 
         int count = 0;
 
         for (ArrayList<String> stringArrayList : listsPricePatterns) {
-            thIs = stringArrayList.get(0).split("===");
-
-            if (in.length == thIs.length) {
-                if (in[in.length - 1].equals(thIs[thIs.length - 1])) {
-                    stringArrayList.set(0, stringSet);
-                    count++;
-                }
+//            thIs = stringArrayList.get(0).split("===");
+//
+//            if (in.length == thIs.length) {
+            if (StringHelper.giveData(ID, string).equals(StringHelper.giveData(ID, stringArrayList.get(0)))) {
+//               if (in[in.length - 1].equals(thIs[thIs.length - 1])) {
+                stringArrayList.set(0, string);
+                count++;
             }
+//            }
         }
 
         if (count > 0) {
             ReadAndSavePatternsPro.saveSavedPatterns();
 
             writeMessage(DatesTimes.getDateTerminal()
-                    + " --- ОБНОВИЛ нулевую стороку II Pro ПАТТЕРНОВ согласно исходу сделки");
+                    + " --- ОБНОВИЛ нулевую стороку II Pro ПАТТЕРНОВ согласно исходу сделки === "
+                    + StringHelper.giveData(ID, string));
 
         } else {
 
             writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Такого номера ===" + in[in.length - 1] + "=== II Pro ПАТТЕРНА нет");
+//                    + " --- Такого номера ===" + in[in.length - 1] + "=== II Pro ПАТТЕРНА нет");
+                    + " --- Такого номера ===" + StringHelper.giveData(ID, string) + "=== II Pro ПАТТЕРНА нет");
         }
     }
 }

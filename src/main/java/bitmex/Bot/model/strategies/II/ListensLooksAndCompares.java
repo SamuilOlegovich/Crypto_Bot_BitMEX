@@ -278,16 +278,16 @@ public class ListensLooksAndCompares {
     // находим куда сместилась цена и другие данные
     private synchronized String getBias() {
         double bias = priceNow - priceStart;
-        String stringOut;
 
         if (bias > 0) {
-            stringOut = BUY.toString() + "===" + bias;
-        } else if (bias < 0) {
-            stringOut = SELL.toString() + "===" + bias;
-        } else {
-            stringOut = NULL.toString() + "===0";
+            return BUY.toString() + "===" + bias;
         }
-        return stringOut;
+
+        if (bias < 0) {
+            return SELL.toString() + "===" + bias;
+        }
+
+        return NULL.toString() + "===0";
     }
 
 

@@ -1,5 +1,7 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.view.ConsoleHelper;
@@ -8,6 +10,7 @@ import bitmex.Bot.model.Gasket;
 
 import java.util.*;
 
+import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
 import static bitmex.Bot.model.CompareHelper.*;
 import static java.lang.Float.NaN;
@@ -200,7 +203,7 @@ public class ListensLooksAndComparesUser {
         ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
         ArrayList<Integer> indexDelete = new ArrayList<>();
         int count = 0;
-        long time;
+        long times;
 
 
         if (inArrayList.size() > 0) {
@@ -212,31 +215,36 @@ public class ListensLooksAndComparesUser {
 
             // согласно количеству BIAS находим максимальный нужный нам промежуток времени
             if (count >= 1) {
-                time = timeNow - (1000 * 60 * 5 * (count + 1));
+                times = timeNow - (1000 * 60 * 5 * (count + 1));
             } else {
-                time = timeNow - (1000 * 60 * 6);
+                times = timeNow - (1000 * 60 * 6);
             }
 
                 // перебираем объекты и смотрим вписываются ли они в промежуток времени
             for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
 
                     // если не вписались в промежуток удаляем объект и прирываем этот цикл
-                if (infoIndicator.getTime().getTime() < time) {
+                if (infoIndicator.getTime().getTime() < times) {
                         indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
 
                 } else {
                         // сравниваем строки объекта с строками в списке
                     for (String string : inArrayList) {
-                        String[] stringsIn = infoIndicator.toStringUser().split("===");
-                        String[] stringsThis = string.split("===");
+//                        String[] stringsIn = infoIndicator.toStringUser().split("===");
+//                        String[] stringsThis = string.split("===");
 
                             // если длина строки объекта и массива равны то ...
-                        if (stringsIn.length == stringsThis.length) {
+                        if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
+                                && string.startsWith(NULL.toString())) {
+//                        if (stringsIn.length == stringsThis.length) {
 
                                 // если такая строка уже есть то заменяем ее на более новую
-                            if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
-                                        && stringsIn[11].equals(stringsThis[11])
-                                        && stringsIn[15].equals(stringsThis[15])) {
+                            if (giveData(time, infoIndicator.toStringUser()).equals(giveData(time, string))
+                                    && giveData(type, infoIndicator.toStringUser()).equals(giveData(type, string))
+                                    && giveData(dir, infoIndicator.toStringUser()).equals(giveData(dir, string))) {
+//                            if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
+//                                        && stringsIn[11].equals(stringsThis[11])
+//                                        && stringsIn[15].equals(stringsThis[15])) {
 
                                 inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
                                 indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
@@ -258,12 +266,12 @@ public class ListensLooksAndComparesUser {
         }
 
             // определяем пределы последнего блока
-        time = timeNow - (1000 * 60 * 6);
+        times = timeNow - (1000 * 60 * 6);
 
             // если еще остались строки, то добаляем их в последний блок
         if (infoIndicatorArrayListWorking.size() > 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
-                if (infoIndicator.getTime().getTime() > time) {
+                if (infoIndicator.getTime().getTime() > times) {
                     inArrayList.add(infoIndicator.toStringUser());
                 } else {
                     residualArrayList.add(infoIndicator);
@@ -300,9 +308,9 @@ public class ListensLooksAndComparesUser {
 
                 if (!patternString.startsWith(NULL.toString())
                         && !patternString.startsWith(BUY.toString()) && !patternString.startsWith(BIAS.toString())) {
-                    String[] stringsPattern = patternString.split("===");
+//                    String[] stringsPattern = patternString.split("===");
 
-                    if (DatesTimes.getDate(stringsPattern[5]).getTime() < marketInfo.getTime().getTime()) {
+                    if (DatesTimes.getDate(giveData(time, patternString)).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
                         break;
                     }
@@ -313,15 +321,15 @@ public class ListensLooksAndComparesUser {
                 if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toStringUser());
                 } else {
-                    String[] stringBias = inEdit.get(index).split("===");
-                    long time = 0;
+//                    String[] stringBias = inEdit.get(index).split("===");
+                    long time = DatesTimes.getDate(giveData(TIME, inEdit.get(index))).getTime() - (1000 * 60 * 5);
 
-                    for (int i = 0; i < stringBias.length; i++) {
-                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
-                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
-                            break;
-                        }
-                    }
+//                    for (int i = 0; i < stringBias.length; i++) {
+//                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
+//                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+//                            break;
+//                        }
+//                    }
 
                     if (time != 0 && time <= marketInfo.getTime().getTime()) {
                         inEdit.add(index + 1, marketInfo.toStringUser());
@@ -375,17 +383,18 @@ public class ListensLooksAndComparesUser {
     // находим куда сместилась цена и другие данные
     private synchronized String getBias() {
         double bias = priceNow - priceStart;
-        String stringOut;
-
 
         if (bias > 0) {
-            stringOut = BUY.toString() + "===" + bias;
-        } else if (bias < 0) {
-            stringOut = SELL.toString() + "===" + bias;
-        } else {
-            stringOut = NULL.toString() + "===0";
+//            stringOut = BUY.toString() + "===" + bias;
+            return BUY.toString() + "===" + bias;
         }
-        return stringOut;
+
+        if (bias < 0) {
+//            stringOut = SELL.toString() + "===" + bias;
+            return SELL.toString() + "===" + bias;
+        }
+
+        return NULL.toString() + "===0";
     }
 
 

@@ -1,17 +1,19 @@
 package bitmex.Bot.model.strategies.iiPro;
 
-import bitmex.Bot.model.CompareHelper;
+import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
+import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
 import static bitmex.Bot.model.CompareHelper.*;
 
@@ -185,7 +187,7 @@ public class ListensLooksAndComparesPro {
         ArrayList<Integer> indexDelete = new ArrayList<>();
 
         int count = 0;
-        long time;
+        long times;
 
 
         if (patternListIn.size() > 0) {
@@ -197,31 +199,37 @@ public class ListensLooksAndComparesPro {
 
             // согласно количеству BIAS находим максимальный нужный нам промежуток времени
             if (count >= 1) {
-                time = timeNow - (1000 * 60 * 5 * (count + 1));
+                times = timeNow - (1000 * 60 * 5 * (count + 1));
             } else {
-                time = timeNow - (1000 * 60 * 6);
+                times = timeNow - (1000 * 60 * 6);
             }
 
             // перебираем объекты и смотрим вписываются ли они в промежуток времени
             for (InfoIndicator marketObjectInfo : marketObjectList) {
 
                 // если не вписались в промежуток удаляем объект и прирываем этот цикл
-                if (marketObjectInfo.getTime().getTime() < time) {
+                if (marketObjectInfo.getTime().getTime() < times) {
                     indexDelete.add(marketObjectList.indexOf(marketObjectInfo));
 
                 } else {
                     // сравниваем строки объекта с строками в списке
                     for (String string : patternListIn) {
-                        String[] stringsMarket = marketObjectInfo.toString().split(",");
-                        String[] stringsPattern = string.split(",");
+//                        String[] stringsMarket = marketObjectInfo.toString().split(",");
+//                        String[] stringsPattern = string.split(",");
 
                         // если длина строки объекта и массива равны то ...
-                        if (stringsMarket.length == stringsPattern.length && stringsMarket.length > 2) {
+                        if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
+                                && string.startsWith(NULL.toString())) {
+//                        if (stringsMarket.length == stringsPattern.length && stringsMarket.length > 2) {
 
                             // если такая строка уже есть то заменяем ее на более новую
-                            if (stringsMarket[2].equals(stringsPattern[2]) && stringsMarket[3].equals(stringsPattern[3])
-                                    && stringsMarket[5].equals(stringsPattern[5])
-                                    && stringsMarket[7].equals(stringsPattern[7])) {
+                            if (giveData(time, marketObjectInfo.toString()).equals(giveData(time, string))
+                                    && giveData(type, marketObjectInfo.toString()).equals(giveData(type, string))
+                                    && giveData(price, marketObjectInfo.toString()).equals(giveData(price, string))
+                                    && giveData(dir, marketObjectInfo.toString()).equals(giveData(dir, string))) {
+//                            if (stringsMarket[2].equals(stringsPattern[2]) && stringsMarket[3].equals(stringsPattern[3])
+//                                    && stringsMarket[5].equals(stringsPattern[5])
+//                                    && stringsMarket[7].equals(stringsPattern[7])) {
 
                                 patternListIn.set(patternListIn.indexOf(string), marketObjectInfo.toString());
                                 indexDelete.add(marketObjectList.indexOf(marketObjectInfo));
@@ -243,12 +251,12 @@ public class ListensLooksAndComparesPro {
         }
 
         // определяем пределы последнего блока
-        time = timeNow - (1000 * 60 * 6);
+        times = timeNow - (1000 * 60 * 6);
 
         // если еще остались строки, то добаляем их в последний блок
         if (marketObjectList.size() > 0) {
             for (InfoIndicator marketObjectInfo : marketObjectList) {
-                if (marketObjectInfo.getTime().getTime() > time) {
+                if (marketObjectInfo.getTime().getTime() > times) {
                     patternListIn.add(marketObjectInfo.toString());
                 } else {
                     residualList.add(marketObjectInfo);
@@ -280,16 +288,16 @@ public class ListensLooksAndComparesPro {
     // находим куда сместилась цена и другие данные
     private synchronized String getBias() {
         double bias = priceNow - priceStart;
-        String stringOut;
 
         if (bias > 0) {
-            stringOut = BUY.toString() + "===" + bias;
-        } else if (bias < 0) {
-            stringOut = SELL.toString() + "===" + bias;
-        } else {
-            stringOut = NULL.toString() + "===0";
+            return BUY.toString() + "===" + bias;
         }
-        return stringOut;
+
+        if (bias < 0) {
+            return SELL.toString() + "===" + bias;
+        }
+
+        return NULL.toString() + "===0";
     }
 
 
@@ -317,9 +325,11 @@ public class ListensLooksAndComparesPro {
 
                 if (!patternString.startsWith(NULL.toString()) && !patternString.startsWith(BUY.toString())
                         && !patternString.startsWith(BIAS.toString())) {
-                    String[] stringsPattern = patternString.split(",");
+//                    String[] stringsPattern = patternString.split(",");
 
-                    if (DatesTimes.getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
+
+                    if (DatesTimes.getDate(giveData(time, patternString)).getTime() < marketInfo.getTime().getTime()) {
+//                    if (DatesTimes.getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
                         break;
                     }
@@ -330,15 +340,16 @@ public class ListensLooksAndComparesPro {
                 if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toString());
                 } else {
-                    String[] stringBias = inEdit.get(index).split("===");
-                    long time = 0;
+//                    String[] stringBias = inEdit.get(index).split("===");
+//                    long time = 0;
+                    long time = DatesTimes.getDate(giveData(TIME, inEdit.get(index))).getTime() - (1000 * 60 * 5);
 
-                    for (int i = 0; i < stringBias.length; i++) {
-                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
-                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
-                            break;
-                        }
-                    }
+//                    for (int i = 0; i < stringBias.length; i++) {
+//                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
+//                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+//                            break;
+//                        }
+//                    }
 
                     if (time != 0 && time <= marketInfo.getTime().getTime()) {
                         inEdit.add(index + 1, marketInfo.toString());

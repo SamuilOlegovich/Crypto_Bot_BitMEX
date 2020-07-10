@@ -1,9 +1,6 @@
 package bitmex.Bot.view;
 
 
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.io.*;
 

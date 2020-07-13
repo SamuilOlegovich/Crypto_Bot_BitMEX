@@ -1,5 +1,6 @@
 package bitmex.Bot.view;
 
+import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.controller.RunTheProgram;
 import bitmex.Bot.model.DatesTimes;
@@ -23,6 +24,8 @@ public class View extends Thread {
     private JButton jButtonSet;
     private JFrame jFrame;
     private JPanel jPanel;
+
+    private boolean startFlag;
 
 
 
@@ -53,6 +56,7 @@ public class View extends Thread {
         jTextArea.setLineWrap(true);
         jFrame.add(jScrollPane, BorderLayout.CENTER);
 
+        startFlag = true;
 
         jButtonStart.addActionListener(new ActionListener() {
             @Override
@@ -158,5 +162,10 @@ public class View extends Thread {
                 jTextArea.append(string + "\n");
             }
         }
+    }
+
+
+    public boolean isStartFlag() {
+        return startFlag;
     }
 }

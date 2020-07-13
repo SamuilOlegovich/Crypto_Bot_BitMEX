@@ -21,6 +21,18 @@ public class Main {
         Gasket.setViewThread(view);
         view.start();
 
+        while (true) {
+            if (view.isStartFlag()) {
+                break;
+            } else {
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
 
         FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
 

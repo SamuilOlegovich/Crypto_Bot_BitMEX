@@ -7,6 +7,7 @@ package bitmex.Bot.model.bitMEX.client;
 
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.model.bitMEX.enums.Verb;
+import bitmex.Bot.view.LoggerHelper;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.cfg.Annotations;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -32,14 +33,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
-import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Arrays;
-import org.slf4j.Logger;
 import java.io.IOError;
 import java.util.List;
 import java.net.URI;
+import java.util.logging.Logger;
 
 import static bitmex.Bot.model.bitMEX.enums.Verb.*;
 
@@ -49,7 +49,7 @@ import static bitmex.Bot.model.bitMEX.enums.Verb.*;
  */
 public class BitmexRestClient implements IBitmexRestClient {
 
-    protected static Logger logger = LoggerFactory.getLogger(BitmexRestClient.class);///////////////////////
+//    protected static Logger logger = LoggerFactory.getLogger(BitmexRestClient.class);///////////////////////
 
     protected Client client;
 
@@ -101,7 +101,7 @@ public class BitmexRestClient implements IBitmexRestClient {
         Response response = builder.get();
 
         response.bufferEntity();
-        logger.debug("Response: " + response.readEntity(String.class));//////////////////////
+        LoggerHelper.writeError("Response: " + response.readEntity(String.class));//////////////////////
         BitmexInstrument[] instruments = response.readEntity(BitmexInstrument[].class);
         return instruments[0];
     }
@@ -109,10 +109,10 @@ public class BitmexRestClient implements IBitmexRestClient {
     @Override
     public BitmexOrder submitOrder(BitmexOrder order) { // подтвердить заказ
         Response response = submitRequestWithBody("order", order, POST);
-        logger.debug("Response code: " + response.getStatus());/////////////////////////////////info
+        LoggerHelper.writeError("Response code: " + response.getStatus());/////////////////////////////////info
         
         if (response.getStatus() == 503) {
-            logger.error("503 response returned");
+            LoggerHelper.writeError("503 response returned");
             throw new BitmexSystemOverloadedException(order);
         }
         return response.readEntity(BitmexOrder.class);
@@ -123,14 +123,14 @@ public class BitmexRestClient implements IBitmexRestClient {
         BitmexCancelOrder cancel = new BitmexCancelOrder();
         cancel.setOrderID(order.getOrderID());
         Response response = submitRequestWithBody("order", cancel, DELETE);
-        logger.debug("Response code: " + response.getStatus());//////////////////////////////////////
+        LoggerHelper.writeError("Response code: " + response.getStatus());//////////////////////////////////////
         return response.readEntity(BitmexOrder[].class);
     }
 
     @Override
     public BitmexOrder amendOrder(BitmexAmendOrder order) { // изменить ордер
         Response response = submitRequestWithBody("order", order, PUT);
-        logger.debug("Response code: " + response.getStatus());/////////////////////////////////////
+        LoggerHelper.writeError("Response code: " + response.getStatus());/////////////////////////////////////
         return response.readEntity(BitmexOrder.class);
     }
 
@@ -164,7 +164,7 @@ public class BitmexRestClient implements IBitmexRestClient {
 
         response.bufferEntity();
 
-        logger.debug("Response: " + response.readEntity(String.class));////////////////////////////
+        LoggerHelper.writeError("Response: " + response.readEntity(String.class));////////////////////////////
         BitmexChartData[] data = response.readEntity(BitmexChartData[].class);
         List<BitmexChartData> returnList = Arrays.asList(data);
         Collections.reverse(returnList);
@@ -182,7 +182,7 @@ public class BitmexRestClient implements IBitmexRestClient {
         }
 
         String jsonObject = toJson(object);
-        logger.debug("Submitting object: " + jsonObject);
+        LoggerHelper.writeError("Submitting object: " + jsonObject);
         WebTarget target = client.target(apiURL).path(path);
         Invocation.Builder builder = target.request(MediaType.APPLICATION_JSON);
         addHeaders(builder, target.getUri(), verb.toString(), jsonObject);
@@ -190,10 +190,10 @@ public class BitmexRestClient implements IBitmexRestClient {
         Response response = builder.build(verb.toString(), entity).invoke();
         response.bufferEntity();    
         String stringResponse = response.readEntity(String.class);
-        logger.debug("Response: " + stringResponse);
+        LoggerHelper.writeError("Response: " + stringResponse);
 
         if( stringResponse.contains("error") ) {
-            logger.debug("HTTP: " + verb.name() + " Error Submitting object: " + jsonObject);///////////////////////
+            LoggerHelper.writeError("HTTP: " + verb.name() + " Error Submitting object: " + jsonObject);///////////////////////
             throw new BitmexException( response.readEntity(BitmexError.class).getError() );
         }
         
@@ -224,12 +224,12 @@ public class BitmexRestClient implements IBitmexRestClient {
 
             String urlPath = sb.toString();
             int expiry = getExpiry();
-            logger.debug("expiry: " + expiry);
+            LoggerHelper.writeError("expiry: " + expiry);
             String apiSignature = signatureGenerator.generateSignature(apiKey, verb, urlPath, expiry, data);
             builder.header("api-expires", Integer.toString(expiry))
                     .header("api-key", apiKeyName)
                     .header("api-signature", apiSignature);
-            logger.debug("api-signature: " + apiSignature);
+            LoggerHelper.writeError("api-signature: " + apiSignature);
         }
     }
 

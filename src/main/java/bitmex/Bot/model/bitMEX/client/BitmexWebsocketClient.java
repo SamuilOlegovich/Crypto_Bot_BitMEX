@@ -8,6 +8,7 @@ package bitmex.Bot.model.bitMEX.client;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.listener.WebsocketDisconnectListener;
+import bitmex.Bot.view.LoggerHelper;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import bitmex.Bot.model.bitMEX.listener.IExecutionListener;
 import bitmex.Bot.model.bitMEX.listener.IPositionListener;
@@ -18,21 +19,25 @@ import bitmex.Bot.model.bitMEX.listener.IQuoteListener;
 //import com.sumzerotrading.data.SumZeroException;
 import java.util.concurrent.CountDownLatch;
 //import com.sumzerotrading.data.Ticker;
-import javax.xml.bind.DatatypeConverter;
+//import javax.xml.bind.DatatypeConverter;
 import javax.crypto.spec.SecretKeySpec;
 import com.google.common.base.Strings;
 import java.util.concurrent.TimeUnit;
 //import org.apache.log4j.Logger;
 //import java.util.logging.Level;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javax.crypto.Mac;
-import org.slf4j.Logger;
+import javax.xml.bind.DatatypeConverter;
+//import org.slf4j.Logger;
 import java.io.IOError;
 import java.util.List;
 import java.util.Set;
 import java.net.URI;
+
+
+
 
 /**
  *
@@ -40,7 +45,7 @@ import java.net.URI;
  */
 public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketDisconnectListener {
 
-    protected static Logger logger = LoggerFactory.getLogger(BitmexWebsocketClient.class);
+//    protected static Logger logger = LoggerFactory.getLogger(BitmexWebsocketClient.class);
     protected String testnetApiUrl = "wss://testnet.bitmex.com/realtime";
     protected String productionApiUrl = "wss://www.bitmex.com/realtime";
     protected List<String> subscribeCommandList = new ArrayList<>(); // список команд подписки
@@ -94,18 +99,18 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
         try {
             this.apiKey = apiKey;
             this.apiSecret = apiSecret;
-            logger.debug("Starting connection");////////////////////////////////////
+            LoggerHelper.writeError("Starting connection");////////////////////////////////////
             client.start();
             URI echoUri = new URI(websocketUrl);
             ClientUpgradeRequest request = new ClientUpgradeRequest();
             client.connect(socket, echoUri, request);
-            
 
-            logger.debug("Connecting to : " + echoUri);////////////////////////////
+
+            LoggerHelper.writeError("Connecting to : " + echoUri);////////////////////////////
             latch.await(15, TimeUnit.SECONDS);
             isStarted = socket.isConnected();
             connected = socket.isConnected();
-            logger.debug("Connected: " + connected);//////////////////////////////
+            LoggerHelper.writeError("Connected: " + connected);//////////////////////////////
 
             if (!Strings.isNullOrEmpty(apiKey)) {
                 long nonce = System.currentTimeMillis();
@@ -124,12 +129,12 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
 
     @Override
     public void socketDisconnectDetected() {
-        logger.error("Disconnect detected, should reconnect: " + shouldReconnect );
+        LoggerHelper.writeError("Disconnect detected, should reconnect: " + shouldReconnect );
         if (shouldReconnect) {
-            logger.error("Disconnect detected....reconnecting");
+            LoggerHelper.writeError("Disconnect detected....reconnecting");
             connect(apiKey, apiSecret);
             for (String command : subscribeCommandList) {
-                logger.error("Resubmitting subscribe command: " + command);
+                LoggerHelper.writeError("Resubmitting subscribe command: " + command);
                 socket.subscribe(command);
                 try {
                     Thread.sleep(250);
@@ -137,7 +142,7 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
                 }
             }
         } else {
-            logger.debug("Disconnect detected, but will not reconnect");//////////////////////////
+            LoggerHelper.writeError("Disconnect detected, but will not reconnect");//////////////////////////
         }
     }
 
@@ -147,7 +152,7 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
             shouldReconnect = false;
             client.stop();
         } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
+            LoggerHelper.writeError(ex.getMessage() + " === " + ex);
         }
     }
 

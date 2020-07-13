@@ -6,11 +6,11 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>sumzero-market-data-api</artifactId>
-            <version>0.1.7-SNAPSHOT</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>${project.groupId}</groupId>-->
+<!--            <artifactId>sumzero-market-data-api</artifactId>-->
+<!--            <version>0.1.7-SNAPSHOT</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.glassfish.tyrus.bundles</groupId>
             <artifactId>tyrus-standalone-client</artifactId>
@@ -43,11 +43,11 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.9.5</version>
         </dependency>
-        <dependency>
-            <groupId>apache-log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>apache-log4j</groupId>-->
+<!--            <artifactId>log4j</artifactId>-->
+<!--            <version>1.2.14</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -89,32 +89,43 @@
             <artifactId>jackson-module-parameter-names</artifactId>
             <version>2.9.5</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sun</groupId>-->
+<!--            <artifactId>tools</artifactId>-->
+<!--            <version>1.5.0</version>-->
+<!--            <scope>system</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.objectweb.util.misc</groupId>-->
+<!--            <artifactId>ow-misc</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.squareup.misk</groupId>-->
+<!--            <artifactId>misk-crypto</artifactId>-->
+<!--            <version>0.12.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.sun.jini</groupId>-->
+<!--            <artifactId>sun-util</artifactId>-->
+<!--            <version>2.1</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.squareup.misk</groupId>-->
+<!--            <artifactId>misk-crypto</artifactId>-->
+<!--            <version>0.12.0</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>com.sun</groupId>
-            <artifactId>tools</artifactId>
-            <version>1.5.0</version>
-            <scope>system</scope>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.objectweb.util.misc</groupId>
-            <artifactId>ow-misc</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.misk</groupId>
-            <artifactId>misk-crypto</artifactId>
-            <version>0.12.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jini</groupId>
-            <artifactId>sun-util</artifactId>
-            <version>2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.misk</groupId>
-            <artifactId>misk-crypto</artifactId>
-            <version>0.12.0</version>
-        </dependency>
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.sumzerotrading/J4C2 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.sumzerotrading</groupId>-->
+<!--            <artifactId>J4C2</artifactId>-->
+<!--            <version>1.0.0-4</version>-->
+<!--        </dependency>-->
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -122,16 +133,34 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <build>
+        <plugins>
 
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>[path you class main]</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
     <name>bitmex-client</name>
-</project>
-<project>
-<modelVersion>4.0.0</modelVersion>
-<groupId>com.sun</groupId>
-<artifactId>tools</artifactId>
-<version>1.5.0</version>
-<name>Sun JVM tools</name>
-<packaging>jar</packaging>
 </project>

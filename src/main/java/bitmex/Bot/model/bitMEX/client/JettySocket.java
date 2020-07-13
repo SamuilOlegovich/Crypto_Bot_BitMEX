@@ -7,6 +7,7 @@ package bitmex.Bot.model.bitMEX.client;
 
 import bitmex.Bot.model.bitMEX.listener.IPongListener;
 import bitmex.Bot.model.bitMEX.listener.WebsocketDisconnectListener;
+import bitmex.Bot.view.LoggerHelper;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -18,10 +19,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Future;
 import com.google.gson.JsonParser;
 //import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import java.util.TimerTask;
-import org.slf4j.Logger;
+//import org.slf4j.Logger;
 import java.io.IOError;
 import java.util.Timer;
 
@@ -35,7 +36,7 @@ public class JettySocket implements IPongListener {
 
     protected final long MAX_PONG_TIME_SECONDS = 20;
     
-    public static Logger logger = LoggerFactory.getLogger(JettySocket.class);//////////////
+//    public static Logger logger = LoggerFactory.getLogger(JettySocket.class);//////////////
     protected WebsocketDisconnectListener disconnectListener = null;
     protected JsonParser parser = new JsonParser();
     protected IMessageProcessor messageProcessor;
@@ -75,7 +76,7 @@ public class JettySocket implements IPongListener {
     
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
-        logger.error("Connection Closed: code: " + statusCode + " reason: " + reason);
+        LoggerHelper.writeError("Connection Closed: code: " + statusCode + " reason: " + reason);
         shouldRun = false;
         this.session = null;
         connected = false;
@@ -99,7 +100,7 @@ public class JettySocket implements IPongListener {
                 try {
                     if (session != null) {
                         Future<Void> fut = session.getRemote().sendStringByFuture(pingCommand);
-                        logger.debug("Sending ping");//////////////////////////
+                        LoggerHelper.writeError("Sending ping");//////////////////////////
                     }
                     Thread.sleep(10000);
                 } catch (Exception ex) {
@@ -114,7 +115,7 @@ public class JettySocket implements IPongListener {
 
     @OnWebSocketMessage
     public void onMessage(String msg) {
-        logger.debug("msg: " + msg);//////////////////////////////
+        LoggerHelper.writeError("msg: " + msg);//////////////////////////////
         messageProcessor.processMessage(msg);
     }
 
@@ -130,7 +131,7 @@ public class JettySocket implements IPongListener {
     }
 
     public void subscribe(String message) {
-        logger.debug("Sending command: " + message);/////////////////////////
+        LoggerHelper.writeError("Sending command: " + message);/////////////////////////
         Future<Void> fut = session.getRemote().sendStringByFuture(message);
         try {
             fut.get(2, TimeUnit.SECONDS);
@@ -152,7 +153,7 @@ public class JettySocket implements IPongListener {
                 try {
                     checkLastPongTime();
                 } catch( Exception ex ) {
-                    logger.error(ex.getMessage(), ex);
+                    LoggerHelper.writeError(ex.getMessage() + " === " + ex);
                 }
             }
         };
@@ -163,11 +164,11 @@ public class JettySocket implements IPongListener {
         if( lastPongTime > 0 ) {
             long responseDelay = getCurrentTime() - lastPongTime;
             if( responseDelay >= (MAX_PONG_TIME_SECONDS * 1000) ) {
-                logger.error("Pong not detected in " + responseDelay + "ms");
+                LoggerHelper.writeError("Pong not detected in " + responseDelay + "ms");
                 disconnectListener.socketDisconnectDetected();
             }
         } else {
-            logger.debug("Last pong time has not been set");///////////////////////
+            LoggerHelper.writeError("Last pong time has not been set");///////////////////////
         }
     }
     

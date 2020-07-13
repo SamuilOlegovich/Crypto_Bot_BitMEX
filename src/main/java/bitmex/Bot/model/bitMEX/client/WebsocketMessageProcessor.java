@@ -18,16 +18,18 @@ import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.model.bitMEX.entity.BitmexTrade;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import bitmex.Bot.view.LoggerHelper;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 //import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.LoggerFactory;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import java.util.HashSet;
-import org.slf4j.Logger;
+//import org.slf4j.Logger;
 import java.util.Set;
 
 
@@ -37,7 +39,7 @@ import java.util.Set;
  */
 public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
 
-    protected static Logger logger = LoggerFactory.getLogger(WebsocketMessageProcessor.class);
+//    protected static Logger logger = LoggerFactory.getLogger(WebsocketMessageProcessor.class);
     protected LinkedBlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
     protected JsonParser parser = new JsonParser();
     protected volatile boolean shouldRun = false;
@@ -119,7 +121,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
         String message = "";
         try {
             message = messageQueue.take();
-            logger.debug("Processor got message: " + message);
+            LoggerHelper.writeError("Processor got message: " + message);
             if( message.equalsIgnoreCase("Pong")) {
                 firePongReceived();
                 return;
@@ -144,40 +146,40 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                 }
             }
         } catch (JsonSyntaxException ex) {
-            logger.error(ex.getMessage(), ex);
-            logger.error("error parsing: " + message);
+            LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+            LoggerHelper.writeError("error parsing: " + message);
         }    catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
+            LoggerHelper.writeError(ex.getMessage() + " === " + ex);
         }
     }
 
     protected void processQuote(String message) {
         BitmexResponse<BitmexQuote> quote = parseMessage(message, new TypeToken<BitmexResponse<BitmexQuote>>(){});
-        logger.debug("Parsed response: " + quote);
+        LoggerHelper.writeError("Parsed response: " + quote);
         fireQuoteMessage(quote);
     }
 
     protected void processPosition(String message) {
         BitmexResponse<BitmexPosition> position = parseMessage(message, new TypeToken<BitmexResponse<BitmexPosition>>(){});
-        logger.debug("Parsed response: " + position);
+        LoggerHelper.writeError("Parsed response: " + position);
         firePositionMessage(position);
     }
 
     protected void processOrder(String message) {
         BitmexResponse<BitmexOrder> order = parseMessage(message, new TypeToken<BitmexResponse<BitmexOrder>>(){});
-        logger.debug("Parsed response: " + order);
+        LoggerHelper.writeError("Parsed response: " + order);
         fireOrderMessage(order);
     }
 
     protected void processTrade(String message) {
         BitmexResponse<BitmexTrade> trade = parseMessage(message, new TypeToken<BitmexResponse<BitmexTrade>>(){} );
-        logger.debug("Parsed response: " + trade);
+        LoggerHelper.writeError("Parsed response: " + trade);
         fireTradeMessage(trade);
     }
     
     protected void processExecution(String message) {
         BitmexResponse<BitmexExecution> execution = parseMessage(message, new TypeToken<BitmexResponse<BitmexExecution>>(){} );
-        logger.debug("Parsed response: " + execution);
+        LoggerHelper.writeError("Parsed response: " + execution);
         fireExecutionMessage(execution);
     }    
 
@@ -193,7 +195,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                 try {
                     listener.pongReceived();
                 } catch( Exception ex ) {
-                    logger.error(ex.getMessage(), ex);
+                    LoggerHelper.writeError(ex.getMessage() + " === " + ex);
                 }
             }
         }
@@ -206,7 +208,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.quoteUpdated(data);
                     } catch (Exception ex) {
-                        logger.error(ex.getMessage(), ex);
+                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }
@@ -220,7 +222,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.positionUpdated(data);
                     } catch (Exception ex) {
-                        logger.error(ex.getMessage(), ex);
+                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }
@@ -234,7 +236,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.orderUpdated(data);
                     } catch (Exception ex) {
-                        logger.error(ex.getMessage(), ex);
+                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }
@@ -248,7 +250,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.tradeUpdated(data);
                     } catch (Exception ex) {
-                        logger.error(ex.getMessage(), ex);
+                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }
@@ -262,7 +264,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.executionUpdated(data);
                     } catch (Exception ex) {
-                        logger.error(ex.getMessage(), ex);
+                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }

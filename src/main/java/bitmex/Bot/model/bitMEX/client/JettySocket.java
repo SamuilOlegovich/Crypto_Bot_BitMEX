@@ -7,7 +7,7 @@ package bitmex.Bot.model.bitMEX.client;
 
 import bitmex.Bot.model.bitMEX.listener.IPongListener;
 import bitmex.Bot.model.bitMEX.listener.WebsocketDisconnectListener;
-import bitmex.Bot.view.LoggerHelper;
+import bitmex.Bot.view.ConsoleHelper;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -76,7 +76,7 @@ public class JettySocket implements IPongListener {
     
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
-        LoggerHelper.writeError("Connection Closed: code: " + statusCode + " reason: " + reason);
+        ConsoleHelper.writeDeBug("Connection Closed: code: " + statusCode + " reason: " + reason);
         shouldRun = false;
         this.session = null;
         connected = false;
@@ -100,7 +100,7 @@ public class JettySocket implements IPongListener {
                 try {
                     if (session != null) {
                         Future<Void> fut = session.getRemote().sendStringByFuture(pingCommand);
-                        LoggerHelper.writeError("Sending ping");//////////////////////////
+                        ConsoleHelper.writeDeBug("Sending ping");//////////////////////////
                     }
                     Thread.sleep(10000);
                 } catch (Exception ex) {
@@ -115,7 +115,7 @@ public class JettySocket implements IPongListener {
 
     @OnWebSocketMessage
     public void onMessage(String msg) {
-        LoggerHelper.writeError("msg: " + msg);//////////////////////////////
+        ConsoleHelper.writeDeBug("msg: " + msg);//////////////////////////////
         messageProcessor.processMessage(msg);
     }
 
@@ -131,13 +131,12 @@ public class JettySocket implements IPongListener {
     }
 
     public void subscribe(String message) {
-        LoggerHelper.writeError("Sending command: " + message);/////////////////////////
+        ConsoleHelper.writeDeBug("Sending command: " + message);/////////////////////////
         Future<Void> fut = session.getRemote().sendStringByFuture(message);
         try {
             fut.get(2, TimeUnit.SECONDS);
         } catch (Exception ex) {
-//            throw new SumZeroException(ex);
-            throw new IOError(ex);
+            ConsoleHelper.writeError(ex.toString());
 
         }
     }
@@ -153,7 +152,7 @@ public class JettySocket implements IPongListener {
                 try {
                     checkLastPongTime();
                 } catch( Exception ex ) {
-                    LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+                    ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
                 }
             }
         };
@@ -164,11 +163,11 @@ public class JettySocket implements IPongListener {
         if( lastPongTime > 0 ) {
             long responseDelay = getCurrentTime() - lastPongTime;
             if( responseDelay >= (MAX_PONG_TIME_SECONDS * 1000) ) {
-                LoggerHelper.writeError("Pong not detected in " + responseDelay + "ms");
+                ConsoleHelper.writeDeBug("Pong not detected in " + responseDelay + "ms");
                 disconnectListener.socketDisconnectDetected();
             }
         } else {
-            LoggerHelper.writeError("Last pong time has not been set");///////////////////////
+            ConsoleHelper.writeDeBug("Last pong time has not been set");///////////////////////
         }
     }
     

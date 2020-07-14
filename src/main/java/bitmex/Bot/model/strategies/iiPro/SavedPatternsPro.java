@@ -155,7 +155,7 @@ public class SavedPatternsPro {
                             }
 
                             for (String market : marketListCopy) {
-                                if (market.startsWith(BIAS.toString()) && !market.startsWith(BUY.toString())) {
+                                if (!market.startsWith(BIAS.toString()) && !market.startsWith(BUY.toString())) {
                                     marketList.add(market);
                                 }
                             }

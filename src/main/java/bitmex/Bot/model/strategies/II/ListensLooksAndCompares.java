@@ -11,10 +11,10 @@ import java.util.*;
 
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
 import static bitmex.Bot.model.DatesTimes.getDate;
+import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
 import static bitmex.Bot.model.CompareHelper.*;
-
-
+import static bitmex.Bot.model.enums.TypeData.time;
 
 
 public class ListensLooksAndCompares {
@@ -183,7 +183,7 @@ public class ListensLooksAndCompares {
         ArrayList<Integer> indexDelete = new ArrayList<>();
 
         int count = 0;
-        long time;
+        long times;
 
 
         if (patternListIn.size() > 0) {
@@ -195,32 +195,38 @@ public class ListensLooksAndCompares {
 
                 // согласно количеству BIAS находим максимальный нужный нам промежуток времени
             if (count >= 1) {
-                time = timeNow - (1000 * 60 * 5 * (count + 1));
+                times = timeNow - (1000 * 60 * 5 * (count + 1));
             } else {
-                time = timeNow - (1000 * 60 * 6);
+                times = timeNow - (1000 * 60 * 6);
             }
 
                 // перебираем объекты и смотрим вписываются ли они в промежуток времени
             for (InfoIndicator marketObjectInfo : marketObjectList) {
 
                     // если не вписались в промежуток удаляем объект и прирываем этот цикл
-                if (marketObjectInfo.getTime().getTime() < time) {
+                if (marketObjectInfo.getTime().getTime() < times) {
                     indexDelete.add(marketObjectList.indexOf(marketObjectInfo));
 
                 } else {
                         // сравниваем строки объекта с строками в списке
                     for (String string : patternListIn) {
-                        String[] stringsMarket = marketObjectInfo.toString().split(",");
-                        String[] stringsPattern = string.split(",");
+//                        String[] stringsMarket = marketObjectInfo.toString().split(",");
+//                        String[] stringsPattern = string.split(",");
 
                             // если длина строки объекта и массива равны то ...
-                        if (stringsMarket.length == stringsPattern.length && stringsMarket.length > 2) {
+                        if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
+                                && !string.startsWith(NULL.toString())) {
+//                        if (stringsMarket.length == stringsPattern.length && stringsMarket.length > 2) {
 
                                 // если такая строка уже есть то заменяем ее на более новую
-                            if (stringsMarket[2].equals(stringsPattern[2])
-                                    && stringsMarket[3].equals(stringsPattern[3])
-                                    && stringsMarket[5].equals(stringsPattern[5])
-                                    && stringsMarket[7].equals(stringsPattern[7])) {
+                            if (giveData(time, marketObjectInfo.toString()).equals(giveData(time, string))
+                                    && giveData(type, marketObjectInfo.toString()).equals(giveData(type, string))
+                                    && giveData(price, marketObjectInfo.toString()).equals(giveData(price, string))
+                                    && giveData(dir, marketObjectInfo.toString()).equals(giveData(dir, string))) {
+//                            if (stringsMarket[2].equals(stringsPattern[2])
+//                                    && stringsMarket[3].equals(stringsPattern[3])
+//                                    && stringsMarket[5].equals(stringsPattern[5])
+//                                    && stringsMarket[7].equals(stringsPattern[7])) {
 
                                 patternListIn.set(patternListIn.indexOf(string), marketObjectInfo.toString());
                                 indexDelete.add(marketObjectList.indexOf(marketObjectInfo));
@@ -242,12 +248,12 @@ public class ListensLooksAndCompares {
         }
 
             // определяем пределы последнего блока
-        time = timeNow - (1000 * 60 * 6);
+        times = timeNow - (1000 * 60 * 6);
 
             // если еще остались строки, то добаляем их в последний блок
         if (marketObjectList.size() > 0) {
             for (InfoIndicator marketObjectInfo : marketObjectList) {
-                if (marketObjectInfo.getTime().getTime() > time) {
+                if (marketObjectInfo.getTime().getTime() > times) {
                     patternListIn.add(marketObjectInfo.toString());
                 } else {
                     residualList.add(marketObjectInfo);

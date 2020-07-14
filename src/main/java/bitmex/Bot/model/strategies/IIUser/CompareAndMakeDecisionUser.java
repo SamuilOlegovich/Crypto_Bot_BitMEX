@@ -257,7 +257,12 @@ public class CompareAndMakeDecisionUser extends Thread {
                     }
 
                     // Data
-                    if (giveData(time, stringPattern).equalsIgnoreCase(NULL.toString())) {
+//                    if (!stringMarket.startsWith(NULL.toString()) && !stringMarket.startsWith(BIAS.toString())
+//                            && !stringPattern.startsWith(BUY.toString())
+//                            && !stringPattern.startsWith(BIAS.toString())) {
+
+
+                        if (giveData(time, stringPattern).equalsIgnoreCase(NULL.toString())) {
                         // если время нулл - то у маркета должны быть в этом диапазоне все свечи на одной свече,
                         // а именно время ровно, направление свечи дир тоже должно быть ровно
 

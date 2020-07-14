@@ -4,6 +4,8 @@ package bitmex.Bot.controller;
 
 import java.util.*;
 
+import static bitmex.Bot.model.enums.TypeData.NULL;
+
 public class Test {
 
     public static void main(String[] args) {
@@ -17,23 +19,7 @@ public class Test {
 //        System.out.println(giveData(TypeData.type, string));
 //        System.out.println(giveData(TypeData.avg, string));
 //        System.out.println(giveData(TypeData.dir, string));
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        arrayList.add(8);
-        arrayList.add(0);
-        arrayList.add(7);
-        arrayList.add(7);
-        arrayList.add(9);
-        arrayList.add(10);
-        arrayList.add(888);
-        arrayList.add(18);
-        arrayList.add(2);
-        arrayList.add(1);
-
-        TreeSet<Integer> hashSet = new TreeSet<>(arrayList);
-        arrayList.clear();
-        arrayList.addAll(hashSet);
-        Collections.reverse(arrayList);
-        System.out.println(arrayList);
+       System.out.println(!"NULL===2020-07-13 21:45:00".startsWith(NULL.toString()));
 
 
 

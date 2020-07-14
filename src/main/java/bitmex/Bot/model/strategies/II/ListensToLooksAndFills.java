@@ -204,7 +204,7 @@ public class ListensToLooksAndFills {
         ArrayList<String> inArrayList = new ArrayList<>(arrayListIn);
         ArrayList<Integer> indexDelete = new ArrayList<>();
         int count = 0;
-        long time;
+        long times;
 
 
         if (inArrayList.size() > 0) {
@@ -216,16 +216,16 @@ public class ListensToLooksAndFills {
 
             // согласно количеству BIAS находим максимальный нужный нам промежуток времени
             if (count >= 1) {
-                time = timeNow - (1000 * 60 * 5 * (count + 1));
+                times = timeNow - (1000 * 60 * 5 * (count + 1));
             } else {
-                time = timeNow - (1000 * 60 * 6);
+                times = timeNow - (1000 * 60 * 6);
             }
 
             // перебираем объекты и смотрим вписываются ли они в промежуток времени
             for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
 
                 // если не вписались в промежуток удаляем объект и прирываем этот цикл
-                if (infoIndicator.getTime().getTime() < time) {
+                if (infoIndicator.getTime().getTime() < times) {
                     indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
 
                 } else {
@@ -262,12 +262,12 @@ public class ListensToLooksAndFills {
         }
 
         // определяем пределы последнего блока
-        time = timeNow - (1000 * 60 * 6);
+        times = timeNow - (1000 * 60 * 6);
 
         // если еще остались строки, то добаляем их в последний блок
         if (infoIndicatorArrayListWorking.size() > 0) {
             for (InfoIndicator infoIndicator : infoIndicatorArrayListWorking) {
-                if (infoIndicator.getTime().getTime() > time) {
+                if (infoIndicator.getTime().getTime() > times) {
                     inArrayList.add(infoIndicator.toString());
                 } else {
                     residualArrayList.add(infoIndicator);
@@ -319,16 +319,16 @@ public class ListensToLooksAndFills {
                     inEdit.add(index, marketInfo.toString());
                 } else {
                     String[] stringBias = inEdit.get(index).split("===");
-                    long time = 0;
+                    long times = 0;
 
                     for (int i = 0; i < stringBias.length; i++) {
                         if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
-                            time = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+                            times = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
                             break;
                         }
                     }
 
-                    if (time != 0 && time <= marketInfo.getTime().getTime()) {
+                    if (times != 0 && times <= marketInfo.getTime().getTime()) {
                         inEdit.add(index + 1, marketInfo.toString());
                     } else {
                         inEdit.add(index, marketInfo.toString());

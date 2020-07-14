@@ -2,6 +2,8 @@ package bitmex.Bot.view;
 
 import java.io.InputStreamReader;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.enums.TypeData;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -20,6 +22,25 @@ public class ConsoleHelper {
         getViewThread().updateInfoView(string);
         writerFile(string + "\n", getFilesAndPathCreator().getPathLogs(), true);
 //        System.out.println(string);
+    }
+
+
+
+
+    public static void writeError(String string) {
+//        String out = string + " --- " + TypeData.ERROR.toString();
+//        getViewThread().updateInfoView(out);
+//        writerFile(out + "\n", getFilesAndPathCreator().getPathLogs(), true);
+//        System.out.println(out);
+    }
+
+
+
+    public static void writeDeBug(String string) {
+//        String out = string + " --- " + TypeData.DEBUG.toString();
+//        getViewThread().updateInfoView(out);
+//        writerFile(out + "\n", getFilesAndPathCreator().getPathLogs(), true);
+//        System.out.println(out);
     }
 
 

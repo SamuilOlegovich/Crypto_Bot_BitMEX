@@ -5,6 +5,8 @@ public enum TypeData {
     AVERAGE,
     BLOCK,
     START,
+    ERROR,
+    DEBUG,
     NULL,
     BIAS,
     SELL,

@@ -235,7 +235,7 @@ public class ListensLooksAndComparesUser {
 
                             // если длина строки объекта и массива равны то ...
                         if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
-                                && string.startsWith(NULL.toString())) {
+                                && !string.startsWith(NULL.toString())) {
 //                        if (stringsIn.length == stringsThis.length) {
 
                                 // если такая строка уже есть то заменяем ее на более новую

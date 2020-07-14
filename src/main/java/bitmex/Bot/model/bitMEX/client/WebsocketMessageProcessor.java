@@ -19,7 +19,7 @@ import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.model.bitMEX.entity.BitmexTrade;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import bitmex.Bot.view.LoggerHelper;
+import bitmex.Bot.view.ConsoleHelper;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.JsonElement;
@@ -121,7 +121,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
         String message = "";
         try {
             message = messageQueue.take();
-            LoggerHelper.writeError("Processor got message: " + message);
+            ConsoleHelper.writeDeBug("Processor got message: " + message);
             if( message.equalsIgnoreCase("Pong")) {
                 firePongReceived();
                 return;
@@ -146,40 +146,40 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                 }
             }
         } catch (JsonSyntaxException ex) {
-            LoggerHelper.writeError(ex.getMessage() + " === " + ex);
-            LoggerHelper.writeError("error parsing: " + message);
+            ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
+            ConsoleHelper.writeError("error parsing: " + message);
         }    catch (Exception ex) {
-            LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+            ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
         }
     }
 
     protected void processQuote(String message) {
         BitmexResponse<BitmexQuote> quote = parseMessage(message, new TypeToken<BitmexResponse<BitmexQuote>>(){});
-        LoggerHelper.writeError("Parsed response: " + quote);
+        ConsoleHelper.writeError("Parsed response: " + quote);
         fireQuoteMessage(quote);
     }
 
     protected void processPosition(String message) {
         BitmexResponse<BitmexPosition> position = parseMessage(message, new TypeToken<BitmexResponse<BitmexPosition>>(){});
-        LoggerHelper.writeError("Parsed response: " + position);
+        ConsoleHelper.writeError("Parsed response: " + position);
         firePositionMessage(position);
     }
 
     protected void processOrder(String message) {
         BitmexResponse<BitmexOrder> order = parseMessage(message, new TypeToken<BitmexResponse<BitmexOrder>>(){});
-        LoggerHelper.writeError("Parsed response: " + order);
+        ConsoleHelper.writeError("Parsed response: " + order);
         fireOrderMessage(order);
     }
 
     protected void processTrade(String message) {
         BitmexResponse<BitmexTrade> trade = parseMessage(message, new TypeToken<BitmexResponse<BitmexTrade>>(){} );
-        LoggerHelper.writeError("Parsed response: " + trade);
+        ConsoleHelper.writeError("Parsed response: " + trade);
         fireTradeMessage(trade);
     }
     
     protected void processExecution(String message) {
         BitmexResponse<BitmexExecution> execution = parseMessage(message, new TypeToken<BitmexResponse<BitmexExecution>>(){} );
-        LoggerHelper.writeError("Parsed response: " + execution);
+        ConsoleHelper.writeError("Parsed response: " + execution);
         fireExecutionMessage(execution);
     }    
 
@@ -195,7 +195,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                 try {
                     listener.pongReceived();
                 } catch( Exception ex ) {
-                    LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+                    ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
                 }
             }
         }
@@ -208,7 +208,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.quoteUpdated(data);
                     } catch (Exception ex) {
-                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+                        ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }
@@ -222,7 +222,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.positionUpdated(data);
                     } catch (Exception ex) {
-                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+                        ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }
@@ -236,7 +236,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.orderUpdated(data);
                     } catch (Exception ex) {
-                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+                        ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }
@@ -250,7 +250,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.tradeUpdated(data);
                     } catch (Exception ex) {
-                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+                        ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }
@@ -264,7 +264,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.executionUpdated(data);
                     } catch (Exception ex) {
-                        LoggerHelper.writeError(ex.getMessage() + " === " + ex);
+                        ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
                     }
                 }
             }

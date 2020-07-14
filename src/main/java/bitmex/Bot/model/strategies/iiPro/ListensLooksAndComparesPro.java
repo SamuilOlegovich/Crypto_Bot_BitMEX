@@ -219,7 +219,7 @@ public class ListensLooksAndComparesPro {
 
                         // если длина строки объекта и массива равны то ...
                         if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
-                                && string.startsWith(NULL.toString())) {
+                                && !string.startsWith(NULL.toString())) {
 //                        if (stringsMarket.length == stringsPattern.length && stringsMarket.length > 2) {
 
                             // если такая строка уже есть то заменяем ее на более новую

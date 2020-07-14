@@ -373,22 +373,13 @@ public class SavedPatternsPro {
 
 
     public synchronized void updateFirstRowData(String string) {
-//        String stringSet = string;
-//        String[] in = stringSet.split("===");
-//        String[] thIs;
-
         int count = 0;
 
         for (ArrayList<String> stringArrayList : listsPricePatterns) {
-//            thIs = stringArrayList.get(0).split("===");
-//
-//            if (in.length == thIs.length) {
             if (StringHelper.giveData(ID, string).equals(StringHelper.giveData(ID, stringArrayList.get(0)))) {
-//               if (in[in.length - 1].equals(thIs[thIs.length - 1])) {
                 stringArrayList.set(0, string);
                 count++;
             }
-//            }
         }
 
         if (count > 0) {
@@ -401,7 +392,6 @@ public class SavedPatternsPro {
         } else {
 
             writeMessage(DatesTimes.getDateTerminal()
-//                    + " --- Такого номера ===" + in[in.length - 1] + "=== II Pro ПАТТЕРНА нет");
                     + " --- Такого номера ===" + StringHelper.giveData(ID, string) + "=== II Pro ПАТТЕРНА нет");
         }
     }

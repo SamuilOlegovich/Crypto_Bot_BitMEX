@@ -121,7 +121,6 @@ public class ReadAndSavePatterns {
             }
             stringBuilder.append(next);
         }
-        //stringBuilder.delete(stringBuilder.length() - next.length(), stringBuilder.length());
         stringBuilder.append(END.toString()).append(lineBreak);
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),

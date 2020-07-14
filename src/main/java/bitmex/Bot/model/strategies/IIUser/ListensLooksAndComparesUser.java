@@ -230,21 +230,15 @@ public class ListensLooksAndComparesUser {
                 } else {
                         // сравниваем строки объекта с строками в списке
                     for (String string : inArrayList) {
-//                        String[] stringsIn = infoIndicator.toStringUser().split("===");
-//                        String[] stringsThis = string.split("===");
 
                             // если длина строки объекта и массива равны то ...
                         if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
                                 && !string.startsWith(NULL.toString())) {
-//                        if (stringsIn.length == stringsThis.length) {
 
                                 // если такая строка уже есть то заменяем ее на более новую
                             if (giveData(time, infoIndicator.toStringUser()).equals(giveData(time, string))
                                     && giveData(type, infoIndicator.toStringUser()).equals(giveData(type, string))
                                     && giveData(dir, infoIndicator.toStringUser()).equals(giveData(dir, string))) {
-//                            if (stringsIn[5].equals(stringsThis[5]) && stringsIn[7].equals(stringsThis[7])
-//                                        && stringsIn[11].equals(stringsThis[11])
-//                                        && stringsIn[15].equals(stringsThis[15])) {
 
                                 inArrayList.set(inArrayList.indexOf(string), infoIndicator.toStringUser());
                                 indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
@@ -308,7 +302,6 @@ public class ListensLooksAndComparesUser {
 
                 if (!patternString.startsWith(NULL.toString())
                         && !patternString.startsWith(BUY.toString()) && !patternString.startsWith(BIAS.toString())) {
-//                    String[] stringsPattern = patternString.split("===");
 
                     if (DatesTimes.getDate(giveData(time, patternString)).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
@@ -321,15 +314,7 @@ public class ListensLooksAndComparesUser {
                 if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toStringUser());
                 } else {
-//                    String[] stringBias = inEdit.get(index).split("===");
                     long time = DatesTimes.getDate(giveData(TIME, inEdit.get(index))).getTime() - (1000 * 60 * 5);
-
-//                    for (int i = 0; i < stringBias.length; i++) {
-//                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
-//                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
-//                            break;
-//                        }
-//                    }
 
                     if (time != 0 && time <= marketInfo.getTime().getTime()) {
                         inEdit.add(index + 1, marketInfo.toStringUser());
@@ -385,12 +370,10 @@ public class ListensLooksAndComparesUser {
         double bias = priceNow - priceStart;
 
         if (bias > 0) {
-//            stringOut = BUY.toString() + "===" + bias;
             return BUY.toString() + "===" + bias;
         }
 
         if (bias < 0) {
-//            stringOut = SELL.toString() + "===" + bias;
             return SELL.toString() + "===" + bias;
         }
 

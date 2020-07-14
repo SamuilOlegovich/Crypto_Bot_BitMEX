@@ -170,8 +170,8 @@ public class CompareAndMakeDecisionUser extends Thread {
                 ArrayList<Integer> deleteIndexPattern = new ArrayList<>();
                 ArrayList<Integer> deleteIndexMarket = new ArrayList<>();
 ////////////////////////////
-//                ArrayList<String> patternNullNull = new ArrayList<>();
-//                ArrayList<String> marketNullNull = new ArrayList<>();
+                ArrayList<String> patternNullNull = new ArrayList<>();
+                ArrayList<String> marketNullNull = new ArrayList<>();
 ////////////////////////////
 
 
@@ -181,17 +181,38 @@ public class CompareAndMakeDecisionUser extends Thread {
 
 ////////////////////////////
                     // если цена NULL-NULL то не важно где и как стоит этот элемент (Тест)
-//                    if (giveData(price, stringPattern).equalsIgnoreCase(NULL_NULL.toString())) {
-//                        for (String stringPatternSearch : patternStrings) {
-//                            if (giveData(type, stringPatternSearch).equals(giveData(type, stringMarket))) {
-//                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
-//                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
-//
-//                                patternNullNull.add(stringPatternSearch);
-//                                marketNullNull.add(stringMarket);
-//                            }
-//                        }
-//                    }
+                    if (giveData(price, stringPattern).equalsIgnoreCase(NULL_NULL.toString())
+                            && giveData(type, stringPattern).equals(giveData(type, stringMarket))) {
+
+                        deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
+                        deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
+
+                        patternNullNull.add(stringPattern);
+                        marketNullNull.add(stringMarket);
+
+                    } else if (giveData(price, stringPattern).equalsIgnoreCase(NULL_NULL.toString())
+                            && !giveData(type, stringPattern).equals(giveData(type, stringMarket))) {
+
+                        boolean noSuchItem = true;
+
+                        for (String stringPatternSearch : patternStrings) {
+
+                            if (giveData(type, stringPatternSearch).equals(giveData(type, stringMarket))) {
+
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPatternSearch));
+
+                                patternNullNull.add(stringPatternSearch);
+                                marketNullNull.add(stringMarket);
+
+                                noSuchItem = false;
+                            }
+                        }
+
+                        if (noSuchItem) {
+                            return false;
+                        }
+                    }
 ////////////////////////////
 
                     // price
@@ -257,12 +278,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                     }
 
                     // Data
-//                    if (!stringMarket.startsWith(NULL.toString()) && !stringMarket.startsWith(BIAS.toString())
-//                            && !stringPattern.startsWith(BUY.toString())
-//                            && !stringPattern.startsWith(BIAS.toString())) {
-
-
-                        if (giveData(time, stringPattern).equalsIgnoreCase(NULL.toString())) {
+                    if (giveData(time, stringPattern).equalsIgnoreCase(NULL.toString())) {
                         // если время нулл - то у маркета должны быть в этом диапазоне все свечи на одной свече,
                         // а именно время ровно, направление свечи дир тоже должно быть ровно
 
@@ -427,19 +443,20 @@ public class CompareAndMakeDecisionUser extends Thread {
                 }
 
 ////////////////////////////
-//                if (patternNullNull.size() == marketNullNull.size() && patternNullNull.size() > 0) {
-//                    patternNullNull.sort(getSortTheAlphabet());
-//                    marketNullNull.sort(getSortTheAlphabet());
-//
-//                    for (String stringMarket : marketNullNull) {
-//                        if (!finallyComparisonOnAllData(stringMarket,
-//                                patternNullNull.get(marketNullNull.indexOf(stringMarket)))) {
-//                            return false;
-//                        }
-//                    }
-//                } else {
-//                    return false;
-//                }
+                if (patternNullNull.size() == marketNullNull.size() && patternNullNull.size() > 0) {
+
+                    patternNullNull.sort(getSortTheAlphabet());
+                    marketNullNull.sort(getSortTheAlphabet());
+
+                    for (String stringMarket : marketNullNull) {
+                        if (!finallyComparisonOnAllData(stringMarket,
+                                patternNullNull.get(marketNullNull.indexOf(stringMarket)))) {
+                            return false;
+                        }
+                    }
+                } else {
+                    return false;
+                }
 /////////////////////////////
             }
             return true;

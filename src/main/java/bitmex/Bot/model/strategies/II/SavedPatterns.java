@@ -114,23 +114,16 @@ public class SavedPatterns implements Serializable {
                         // если размер совпал то начинаем сравнивать построчно
                         // не считая 0-вой строки так как там инфа о паттерне
                         for (int i = 1; i < inArrayListCopy.size(); i++) {
-//                            String[] strings1;
-//                            String[] strings2;
-//                            String[] arr1;
-//                            String[] arr2;
 
                             // Тут мы так же определяем не строка ли это направления и сравниваем либо ее либо строки уровней
                             // BIAS===BUY===10===AVERAGE===3===MAX===5   <----- строка направления
                             if (inArrayList.get(i).startsWith(BIAS.toString())
                                     && stringArrayList.get(i).startsWith(BIAS.toString())) {
 
-//                                arr1 = stringArrayList.get(i).split("===");
-//                                arr2 = inArrayListCopy.get(i).split("===");
 
                                 // если хоть один объект не равен то прирываем цикл
                                 if (!giveData(BIAS, stringArrayList.get(i))
                                         .equals(giveData(BIAS, inArrayListCopy.get(i)))) {
-//                                if (!arr1[1].equals(arr2[1])) {
                                     result = false;
                                     break;
                                 }
@@ -146,15 +139,9 @@ public class SavedPatterns implements Serializable {
                             } else if (!inArrayListCopy.get(i).startsWith(BIAS.toString())
                                     && !stringArrayList.get(i).startsWith(BIAS.toString())) {
 
-//                                arr1 = stringArrayList.get(i).split("\"type\": \"");
-//                                arr2 = inArrayListCopy.get(i).split("\"type\": \"");
-//                                strings1 = arr1[1].split("\"");
-//                                strings2 = arr2[1].split("\"");
-
                                 // если хоть один объект не равен то прирываем цикл
                                 if (!giveData(type, stringArrayList.get(i))
                                         .equals(giveData(type, inArrayListCopy.get(i)))) {
-//                                if (!strings1[0].equals(strings2[0])) {
                                     result = false;
                                     break;
                                 }
@@ -169,7 +156,7 @@ public class SavedPatterns implements Serializable {
                             stringArrayList.set(0, stringZero);
 
                             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                                    + " --- II ПАТТЕРН такой есть - обновляю информацию по === "
+                                    + " --- II PRO ПАТТЕРН такой есть - обновляю информацию по === "
                                     + giveData(ID, stringZero));
 
                             ReadAndSavePatterns.saveSavedPatternsFromUser();
@@ -181,7 +168,7 @@ public class SavedPatterns implements Serializable {
 
                 // если совпадение не было найдено - добавляем данный патерн в массив
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                        + " --- Такого II ПАТТЕРНА нет - ДОБАВЛЕН --- "
+                        + " --- Такого II PRO ПАТТЕРНА нет - ДОБАВЛЕН --- "
                         + "SIZE --- " + inArrayList.size());
 
                 // проверяю есть ли такой айди и если есть меняю его на другой
@@ -242,7 +229,7 @@ public class SavedPatterns implements Serializable {
     }
 
 
-    public ArrayList<ArrayList<String>> getListsPricePatterns() {
+    public synchronized ArrayList<ArrayList<String>> getListsPricePatterns() {
         return listsPricePatterns;
     }
 
@@ -289,22 +276,14 @@ public class SavedPatterns implements Serializable {
 
 
     public synchronized void updateFirstRowData(String string) {
-//        String stringSet = string;
-//        String[] in = stringSet.split("===");
-//        String[] thIs;
 
         int count = 0;
 
         for (ArrayList<String> stringArrayList : listsPricePatterns) {
-//            thIs = stringArrayList.get(0).split("===");
-
-//            if (in.length == thIs.length) {
-                if (giveData(ID, string).equals(giveData(ID, stringArrayList.get(0)))) {
-//                if (in[in.length - 1].equals(thIs[thIs.length - 1])) {
-                    stringArrayList.set(0, string);
-                    count++;
-                }
-//            }
+            if (giveData(ID, string).equals(giveData(ID, stringArrayList.get(0)))) {
+                stringArrayList.set(0, string);
+                count++;
+            }
         }
 
         if (count > 0) {

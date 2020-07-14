@@ -210,23 +210,16 @@ public class ListensLooksAndCompares {
                 } else {
                         // сравниваем строки объекта с строками в списке
                     for (String string : patternListIn) {
-//                        String[] stringsMarket = marketObjectInfo.toString().split(",");
-//                        String[] stringsPattern = string.split(",");
 
                             // если длина строки объекта и массива равны то ...
                         if (!string.startsWith(BIAS.toString()) && !string.startsWith(BUY.toString())
                                 && !string.startsWith(NULL.toString())) {
-//                        if (stringsMarket.length == stringsPattern.length && stringsMarket.length > 2) {
 
                                 // если такая строка уже есть то заменяем ее на более новую
                             if (giveData(time, marketObjectInfo.toString()).equals(giveData(time, string))
                                     && giveData(type, marketObjectInfo.toString()).equals(giveData(type, string))
                                     && giveData(price, marketObjectInfo.toString()).equals(giveData(price, string))
                                     && giveData(dir, marketObjectInfo.toString()).equals(giveData(dir, string))) {
-//                            if (stringsMarket[2].equals(stringsPattern[2])
-//                                    && stringsMarket[3].equals(stringsPattern[3])
-//                                    && stringsMarket[5].equals(stringsPattern[5])
-//                                    && stringsMarket[7].equals(stringsPattern[7])) {
 
                                 patternListIn.set(patternListIn.indexOf(string), marketObjectInfo.toString());
                                 indexDelete.add(marketObjectList.indexOf(marketObjectInfo));
@@ -321,9 +314,10 @@ public class ListensLooksAndCompares {
 
                 if (!patternString.startsWith(NULL.toString())
                         && !patternString.startsWith(BUY.toString()) && !patternString.startsWith(BIAS.toString())) {
-                    String[] stringsPattern = patternString.split(",");
+//                    String[] stringsPattern = patternString.split(",");
 
-                    if (getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
+                    if (getDate(giveData(time, patternString)).getTime() < marketInfo.getTime().getTime()) {
+//                    if (getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
                         break;
                     }
@@ -334,17 +328,17 @@ public class ListensLooksAndCompares {
                 if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toString());
                 } else {
-                    String[] stringBias = inEdit.get(index).split("===");
-                    long time = 0;
+//                    String[] stringBias = inEdit.get(index).split("===");
+                    long times = getDate(giveData(TIME, inEdit.get(index))).getTime() - (1000 * 60 * 5);
 
-                    for (int i = 0; i < stringBias.length; i++) {
-                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
-                            time = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
-                            break;
-                        }
-                    }
+//                    for (int i = 0; i < stringBias.length; i++) {
+//                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
+//                            times = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+//                            break;
+//                        }
+//                    }
 
-                    if (time != 0 && time <= marketInfo.getTime().getTime()) {
+                    if (times != 0 && times <= marketInfo.getTime().getTime()) {
                         inEdit.add(index + 1, marketInfo.toString());
                     } else {
                         inEdit.add(index, marketInfo.toString());

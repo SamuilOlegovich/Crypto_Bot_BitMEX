@@ -235,22 +235,16 @@ public class ListensToLooksAndFillsPro {
                 } else {
                     // сравниваем строки объекта с строками в списке
                     for (String string : inArrayList) {
-//                        String[] stringsIn = infoIndicator.toString().split(",");
-//                        String[] stringsThis = string.split(",");
 
                         // если длина строки объекта и массива равны то ...
                         if (!string.startsWith(BUY.toString()) && !string.startsWith(NULL.toString())
-                                && !string.startsWith(BIAS.toString())) {
-//                        if (stringsIn.length == stringsThis.length) {
+                                && !string.startsWith(BIAS.toString())) {//                        if (stringsIn.length == stringsThis.length) {
 
                             // если такая строка уже есть то заменяем ее на более новую
                             if (giveData(time, infoIndicator.toString()).equals(giveData(time, string))
                                     && giveData(price, infoIndicator.toString()).equals(giveData(price, string))
                                     && giveData(type, infoIndicator.toString()).equals(giveData(type, string))
                                     && giveData(dir, infoIndicator.toString()).equals(giveData(dir, string))) {
-//                            if (stringsIn[2].equals(stringsThis[2]) && stringsIn[3].equals(stringsThis[3])
-//                                    && stringsIn[5].equals(stringsThis[5])
-//                                    && stringsIn[7].equals(stringsThis[7])) {
 
                                 inArrayList.set(inArrayList.indexOf(string), infoIndicator.toString());
                                 indexDelete.add(infoIndicatorArrayListWorking.indexOf(infoIndicator));
@@ -315,10 +309,8 @@ public class ListensToLooksAndFillsPro {
 
                 if (!patternString.startsWith(NULL.toString())
                         && !patternString.startsWith(BUY.toString()) && !patternString.startsWith(BIAS.toString())) {
-//                    String[] stringsPattern = patternString.split(",");
 
                     if (DatesTimes.getDate(giveData(time, patternString)).getTime() < marketInfo.getTime().getTime()) {
-//                    if (DatesTimes.getDate(stringsPattern[2]).getTime() < marketInfo.getTime().getTime()) {
                         index = inEdit.indexOf(patternString) - 1;
                         break;
                     }
@@ -330,15 +322,7 @@ public class ListensToLooksAndFillsPro {
                     inEdit.add(index, marketInfo.toString());
                 } else {
                     String[] stringBias = inEdit.get(index).split("===");
-//                    long time = 0;
                     long time = DatesTimes.getDate(giveData(TIME, inEdit.get(index))).getTime() - (1000 * 60 * 5);
-
-//                    for (int i = 0; i < stringBias.length; i++) {
-//                        if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
-//                            time = DatesTimes.getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
-//                            break;
-//                        }
-//                    }
 
                     if (time != 0 && time <= marketInfo.getTime().getTime()) {
                         inEdit.add(index + 1, marketInfo.toString());

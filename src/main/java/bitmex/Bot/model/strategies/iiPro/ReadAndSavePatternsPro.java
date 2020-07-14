@@ -55,13 +55,13 @@ public class ReadAndSavePatternsPro {
 
 
 
-    public static void saveSavedPatterns() {
+    public synchronized static void saveSavedPatterns() {
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
         String next = NEXT.toString() + lineBreak;
         stringBuilder.append(START.toString()).append(lineBreak);
-        ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
 
+        ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsClass().getListsPricePatterns();
 
         for (ArrayList<String> arr : arrayLists) {
 

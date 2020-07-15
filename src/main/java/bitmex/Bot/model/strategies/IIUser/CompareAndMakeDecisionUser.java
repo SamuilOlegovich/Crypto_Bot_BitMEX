@@ -257,10 +257,10 @@ public class CompareAndMakeDecisionUser extends Thread {
                                 // если цены на шаг впереди не ровны то проверяем на предыдущий шаг и добавляем
                             } else if (!giveData(price, stringPattern).equals(giveData(price, patternPlusOne))) {
 
-                                String marketMinusOne = readyMarketBlock.get(readyMarketBlock
-                                        .indexOf(stringMarket) - 1);
-                                String patternMinusOne = patternStrings.get(readyMarketBlock
-                                        .indexOf(stringMarket) - 1);
+                                int index = readyMarketBlock.indexOf(stringMarket) - 1;
+
+                                String marketMinusOne = readyMarketBlock.get(Math.max(index, 0));
+                                String patternMinusOne = patternStrings.get(Math.max(index, 0));
 
                                 if (giveData(price, stringPattern).equals(giveData(price, patternMinusOne))
                                         && giveData(price, stringMarket).equals(giveData(price, marketMinusOne))) {

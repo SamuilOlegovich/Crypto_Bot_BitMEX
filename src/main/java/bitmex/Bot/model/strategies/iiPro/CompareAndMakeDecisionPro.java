@@ -37,7 +37,7 @@ public class CompareAndMakeDecisionPro extends Thread {
     public void run() {
         if (compareSheets()) {
             writeMessage(getDateTerminal() + " --- "
-                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ II Pro передаю на сделку --- ID-"
+                    + "Нашел совпадения в рынке с ПАТТЕРНАМИ iiPRO передаю на сделку --- ID-"
                     + StringHelper.giveData(ID, patternsList.get(0)));
             new MakeDealPro(patternsList.get(0));
         }
@@ -169,14 +169,16 @@ public class CompareAndMakeDecisionPro extends Thread {
 
                 for (String pattern : patternCompare) {
                     String market = marketCompare.get(patternCompare.indexOf(pattern));
-                    if (!finallyComparisonOnAllData(market, pattern)) {
+                    if (!CompareHelper.finallyComparisonForPro(market, pattern)) {
+//                    if (!finallyComparisonOnAllData(market, pattern)) {
                         return false;
                     }
                 }
 
                 for (String pattern : patternAll) {
                     String market = marketAll.get(patternAll.indexOf(pattern));
-                    if (!finallyComparisonOnAllData(market, pattern)) {
+                    if (!CompareHelper.finallyComparisonForPro(market, pattern)) {
+//                    if (!finallyComparisonOnAllData(market, pattern)) {
                         return false;
                     }
                 }
@@ -187,38 +189,38 @@ public class CompareAndMakeDecisionPro extends Thread {
 
 
 
-    private boolean finallyComparisonOnAllData(String marketString, String patternString) {
-
-        writeMessage(getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4 ii Pro");
-
-
-        if (!giveData(type, marketString).equals(giveData(type, patternString))) {
-
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-3 ii Pro");
-
-            return false;
-        }
-
-        // направление свечи сравниваем только на избранных уровнях, на остальных это не важно
-        for (String string : levelsToCompare) {
-            if (string.equals(giveData(type, marketString)) && string.equals(giveData(type, patternString))) {
-                if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
-
-                    writeMessage(getDateTerminal() + " --- "
-                            + "---------------------------------------------------------------------------- 4-4 ii Pro");
-
-                    return false;
-                }
-            }
-        }
-
-        writeMessage(getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4-5 ii Pro");
-
-        return true;
-    }
+//    private boolean finallyComparisonOnAllData(String marketString, String patternString) {
+//
+//        writeMessage(getDateTerminal() + " --- "
+//                + "---------------------------------------------------------------------------- 4 ii Pro");
+//
+//
+//        if (!giveData(type, marketString).equals(giveData(type, patternString))) {
+//
+//            writeMessage(getDateTerminal() + " --- "
+//                    + "---------------------------------------------------------------------------- 4-3 ii Pro");
+//
+//            return false;
+//        }
+//
+//        // направление свечи сравниваем только на избранных уровнях, на остальных это не важно
+//        for (String string : levelsToCompare) {
+//            if (string.equals(giveData(type, marketString)) && string.equals(giveData(type, patternString))) {
+//                if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
+//
+//                    writeMessage(getDateTerminal() + " --- "
+//                            + "---------------------------------------------------------------------------- 4-4 ii Pro");
+//
+//                    return false;
+//                }
+//            }
+//        }
+//
+//        writeMessage(getDateTerminal() + " --- "
+//                + "---------------------------------------------------------------------------- 4-5 ii Pro");
+//
+//        return true;
+//    }
 }
 
 

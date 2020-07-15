@@ -83,6 +83,9 @@ public class Gasket {
     private static int dateDifference = -3;         // разница в часовом поясе
     private static boolean trading = false;         // торговать - true нет - false
     private static double visible = 0.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
+    private static boolean ERROR = true;            // включить - отключить показ ошибок в окне приложения
+    private static boolean DEBUG = true;
+    private static boolean INFO = true;
     private static double take = 15.0;              // тейк профит в долларах
     private static double stop = 30.0;              // стоп лосс в долларах
     private static double lot = 1.0;                // количество контрактов
@@ -90,6 +93,9 @@ public class Gasket {
     private static View viewThread;
     private static int PORT = 4444;                 // порт подключения
     private static Ticker ticker;
+
+
+
 
     private static String levelsToCompare = "OPEN_POS_BID_MINUS" + "-OPEN_POS_ASK_MINUS" + "-OPEN_POS_ASK_PLUS"
             + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS" + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
@@ -1500,6 +1506,31 @@ public class Gasket {
 
     public static void setLevelsToCompare(String levelsToCompare) {
         Gasket.levelsToCompare = levelsToCompare;
+    }
+
+
+    public static boolean isERROR() {
+        return ERROR;
+    }
+
+    public static void setERROR(boolean ERROR) {
+        Gasket.ERROR = ERROR;
+    }
+
+    public static boolean isDEBUG() {
+        return DEBUG;
+    }
+
+    public static void setDEBUG(boolean DEBUG) {
+        Gasket.DEBUG = DEBUG;
+    }
+
+    public static boolean isINFO() {
+        return INFO;
+    }
+
+    public static void setINFO(boolean INFO) {
+        Gasket.INFO = INFO;
     }
 }
 

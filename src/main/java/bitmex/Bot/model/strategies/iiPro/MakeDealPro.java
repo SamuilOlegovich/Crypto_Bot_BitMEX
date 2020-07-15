@@ -24,7 +24,7 @@ public class MakeDealPro extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + "Определяю какую сделку сделать согласно II Pro ПАТТЕРНАМ");
+                + "Определяю какую сделку сделать согласно iiPRO ПАТТЕРНАМ");
 
         String[] strings = stringIn.split("===");
         String stringOut = stringIn;
@@ -39,7 +39,7 @@ public class MakeDealPro extends Thread {
             }
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + stringOut
-                    + " --- Согластно ПАТТЕРНУ II Pro сделал сделку БАЙ");
+                    + " --- Согластно ПАТТЕРНУ iiPRO сделал сделку БАЙ");
 
         } else if (Integer.parseInt(strings[1]) < Integer.parseInt(strings[3])) {
 
@@ -51,7 +51,7 @@ public class MakeDealPro extends Thread {
             }
 
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + stringOut
-                    + " --- Согластно ПАТТЕРНУ II Pro сделал сделку СЕЛЛ");
+                    + " --- Согластно ПАТТЕРНУ iiPRO сделал сделку СЕЛЛ");
 
         }
     }

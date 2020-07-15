@@ -115,7 +115,8 @@ public class SavedPatterns implements Serializable {
                         // не считая 0-вой строки так как там инфа о паттерне
                         for (int i = 1; i < inArrayListCopy.size(); i++) {
 
-                            // Тут мы так же определяем не строка ли это направления и сравниваем либо ее либо строки уровней
+                            // Тут мы так же определяем не строка ли это направления и сравниваем либо ее
+                            // либо строки уровней
                             // BIAS===BUY===10===AVERAGE===3===MAX===5   <----- строка направления
                             if (inArrayList.get(i).startsWith(BIAS.toString())
                                     && stringArrayList.get(i).startsWith(BIAS.toString())) {
@@ -156,7 +157,7 @@ public class SavedPatterns implements Serializable {
                             stringArrayList.set(0, stringZero);
 
                             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                                    + " --- II PRO ПАТТЕРН такой есть - обновляю информацию по === "
+                                    + " --- II ПАТТЕРН такой есть - обновляю информацию по === "
                                     + giveData(ID, stringZero));
 
                             ReadAndSavePatterns.saveSavedPatternsFromUser();
@@ -168,7 +169,7 @@ public class SavedPatterns implements Serializable {
 
                 // если совпадение не было найдено - добавляем данный патерн в массив
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                        + " --- Такого II PRO ПАТТЕРНА нет - ДОБАВЛЕН --- "
+                        + " --- Такого II ПАТТЕРНА нет - ДОБАВЛЕН --- "
                         + "SIZE --- " + inArrayList.size());
 
                 // проверяю есть ли такой айди и если есть меняю его на другой
@@ -186,6 +187,7 @@ public class SavedPatterns implements Serializable {
             inArrayList.clear();
         }
     }
+
 
 
     // обновляем информационные данные в строке информации
@@ -208,6 +210,7 @@ public class SavedPatterns implements Serializable {
     }
 
 
+
     // находим и отдаем массивы нужной длины - размера
     public ArrayList<ArrayList<String>> getListFoSize(int size) {
         ArrayList<ArrayList<String>> listFoSize = new ArrayList<>();
@@ -223,21 +226,26 @@ public class SavedPatterns implements Serializable {
     }
 
 
+
     // возвращаем самую большую длину имеющегося паттерна
     public int getMaxArraySize() {
         return maxArraySize;
     }
 
 
+
     public synchronized ArrayList<ArrayList<String>> getListsPricePatterns() {
         return listsPricePatterns;
     }
+
+
 
     public void setPatternsInListsPricePatterns(ArrayList<String> arrayList) {
         ArrayList<String> strings = new ArrayList<>(arrayList);
         listsPricePatterns.add(strings);
         maxArraySize = Math.max(strings.size(), maxArraySize);
     }
+
 
 
     private String checkingID(String string) {
@@ -251,6 +259,7 @@ public class SavedPatterns implements Serializable {
         }
         return stringOut.toString();
     }
+
 
 
     public void seeLists() {
@@ -273,6 +282,7 @@ public class SavedPatterns implements Serializable {
         }
         ConsoleHelper.writeMessage("");
     }
+
 
 
     public synchronized void updateFirstRowData(String string) {

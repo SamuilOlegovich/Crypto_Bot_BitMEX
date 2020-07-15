@@ -321,7 +321,6 @@ public class ListensToLooksAndFillsPro {
                 if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toString());
                 } else {
-                    String[] stringBias = inEdit.get(index).split("===");
                     long time = DatesTimes.getDate(giveData(TIME, inEdit.get(index))).getTime() - (1000 * 60 * 5);
 
                     if (time != 0 && time <= marketInfo.getTime().getTime()) {

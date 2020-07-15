@@ -5,11 +5,17 @@
  */
 package bitmex.Bot.model.bitMEX.client;
 
+import bitmex.Bot.view.ConsoleHelper;
+
 import java.io.FileInputStream;
 import java.util.Properties;
 import java.io.IOException;
 import java.util.Objects;
 import java.io.IOError;
+
+
+
+
 
 /**
  *
@@ -67,6 +73,7 @@ public class BitmexApiKey {
             return new BitmexApiKey(name, value, useProd);
         } catch (IOException ex) {
 //            throw new SumZeroException(ex.getMessage(), ex);  /////////////////////
+            ConsoleHelper.writeERROR(ex.toString());
             throw new IOError(ex);
         }
     }

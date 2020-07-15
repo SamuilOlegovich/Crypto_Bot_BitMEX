@@ -21,7 +21,7 @@ public class KeepsTrackOfFillingListInfoIndicatorIIPro extends Thread {
 
     public KeepsTrackOfFillingListInfoIndicatorIIPro() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                + " --- Класс Keeps Track Of Filling List InfoIndicator II Pro начал работать");
+                + " --- Класс Keeps Track Of Filling List InfoIndicator iiPRO начал работать");
         start();
     }
 

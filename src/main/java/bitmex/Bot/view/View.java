@@ -117,7 +117,7 @@ public class View extends Thread {
 
                 String string = jTextField.getText();
                 if (string.length() > 3) {
-                    if (string.trim().equalsIgnoreCase("info")) {
+                    if (string.trim().equals("info")) {
                         ConsoleHelper.printInfoSettings();
                     } else if (string.trim().equalsIgnoreCase("commands")) {
                         ConsoleHelper.showCommands();

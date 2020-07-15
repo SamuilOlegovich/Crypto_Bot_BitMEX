@@ -99,18 +99,18 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
         try {
             this.apiKey = apiKey;
             this.apiSecret = apiSecret;
-            ConsoleHelper.writeDeBug("Starting connection");////////////////////////////////////
+            ConsoleHelper.writeINFO("Starting connection");////////////////////////////////////
             client.start();
             URI echoUri = new URI(websocketUrl);
             ClientUpgradeRequest request = new ClientUpgradeRequest();
             client.connect(socket, echoUri, request);
 
 
-            ConsoleHelper.writeDeBug("Connecting to : " + echoUri);////////////////////////////
+            ConsoleHelper.writeINFO("Connecting to : " + echoUri);////////////////////////////
             latch.await(15, TimeUnit.SECONDS);
             isStarted = socket.isConnected();
             connected = socket.isConnected();
-            ConsoleHelper.writeDeBug("Connected: " + connected);//////////////////////////////
+            ConsoleHelper.writeINFO("Connected: " + connected);//////////////////////////////
 
             if (!Strings.isNullOrEmpty(apiKey)) {
                 long nonce = System.currentTimeMillis();
@@ -121,6 +121,7 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
             //socket.startPing();
         } catch (Exception ex) {
 //            throw new SumZeroException(ex);
+            ConsoleHelper.writeERROR(ex.toString());
             throw new IOError(ex);
         } finally {
             return connected;
@@ -129,20 +130,21 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
 
     @Override
     public void socketDisconnectDetected() {
-        ConsoleHelper.writeDeBug("Disconnect detected, should reconnect: " + shouldReconnect );
+        ConsoleHelper.writeDEBUG("Disconnect detected, should reconnect: " + shouldReconnect );
         if (shouldReconnect) {
-            ConsoleHelper.writeDeBug("Disconnect detected....reconnecting");
+            ConsoleHelper.writeDEBUG("Disconnect detected....reconnecting");
             connect(apiKey, apiSecret);
             for (String command : subscribeCommandList) {
-                ConsoleHelper.writeDeBug("Resubmitting subscribe command: " + command);
+                ConsoleHelper.writeDEBUG("Resubmitting subscribe command: " + command);
                 socket.subscribe(command);
                 try {
                     Thread.sleep(250);
                 } catch (InterruptedException ex) {
+                    ConsoleHelper.writeERROR(ex.toString());
                 }
             }
         } else {
-            ConsoleHelper.writeDeBug("Disconnect detected, but will not reconnect");//////////////////////////
+            ConsoleHelper.writeDEBUG("Disconnect detected, but will not reconnect");//////////////////////////
         }
     }
 
@@ -152,7 +154,7 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
             shouldReconnect = false;
             client.stop();
         } catch (Exception ex) {
-            ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
+            ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex);
         }
     }
 

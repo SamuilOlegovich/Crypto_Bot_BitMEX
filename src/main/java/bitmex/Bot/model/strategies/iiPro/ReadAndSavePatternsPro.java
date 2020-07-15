@@ -20,7 +20,7 @@ public class ReadAndSavePatternsPro {
 
     public static void createSavedPatternsPro() {
         SavedPatternsPro savedPatternsPro = Gasket.getSavedPatternsProClass();
-        ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю Saved Patterns II Pro");
+        ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю Saved Patterns iiPRO");
         File file = new File(Gasket.getFilesAndPathCreator().getPathPatternsIIPro());
         ArrayList<String> arrayListOut = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class ReadAndSavePatternsPro {
                     arrayListOut.clear();
                 } else if (string.equalsIgnoreCase(END.toString())) {
                     ConsoleHelper.writeMessage(DatesTimes.getDate()
-                            + " --- Saved Patterns II Pro востановлен");
+                            + " --- Saved Patterns iiPRO востановлен");
 
                     if (Gasket.isShowLoadPatternsIIPro()) {
                         savedPatternsPro.seeLists();

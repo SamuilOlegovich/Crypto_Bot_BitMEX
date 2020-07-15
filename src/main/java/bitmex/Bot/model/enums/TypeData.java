@@ -7,6 +7,7 @@ public enum TypeData {
     START,
     ERROR,
     DEBUG,
+    INFO,
     NULL,
     BIAS,
     SELL,

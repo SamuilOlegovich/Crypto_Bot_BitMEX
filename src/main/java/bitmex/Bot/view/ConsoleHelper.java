@@ -27,19 +27,33 @@ public class ConsoleHelper {
 
 
 
-    public static void writeError(String string) {
-//        String out = string + " --- " + TypeData.ERROR.toString();
-//        getViewThread().updateInfoView(out);
-//        writerFile(out + "\n", getFilesAndPathCreator().getPathLogs(), true);
+    public static void writeERROR(String string) {
+        String out = string + " --- " + TypeData.ERROR.toString();
+        if (Gasket.isERROR()) {
+            getViewThread().updateInfoView(out);
+        }
+        writerFile(out + "\n", getFilesAndPathCreator().getPathLogs(), true);
 //        System.out.println(out);
     }
 
 
 
-    public static void writeDeBug(String string) {
-//        String out = string + " --- " + TypeData.DEBUG.toString();
-//        getViewThread().updateInfoView(out);
-//        writerFile(out + "\n", getFilesAndPathCreator().getPathLogs(), true);
+    public static void writeDEBUG(String string) {
+        String out = string + " --- " + TypeData.DEBUG.toString();
+        if (Gasket.isDEBUG()) {
+            getViewThread().updateInfoView(out);
+        }
+        writerFile(out + "\n", getFilesAndPathCreator().getPathLogs(), true);
+//        System.out.println(out);
+    }
+
+
+    public static void writeINFO(String string) {
+        String out = string + " --- " + TypeData.INFO.toString();
+        if (Gasket.isINFO()) {
+            getViewThread().updateInfoView(out);
+        }
+        writerFile(out + "\n", getFilesAndPathCreator().getPathLogs(), true);
 //        System.out.println(out);
     }
 
@@ -187,7 +201,13 @@ public class ConsoleHelper {
                 + "showLoadPatternsIIPro === " + Gasket.isShowLoadPatternsIIPro()
                 + " ----- показывать загрузку паттернов при запуске программы\n"
                 + "levelsToCompare === " + Gasket.getLevelsToCompare()
-                + " ----- уровни для сравнения II Pro\n";
+                + " ----- уровни для сравнения II Pro\n"
+                + "ERROR === " + Gasket.isERROR()
+                + " ----- включить - отключить показ ошибок в окне программы\n"
+                + "DEBUG === " + Gasket.isDEBUG()
+                + " ----- включить - отключить показ ошибок в окне программы\n"
+                + "INFO === " + Gasket.isINFO()
+                + " ----- включить - отключить показ ошибок в окне программы\n";
     }
 
 

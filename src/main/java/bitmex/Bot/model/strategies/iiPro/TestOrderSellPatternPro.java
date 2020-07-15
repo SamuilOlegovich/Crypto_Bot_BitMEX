@@ -27,7 +27,7 @@ public class TestOrderSellPatternPro extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + ID + " --- RUN класса TestOrderSellPattern II начал считать");
+                + ID + " --- RUN класса TestOrderSellPattern iiPRO начал считать");
 
         while (true) {
             double priceAsk = Gasket.getBitmexQuote().getAskPrice();
@@ -53,7 +53,7 @@ public class TestOrderSellPatternPro extends Thread {
                 new UpdatingStatisticsDataPro(stringBuilder.toString());
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + ID + " --- Сработал СТОП ЛОСС II");
+                        + ID + " --- Сработал СТОП ЛОСС iiPRO");
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() - Gasket.getStop());
                 break;
             }
@@ -77,7 +77,7 @@ public class TestOrderSellPatternPro extends Thread {
                 new UpdatingStatisticsDataPro(stringBuilder.toString());
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + ID + " --- Сработал ТЕЙК ПРОФИТ II");
+                        + ID + " --- Сработал ТЕЙК ПРОФИТ iiPRO");
                 Gasket.setPROFIT_Sell(Gasket.getPROFIT_Sell() + Gasket.getTake());
                 break;
             }
@@ -86,7 +86,7 @@ public class TestOrderSellPatternPro extends Thread {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + ID + " --- Не смогли проснуться в методе RUN класса TestOrderSellPattern II");
+                        + ID + " --- Не смогли проснуться в методе RUN класса TestOrderSellPattern iiPRO");
             }
         }
         ConsoleHelper.printStatisticsPatterns();

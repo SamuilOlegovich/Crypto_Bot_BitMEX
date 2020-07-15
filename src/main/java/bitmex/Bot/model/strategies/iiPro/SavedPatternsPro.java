@@ -1,8 +1,9 @@
 package bitmex.Bot.model.strategies.iiPro;
 
+import bitmex.Bot.model.CompareHelper;
+import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
-import bitmex.Bot.model.StringHelper;
 
 import java.util.ArrayList;
 
@@ -52,7 +53,7 @@ public class SavedPatternsPro {
     // если есть то устанавливаем приоритет
     private synchronized void isThereSuchCombination(ArrayList<String> arrayList) {
         writeMessage(DatesTimes.getDateTerminal()
-                + " --- Сравниваю II Pro ПАТТЕРН с имеющимися");
+                + " --- Сравниваю iiPRO ПАТТЕРН с имеющимися");
 
         // находим количество смещений и запоминаем индекс первого смещения
         ArrayList<String> inArrayList = new ArrayList<>(arrayList);
@@ -111,6 +112,7 @@ public class SavedPatternsPro {
 
                 // перебираем массив стратегий и сравниваем с пришедшим
                 for (ArrayList<String> patternListIn : listsPricePatterns) {
+
                     ArrayList<String> patternBias = new ArrayList<>();
                     ArrayList<String> marketBias = new ArrayList<>();
 
@@ -149,13 +151,15 @@ public class SavedPatternsPro {
                             ArrayList<String> marketList = new ArrayList<>();
 
                             for (String pattern : patternListIn) {
-                                if (!pattern.startsWith(BIAS.toString()) && !pattern.startsWith(BUY.toString())) {
+                                if (!pattern.startsWith(BIAS.toString()) && !pattern.startsWith(BUY.toString())
+                                        && !pattern.startsWith(NULL.toString())) {
                                     patternList.add(pattern);
                                 }
                             }
 
                             for (String market : marketListCopy) {
-                                if (!market.startsWith(BIAS.toString()) && !market.startsWith(BUY.toString())) {
+                                if (!market.startsWith(BIAS.toString()) && !market.startsWith(BUY.toString())
+                                        && !market.startsWith(NULL.toString())) {
                                     marketList.add(market);
                                 }
                             }
@@ -173,7 +177,7 @@ public class SavedPatternsPro {
                             patternListIn.set(0, stringZero);
 
                             writeMessage(DatesTimes.getDateTerminal()
-                                    + " --- II Pro ПАТТЕРН такой есть - обновляю информацию по === "
+                                    + " --- iiPRO ПАТТЕРН такой есть - обновляю информацию по === "
                                     + giveData(ID, stringZero));
 
                             ReadAndSavePatternsPro.saveSavedPatternsFromUser();
@@ -185,7 +189,7 @@ public class SavedPatternsPro {
 
                 // если совпадение не было найдено - добавляем данный патерн в массив
                 writeMessage(DatesTimes.getDateTerminal()
-                        + " --- Такого II Pro ПАТТЕРНА нет - ДОБАВЛЕН --- "
+                        + " --- Такого iiPRO ПАТТЕРНА нет - ДОБАВЛЕН --- "
                         + "SIZE --- " + inArrayList.size());
 
                 // проверяю есть ли такой айди и если есть меняю его на другой
@@ -241,39 +245,40 @@ public class SavedPatternsPro {
         // а эти должны быть в четкой последовательности
         for (String pattern : patternCompare) {
             String market = marketCompare.get(patternCompare.indexOf(pattern));
-            if (!finallyComparisonOnAllData(market, pattern)) {
+            if (!CompareHelper.finallyComparisonForPro(market, pattern)) {
+//            if (!finallyComparisonOnAllData(market, pattern)) {
                 return false;
             }
         }
 
         for (String pattern : patternAll) {
             String market = marketAll.get(patternAll.indexOf(pattern));
-            if (!finallyComparisonOnAllData(market, pattern)) {
+            if (!CompareHelper.finallyComparisonForPro(market, pattern)) {
+//            if (!finallyComparisonOnAllData(market, pattern)) {
                 return false;
             }
         }
-
         return true;
     }
 
 
 
-    private boolean finallyComparisonOnAllData(String marketString, String patternString) {
-
-        if (!giveData(type, marketString).equals(giveData(type, patternString))) {
-            return false;
-        }
-
-        // направление свечи сравниваем только на избранных уровнях, на остальных это не важно
-        for (String string : levelsToCompare) {
-            if (string.equals(giveData(type, marketString)) && string.equals(giveData(type, patternString))) {
-                if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+//    private boolean finallyComparisonOnAllData(String marketString, String patternString) {
+//
+//        if (!giveData(type, marketString).equals(giveData(type, patternString))) {
+//            return false;
+//        }
+//
+//        // направление свечи сравниваем только на избранных уровнях, на остальных это не важно
+//        for (String string : levelsToCompare) {
+//            if (string.equals(giveData(type, marketString)) && string.equals(giveData(type, patternString))) {
+//                if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
 
 
 
@@ -337,7 +342,6 @@ public class SavedPatternsPro {
 
     private String checkingID(String string) {
         StringBuilder stringOut = new StringBuilder(string);
-//        String[] strings = stringOut.toString().split("===");
 
         for (ArrayList<String> stringArrayList : listsPricePatterns) {
             if (StringHelper.giveData(ID, stringOut.toString()).equals(stringArrayList.get(0))) {
@@ -386,13 +390,13 @@ public class SavedPatternsPro {
             ReadAndSavePatternsPro.saveSavedPatterns();
 
             writeMessage(DatesTimes.getDateTerminal()
-                    + " --- ОБНОВИЛ нулевую стороку II Pro ПАТТЕРНОВ согласно исходу сделки === "
+                    + " --- ОБНОВИЛ нулевую стороку iiPRO ПАТТЕРНОВ согласно исходу сделки === "
                     + StringHelper.giveData(ID, string));
 
         } else {
 
             writeMessage(DatesTimes.getDateTerminal()
-                    + " --- Такого номера ===" + StringHelper.giveData(ID, string) + "=== II Pro ПАТТЕРНА нет");
+                    + " --- Такого номера ===" + StringHelper.giveData(ID, string) + "=== iiPRO ПАТТЕРНА нет");
         }
     }
 }

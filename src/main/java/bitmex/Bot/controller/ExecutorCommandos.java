@@ -165,6 +165,21 @@ public class ExecutorCommandos {
                         writeMessage("trading === "
                                 + Gasket.isTrading() + "\n");
                     break;
+                case "ERROR" :
+                    Gasket.setERROR(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("ERROR === "
+                                + Gasket.isERROR() + "\n");
+                    break;
+                case "DEBUG" :
+                    Gasket.setDEBUG(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("DEBUG === "
+                                + Gasket.isDEBUG() + "\n");
+                    break;
+                case "INFO" :
+                    Gasket.setINFO(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("INFO === "
+                                + Gasket.isINFO() + "\n");
+                    break;
                 case "obs_2":
                     Gasket.setObs_2(strings[1].equalsIgnoreCase("true"));
                         writeMessage("strategyOne === "

@@ -38,7 +38,7 @@ public class ListensLooksAndComparesPro {
 
     private ListensLooksAndComparesPro() {
         ConsoleHelper.writeMessage(getDateTerminal() + " --- "
-                + "Класс Listens Looks And Compares II Pro начал работать");
+                + "Класс Listens Looks And Compares iiPRO начал работать");
 
         this.savedPatternsPro = Gasket.getSavedPatternsProClass();
         this.marketObjectInfoWorkingCopy = new ArrayList<>();
@@ -95,7 +95,7 @@ public class ListensLooksAndComparesPro {
             ReadAndSavePatternsPro.saveTemporarySavedPatterns(marketListInListString);
 
             ConsoleHelper.writeMessage(getDateTerminal() + " --- "
-                    + "Сравниваю рынок с паттернами II Pro");
+                    + "Сравниваю рынок с паттернами iiPRO");
 
             // сравниваем оставшееся с патернами
             for (ArrayList<String> marketListString : marketListInListString) {

@@ -6,6 +6,8 @@
 package bitmex.Bot.model.bitMEX.client;
 
 //import com.sumzerotrading.data.SumZeroException;
+import bitmex.Bot.view.ConsoleHelper;
+
 import javax.xml.bind.DatatypeConverter;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Mac;
@@ -29,6 +31,7 @@ public class BitmexSignatureGenerator implements ISignatureGenerator {
             return hash;
         } catch (Exception e) {
 //            throw new SumZeroException(e);
+            ConsoleHelper.writeERROR(e.toString());
             throw new IOError(e);
         }
     }

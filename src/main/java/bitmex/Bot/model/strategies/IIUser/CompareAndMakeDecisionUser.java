@@ -73,11 +73,14 @@ public class CompareAndMakeDecisionUser extends Thread {
         if (marketBias.size() != patternBias.size()) {
             return false;
         } else if (patternBias.size() > 0) {
+
             for (String patternBi : patternBias) {
+
                 // если нул_нул то не важно равны ли строки направления
                 if (!patternBi.equalsIgnoreCase(NULL_NULL.toString())
                         && !giveData(BIAS, patternBi).equals(giveData(BIAS,
                         marketBias.get(patternBias.indexOf(patternBi))))) {
+
                     return false;
                 }
             }
@@ -195,15 +198,15 @@ public class CompareAndMakeDecisionUser extends Thread {
 
                         boolean noSuchItem = true;
 
-                        for (String stringPatternSearch : patternStrings) {
+                        for (String stringMarketSearch : readyMarketBlock) {
 
-                            if (giveData(type, stringPatternSearch).equals(giveData(type, stringMarket))) {
+                            if (giveData(type, stringMarketSearch).equals(giveData(type, stringPattern))) {
 
-                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarket));
-                                deleteIndexPattern.add(patternStrings.indexOf(stringPatternSearch));
+                                deleteIndexMarket.add(readyMarketBlock.indexOf(stringMarketSearch));
+                                deleteIndexPattern.add(patternStrings.indexOf(stringPattern));
 
-                                patternNullNull.add(stringPatternSearch);
-                                marketNullNull.add(stringMarket);
+                                patternNullNull.add(stringPattern);
+                                marketNullNull.add(stringMarketSearch);
 
                                 noSuchItem = false;
                             }
@@ -402,6 +405,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                             return false;
                         }
                     }
+
                 } else if (patternComparePriceNull.size() != marketComparePriceNull.size()) {
                     return false;
                 }
@@ -454,7 +458,7 @@ public class CompareAndMakeDecisionUser extends Thread {
                             return false;
                         }
                     }
-                } else {
+                } else if (patternNullNull.size() != marketNullNull.size()){
                     return false;
                 }
 /////////////////////////////

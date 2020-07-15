@@ -5,16 +5,16 @@
  */
 package bitmex.Bot.model.bitMEX.client;
 
-import bitmex.Bot.model.bitMEX.listener.IPongListener;
 import bitmex.Bot.model.bitMEX.listener.WebsocketDisconnectListener;
-import bitmex.Bot.view.ConsoleHelper;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import bitmex.Bot.model.bitMEX.listener.IPongListener;
 //import com.sumzerotrading.data.SumZeroException;
 import org.eclipse.jetty.websocket.api.Session;
 import java.util.concurrent.CountDownLatch;
+import bitmex.Bot.view.ConsoleHelper;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Future;
 import com.google.gson.JsonParser;
@@ -23,7 +23,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.Gson;
 import java.util.TimerTask;
 //import org.slf4j.Logger;
-import java.io.IOError;
 import java.util.Timer;
 
 /**
@@ -76,7 +75,7 @@ public class JettySocket implements IPongListener {
     
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
-        ConsoleHelper.writeDeBug("Connection Closed: code: " + statusCode + " reason: " + reason);
+        ConsoleHelper.writeERROR("Connection Closed: code: " + statusCode + " reason: " + reason);
         shouldRun = false;
         this.session = null;
         connected = false;
@@ -100,11 +99,11 @@ public class JettySocket implements IPongListener {
                 try {
                     if (session != null) {
                         Future<Void> fut = session.getRemote().sendStringByFuture(pingCommand);
-                        ConsoleHelper.writeDeBug("Sending ping");//////////////////////////
+                        ConsoleHelper.writeINFO("Sending ping");//////////////////////////
                     }
                     Thread.sleep(10000);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ConsoleHelper.writeERROR(ex.toString());
                 }
 
             }
@@ -115,7 +114,7 @@ public class JettySocket implements IPongListener {
 
     @OnWebSocketMessage
     public void onMessage(String msg) {
-        ConsoleHelper.writeDeBug("msg: " + msg);//////////////////////////////
+        ConsoleHelper.writeINFO("msg: " + msg);//////////////////////////////
         messageProcessor.processMessage(msg);
     }
 
@@ -131,12 +130,12 @@ public class JettySocket implements IPongListener {
     }
 
     public void subscribe(String message) {
-        ConsoleHelper.writeDeBug("Sending command: " + message);/////////////////////////
+        ConsoleHelper.writeINFO("Sending command: " + message);/////////////////////////
         Future<Void> fut = session.getRemote().sendStringByFuture(message);
         try {
             fut.get(2, TimeUnit.SECONDS);
         } catch (Exception ex) {
-            ConsoleHelper.writeError(ex.toString());
+            ConsoleHelper.writeERROR(ex.toString());
 
         }
     }
@@ -152,7 +151,7 @@ public class JettySocket implements IPongListener {
                 try {
                     checkLastPongTime();
                 } catch( Exception ex ) {
-                    ConsoleHelper.writeError(ex.getMessage() + " === " + ex);
+                    ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex);
                 }
             }
         };
@@ -163,11 +162,11 @@ public class JettySocket implements IPongListener {
         if( lastPongTime > 0 ) {
             long responseDelay = getCurrentTime() - lastPongTime;
             if( responseDelay >= (MAX_PONG_TIME_SECONDS * 1000) ) {
-                ConsoleHelper.writeDeBug("Pong not detected in " + responseDelay + "ms");
+                ConsoleHelper.writeDEBUG("Pong not detected in " + responseDelay + "ms");
                 disconnectListener.socketDisconnectDetected();
             }
         } else {
-            ConsoleHelper.writeDeBug("Last pong time has not been set");///////////////////////
+            ConsoleHelper.writeINFO("Last pong time has not been set");///////////////////////
         }
     }
     

@@ -5,8 +5,6 @@
  */
 package bitmex.Bot.model.bitMEX.client;
 
-import bitmex.Bot.model.Gasket;
-import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.model.bitMEX.listener.IExecutionListener;
 import bitmex.Bot.model.bitMEX.listener.IPositionListener;
 import bitmex.Bot.model.bitMEX.listener.IOrderListener;
@@ -16,10 +14,15 @@ import bitmex.Bot.model.bitMEX.entity.BitmexAmendOrder;
 import bitmex.Bot.model.bitMEX.entity.BitmexInstrument;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
+import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 //import com.sumzerotrading.data.Ticker;
+import bitmex.Bot.model.Gasket;
 import java.util.List;
+
+
+
 
 /**
  *

@@ -4,13 +4,14 @@ import bitmex.Bot.model.serverAndParser.InfoIndicator;
 
 import java.util.*;
 
+import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.model.Gasket.getLevelsToCompare;
 import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.BIAS;
 import static bitmex.Bot.model.enums.TimeFrame.M5;
 import static bitmex.Bot.model.enums.TypeData.*;
 import static bitmex.Bot.model.enums.BidAsk.*;
-
-
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 
 
 public class CompareHelper {
@@ -123,6 +124,42 @@ public class CompareHelper {
         }
 
         return listIn;
+    }
+
+
+
+    public synchronized static boolean finallyComparisonForPro(String marketString, String patternString) {
+        String[] levelsToCompare = getLevelsToCompare().split("-");
+
+        writeMessage(getDateTerminal() + " --- "
+                + "---------------------------------------------------------------------------- 4 iiPro");
+
+
+        if (!giveData(type, marketString).equals(giveData(type, patternString))) {
+
+            writeMessage(getDateTerminal() + " --- "
+                    + "---------------------------------------------------------------------------- 4-3 iiPro");
+
+            return false;
+        }
+
+        // направление свечи сравниваем только на избранных уровнях, на остальных это не важно
+        for (String string : levelsToCompare) {
+            if (string.equals(giveData(type, marketString)) && string.equals(giveData(type, patternString))) {
+                if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
+
+                    writeMessage(getDateTerminal() + " --- "
+                            + "---------------------------------------------------------------------------- 4-4 iiPro");
+
+                    return false;
+                }
+            }
+        }
+
+        writeMessage(getDateTerminal() + " --- "
+                + "---------------------------------------------------------------------------- 4-5 iiPro");
+
+        return true;
     }
 
 

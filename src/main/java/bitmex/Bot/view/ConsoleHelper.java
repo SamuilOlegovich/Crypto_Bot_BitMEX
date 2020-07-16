@@ -207,7 +207,37 @@ public class ConsoleHelper {
                 + "DEBUG === " + Gasket.isDEBUG()
                 + " ----- включить - отключить показ ошибок в окне программы\n"
                 + "INFO === " + Gasket.isINFO()
-                + " ----- включить - отключить показ ошибок в окне программы\n";
+                + " ----- включить - отключить показ ошибок в окне программы\n"
+                + "periodNULL === " + Gasket.getPeriodNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "previewNULL === " + Gasket.getPreviewNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "timeNULL === " + Gasket.getTimeNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "priceNULL === " + Gasket.getPriceNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "valueNULL === " + Gasket.getValueNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "typeNULL === " + Gasket.getTypeNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "avgNULL === " + Gasket.getAvgNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "dirNULL === " + Gasket.getDirNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "openNULL === " + Gasket.getOpenNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "closeNULL === " + Gasket.getCloseNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "highNULL === " + Gasket.getHighNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "lowNULL === " + Gasket.getLowNULL()
+                + " ----- если заменяем данные то на что\n"
+                + "replaceDataWithNULL === " + Gasket.isReplaceDataWithNULL()
+                + " ----- включить выключить замену данных\n"
+                + "replaceDataWithNULLPro === " + Gasket.isReplaceDataWithNULL()
+                + " ----- включить выключить замену данных\n"
+                + "addOrTESTatTheEndOfTheLine === " + Gasket.isReplaceDataWithNULL()
+                + " ----- добавлять или нет тест в конце строки\n";
     }
 
 

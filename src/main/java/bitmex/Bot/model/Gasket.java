@@ -13,6 +13,7 @@ import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.controller.ExecutorCommandos;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.View;
 
 import java.util.List;
@@ -25,14 +26,15 @@ import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
 public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
+    private static double  indexOfTheRatioOfTransactionsAtWhichWeEnterTheMarket;        // индекс соотношения сделок прикотором входим в рынок
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
     private static ListensLooksAndComparesPro listensLooksAndComparesPro;
     private static ListensToLooksAndFillsPro listensToLooksAndFillsPro;
     private static ListensLooksAndCompares listensLooksAndCompares;
-    private static boolean activeNumberOfCandlesForAnalysis = true; // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
+    private static boolean activeNumberOfCandlesForAnalysis = true;                     // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static ListensToLooksAndFills listensToLooksAndFills;
-    private static int timeCalculationCombinationLevel = 20;        // когда уровни сформированы указываем время жизни данной комбинации
-    private static String numberOfHistoryBlocks = "5-4-3-2";        // количество блоков истории выше которого обрезать историю
+    private static int timeCalculationCombinationLevel = 20;                            // когда уровни сформированы указываем время жизни данной комбинации
+    private static String numberOfHistoryBlocks = "5-4-3-2";                            // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
     private static boolean showLoadPatternsIIPro = false;           // показывать загрузку паттернов при запуске программы
@@ -93,6 +95,28 @@ public class Gasket {
     private static View viewThread;
     private static int PORT = 4444;                 // порт подключения
     private static Ticker ticker;
+
+
+    // выставляем данные для юзера которые надо заменить,
+    // а которые надо оставить при формировании паттерна для юзера
+    // название - будуе неизменны данные на выходе
+    // все остальное поменяется на то что вставлено в строки
+    private static String periodNULL = TypeData.NULL.toString();
+    private static String previewNULL = TypeData.NULL.toString();
+    private static String timeNULL = TypeData.time.toString();
+    private static String priceNULL = TypeData.NULL_NULL.toString();
+    private static String valueNULL = TypeData.NULL.toString();
+    private static String typeNULL = TypeData.type.toString();
+    private static String avgNULL = TypeData.NULL.toString();
+    private static String dirNULL = TypeData.NULL.toString();
+    private static String openNULL = TypeData.NULL.toString();
+    private static String closeNULL = TypeData.NULL.toString();
+    private static String highNULL = TypeData.NULL.toString();
+    private static String lowNULL = TypeData.NULL.toString();
+
+    private static boolean addOrTESTatTheEndOfTheLine = false;      // добавлять или нет тест в конце строки
+    private static boolean replaceDataWithNULLPro = false;          // включить выключить замену в паттернах для юзера
+    private static boolean replaceDataWithNULL = true;              // включить выключить замену в паттернах для юзера
 
 
 
@@ -1532,6 +1556,132 @@ public class Gasket {
     public static void setINFO(boolean INFO) {
         Gasket.INFO = INFO;
     }
+
+
+
+
+    ///////////////////////////////////////////////////////////////
+
+    public static String getPeriodNULL() {
+        return periodNULL;
+    }
+
+    public static void setPeriodNULL(String periodNULL) {
+        Gasket.periodNULL = periodNULL;
+    }
+
+    public static String getPreviewNULL() {
+        return previewNULL;
+    }
+
+    public static void setPreviewNULL(String previewNULL) {
+        Gasket.previewNULL = previewNULL;
+    }
+
+    public static String getTimeNULL() {
+        return timeNULL;
+    }
+
+    public static void setTimeNULL(String timeNULL) {
+        Gasket.timeNULL = timeNULL;
+    }
+
+    public static String getPriceNULL() {
+        return priceNULL;
+    }
+
+    public static void setPriceNULL(String priceNULL) {
+        Gasket.priceNULL = priceNULL;
+    }
+
+    public static String getValueNULL() {
+        return valueNULL;
+    }
+
+    public static void setValueNULL(String valueNULL) {
+        Gasket.valueNULL = valueNULL;
+    }
+
+    public static String getTypeNULL() {
+        return typeNULL;
+    }
+
+    public static void setTypeNULL(String typeNULL) {
+        Gasket.typeNULL = typeNULL;
+    }
+
+    public static String getAvgNULL() {
+        return avgNULL;
+    }
+
+    public static void setAvgNULL(String avgNULL) {
+        Gasket.avgNULL = avgNULL;
+    }
+
+    public static String getDirNULL() {
+        return dirNULL;
+    }
+
+    public static void setDirNULL(String dirNULL) {
+        Gasket.dirNULL = dirNULL;
+    }
+
+    public static String getOpenNULL() {
+        return openNULL;
+    }
+
+    public static void setOpenNULL(String openNULL) {
+        Gasket.openNULL = openNULL;
+    }
+
+    public static String getCloseNULL() {
+        return closeNULL;
+    }
+
+    public static void setCloseNULL(String closeNULL) {
+        Gasket.closeNULL = closeNULL;
+    }
+
+    public static String getHighNULL() {
+        return highNULL;
+    }
+
+    public static void setHighNULL(String highNULL) {
+        Gasket.highNULL = highNULL;
+    }
+
+    public static String getLowNULL() {
+        return lowNULL;
+    }
+
+    public static void setLowNULL(String lowNULL) {
+        Gasket.lowNULL = lowNULL;
+    }
+
+    public static boolean isReplaceDataWithNULL() {
+        return replaceDataWithNULL;
+    }
+
+    public static void setReplaceDataWithNULL(boolean replaceDataWithNULL) {
+        Gasket.replaceDataWithNULL = replaceDataWithNULL;
+    }
+
+    public static boolean isReplaceDataWithNULLPro() {
+        return replaceDataWithNULLPro;
+    }
+
+    public static void setReplaceDataWithNULLPro(boolean replaceDataWithNULLPro) {
+        Gasket.replaceDataWithNULLPro = replaceDataWithNULLPro;
+    }
+
+    public static boolean isAddOrTESTatTheEndOfTheLine() {
+        return addOrTESTatTheEndOfTheLine;
+    }
+
+    public static void setAddOrTESTatTheEndOfTheLine(boolean addOrTESTatTheEndOfTheLine) {
+        Gasket.addOrTESTatTheEndOfTheLine = addOrTESTatTheEndOfTheLine;
+    }
+    //////////////////////////////////////////////////////////////////////
 }
 
 

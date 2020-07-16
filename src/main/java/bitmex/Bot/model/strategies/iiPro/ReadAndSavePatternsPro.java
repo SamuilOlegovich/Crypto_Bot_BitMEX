@@ -91,9 +91,15 @@ public class ReadAndSavePatternsPro {
 
             for (String s : arr) {
                 if (!s.startsWith(BIAS.toString()) && !s.startsWith(BUY.toString())) {
-                    stringBuilder.append(StringHelper.convertStringForUser(s));
-                } else {
+                    if (Gasket.isReplaceDataWithNULLPro()) {
+                        stringBuilder.append(StringHelper.convertStringForUserInsertNulls(s));
+                    } else {
+                        stringBuilder.append(StringHelper.convertStringForUser(s));
+                    }
+                } else if (s.startsWith(BIAS.toString())) {
                     stringBuilder.append(s);
+                } else if (s.startsWith(BUY.toString())) {
+                    stringBuilder.append(StringHelper.insertTheMissingDataInTheZeroLine(s));
                 }
             }
             stringBuilder.append(next);

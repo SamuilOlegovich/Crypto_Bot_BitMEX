@@ -326,6 +326,81 @@ public class ExecutorCommandos {
                     writeMessage("apiKeyName === "
                             + ApiKey.getApiKeyName2Accounts() + "\n");
                     break;
+                case "periodNULL" :
+                    Gasket.setPeriodNULL(strings[1]);
+                    writeMessage("periodNULL === "
+                            + Gasket.getPeriodNULL() + "\n");
+                    break;
+                case "previewNULL" :
+                    Gasket.setPreviewNULL(strings[1]);
+                    writeMessage("previewNULL === "
+                            + Gasket.getPreviewNULL() + "\n");
+                    break;
+                case "timeNULL" :
+                    Gasket.setTimeNULL(strings[1]);
+                    writeMessage("timeNULL === "
+                            + Gasket.getTimeNULL() + "\n");
+                    break;
+                case "priceNULL" :
+                    Gasket.setPriceNULL(strings[1]);
+                    writeMessage("priceNULL === "
+                            + Gasket.getPriceNULL() + "\n");
+                    break;
+                case "valueNULL" :
+                    Gasket.setValueNULL(strings[1]);
+                    writeMessage("valueNULL === "
+                            + Gasket.getValueNULL() + "\n");
+                    break;
+                case "typeNULL" :
+                    Gasket.setTypeNULL(strings[1]);
+                    writeMessage("typeNULL === "
+                            + Gasket.getTypeNULL() + "\n");
+                    break;
+                case "avgNULL" :
+                    Gasket.setAvgNULL(strings[1]);
+                    writeMessage("avgNULL === "
+                            + Gasket.getAvgNULL() + "\n");
+                    break;
+                case "dirNULL" :
+                    Gasket.setDirNULL(strings[1]);
+                    writeMessage("dirNULL === "
+                            + Gasket.getDirNULL() + "\n");
+                    break;
+                case "openNULL" :
+                    Gasket.setOpenNULL(strings[1]);
+                    writeMessage("openNULL === "
+                            + Gasket.getOpenNULL() + "\n");
+                    break;
+                case "closeNULL" :
+                    Gasket.setCloseNULL(strings[1]);
+                    writeMessage("closeNULL === "
+                            + Gasket.getCloseNULL() + "\n");
+                    break;
+                case "highNULL" :
+                    Gasket.setHighNULL(strings[1]);
+                    writeMessage("highNULL === "
+                            + Gasket.getHighNULL() + "\n");
+                    break;
+                case "lowNULL" :
+                    Gasket.setLowNULL(strings[1]);
+                    writeMessage("highNULL === "
+                            + Gasket.getLowNULL() + "\n");
+                    break;
+                case "replaceDataWithNULL" :
+                    Gasket.setReplaceDataWithNULL(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("replaceDataWithNULL === "
+                            + Gasket.isReplaceDataWithNULL() + "\n");
+                    break;
+                case "replaceDataWithNULLPro" :
+                    Gasket.setReplaceDataWithNULL(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("replaceDataWithNULLPro === "
+                            + Gasket.isReplaceDataWithNULL() + "\n");
+                    break;
+                case "addOrTESTatTheEndOfTheLine" :
+                    Gasket.setReplaceDataWithNULL(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("addOrTESTatTheEndOfTheLine === "
+                            + Gasket.isReplaceDataWithNULL() + "\n");
+                    break;
                 case "SETTINGS" :
                     // SETTINGS=RESTART программа перезапустит настройки не отключаясь
                     if (strings[1].equalsIgnoreCase("RESTART")) parserSetting.writeSettings();

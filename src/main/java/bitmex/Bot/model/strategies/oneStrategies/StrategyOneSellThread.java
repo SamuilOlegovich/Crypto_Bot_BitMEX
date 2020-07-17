@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
+import bitmex.Bot.model.TradeSell;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.view.ConsoleHelper;

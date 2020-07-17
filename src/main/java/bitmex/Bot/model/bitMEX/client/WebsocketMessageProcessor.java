@@ -17,6 +17,8 @@ import bitmex.Bot.model.bitMEX.entity.BitmexResponse;
 import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.model.bitMEX.entity.BitmexTrade;
+
+import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import bitmex.Bot.view.ConsoleHelper;
@@ -146,6 +148,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                 }
             }
         } catch (JsonSyntaxException ex) {
+            ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
             ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex.toString());
             ConsoleHelper.writeERROR("error parsing: " + message);
         }    catch (Exception ex) {
@@ -195,6 +198,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                 try {
                     listener.pongReceived();
                 } catch( Exception ex ) {
+                    ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
                     ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex);
                 }
             }
@@ -208,6 +212,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.quoteUpdated(data);
                     } catch (Exception ex) {
+                        ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
                         ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex);
                     }
                 }
@@ -222,6 +227,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.positionUpdated(data);
                     } catch (Exception ex) {
+                        ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
                         ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex);
                     }
                 }
@@ -236,6 +242,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.orderUpdated(data);
                     } catch (Exception ex) {
+                        ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
                         ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex);
                     }
                 }
@@ -250,6 +257,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.tradeUpdated(data);
                     } catch (Exception ex) {
+                        ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
                         ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex);
                     }
                 }
@@ -264,6 +272,7 @@ public class WebsocketMessageProcessor implements Runnable, IMessageProcessor {
                     try {
                         listener.executionUpdated(data);
                     } catch (Exception ex) {
+                        ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
                         ConsoleHelper.writeERROR(ex.getMessage() + " === " + ex);
                     }
                 }

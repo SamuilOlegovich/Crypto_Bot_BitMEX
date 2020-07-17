@@ -12,6 +12,7 @@ import javax.xml.bind.DatatypeConverter;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Mac;
 import java.io.IOError;
+import java.util.Arrays;
 
 /**
  *
@@ -31,7 +32,7 @@ public class BitmexSignatureGenerator implements ISignatureGenerator {
             return hash;
         } catch (Exception e) {
 //            throw new SumZeroException(e);
-            ConsoleHelper.writeERROR(e.toString());
+            ConsoleHelper.writeERROR(Arrays.toString(e.getStackTrace()));
             throw new IOError(e);
         }
     }

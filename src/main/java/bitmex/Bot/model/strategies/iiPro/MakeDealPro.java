@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.iiPro;
 
-import bitmex.Bot.model.strategies.oneStrategies.TradeSell;
-import bitmex.Bot.model.strategies.oneStrategies.TradeBuy;
+import bitmex.Bot.model.TradeSell;
+import bitmex.Bot.model.TradeBuy;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;

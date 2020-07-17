@@ -1,8 +1,8 @@
 package bitmex.Bot.view;
 
+import bitmex.Bot.model.enums.TypeData;
 import java.io.InputStreamReader;
 import bitmex.Bot.model.Gasket;
-import bitmex.Bot.model.enums.TypeData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -237,7 +237,10 @@ public class ConsoleHelper {
                 + "replaceDataWithNULLPro === " + Gasket.isReplaceDataWithNULL()
                 + " ----- включить выключить замену данных\n"
                 + "addOrTESTatTheEndOfTheLine === " + Gasket.isReplaceDataWithNULL()
-                + " ----- добавлять или нет тест в конце строки\n";
+                + " ----- добавлять или нет тест в конце строки\n"
+                + "indexRatioTransactionsAtWhichEnterMarket === "
+                + Gasket.getIndexRatioTransactionsAtWhichEnterMarket()
+                + " ----- индекс соотношения сделок прикотором входим в рынок\n";
     }
 
 
@@ -375,18 +378,22 @@ public class ConsoleHelper {
     public static void showCommands() {
         writeMessage("\n\n"
                 + "SETTINGS=RESTART программа перезапустит настройки не отключаясь\n"
+                + "indexRatioTransactionsAtWhichEnterMarket\n"
                 + "activeNumberOfCandlesForAnalysis\n"
                 + "timeCalculationCombinationLevel\n"
                 + "timeStopLiveForUserPatterns\n"
+                + "addOrTESTatTheEndOfTheLine\n"
                 + "numberOfCandlesForAnalysis\n"
                 + "takeForCollectingPatterns\n"
                 + "useStopLevelOrNotStopTime\n"
+                + "replaceDataWithNULLPro\n"
                 + "useStopLevelOrNotStop\n"
                 + "numberOfHistoryBlocks\n"
+                + "showLoadPatternsUser\n"
                 + "timeCalculationLevel\n"
+                + "replaceDataWithNULL\n"
                 + "tradingPatternsUser\n"
                 + "apiKeyName2Accounts\n"
-                + "showLoadPatternsUser\n"
                 + "showLoadPatternsII\n"
                 + "timeBetweenOrders\n"
                 + "gameAllDirection\n"
@@ -409,25 +416,40 @@ public class ConsoleHelper {
                 + "priceActive\n"
                 + "PROFIT_Sell\n"
                 + "tradingUser\n"
+                + "previewNULL\n"
                 + "PROFIT_Buy\n"
                 + "apiKeyName\n"
                 + "oneBuyFLAG\n"
                 + "rangeLevel\n"
+                + "periodNULL\n"
                 + "tradingII\n"
+                + "priceNULL\n"
+                + "valueNULL\n"
                 + "typeOrder\n"
+                + "closeNULL\n"
+                + "timeNULL\n"
+                + "openNULL\n"
+                + "highNULL\n"
+                + "typeNULL\n"
+                + "avgNULL\n"
+                + "dirNULL\n"
+                + "lowNULL\n"
                 + "visible\n"
                 + "trading\n"
                 + "PROFIT\n"
                 + "apiKey\n"
+                + "DEBUG \n"
                 + "obs_2\n"
                 + "obs_5\n"
                 + "obs_4\n"
+                + "ERROR\n"
                 + "obs_3\n"
                 + "PORT\n"
                 + "stop\n"
                 + "take\n"
                 + "obs\n"
                 + "lot\n"
+                + "INFO\n"
 
                 + "\n\n");
     }

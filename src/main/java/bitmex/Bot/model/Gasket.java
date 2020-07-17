@@ -26,15 +26,15 @@ import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
 public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
-    private static double  indexOfTheRatioOfTransactionsAtWhichWeEnterTheMarket;        // индекс соотношения сделок прикотором входим в рынок
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
+    private static double  indexRatioTransactionsAtWhichEnterMarket = 2.5;      // индекс соотношения сделок прикотором входим в рынок
     private static ListensLooksAndComparesPro listensLooksAndComparesPro;
     private static ListensToLooksAndFillsPro listensToLooksAndFillsPro;
     private static ListensLooksAndCompares listensLooksAndCompares;
-    private static boolean activeNumberOfCandlesForAnalysis = true;                     // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
+    private static boolean activeNumberOfCandlesForAnalysis = true;             // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static ListensToLooksAndFills listensToLooksAndFills;
-    private static int timeCalculationCombinationLevel = 20;                            // когда уровни сформированы указываем время жизни данной комбинации
-    private static String numberOfHistoryBlocks = "5-4-3-2";                            // количество блоков истории выше которого обрезать историю
+    private static int timeCalculationCombinationLevel = 20;                    // когда уровни сформированы указываем время жизни данной комбинации
+    private static String numberOfHistoryBlocks = "5-4-3-2";                    // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
     private static boolean showLoadPatternsIIPro = false;           // показывать загрузку паттернов при запуске программы
@@ -1682,6 +1682,15 @@ public class Gasket {
         Gasket.addOrTESTatTheEndOfTheLine = addOrTESTatTheEndOfTheLine;
     }
     //////////////////////////////////////////////////////////////////////
+
+
+    public static double getIndexRatioTransactionsAtWhichEnterMarket() {
+        return indexRatioTransactionsAtWhichEnterMarket;
+    }
+
+    public static void setIndexRatioTransactionsAtWhichEnterMarket(double indexRatioTransactionsAtWhichEnterMarket) {
+        Gasket.indexRatioTransactionsAtWhichEnterMarket = indexRatioTransactionsAtWhichEnterMarket;
+    }
 }
 
 

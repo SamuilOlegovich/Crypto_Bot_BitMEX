@@ -40,6 +40,11 @@ public class ExecutorCommandos {
                         writeMessage("activeNumberOfCandlesForAnalysis === "
                                 + isActiveNumberOfCandlesForAnalysis() + "\n");
                     break;
+                case "indexRatioTransactionsAtWhichEnterMarket" :
+                    setIndexRatioTransactionsAtWhichEnterMarket(Double.parseDouble(strings[1]));
+                        writeMessage("indexRatioTransactionsAtWhichEnterMarket === "
+                                + getIndexRatioTransactionsAtWhichEnterMarket() + "\n");
+                    break;
                 case "useStopLevelOrNotStop" :
                     setUseStopLevelOrNotStop(strings[1].equalsIgnoreCase("true"));
                         writeMessage("useStopLevelOrNotStop === "

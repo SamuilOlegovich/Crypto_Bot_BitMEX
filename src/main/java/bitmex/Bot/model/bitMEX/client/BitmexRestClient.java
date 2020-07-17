@@ -209,7 +209,7 @@ public class BitmexRestClient implements IBitmexRestClient {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException ex) {
 //            throw new SumZeroException(ex);
-            ConsoleHelper.writeERROR(ex.toString());
+            ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
             throw new IOError(ex);
         }
     }

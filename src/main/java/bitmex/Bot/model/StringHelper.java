@@ -99,8 +99,8 @@ public class StringHelper {
         return "period===" +  period + "===preview===" + preview + "===time===" + time + "===price===" + price
                 + "===value===" + value + "===type===" + type + "===avg===" + avg + "===dir===" + dir
                 + "===open===" + open + "===close===" + close + "===high===" + high
-                + "===low===" + low;
-//                + "\n";
+                + "===low===" + low
+                + "\n";
     }
 
 
@@ -139,15 +139,19 @@ public class StringHelper {
         stringBuilder.append("===");
         stringBuilder.append(TypeData.TYPE.toString());
         stringBuilder.append("===");
-        stringBuilder.append(TypeData.NULL_NULL.toString());
+        stringBuilder.append(TypeData.NULL.toString());
         stringBuilder.append("===");
 
         stringBuilder.append(strings[10]);
         stringBuilder.append("===");
         stringBuilder.append(strings[11]);
+
         if (Gasket.isAddOrTESTatTheEndOfTheLine()) {
             stringBuilder.append(" --- " + TypeData.TEST.toString());
         }
+
+        stringBuilder.append("\n");
+
         return stringBuilder.toString();
     }
 }

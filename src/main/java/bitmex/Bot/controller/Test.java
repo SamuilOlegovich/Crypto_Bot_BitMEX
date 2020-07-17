@@ -19,7 +19,6 @@ public class Test {
 //        System.out.println(giveData(TypeData.type, string));
 //        System.out.println(giveData(TypeData.avg, string));
 //        System.out.println(giveData(TypeData.dir, string));
-       System.out.println(!"NULL===2020-07-13 21:45:00".startsWith(NULL.toString()));
 
 
 

@@ -1,6 +1,7 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.DatesTimes;
+import bitmex.Bot.model.TradeSell;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
 

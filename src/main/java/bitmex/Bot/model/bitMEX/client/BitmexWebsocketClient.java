@@ -17,6 +17,7 @@ import bitmex.Bot.model.bitMEX.listener.IOrderListener;
 import bitmex.Bot.model.bitMEX.listener.ITradeListener;
 import bitmex.Bot.model.bitMEX.listener.IQuoteListener;
 //import com.sumzerotrading.data.SumZeroException;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 //import com.sumzerotrading.data.Ticker;
 //import javax.xml.bind.DatatypeConverter;
@@ -26,14 +27,10 @@ import java.util.concurrent.TimeUnit;
 //import org.apache.log4j.Logger;
 //import java.util.logging.Level;
 //import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.HashSet;
 import javax.crypto.Mac;
 import javax.xml.bind.DatatypeConverter;
 //import org.slf4j.Logger;
 import java.io.IOError;
-import java.util.List;
-import java.util.Set;
 import java.net.URI;
 
 
@@ -121,7 +118,7 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
             //socket.startPing();
         } catch (Exception ex) {
 //            throw new SumZeroException(ex);
-            ConsoleHelper.writeERROR(ex.toString());
+            ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
             throw new IOError(ex);
         } finally {
             return connected;
@@ -234,6 +231,12 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
         return command;
     }
 
+//    protected String buildSubscribeCommand(String... args) {
+//        String command = buildCommandJson("subscribe", (Object) args);
+//        subscribeCommandList.add(command);
+//        return command;
+//    }
+
     protected String buildCommandJson(String command, Object... args) {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"op\": \"")
@@ -280,6 +283,7 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
             return hash;
         } catch (Exception e) {
 //            throw new SumZeroException(e);
+            ConsoleHelper.writeERROR(Arrays.toString(e.getStackTrace()));
             throw new IOError(e);
         }
     }

@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.oneStrategies;
 
+import bitmex.Bot.model.TradeSell;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.model.DatesTimes;

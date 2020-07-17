@@ -13,6 +13,8 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import bitmex.Bot.model.bitMEX.listener.IPongListener;
 //import com.sumzerotrading.data.SumZeroException;
 import org.eclipse.jetty.websocket.api.Session;
+
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import bitmex.Bot.view.ConsoleHelper;
 import java.util.concurrent.TimeUnit;
@@ -103,7 +105,7 @@ public class JettySocket implements IPongListener {
                     }
                     Thread.sleep(10000);
                 } catch (Exception ex) {
-                    ConsoleHelper.writeERROR(ex.toString());
+                    ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
                 }
 
             }
@@ -135,7 +137,7 @@ public class JettySocket implements IPongListener {
         try {
             fut.get(2, TimeUnit.SECONDS);
         } catch (Exception ex) {
-            ConsoleHelper.writeERROR(ex.toString());
+            ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
 
         }
     }

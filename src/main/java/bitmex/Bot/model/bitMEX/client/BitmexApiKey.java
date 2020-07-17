@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Arrays;
 import java.io.IOError;
 
 
@@ -73,7 +74,7 @@ public class BitmexApiKey {
             return new BitmexApiKey(name, value, useProd);
         } catch (IOException ex) {
 //            throw new SumZeroException(ex.getMessage(), ex);  /////////////////////
-            ConsoleHelper.writeERROR(ex.toString());
+            ConsoleHelper.writeERROR(Arrays.toString(ex.getStackTrace()));
             throw new IOError(ex);
         }
     }

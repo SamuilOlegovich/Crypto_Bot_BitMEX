@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.StringHelper;
 
 import java.util.Collections;
@@ -37,7 +38,11 @@ public class CompareAndMakeDecisionUser extends Thread {
                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку --- ID-"
                     + StringHelper.giveData(ID, patternsList.get(0)));
 
-            new MakeDealUser(marketList, patternsList.get(0));
+            if (Gasket.isPredictor()) {
+                new Predictor(marketList, patternsList.get(0).replaceAll("\n", ""));
+            } else {
+                new MakeDealUser(marketList, patternsList.get(0).replaceAll("\n", ""));
+            }
         }
 
         patternsList.clear();

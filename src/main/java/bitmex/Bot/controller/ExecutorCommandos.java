@@ -55,6 +55,11 @@ public class ExecutorCommandos {
                         writeMessage("gameAllDirection === "
                                 + isGameAllDirection() + "\n");
                     break;
+                case "predictor" :
+                    setPredictor(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("predictor === "
+                                + isPredictor() + "\n");
+                    break;
                 case "useRealOrNotReal":
                     setUseRealOrNotReal(strings[1].equalsIgnoreCase("true"));
                         writeMessage("useRealOrNotReal === "

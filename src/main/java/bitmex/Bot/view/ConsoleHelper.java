@@ -208,6 +208,8 @@ public class ConsoleHelper {
                 + " ----- включить - отключить показ ошибок в окне программы\n"
                 + "INFO === " + Gasket.isINFO()
                 + " ----- включить - отключить показ ошибок в окне программы\n"
+                + "predictor === " + Gasket.isPredictor()
+                + " ----- включить - отключить предсказателя собственных сделок\n"
                 + "periodNULL === " + Gasket.getPeriodNULL()
                 + " ----- если заменяем данные то на что\n"
                 + "previewNULL === " + Gasket.getPreviewNULL()
@@ -426,6 +428,7 @@ public class ConsoleHelper {
                 + "priceNULL\n"
                 + "valueNULL\n"
                 + "typeOrder\n"
+                + "predictor\n"
                 + "closeNULL\n"
                 + "timeNULL\n"
                 + "openNULL\n"

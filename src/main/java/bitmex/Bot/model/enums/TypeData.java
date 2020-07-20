@@ -2,6 +2,7 @@ package bitmex.Bot.model.enums;
 
 public enum TypeData {
     NULL_NULL,
+    PREDICTOR,
     AVERAGE,
     BLOCK,
     START,
@@ -16,6 +17,9 @@ public enum TypeData {
     SIZE,
     TYPE,
     TIME,
+    TAKE,
+    LOSS,
+    OFF,
     BUY,
     MAX,
     END,

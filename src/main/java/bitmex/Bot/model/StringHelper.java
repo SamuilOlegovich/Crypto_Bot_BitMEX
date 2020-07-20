@@ -4,6 +4,8 @@ package bitmex.Bot.model;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
 
+import java.util.ArrayList;
+
 import static bitmex.Bot.model.Gasket.getPeriodNULL;
 import static bitmex.Bot.model.Gasket.getPreviewNULL;
 
@@ -42,6 +44,51 @@ public class StringHelper {
                 + in + "=============================================================================================");
 
         return null;
+    }
+
+
+
+    public static synchronized String setData(TypeData key, String data, String in) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+//        if (in.startsWith("{\"" + TypeData.period.toString() + "\":")) {
+//            String[] strings = in.split("\",\"");
+//            strings[0] = strings[0].replaceAll("\\{", "");
+//            strings[strings.length - 1] = strings[strings.length - 1].replaceAll("}", "");
+//
+//            for (int i = 0; i < strings.length; i++) {
+//                strings[i] = strings[i].replaceAll("\"", "");
+//                strings[i] = strings[i].replaceAll(": ", "");
+//            }
+//
+//            for (String s : strings) {
+//                if (s.startsWith(key.toString())) {
+//                    return s.replaceAll(key.toString(), "").replaceAll(",", ".");
+//                }
+//            }
+//        } else {
+            String[] strings = in.split("===");
+
+            for (int i = 0; i < strings.length; i++) {
+                if (strings[i].equalsIgnoreCase(key.toString())) {
+                    strings[i + 1] = data;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < strings.length; i++) {
+                stringBuilder.append(strings[i]);
+
+                if (i != strings.length - 1) {
+                    stringBuilder.append("===");
+                }
+            }
+//        }
+
+//        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " === " + key.toString() + " --- "
+//                + in + "=============================================================================================");
+
+        return stringBuilder.toString();
     }
 
 

@@ -77,6 +77,9 @@ public class RunTheProgram extends Thread {
 //        controlConsoleSetting.start();
         server.start();
 
+        // подготавливаем строки предсказания
+        Gasket.getSavedPatternsUserClass().replacePredictions();
+
         try {
             Thread.sleep(1000 * 10);
         } catch (InterruptedException e) {

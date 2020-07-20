@@ -24,8 +24,8 @@ public class MakeDealUser extends Thread {
 
 
     public MakeDealUser(ArrayList<String> marketList, String patternZeroString) {
-        this.patternZeroString = patternZeroString.replaceAll("\n", "");
         this.marketList = new ArrayList<>(marketList);
+        this.patternZeroString = patternZeroString;
         start();
     }
 
@@ -63,6 +63,7 @@ public class MakeDealUser extends Thread {
                             + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
                             + " сделал сделку БАЙ USER - TEST");
                 }
+
             } else {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
@@ -89,17 +90,17 @@ public class MakeDealUser extends Thread {
 
                 if (Gasket.isTradingTestUser()) {
                     new TestOrderSellPatternUser(stringOut, Gasket.getBitmexQuote().getBidPrice());
+
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                             + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
                             + " сделал сделку СЕЛЛ USER - TEST");
                 }
 
-
+            } else {
+                ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                        + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
+                        + " сделку СЕЛЛ USER отменил по истечению времени");
             }
-        } else {
-            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
-                    + " сделку СЕЛЛ USER отменил по истечению времени");
         }
     }
 

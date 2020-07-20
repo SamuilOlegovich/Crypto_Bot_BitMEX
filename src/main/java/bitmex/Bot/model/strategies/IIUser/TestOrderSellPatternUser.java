@@ -1,5 +1,7 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -36,20 +38,27 @@ public class TestOrderSellPatternUser extends Thread {
                 flag();
                 setStop();
 
-                String[] strings = ID.split("===");
-                strings[1] = (Integer.parseInt(strings[1]) + 1) + "";
+                // меняем число положительных / отрицательных сделок
+                // а так же устанавливаем знаки для предсказателя
+                String data = (Integer.parseInt(StringHelper.giveData(TypeData.BUY, ID)) + 1) + "";
+                String out = StringHelper.setData(TypeData.PREDICTOR, TypeData.LOSS.toString(), ID);
+                out = StringHelper.setData(TypeData.BUY, data, out);
 
-                StringBuilder stringBuilder = new StringBuilder();
+//                String[] strings = ID.split("===");
+//                strings[1] = (Integer.parseInt(strings[1]) + 1) + "";
+//
+//                StringBuilder stringBuilder = new StringBuilder();
+//
+//                for (int i = 0; i < strings.length; i++) {
+//                    stringBuilder.append(strings[i]);
+//
+//                    if (i != strings.length - 1) {
+//                        stringBuilder.append("===");
+//                    }
+//                }
 
-                for (int i = 0; i < strings.length; i++) {
-                    stringBuilder.append(strings[i]);
-
-                    if (i != strings.length - 1) {
-                        stringBuilder.append("===");
-                    }
-                }
-
-                new UpdatingStatisticsDataUser(stringBuilder.toString());
+//                new UpdatingStatisticsDataUser(stringBuilder.toString());
+                new UpdatingStatisticsDataUser(out);
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал СТОП ЛОСС USER");
@@ -61,20 +70,28 @@ public class TestOrderSellPatternUser extends Thread {
             if (priceBid <= priseTakeOrder) {
                 flag();
                 setTake();
-                String[] strings = ID.split("===");
-                strings[3] = (Integer.parseInt(strings[3]) + 1) + "";
 
-                StringBuilder stringBuilder = new StringBuilder();
+                // меняем число положительных / отрицательных сделок
+                // а так же устанавливаем знаки для предсказателя
+                String data = (Integer.parseInt(StringHelper.giveData(TypeData.SELL, ID)) + 1) + "";
+                String out = StringHelper.setData(TypeData.PREDICTOR, TypeData.TAKE.toString(), ID);
+                out = StringHelper.setData(TypeData.SELL, data, out);
 
-                for (int i = 0; i < strings.length; i++) {
-                    stringBuilder.append(strings[i]);
+//                String[] strings = ID.split("===");
+//                strings[3] = (Integer.parseInt(strings[3]) + 1) + "";
+//
+//                StringBuilder stringBuilder = new StringBuilder();
+//
+//                for (int i = 0; i < strings.length; i++) {
+//                    stringBuilder.append(strings[i]);
+//
+//                    if (i != strings.length - 1) {
+//                        stringBuilder.append("===");
+//                    }
+//                }
 
-                    if (i != strings.length - 1) {
-                        stringBuilder.append("===");
-                    }
-                }
-
-                new UpdatingStatisticsDataUser(stringBuilder.toString());
+//                new UpdatingStatisticsDataUser(stringBuilder.toString());
+                new UpdatingStatisticsDataUser(out);
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Сработал ТЕЙК ПРОФИТ USER");

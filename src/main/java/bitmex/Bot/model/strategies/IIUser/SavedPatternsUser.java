@@ -1,6 +1,7 @@
 package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 
@@ -111,6 +112,19 @@ public class SavedPatternsUser {
         } else {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- Такого номера ===" + StringHelper.giveData(ID, stringSet) + "=== ПАТТЕРНА USER нет");
+        }
+    }
+
+
+    // подготавливаем почту для предсказаний - выставляем в исходную позицию
+    public synchronized void replacePredictions() {
+        for (ArrayList<String> arrayList : listsPricePatternsUser) {
+            String out = arrayList.get(0);
+
+            if (!StringHelper.giveData(TypeData.PREDICTOR, out).equalsIgnoreCase(TypeData.OFF.toString())) {
+                out = StringHelper.setData(TypeData.PREDICTOR, TypeData.NULL.toString(), out);
+                arrayList.set(0, out);
+            }
         }
     }
 

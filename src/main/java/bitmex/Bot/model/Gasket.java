@@ -80,6 +80,7 @@ public class Gasket {
     private static boolean tradingII = false;
     private static int secondsSleepTime = 13;       // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
     private static double priceActive = 3.0;        // цена тригер для стоп лимитов и тейк лимитов
+    private static boolean predictor = true;        // предсказатель
     private static int strategyWorkOne = 2;         // количество стратегий одновременно работающих (можно еще допелить или убрать)
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
     private static int dateDifference = -3;         // разница в часовом поясе
@@ -1690,6 +1691,15 @@ public class Gasket {
 
     public static void setIndexRatioTransactionsAtWhichEnterMarket(double indexRatioTransactionsAtWhichEnterMarket) {
         Gasket.indexRatioTransactionsAtWhichEnterMarket = indexRatioTransactionsAtWhichEnterMarket;
+    }
+
+
+    public static boolean isPredictor() {
+        return predictor;
+    }
+
+    public static void setPredictor(boolean predictor) {
+        Gasket.predictor = predictor;
     }
 }
 

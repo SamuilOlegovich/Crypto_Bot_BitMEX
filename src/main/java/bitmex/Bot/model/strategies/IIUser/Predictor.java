@@ -30,7 +30,9 @@ public class Predictor extends Thread {
         // то работаем с ним, если отключен, просто передаем дальше
         if (!StringHelper.giveData(TypeData.PREDICTOR, zeroString).equalsIgnoreCase(TypeData.OFF.toString())) {
             if (StringHelper.giveData(TypeData.PREDICTOR, zeroString).equalsIgnoreCase(TypeData.LOSS.toString())) {
-                new MakeDealUser(market, zeroString);
+                new MakeDealPredictor(true, market, zeroString);
+            } else {
+                new MakeDealPredictor(false, market, zeroString);
             }
         } else {
             new MakeDealUser(market, zeroString);

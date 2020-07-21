@@ -93,6 +93,7 @@ public class ReadAndSavePatternsPro {
                 if (!s.startsWith(BIAS.toString()) && !s.startsWith(BUY.toString())) {
                     if (Gasket.isReplaceDataWithNULLPro()) {
                         stringBuilder.append(StringHelper.convertStringForUserInsertNulls(s));
+                        stringBuilder.append("\n");
                     } else {
                         stringBuilder.append(StringHelper.convertStringForUser(s));
                     }

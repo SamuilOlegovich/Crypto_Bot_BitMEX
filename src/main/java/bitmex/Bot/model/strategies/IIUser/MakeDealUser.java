@@ -75,6 +75,7 @@ public class MakeDealUser extends Thread {
 
             if (conditionsAreMet(false)) {
                 if (Gasket.isTradingUser() && !patternZeroString.endsWith(TEST.toString())) {
+
                     double index = (double) Integer.parseInt(giveData(SELL, patternZeroString))
                             / Integer.parseInt(giveData(BUY, patternZeroString));
 

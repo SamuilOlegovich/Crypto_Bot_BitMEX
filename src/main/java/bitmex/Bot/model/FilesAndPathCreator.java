@@ -47,8 +47,12 @@ public class FilesAndPathCreator {
     }
 
     private void createdPath() {
+        String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        String[] stringsSplit = path.split("/");
+        path = stringsSplit[stringsSplit.length - 1];
 
-        String[] strings = getClass().getResource("").getPath().split("bitmex-client-master.jar");
+        String[] strings = getClass().getResource("").getPath().split(path);
+//        String[] strings = getClass().getResource("").getPath().split("bitmex-client-master.jar");
         String finish = strings[0].replaceAll("file:", "");
 
         if (System.getProperty("os.name").startsWith("Windows")) {

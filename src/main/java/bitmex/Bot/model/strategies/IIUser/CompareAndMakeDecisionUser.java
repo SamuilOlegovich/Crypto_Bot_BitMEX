@@ -2,6 +2,7 @@ package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.enums.TypeData;
 
 import java.util.Collections;
 import java.util.ArrayList;
@@ -41,7 +42,9 @@ public class CompareAndMakeDecisionUser extends Thread {
             if (Gasket.isPredictor()) {
                 new Predictor(marketList, patternsList.get(0).replaceAll("\n", ""));
             } else {
-                new MakeDealUser(marketList, patternsList.get(0).replaceAll("\n", ""));
+                if (StringHelper.giveData(PREDICTOR, patternsList.get(0)).equalsIgnoreCase(OFF.toString())) {
+                    new MakeDealUser(marketList, patternsList.get(0).replaceAll("\n", ""));
+                }
             }
         }
 

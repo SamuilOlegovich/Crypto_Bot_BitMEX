@@ -32,7 +32,7 @@ public class TestOrderSellPatternPredictor extends Thread {
     @Override
     public void run() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                + ID + " --- RUN класса TestOrderSellPatternUser начал считать");
+                + ID + " --- RUN класса TestOrderSellPatternPredictor начал считать");
 
         while (true) {
             double priceAsk = Gasket.getBitmexQuote().getAskPrice();

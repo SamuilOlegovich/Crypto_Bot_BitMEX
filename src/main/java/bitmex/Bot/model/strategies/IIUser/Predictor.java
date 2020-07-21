@@ -28,10 +28,18 @@ public class Predictor extends Thread {
     public void run() {
         // если предсказатель не отключен на этом паттерне,
         // то работаем с ним, если отключен, просто передаем дальше
+        // так же тут мы определяем работаем после положительной сделки или после отрицательной
         if (!StringHelper.giveData(TypeData.PREDICTOR, zeroString).equalsIgnoreCase(TypeData.OFF.toString())) {
+
             if (StringHelper.giveData(TypeData.PREDICTOR, zeroString).equalsIgnoreCase(TypeData.LOSS.toString())) {
-                new MakeDealPredictor(true, market, zeroString);
-            } else {
+                if (!StringHelper.giveData(TypeData.ID, zeroString).contains(TypeData.TAKE.toString())) {
+                    new MakeDealPredictor(true, market, zeroString);
+                }
+            } if (StringHelper.giveData(TypeData.PREDICTOR, zeroString).equalsIgnoreCase(TypeData.TAKE.toString())) {
+                if (StringHelper.giveData(TypeData.ID, zeroString).contains(TypeData.TAKE.toString())) {
+                    new MakeDealPredictor(true, market, zeroString);
+                }
+            }else {
                 new MakeDealPredictor(false, market, zeroString);
             }
         } else {

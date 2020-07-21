@@ -41,8 +41,8 @@ public class TestOrderBuyPatternUser extends Thread {
                 // меняем число положительных / отрицательных сделок
                 // а так же устанавливаем знаки для предсказателя
                 String data = (Integer.parseInt(StringHelper.giveData(TypeData.SELL, ID)) + 1) + "";
-                String out = StringHelper.setData(TypeData.PREDICTOR, TypeData.LOSS.toString(), ID);
-                out = StringHelper.setData(TypeData.SELL, data, out);
+//                String out = StringHelper.setData(TypeData.PREDICTOR, TypeData.LOSS.toString(), ID);
+                String out = StringHelper.setData(TypeData.SELL, data, ID);
 
 //                String[] strings = ID.split("===");
 //                strings[3] = (Integer.parseInt(strings[3]) + 1) + "";
@@ -74,8 +74,8 @@ public class TestOrderBuyPatternUser extends Thread {
                 // меняем число положительных / отрицательных сделок
                 // а так же устанавливаем знаки для предсказателя
                 String data = (Integer.parseInt(StringHelper.giveData(TypeData.BUY, ID)) + 1) + "";
-                String out = StringHelper.setData(TypeData.PREDICTOR, TypeData.TAKE.toString(), ID);
-                out = StringHelper.setData(TypeData.BUY, data, out);
+//                String out = StringHelper.setData(TypeData.PREDICTOR, TypeData.TAKE.toString(), ID);
+                String out = StringHelper.setData(TypeData.BUY, data, ID);
 
 //                String[] strings = ID.split("===");
 //                strings[1] = (Integer.parseInt(strings[1]) + 1) + "";

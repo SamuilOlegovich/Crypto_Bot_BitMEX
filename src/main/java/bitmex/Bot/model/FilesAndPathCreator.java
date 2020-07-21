@@ -48,7 +48,7 @@ public class FilesAndPathCreator {
 
     private void createdPath() {
 
-        String[] strings = getClass().getResource("").getPath().split("bitmex-client.jar");
+        String[] strings = getClass().getResource("").getPath().split("bitmex-client-master.jar");
         String finish = strings[0].replaceAll("file:", "");
 
         if (System.getProperty("os.name").startsWith("Windows")) {

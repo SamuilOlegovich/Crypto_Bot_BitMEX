@@ -82,7 +82,7 @@ public class TestOrderBuyPatternPredictor extends Thread {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + ID + " --- Не смогли проснуться в методе RUN класса StrategyOneSell USER");
+                        + ID + " --- Не смогли проснуться в методе RUN класса TestOrderBuyPatternPredictor");
             }
         }
         ConsoleHelper.printStatisticsPatterns();

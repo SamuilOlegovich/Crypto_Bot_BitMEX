@@ -9,6 +9,7 @@ import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
 import bitmex.Bot.model.strategies.iiPro.SavedPatternsPro;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
+import bitmex.Bot.model.strategies.IIUser.Martingale;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
@@ -97,6 +98,21 @@ public class Gasket {
     private static int PORT = 4444;                 // порт подключения
     private static Ticker ticker;
 
+    private static final long MINUTE = 1000 * 60;
+    private static final long SECOND = 1000;
+
+
+    // martingale
+    private static boolean tradingTestMartingale = true;    // включить тестировку мартингейла
+    private static double martingaleOpenOneLot = 10.0;      // количество первой сделки при мартингейле
+    private static boolean tradingMartingale = false;        // торговать или нет с помощью мартингейла
+    private static boolean martingaleOnOff = true;          // включить выключить игру по мартингейлу
+    private static double martingalePROFIT = 0.0;
+    private static double martingaleIndex = 2.5;            // индекс мартингейла
+    private static int martingaleMaxSteep = 10;             // максимально разрешенный шаг
+    private static Martingale martingale;
+
+
 
     // выставляем данные для юзера которые надо заменить,
     // а которые надо оставить при формировании паттерна для юзера
@@ -122,8 +138,9 @@ public class Gasket {
 
 
 
-    private static String levelsToCompare = "OPEN_POS_BID_MINUS" + "-OPEN_POS_ASK_MINUS" + "-OPEN_POS_ASK_PLUS"
-            + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS" + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
+    private static String levelsToCompare = "OPEN_POS_BID_MINUS" + "-OPEN_POS_ASK_MINUS"
+            + "-OPEN_POS_ASK_PLUS" + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS"
+            + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
             + "-ASK" + "-BID";                      // уровни для сравнения в II Pro
 
 
@@ -1445,6 +1462,13 @@ public class Gasket {
         Gasket.showLoadPatternsII = showLoadPatternsII;
     }
 
+    public static long getMINUTE() {
+        return MINUTE;
+    }
+
+    public static long getSECOND() {
+        return SECOND;
+    }
 
     public static boolean isServerRestart() {
         return serverRestart;
@@ -1700,6 +1724,73 @@ public class Gasket {
 
     public static void setPredictor(boolean predictor) {
         Gasket.predictor = predictor;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static double getMartingaleOpenOneLot() {
+        return martingaleOpenOneLot;
+    }
+
+    public static void setMartingaleOpenOneLot(double martingaleOpenOneLot) {
+        Gasket.martingaleOpenOneLot = martingaleOpenOneLot;
+    }
+
+    public static boolean isMartingaleOnOff() {
+        return martingaleOnOff;
+    }
+
+    public static void setMartingaleOnOff(boolean martingaleOnOff) {
+        Gasket.martingaleOnOff = martingaleOnOff;
+    }
+
+    public static double getMartingaleIndex() {
+        return martingaleIndex;
+    }
+
+    public static void setMartingaleIndex(double martingaleIndex) {
+        Gasket.martingaleIndex = martingaleIndex;
+    }
+
+    public static Martingale getMartingaleClass() {
+        return martingale;
+    }
+
+    public static void setMartingaleClass(Martingale martingale) {
+        Gasket.martingale = martingale;
+    }
+
+    public static int getMartingaleMaxSteep() {
+        return martingaleMaxSteep;
+    }
+
+    public static void setMartingaleMaxSteep(int martingaleMaxSteep) {
+        Gasket.martingaleMaxSteep = martingaleMaxSteep;
+    }
+
+    public static double getMartingalePROFIT() {
+        return martingalePROFIT;
+    }
+
+    public static void setMartingalePROFIT(double martingalePROFIT) {
+        Gasket.martingalePROFIT = martingalePROFIT;
+    }
+
+    public static boolean isTradingTestMartingale() {
+        return tradingTestMartingale;
+    }
+
+    public static void setTradingTestMartingale(boolean tradingTestMartingale) {
+        Gasket.tradingTestMartingale = tradingTestMartingale;
+    }
+
+    public static boolean isTradingMartingale() {
+        return tradingMartingale;
+    }
+
+    public static void setTradingMartingale(boolean tradingMartingale) {
+        Gasket.tradingMartingale = tradingMartingale;
     }
 }
 

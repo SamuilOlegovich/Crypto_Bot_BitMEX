@@ -46,7 +46,7 @@ public class TestOrderSellPatternPredictor extends Thread {
                 String out = StringHelper.setData(TypeData.PREDICTOR, TypeData.LOSS.toString(), ID);
 
                 if (doNotDoDeal) {
-                    String data = (Integer.parseInt(StringHelper.giveData(TypeData.BUY, ID)) + 1) + "";
+                    String data = (Integer.parseInt(StringHelper.giveData(TypeData.BUY, ID)) - 1) + "";
                     out = StringHelper.setData(TypeData.BUY, data, out);
                 }
 

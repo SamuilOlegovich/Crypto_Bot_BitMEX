@@ -1,8 +1,8 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.Gasket;
-import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.enums.TypeData;
+import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.Gasket;
 
 import java.util.Collections;
 import java.util.ArrayList;
@@ -15,18 +15,18 @@ import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
 
 
-
-
 // сравниваю и принимаю решение
 public class CompareAndMakeDecisionUser extends Thread {
 
     private ArrayList<String> patternsList;
     private ArrayList<String> marketList;
+    private String zeroString;
 
 
     public CompareAndMakeDecisionUser(ArrayList<String> marketList, ArrayList<String> patternsList) {
         this.patternsList = new ArrayList<>(patternsList);
         this.marketList = new ArrayList<>(marketList);
+        this.zeroString = patternsList.get(0).replaceAll("\n", "");
         start();
     }
 
@@ -39,11 +39,15 @@ public class CompareAndMakeDecisionUser extends Thread {
                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку --- ID-"
                     + StringHelper.giveData(ID, patternsList.get(0)));
 
-            if (Gasket.isPredictor()) {
-                new Predictor(marketList, patternsList.get(0).replaceAll("\n", ""));
+            if (StringHelper.giveData(ID, zeroString).contains(MARTINGALE.toString())) {
+                if (!StringHelper.giveData(MARTINGALE, zeroString).equalsIgnoreCase(OFF.toString())) {
+                    new MakeDealMartingale(marketList, zeroString);
+                }
+            } else if (Gasket.isPredictor()) {
+                new Predictor(marketList, zeroString);
             } else {
-                if (StringHelper.giveData(PREDICTOR, patternsList.get(0)).equalsIgnoreCase(OFF.toString())) {
-                    new MakeDealUser(marketList, patternsList.get(0).replaceAll("\n", ""));
+                if (StringHelper.giveData(PREDICTOR, zeroString).equalsIgnoreCase(OFF.toString())) {
+                    new MakeDealUser(marketList, zeroString);
                 }
             }
         }

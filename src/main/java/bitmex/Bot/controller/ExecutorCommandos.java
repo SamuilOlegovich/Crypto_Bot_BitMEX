@@ -85,6 +85,36 @@ public class ExecutorCommandos {
                     writeMessage("levelsToCompare === "
                             + getLevelsToCompare() + "\n");
                     break;
+                case "martingaleOpenOneLot" :
+                    setMartingaleOpenOneLot(Double.parseDouble(strings[1]));
+                    writeMessage("martingaleOpenOneLot === "
+                            + getMartingaleOpenOneLot() + "\n");
+                    break;
+                case "martingaleIndex" :
+                    setMartingaleIndex(Double.parseDouble(strings[1]));
+                    writeMessage("martingaleIndex === "
+                            + getMartingaleIndex() + "\n");
+                    break;
+                case "martingaleOnOff" :
+                    setMartingaleOnOff(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("martingaleOnOff === "
+                            + isMartingaleOnOff() + "\n");
+                    break;
+                case "tradingTestMartingale" :
+                    setTradingTestMartingale(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("tradingTestMartingale === "
+                            + isTradingTestMartingale() + "\n");
+                    break;
+                case "tradingMartingale" :
+                    setTradingMartingale(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("tradingMartingale === "
+                            + isTradingMartingale() + "\n");
+                    break;
+                case "martingaleMaxSteep" :
+                    setMartingaleMaxSteep(Integer.parseInt(strings[1]));
+                    writeMessage("martingaleMaxSteep === "
+                            + getMartingaleMaxSteep() + "\n");
+                    break;
                 case "maxAndMinAverage" :
                     setMaxAndMinAverage(strings[1].equalsIgnoreCase("true"));
                         writeMessage("maxAndMinAverage === "

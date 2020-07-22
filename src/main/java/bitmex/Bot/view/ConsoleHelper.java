@@ -7,10 +7,8 @@ import bitmex.Bot.model.Gasket;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static bitmex.Bot.model.Gasket.getFilesAndPathCreator;
 import static bitmex.Bot.view.WriterAndReadFile.writerFile;
-import static bitmex.Bot.model.Gasket.getViewThread;
-
+import static bitmex.Bot.model.Gasket.*;
 
 
 
@@ -242,7 +240,22 @@ public class ConsoleHelper {
                 + " ----- добавлять или нет тест в конце строки\n"
                 + "indexRatioTransactionsAtWhichEnterMarket === "
                 + Gasket.getIndexRatioTransactionsAtWhichEnterMarket()
-                + " ----- индекс соотношения сделок прикотором входим в рынок\n";
+                + " ----- индекс соотношения сделок прикотором входим в рынок\n"
+                + "\n"
+                + TypeData.MARTINGALE.toString() + "\n"
+                + "martingaleOpenOneLot === " + getMartingaleOpenOneLot()
+                + " ----- количество первой сделки при мартингейле\n"
+                + "martingaleOnOff === " + isMartingaleOnOff()
+                + " ----- включить выключить игру по мартингейлу\n"
+                + "martingaleIndex === " + getMartingaleIndex()
+                + " ----- индекс мартингейла\n"
+                + "martingaleMaxSteep === " + getMartingaleMaxSteep()
+                + " ----- максимально разрешенный шаг\n"
+                + "tradingTestMartingale === " + isTradingTestMartingale()
+                + " ----- включить тестировку мартингейла\n"
+                + "tradingMartingale === " + isTradingMartingale()
+                + " ----- торговать или нет с помощью мартингейла\n"
+                ;
     }
 
 
@@ -377,6 +390,15 @@ public class ConsoleHelper {
     }
 
 
+
+    public static void printStatisticsMartingale() {
+        writeMessage("\n"
+                        + "   ----- ***** " + TypeData.MARTINGALE.toString() + " ***** -----" + "\n"
+                        + "PROFIT === " + Gasket.getMartingaleClass().getMartingalePROFIT() + "\n"
+                        + "---------------------------   " + "\n");
+    }
+
+
     public static void showCommands() {
         writeMessage("\n\n"
                 + "SETTINGS=RESTART программа перезапустит настройки не отключаясь\n"
@@ -393,15 +415,19 @@ public class ConsoleHelper {
                 + "numberOfHistoryBlocks\n"
                 + "showLoadPatternsUser\n"
                 + "timeCalculationLevel\n"
+                + "martingaleOpenOneLot\n"
                 + "replaceDataWithNULL\n"
                 + "tradingPatternsUser\n"
                 + "apiKeyName2Accounts\n"
+                + "martingaleMaxSteep\n"
                 + "showLoadPatternsII\n"
                 + "timeBetweenOrders\n"
                 + "gameAllDirection\n"
                 + "useRealOrNotReal\n"
                 + "maxAndMinAverage\n"
                 + "secondsSleepTime\n"
+                + "martingaleIndex\n"
+                + "martingaleOnOff\n"
                 + "tradingPatterns\n"
                 + "strategyWorkOne\n"
                 + "apiKey2Accounts\n"

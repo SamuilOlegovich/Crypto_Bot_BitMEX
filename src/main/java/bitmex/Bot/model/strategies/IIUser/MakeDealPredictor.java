@@ -43,8 +43,9 @@ public class MakeDealPredictor extends Thread {
 
             if (conditionsAreMet(true)) {
                 if (Gasket.isTradingUser() && !patternZeroString.endsWith(TEST.toString())) {
-                    double index = (double) Integer.parseInt(giveData(BUY, patternZeroString))
-                            / Integer.parseInt(giveData(SELL, patternZeroString));
+
+                    double index = (double) Math.abs(Integer.parseInt(giveData(BUY, patternZeroString)))
+                            / Math.abs(Integer.parseInt(giveData(SELL, patternZeroString)));
 
                     if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket() && doNotDoDeal) {
                         new TradeBuy(stringOut);
@@ -74,8 +75,9 @@ public class MakeDealPredictor extends Thread {
 
             if (conditionsAreMet(false)) {
                 if (Gasket.isTradingUser() && !patternZeroString.endsWith(TEST.toString())) {
-                    double index = (double) Integer.parseInt(giveData(SELL, patternZeroString))
-                            / Integer.parseInt(giveData(BUY, patternZeroString));
+
+                    double index = (double) Math.abs(Integer.parseInt(giveData(SELL, patternZeroString)))
+                            / Math.abs(Integer.parseInt(giveData(BUY, patternZeroString)));
 
                     if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket() && doNotDoDeal) {
                         new TradeSell(stringOut);

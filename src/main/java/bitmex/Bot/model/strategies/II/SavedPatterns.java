@@ -1,8 +1,8 @@
 package bitmex.Bot.model.strategies.II;
 
 
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.*;
+import bitmex.Bot.view.ConsoleHelper;
 
 
 import java.util.ArrayList;

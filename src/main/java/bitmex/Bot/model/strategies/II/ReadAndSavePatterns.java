@@ -1,8 +1,8 @@
 package bitmex.Bot.model.strategies.II;
 
+import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.model.StringHelper;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 

@@ -1,19 +1,15 @@
 package bitmex.Bot.model.serverAndParser;
 
 
-import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.StrategyFactory;
-import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.enums.TypeData;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.enums.BidAsk;
 import bitmex.Bot.model.DatesTimes;
-import bitmex.Bot.view.WriterAndReadFile;
+import bitmex.Bot.view.ConsoleHelper;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import static bitmex.Bot.model.StringHelper.giveData;

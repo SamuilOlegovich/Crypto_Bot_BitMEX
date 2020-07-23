@@ -2,9 +2,8 @@ package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
 import bitmex.Bot.model.DatesTimes;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
-
+import bitmex.Bot.view.ConsoleHelper;
 
 
 public class TestOrderBuy extends Thread {

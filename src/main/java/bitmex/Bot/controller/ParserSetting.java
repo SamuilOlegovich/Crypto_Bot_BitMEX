@@ -1,8 +1,8 @@
 package bitmex.Bot.controller;
 
 import bitmex.Bot.model.FilesAndPathCreator;
-import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.model.Gasket;
 
 import java.util.ArrayList;

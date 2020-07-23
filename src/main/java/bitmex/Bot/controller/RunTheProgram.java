@@ -5,9 +5,10 @@ import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.serverAndParser.Server;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
+import bitmex.Bot.view.ConsoleHelper;
 
 
 public class RunTheProgram extends Thread {
@@ -54,6 +55,7 @@ public class RunTheProgram extends Thread {
 
         // подготавливаем строки предсказания
         Gasket.getSavedPatternsUserClass().replacePredictions();
+        Gasket.setOpenTransactions(new OpenTransactions());
         Gasket.setMartingaleClass(new Martingale());
 
 

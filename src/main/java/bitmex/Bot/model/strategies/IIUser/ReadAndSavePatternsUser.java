@@ -1,7 +1,7 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 

@@ -3,12 +3,9 @@ package bitmex.Bot.model.strategies.II;
 
 import bitmex.Bot.model.TradeSell;
 import bitmex.Bot.model.TradeBuy;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
-
-
-
+import bitmex.Bot.view.ConsoleHelper;
 
 
 // Определяем какую сделку сделать и даем команду на ее исполнение

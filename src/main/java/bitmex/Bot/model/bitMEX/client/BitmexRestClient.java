@@ -5,6 +5,7 @@
  */
 package bitmex.Bot.model.bitMEX.client;
 
+import bitmex.Bot.view.ConsoleHelper;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.cfg.Annotations;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -26,7 +27,7 @@ import bitmex.Bot.model.bitMEX.enums.Verb;
 import javax.ws.rs.client.ClientBuilder;
 //import com.sumzerotrading.data.Ticker;
 import com.google.common.base.Strings;
-import bitmex.Bot.view.ConsoleHelper;
+
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;

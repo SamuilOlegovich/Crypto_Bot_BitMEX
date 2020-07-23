@@ -1,6 +1,5 @@
 package bitmex.Bot.view;
 
-import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.controller.RunTheProgram;
 import bitmex.Bot.model.DatesTimes;

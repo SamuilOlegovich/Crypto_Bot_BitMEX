@@ -1,6 +1,7 @@
 package bitmex.Bot.model;
 
 import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
+import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
 import bitmex.Bot.model.strategies.iiPro.ListensLooksAndComparesPro;
 import bitmex.Bot.model.strategies.iiPro.ListensToLooksAndFillsPro;
 import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
@@ -55,6 +56,7 @@ public class Gasket {
     private static SavedPatternsPro savedPatternsPro;
     private static volatile BitmexQuote bitmex2Quote;               // для получения данных по насущной котировке.
     private static boolean savedPatternsIIPro = true;               // включить нахождение и запись патернов
+    private static OpenTransactions openTransactions;
     private static SavedPatterns savedPatternsClass;
     private static boolean gameAllDirection = false;    // true - играть во все стороны на одном счету
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
@@ -1791,6 +1793,14 @@ public class Gasket {
 
     public static void setTradingMartingale(boolean tradingMartingale) {
         Gasket.tradingMartingale = tradingMartingale;
+    }
+
+    public static OpenTransactions getOpenTransactions() {
+        return openTransactions;
+    }
+
+    public static void setOpenTransactions(OpenTransactions openTransactions) {
+        Gasket.openTransactions = openTransactions;
     }
 }
 

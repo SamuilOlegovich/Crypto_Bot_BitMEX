@@ -1,11 +1,11 @@
 package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.enums.TypeData;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.TradeSell;
 import bitmex.Bot.model.TradeBuy;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -4,7 +4,6 @@ import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.Gasket;
 
 public class TradeBuy extends Thread {
 

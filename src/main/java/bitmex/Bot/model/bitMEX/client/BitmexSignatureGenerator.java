@@ -6,6 +6,7 @@
 package bitmex.Bot.model.bitMEX.client;
 
 //import com.sumzerotrading.data.SumZeroException;
+
 import bitmex.Bot.view.ConsoleHelper;
 
 import javax.xml.bind.DatatypeConverter;

@@ -1,6 +1,5 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.Gasket;
 
@@ -10,9 +9,9 @@ import java.util.TreeSet;
 
 import static bitmex.Bot.model.CompareHelper.getSortTheAlphabet;
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
-import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 
 
 // сравниваю и принимаю решение
@@ -20,13 +19,11 @@ public class CompareAndMakeDecisionUser extends Thread {
 
     private ArrayList<String> patternsList;
     private ArrayList<String> marketList;
-    private String zeroString;
 
 
     public CompareAndMakeDecisionUser(ArrayList<String> marketList, ArrayList<String> patternsList) {
         this.patternsList = new ArrayList<>(patternsList);
         this.marketList = new ArrayList<>(marketList);
-        this.zeroString = patternsList.get(0).replaceAll("\n", "");
         start();
     }
 
@@ -35,9 +32,12 @@ public class CompareAndMakeDecisionUser extends Thread {
     public void run() {
 
         if (compareSheets()) {
+            String zeroString = patternsList.get(0).replaceAll("\n", "");
+
             writeMessage(getDateTerminal() + " --- "
                     + "Нашел совпадения в рынке с ПАТТЕРНАМИ User передаю на сделку --- ID-"
-                    + StringHelper.giveData(ID, patternsList.get(0)));
+                    + StringHelper.giveData(ID, zeroString));
+
 
             if (StringHelper.giveData(ID, zeroString).contains(MARTINGALE.toString())) {
                 if (!StringHelper.giveData(MARTINGALE, zeroString).equalsIgnoreCase(OFF.toString())) {

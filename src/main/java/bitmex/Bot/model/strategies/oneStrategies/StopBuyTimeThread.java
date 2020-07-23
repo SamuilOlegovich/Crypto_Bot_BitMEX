@@ -3,8 +3,8 @@ package bitmex.Bot.model.strategies.oneStrategies;
 
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.TradeBuy;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 
 // если цена опустилась за нижний предел минимум - то даем ей еще один шанс

@@ -3,8 +3,8 @@ package bitmex.Bot.model.strategies.II;
 
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.CompareHelper;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 
 import java.util.*;

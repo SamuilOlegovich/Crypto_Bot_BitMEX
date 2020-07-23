@@ -4,8 +4,8 @@ import bitmex.Bot.model.TradeSell;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.model.DatesTimes;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 
 import java.util.List;

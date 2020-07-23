@@ -4,11 +4,6 @@ package bitmex.Bot.model;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
 
-import java.util.ArrayList;
-
-import static bitmex.Bot.model.Gasket.getPeriodNULL;
-import static bitmex.Bot.model.Gasket.getPreviewNULL;
-
 
 public class StringHelper {
 

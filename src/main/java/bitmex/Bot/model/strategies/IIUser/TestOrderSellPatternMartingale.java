@@ -7,9 +7,6 @@ import bitmex.Bot.model.Gasket;
 import bitmex.Bot.view.ConsoleHelper;
 
 import static bitmex.Bot.model.enums.TypeData.MARTINGALE;
-import static bitmex.Bot.model.enums.TypeData.TYPE;
-
-
 
 
 public class TestOrderSellPatternMartingale extends Thread {
@@ -47,7 +44,6 @@ public class TestOrderSellPatternMartingale extends Thread {
             double priceBid = Gasket.getBitmexQuote().getBidPrice();
 
             if (priceAsk >= priseStopOrder) {
-                openTransactions.zeroSteep(IDs);
                 setStop();
 
                 // меняем число положительных / отрицательных сделок
@@ -55,11 +51,11 @@ public class TestOrderSellPatternMartingale extends Thread {
                 String data = (Integer.parseInt(StringHelper.giveData(TypeData.BUY, zeroString)) - 1) + "";
                 String out = StringHelper.setData(TypeData.BUY, data, zeroString);
 
-                out = Integer.parseInt(steeps) > martingale.getSteep(IDs)
-                        ? out : StringHelper.setData(MARTINGALE, martingale.getSteep(IDs) + "", out);
-
+//                out = Integer.parseInt(steeps) > martingale.getSteep(IDs)
+//                        ? out : StringHelper.setData(MARTINGALE, martingale.getSteep(IDs) + "", out);
 
                 new UpdatingStatisticsDataUser(out);
+                openTransactions.zeroSteepTest(IDs);
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + IDs + " --- Сработал СТОП ЛОСС USER " + MARTINGALE.toString());
@@ -67,8 +63,6 @@ public class TestOrderSellPatternMartingale extends Thread {
             }
 
             if (priceBid <= priseTakeOrder) {
-                openTransactions.zeroSteep(IDs);
-                martingale.zeroSteep(IDs);
                 setTake();
 
 
@@ -77,10 +71,12 @@ public class TestOrderSellPatternMartingale extends Thread {
                 String data = (Integer.parseInt(StringHelper.giveData(TypeData.SELL, zeroString)) + 1) + "";
                 String out = StringHelper.setData(TypeData.SELL, data, zeroString);
 
-                out = Integer.parseInt(steeps) > martingale.getSteep(IDs)
-                        ? out : StringHelper.setData(MARTINGALE, martingale.getSteep(IDs) + "", out);
+//                out = Integer.parseInt(steeps) > martingale.getSteep(IDs)
+//                        ? out : StringHelper.setData(MARTINGALE, martingale.getSteep(IDs) + "", out);
 
                 new UpdatingStatisticsDataUser(out);
+                openTransactions.zeroSteepTest(IDs);
+                martingale.zeroSteep(IDs);
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + IDs + " --- Сработал ТЕЙК ПРОФИТ USER " + MARTINGALE.toString());

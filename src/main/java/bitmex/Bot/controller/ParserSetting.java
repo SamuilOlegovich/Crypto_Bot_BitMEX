@@ -8,9 +8,12 @@ import bitmex.Bot.model.Gasket;
 import java.util.ArrayList;
 
 
+
+
 public class ParserSetting {
     private ExecutorCommandos executorCommandos;
     private String path;
+
 
 
     public ParserSetting(ExecutorCommandos executorCommandos) {

@@ -12,6 +12,7 @@ import java.io.File;
 
 public class FilesAndPathCreator {
 
+    private String pathStrategiesSettingsMartingale;
     private String pathPureHistoryOfPatternsIn;
     private String pathPatternsTemporaryIIPro;
     private String pathPatternsTemporaryUser;
@@ -32,19 +33,13 @@ public class FilesAndPathCreator {
     public FilesAndPathCreator() {
         Gasket.setFilesAndPathCreator(this);
 
-//        try {
-//            Thread.sleep(1000 * 7);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-
         createdPath();
         createdFileLog();
         isTheFileInPlace();
         showPath();
-
     }
+
+
 
     private void createdPath() {
         String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -52,17 +47,27 @@ public class FilesAndPathCreator {
         path = stringsSplit[stringsSplit.length - 1];
 
         String[] strings = getClass().getResource("").getPath().split(path);
-//        String[] strings = getClass().getResource("").getPath().split("bitmex-client-master.jar");
         String finish = strings[0].replaceAll("file:", "");
+
+
 
         if (System.getProperty("os.name").startsWith("Windows")) {
             finish = finish.replaceFirst("/", "").replaceAll("/", "\\\\");
         }
 
-
         if (strings.length == 2) {
 
             if (System.getProperty("os.name").startsWith("Windows")) {
+                Path strategiesSettingsMartingale = Paths.get(finish + "StrategiesSettingsMartingale");
+
+                if (!Files.exists(strategiesSettingsMartingale)) {
+                    try {
+                        Files.createDirectories(Paths.get("StrategiesSettingsMartingale"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 Path pureHistoryOfPatternsIn = Paths.get(finish + "PureHistoryOfPatternsIn");
 
                 if (!Files.exists(pureHistoryOfPatternsIn)) {
@@ -138,6 +143,7 @@ public class FilesAndPathCreator {
                 pathLogs = finish  + "Logs\\" + DatesTimes.getDateLogs().replaceAll(":", "-")
                         + " Log.txt";
                 pathPureHistoryOfPatternsIn = finish + "PureHistoryOfPatternsIn\\PureHistoryOfPatternsIn.txt";
+                pathStrategiesSettingsMartingale = finish + "Settings\\StrategiesSettingsMartingale.txt";
                 pathPatternsTemporaryIIPro = finish + "iiProPatterns\\iiProTemporaryPatterns.txt";
                 pathPatternsDeleteIIPro = finish + "iiProPatterns\\iiProTemporaryDelete.txt";
                 pathPatternsForUserIIPro = finish + "uPatterns\\iiProPatternsForUser.txt";
@@ -154,6 +160,16 @@ public class FilesAndPathCreator {
                 pathSettings = finish + "Settings\\Settings.txt";
 
             } else {
+                Path strategiesSettingsMartingale = Paths.get(strings[0] + "StrategiesSettingsMartingale");
+
+                if (!Files.exists(strategiesSettingsMartingale)) {
+                    try {
+                        Files.createDirectories(Paths.get("StrategiesSettingsMartingale"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 Path pureHistoryOfPatternsIn = Paths.get(strings[0] + "PureHistoryOfPatternsIn");
 
                 if (!Files.exists(pureHistoryOfPatternsIn)) {
@@ -227,6 +243,7 @@ public class FilesAndPathCreator {
                 }
 
                 pathPureHistoryOfPatternsIn = finish + "PureHistoryOfPatternsIn/PureHistoryOfPatternsIn.txt";
+                pathStrategiesSettingsMartingale = finish + "Settings/StrategiesSettingsMartingale.txt";
                 pathPatternsTemporaryIIPro = finish + "iiProPatterns/iiProTemporaryPatterns.txt";
                 pathPatternsDeleteIIPro = finish + "iiProPatterns/iiProTemporaryDelete.txt";
                 pathPatternsTemporaryUser = finish + "uPatterns/uTemporaryPatterns.txt";
@@ -249,6 +266,7 @@ public class FilesAndPathCreator {
 
             pathPureHistoryOfPatternsIn = string + "Logs/PureHistoryOfPatternsIn/PureHistoryOfPatternsIn.txt";
             pathPatternsTemporaryIIPro = string + "Logs/PatternsUser/iiProTemporaryPatterns.txt";
+            pathStrategiesSettingsMartingale = string + "Logs/StrategiesSettingsMartingale.txt";
             pathPatternsForUserIIPro = string + "Logs/PatternsUser/iiProPatternsForUser.txt";
             pathPatternsTemporaryUser = string + "Logs/PatternsUser/uTemporaryPatterns.txt";
             pathPatternsDeleteIIPro = string + "Logs/PatternsUser/iiProTemporaryDelete.txt";
@@ -265,6 +283,9 @@ public class FilesAndPathCreator {
         }
 
         if (System.getProperty("os.name").startsWith("Windows")) {
+            pathStrategiesSettingsMartingale = pathStrategiesSettingsMartingale
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
             pathPureHistoryOfPatternsIn = pathPureHistoryOfPatternsIn
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
@@ -315,6 +336,7 @@ public class FilesAndPathCreator {
 
 
     private void showPath() {
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathStrategiesSettingsMartingale);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPureHistoryOfPatternsIn);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryIIPro);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryUser);
@@ -335,6 +357,10 @@ public class FilesAndPathCreator {
 
 
     private void isTheFileInPlace() {
+        if (!Files.exists(Paths.get(pathStrategiesSettingsMartingale))) {
+            createdStrategiesSettingsMartingale();
+        }
+
         if (!Files.exists(Paths.get(pathPureHistoryOfPatternsIn))) {
             createdFilePureHistoryOfPatternsIn();
         }
@@ -389,6 +415,20 @@ public class FilesAndPathCreator {
 
         if (!Files.exists(Paths.get(pathPatterns))) {
             createdFilePatterns();
+        }
+    }
+
+
+
+    private void createdStrategiesSettingsMartingale() {
+        File file = new File(pathStrategiesSettingsMartingale);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл StrategiesSettingsMartingale успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл StrategiesSettingsMartingale.");
         }
     }
 
@@ -662,5 +702,9 @@ public class FilesAndPathCreator {
 
     public String getPathFullHistory() {
         return pathFullHistory;
+    }
+
+    public String getPathStrategiesSettingsMartingale() {
+        return pathStrategiesSettingsMartingale;
     }
 }

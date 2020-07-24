@@ -112,6 +112,9 @@ public class Gasket {
     private static double martingalePROFIT = 0.0;
     private static double martingaleIndex = 2.5;            // индекс мартингейла
     private static int martingaleMaxSteep = 10;             // максимально разрешенный шаг
+    // id4s-M-T*1000*2000*4000*8000;
+    // id5s-M-T*500*1000*2000*8000;
+    private static String strategiesMartingale;             // настройки для каждого отдельно айди Мартингейла
     private static Martingale martingale;
 
 

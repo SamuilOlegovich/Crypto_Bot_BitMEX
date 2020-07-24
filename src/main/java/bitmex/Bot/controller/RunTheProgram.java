@@ -8,6 +8,7 @@ import bitmex.Bot.model.serverAndParser.Server;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
+import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
 import bitmex.Bot.view.ConsoleHelper;
 
 
@@ -57,6 +58,7 @@ public class RunTheProgram extends Thread {
         Gasket.getSavedPatternsUserClass().replacePredictions();
         Gasket.setOpenTransactions(new OpenTransactions());
         Gasket.setMartingaleClass(new Martingale());
+        ReadAndSavePatternsUser.readFileStrategiesSettingsMartingale();
 
 
         try {

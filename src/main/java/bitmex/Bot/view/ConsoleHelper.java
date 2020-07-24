@@ -242,7 +242,7 @@ public class ConsoleHelper {
                 + Gasket.getIndexRatioTransactionsAtWhichEnterMarket()
                 + " ----- индекс соотношения сделок прикотором входим в рынок\n"
                 + "\n"
-                + TypeData.MARTINGALE.toString() + "\n"
+//                + TypeData.MARTINGALE.toString() + "\n"
                 + "martingaleOpenOneLot === " + getMartingaleOpenOneLot()
                 + " ----- количество первой сделки при мартингейле\n"
                 + "martingaleOnOff === " + isMartingaleOnOff()
@@ -269,7 +269,8 @@ public class ConsoleHelper {
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
                 + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"
                 + "команда=значение ----> PORT=777\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -298,7 +299,8 @@ public class ConsoleHelper {
                 + "OB_STOP === " + Gasket.getObStop() + "\n"
                 + "OS_TAKE === " + Gasket.getOsTake() + "\n"
                 + "OS_STOP === " + Gasket.getOsStop() + "\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -356,7 +358,8 @@ public class ConsoleHelper {
                 + "OB_STOP_R === " + Gasket.getObStopR() + "\n"
                 + "OS_TAKE_R === " + Gasket.getOsTakeR() + "\n"
                 + "OS_STOP_R === " + Gasket.getOsStopR() + "\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -369,7 +372,8 @@ public class ConsoleHelper {
                 + "OB_STOP_PAT === " + Gasket.getObStopPat() + "\n"
                 + "OS_TAKE_PAT === " + Gasket.getOsTakePat() + "\n"
                 + "OS_STOP_PAT === " + Gasket.getOsStopPat() + "\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -386,7 +390,8 @@ public class ConsoleHelper {
                 + "OS_2 === " + Gasket.isOsFlag_2() + "\n"
                 + "OB === " + Gasket.isObFlag() + "\n"
                 + "OS === " + Gasket.isOsFlag() + "\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -476,10 +481,10 @@ public class ConsoleHelper {
                 + "PORT\n"
                 + "stop\n"
                 + "take\n"
+                + "INFO\n"
                 + "obs\n"
                 + "lot\n"
-                + "INFO\n"
-
-                + "\n\n");
+                + "\n\n"
+        );
     }
 }

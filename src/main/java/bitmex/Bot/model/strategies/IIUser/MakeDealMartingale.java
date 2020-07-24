@@ -19,9 +19,12 @@ public class MakeDealMartingale extends Thread {
     private ArrayList<String> marketList;
     private String patternZeroString;
     private Martingale martingale;
+    private String steeps;
     private String IDs;
 
+
     public MakeDealMartingale(ArrayList<String> marketList, String patternZeroString) {
+        this.steeps = StringHelper.giveData(MARTINGALE, patternZeroString);
         this.IDs = StringHelper.giveData(TypeData.ID, patternZeroString);
         this.openTransactions = Gasket.getOpenTransactions();
         this.martingale = Gasket.getMartingaleClass();
@@ -38,10 +41,10 @@ public class MakeDealMartingale extends Thread {
                 + "Определяю какую сделку сделать согласно ПАТТЕРНАМ USER " + MARTINGALE.toString());
 
         // проверяем есть ли такой айди в мапе
-        if (openTransactions.isThereSuchKey(IDs)) {
+        if (openTransactions.isThereSuchKeyTest(IDs)) {
             // если есть то проверяем равен ли он нулю, что значит в данный момент все сделки закрыты
             // и можно делать сделку
-            if (openTransactions.getOrderVolume(IDs) == 0.0) {
+            if (openTransactions.getOrderVolumeTest(IDs) == 0.0) {
                 makeDeal();
             } else {
                 writeMessage(DatesTimes.getDateTerminal() + " --- "
@@ -49,7 +52,7 @@ public class MakeDealMartingale extends Thread {
                         + IDs + " - " + MARTINGALE.toString());
             }
         } else {
-            openTransactions.setHashMap(IDs, 0.0);
+            openTransactions.setMapTest(IDs, 0.0);
             makeDeal();
         }
     }
@@ -70,7 +73,7 @@ public class MakeDealMartingale extends Thread {
                             / Math.abs(Integer.parseInt(giveData(SELL, patternZeroString)));
 
                     if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
-                        openTransactions.setHashMap(IDs, Gasket.getLot());
+                        openTransactions.setMapTest(IDs, Gasket.getLot());
                         martingale.upSteep(IDs);
                         new TradeBuy(stringOut);
                     }
@@ -87,8 +90,12 @@ public class MakeDealMartingale extends Thread {
                         martingale.setHashMap(IDs, 1);
                     }
 
+
                     if (Gasket.getMartingaleMaxSteep() >= martingale.getSteep(IDs)) {
-                        openTransactions.setHashMap(IDs, Gasket.getLot());
+                        openTransactions.setMapTest(IDs, Gasket.getLot());
+                        stringOut = Integer.parseInt(steeps) > martingale.getSteep(IDs)
+                                ? stringOut
+                                : StringHelper.setData(MARTINGALE, martingale.getSteep(IDs) + "", stringOut);
                         new TestOrderBuyPatternMartingale(stringOut, Gasket.getBitmexQuote().getAskPrice());
 
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
@@ -120,7 +127,7 @@ public class MakeDealMartingale extends Thread {
                             / Math.abs(Integer.parseInt(giveData(BUY, patternZeroString)));
 
                     if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
-                        openTransactions.setHashMap(IDs, Gasket.getLot());
+                        openTransactions.setMapTest(IDs, Gasket.getLot());
                         martingale.upSteep(IDs);
                         new TradeSell(stringOut);
                     }
@@ -140,7 +147,10 @@ public class MakeDealMartingale extends Thread {
                     }
 
                     if (Gasket.getMartingaleMaxSteep() >= martingale.getSteep(IDs)) {
-                        openTransactions.setHashMap(IDs, Gasket.getLot());
+                        openTransactions.setMapTest(IDs, Gasket.getLot());
+                        stringOut = Integer.parseInt(steeps) > martingale.getSteep(IDs)
+                                ? stringOut
+                                : StringHelper.setData(MARTINGALE, martingale.getSteep(IDs) + "", stringOut);
                         new TestOrderSellPatternMartingale(stringOut, Gasket.getBitmexQuote().getBidPrice());
 
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "

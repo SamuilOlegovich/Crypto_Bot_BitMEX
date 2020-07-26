@@ -12,7 +12,8 @@ import java.io.File;
 
 public class FilesAndPathCreator {
 
-    private String pathStrategiesSettingsMartingale;
+    private String pathLevelsForTrimmedPatternsIIPro;
+    private String pathLevelsForTrimmedPatternsII;
     private String pathPureHistoryOfPatternsIn;
     private String pathPatternsTemporaryIIPro;
     private String pathPatternsTemporaryUser;
@@ -32,7 +33,6 @@ public class FilesAndPathCreator {
 
     public FilesAndPathCreator() {
         Gasket.setFilesAndPathCreator(this);
-
         createdPath();
         createdFileLog();
         isTheFileInPlace();
@@ -58,16 +58,6 @@ public class FilesAndPathCreator {
         if (strings.length == 2) {
 
             if (System.getProperty("os.name").startsWith("Windows")) {
-                Path strategiesSettingsMartingale = Paths.get(finish + "StrategiesSettingsMartingale");
-
-                if (!Files.exists(strategiesSettingsMartingale)) {
-                    try {
-                        Files.createDirectories(Paths.get("StrategiesSettingsMartingale"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
                 Path pureHistoryOfPatternsIn = Paths.get(finish + "PureHistoryOfPatternsIn");
 
                 if (!Files.exists(pureHistoryOfPatternsIn)) {
@@ -143,9 +133,10 @@ public class FilesAndPathCreator {
                 pathLogs = finish  + "Logs\\" + DatesTimes.getDateLogs().replaceAll(":", "-")
                         + " Log.txt";
                 pathPureHistoryOfPatternsIn = finish + "PureHistoryOfPatternsIn\\PureHistoryOfPatternsIn.txt";
-                pathStrategiesSettingsMartingale = finish + "Settings\\StrategiesSettingsMartingale.txt";
                 pathPatternsTemporaryIIPro = finish + "iiProPatterns\\iiProTemporaryPatterns.txt";
+                pathLevelsForTrimmedPatternsIIPro = finish + "uPatterns\\iiProLevelsTrimmed.txt";
                 pathPatternsDeleteIIPro = finish + "iiProPatterns\\iiProTemporaryDelete.txt";
+                pathLevelsForTrimmedPatternsII = finish + "uPatterns\\iiLevelsTrimmed.txt";
                 pathPatternsForUserIIPro = finish + "uPatterns\\iiProPatternsForUser.txt";
                 pathPatternsTemporaryUser = finish + "uPatterns\\uTemporaryPatterns.txt";
                 pathPatternsTemporary = finish + "iiPatterns\\iiTemporaryPatterns.txt";
@@ -243,9 +234,10 @@ public class FilesAndPathCreator {
                 }
 
                 pathPureHistoryOfPatternsIn = finish + "PureHistoryOfPatternsIn/PureHistoryOfPatternsIn.txt";
-                pathStrategiesSettingsMartingale = finish + "Settings/StrategiesSettingsMartingale.txt";
                 pathPatternsTemporaryIIPro = finish + "iiProPatterns/iiProTemporaryPatterns.txt";
+                pathLevelsForTrimmedPatternsIIPro = finish + "uPatterns/iiProLevelsTrimmed.txt";
                 pathPatternsDeleteIIPro = finish + "iiProPatterns/iiProTemporaryDelete.txt";
+                pathLevelsForTrimmedPatternsII = finish + "uPatterns/iiLevelsTrimmed.txt";
                 pathPatternsTemporaryUser = finish + "uPatterns/uTemporaryPatterns.txt";
                 pathPatternsTemporary = finish + "iiPatterns/iiTemporaryPatterns.txt";
                 pathPatternsForUserIIPro = finish + "uPatterns/iiProPatternsFor.txt";
@@ -265,11 +257,12 @@ public class FilesAndPathCreator {
                     .replaceAll("model/", "");
 
             pathPureHistoryOfPatternsIn = string + "Logs/PureHistoryOfPatternsIn/PureHistoryOfPatternsIn.txt";
+            pathLevelsForTrimmedPatternsIIPro = string + "Logs/PatternsUser/iiProLevelsTrimmed.txt";
             pathPatternsTemporaryIIPro = string + "Logs/PatternsUser/iiProTemporaryPatterns.txt";
-            pathStrategiesSettingsMartingale = string + "Logs/StrategiesSettingsMartingale.txt";
+            pathLevelsForTrimmedPatternsII = string + "Logs/PatternsUser/iiLevelsTrimmed.txt";
             pathPatternsForUserIIPro = string + "Logs/PatternsUser/iiProPatternsForUser.txt";
-            pathPatternsTemporaryUser = string + "Logs/PatternsUser/uTemporaryPatterns.txt";
             pathPatternsDeleteIIPro = string + "Logs/PatternsUser/iiProTemporaryDelete.txt";
+            pathPatternsTemporaryUser = string + "Logs/PatternsUser/uTemporaryPatterns.txt";
             pathPatternsDeleteUser = string + "Logs/PatternsUser/uTemporaryDelete.txt";
             pathLogs = string + "Logs/Log/" + DatesTimes.getDateLogs() + "===Log.txt";
             pathPatternsForUser = string + "Logs/PatternsUser/iiPatternsForUser.txt";
@@ -283,7 +276,10 @@ public class FilesAndPathCreator {
         }
 
         if (System.getProperty("os.name").startsWith("Windows")) {
-            pathStrategiesSettingsMartingale = pathStrategiesSettingsMartingale
+            pathLevelsForTrimmedPatternsIIPro = pathLevelsForTrimmedPatternsIIPro
+                    .replaceFirst("/", "").replaceAll("/", "\\\\");
+
+            pathLevelsForTrimmedPatternsII = pathLevelsForTrimmedPatternsII
                     .replaceFirst("/", "").replaceAll("/", "\\\\");
 
             pathPureHistoryOfPatternsIn = pathPureHistoryOfPatternsIn
@@ -336,7 +332,8 @@ public class FilesAndPathCreator {
 
 
     private void showPath() {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathStrategiesSettingsMartingale);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathLevelsForTrimmedPatternsIIPro);
+        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathLevelsForTrimmedPatternsII);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPureHistoryOfPatternsIn);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryIIPro);
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- " + pathPatternsTemporaryUser);
@@ -357,8 +354,12 @@ public class FilesAndPathCreator {
 
 
     private void isTheFileInPlace() {
-        if (!Files.exists(Paths.get(pathStrategiesSettingsMartingale))) {
-            createdStrategiesSettingsMartingale();
+        if (!Files.exists(Paths.get(pathLevelsForTrimmedPatternsIIPro))) {
+            createdPathLevelsForTrimmedPatternsIIPro();
+        }
+
+        if (!Files.exists(Paths.get(pathLevelsForTrimmedPatternsII))) {
+            createdPathLevelsForTrimmedPatternsII();
         }
 
         if (!Files.exists(Paths.get(pathPureHistoryOfPatternsIn))) {
@@ -420,15 +421,28 @@ public class FilesAndPathCreator {
 
 
 
-    private void createdStrategiesSettingsMartingale() {
-        File file = new File(pathStrategiesSettingsMartingale);
+    private void createdPathLevelsForTrimmedPatternsIIPro() {
+        File file = new File(pathLevelsForTrimmedPatternsIIPro);
         try {
             boolean newFile = file.createNewFile();
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Новый файл StrategiesSettingsMartingale успешно создан.");
+                    + "Новый файл PathLevelsForTrimmedPatternsIIPro успешно создан.");
         } catch (IOException ex) {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                    + "Не удалось создать файл StrategiesSettingsMartingale.");
+                    + "Не удалось создать файл PathLevelsForTrimmedPatternsIIPro.");
+        }
+    }
+
+
+    private void createdPathLevelsForTrimmedPatternsII() {
+        File file = new File(pathLevelsForTrimmedPatternsII);
+        try {
+            boolean newFile = file.createNewFile();
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Новый файл PathLevelsForTrimmedPatternsII успешно создан.");
+        } catch (IOException ex) {
+            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                    + "Не удалось создать файл PathLevelsForTrimmedPatternsII.");
         }
     }
 
@@ -704,7 +718,11 @@ public class FilesAndPathCreator {
         return pathFullHistory;
     }
 
-    public String getPathStrategiesSettingsMartingale() {
-        return pathStrategiesSettingsMartingale;
+    public String getPathLevelsForTrimmedPatternsIIPro() {
+        return pathLevelsForTrimmedPatternsIIPro;
+    }
+
+    public String getPathLevelsForTrimmedPatternsII() {
+        return pathLevelsForTrimmedPatternsII;
     }
 }

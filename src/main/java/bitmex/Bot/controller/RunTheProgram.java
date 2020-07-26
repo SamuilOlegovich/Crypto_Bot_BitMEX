@@ -58,7 +58,7 @@ public class RunTheProgram extends Thread {
         Gasket.getSavedPatternsUserClass().replacePredictions();
         Gasket.setOpenTransactions(new OpenTransactions());
         Gasket.setMartingaleClass(new Martingale());
-        ReadAndSavePatternsUser.readFileStrategiesSettingsMartingale();
+        ConsoleHelper.writeMessage(Gasket.getMartingaleClass().showVolumeForEachStep());
 
 
         try {

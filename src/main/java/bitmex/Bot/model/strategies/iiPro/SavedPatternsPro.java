@@ -4,6 +4,7 @@ import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
 
 import java.util.ArrayList;
 
@@ -179,9 +180,7 @@ public class SavedPatternsPro {
                             writeMessage(DatesTimes.getDateTerminal()
                                     + " --- iiPRO ПАТТЕРН такой есть - обновляю информацию по === "
                                     + giveData(ID, stringZero));
-
-                            ReadAndSavePatternsPro.saveSavedPatternsFromUser();
-                            ReadAndSavePatternsPro.saveSavedPatterns();
+                            savedPatterns();
                             return;
                         }
                     }
@@ -199,13 +198,18 @@ public class SavedPatternsPro {
                 maxArraySize = Math.max(marketListCopy.size(), maxArraySize);
 
                 listsPricePatterns.sort(getSortSize());
+                savedPatterns();
 
-                ReadAndSavePatternsPro.saveSavedPatternsFromUser();
-                ReadAndSavePatternsPro.saveSavedPatterns();
             }
         } else {
             inArrayList.clear();
         }
+    }
+
+    private void savedPatterns() {
+        ReadAndSavePatternsPro.saveSavedTrimmedPatternsFromUser();
+        ReadAndSavePatternsPro.saveSavedPatternsFromUser();
+        ReadAndSavePatternsPro.saveSavedPatterns();
     }
 
 

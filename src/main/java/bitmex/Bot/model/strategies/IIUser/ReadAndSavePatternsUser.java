@@ -18,53 +18,6 @@ import static bitmex.Bot.model.enums.TypeData.*;
 
 public class ReadAndSavePatternsUser {
 
-    public static void readFileStrategiesSettingsMartingale() {
-        String path = Gasket.getFilesAndPathCreator().getPathStrategiesSettingsMartingale();
-        Martingale martingale = Gasket.getMartingaleClass();
-
-        try {
-            ArrayList<String> listSettings =  WriterAndReadFile.readFile(path);
-            // ID===4S===LOT===1*2*4*8*16===EXAMPLE
-
-            if (listSettings.size() < 1) {
-                try {
-                    ConsoleHelper.writeMessage("Настроек в файле StrategiesSettingsMartingale.txt необнаружено "
-                            + "- записан шаблон (ПРИМЕР) настроек. Согласно примеру введите свои настройки "
-                            + "и перезапустите программу"
-                    );
-                    WriterAndReadFile.writerFile(getStringWrite(), path, false);
-                } catch (Exception ex) {
-                    ConsoleHelper.writeMessage("Ошибка в ЗАПИСИ файла StrategiesSettingsMartingale.txt .");
-                }
-            }
-
-
-            for (String string : listSettings) {
-                if (string.equalsIgnoreCase("END")) {
-                    ConsoleHelper.writeMessage("Настройки стартегии Мартингейла УСПЕШНО считаны.");
-                    return;
-                }
-
-                if (string.length() > 4 && !string.equalsIgnoreCase(EXAMPLE.toString())
-                        && string.endsWith(EXAMPLE.toString())) {
-                    martingale.setVolumeForEachStep(string.replaceAll(",", "."));
-                }
-            }
-
-        } catch (Exception e) {
-            ConsoleHelper.writeMessage("Ошибка в ЧТЕНИИ файла StrategiesSettingsMartingale.txt");
-        }
-    }
-
-
-
-    private static String getStringWrite() {
-        return TypeData.EXAMPLE.toString() + "\n" + "ID===4S===LOT===1*2*4*8*16===EXAMPLE\n"
-                + "ID===7S===LOT===1.0*3.0*9.0*27.0===EXAMPLE\n" + "END\n";
-    }
-
-
-
     public static synchronized void createSavedPatternsUser() {
         SavedPatternsUser savedPatternsUser = Gasket.getSavedPatternsUserClass();
         ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю Saved Patterns USER");

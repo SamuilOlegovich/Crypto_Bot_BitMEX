@@ -6,6 +6,7 @@ import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
+import static bitmex.Bot.model.enums.TypeData.ID;
 import static bitmex.Bot.model.enums.TypeData.MARTINGALE;
 
 
@@ -16,7 +17,6 @@ public class TestOrderBuyPatternMartingale extends Thread {
     private double priseStopOrder;
     private String zeroString;
     private String steeps;
-//    private String types;
     private String IDs;
 
 
@@ -25,7 +25,6 @@ public class TestOrderBuyPatternMartingale extends Thread {
         this.IDs = StringHelper.giveData(TypeData.ID, zeroString);
         this.priseTakeOrder = priseOpenOrder + Gasket.getTake();
         this.priseStopOrder = priseOpenOrder - Gasket.getStop();
-//        this.types = StringHelper.giveData(TYPE, zeroString);
         this.openTransactions = Gasket.getOpenTransactions();
         this.martingale = Gasket.getMartingaleClass();
         this.zeroString = zeroString;
@@ -51,9 +50,6 @@ public class TestOrderBuyPatternMartingale extends Thread {
                 String data = (Integer.parseInt(StringHelper.giveData(TypeData.SELL, zeroString)) - 1) + "";
                 String out = StringHelper.setData(TypeData.SELL, data, zeroString);
 
-//                out = Integer.parseInt(steeps) > martingale.getSteep(IDs)
-//                        ? out : StringHelper.setData(MARTINGALE, martingale.getSteep(IDs) + "", out);
-
                 new UpdatingStatisticsDataUser(out);
                 openTransactions.zeroSteepTest(IDs);
 
@@ -69,9 +65,6 @@ public class TestOrderBuyPatternMartingale extends Thread {
                 // а так же максимальный шаг мартина
                 String data = (Integer.parseInt(StringHelper.giveData(TypeData.BUY, zeroString)) + 1) + "";
                 String out = StringHelper.setData(TypeData.BUY, data, zeroString);
-
-//                out = Integer.parseInt(steeps) > martingale.getSteep(IDs)
-//                        ? out : StringHelper.setData(MARTINGALE, martingale.getSteep(IDs) + "", out);
 
                 new UpdatingStatisticsDataUser(out);
                 openTransactions.zeroSteepTest(IDs);
@@ -93,34 +86,36 @@ public class TestOrderBuyPatternMartingale extends Thread {
     }
 
     private void setStop() {
-        double priseLot = Gasket.getStop() / Gasket.getBitmexQuote().getAskPrice();
-        double resultLot = Gasket.getMartingaleOpenOneLot();
-        int steep = martingale.getSteep(IDs);
+//        double priseLot = Gasket.getStop() / Gasket.getBitmexQuote().getAskPrice();
+        double openLot = openTransactions.getOrderVolumeTest(IDs);
+//        double resultLot = Gasket.getMartingaleOpenOneLot();
+        double priceLot = Gasket.getStop() / 10000.0;
+//        int steep = martingale.getSteep(IDs);
         double result = 0.0;
-
-        if (steep > 1) {
-            for (int i = 2; i <= steep; i++) {
-                resultLot = resultLot + (result * Gasket.getMartingaleIndex());
-            }
-        }
-
-        result = resultLot * priseLot;
+//        if (steep > 1) {
+//            for (int i = 2; i <= steep; i++) {
+//                resultLot = resultLot + (result * Gasket.getMartingaleIndex());
+//            }
+//        }
+//        result = resultLot * priseLot;
+        result = priceLot * openLot;
         martingale.setMartingalePROFIT(martingale.getMartingalePROFIT() - result);
     }
 
     private void setTake() {
-        double priseLot = Gasket.getTake() / Gasket.getBitmexQuote().getAskPrice();
-        double resultLot = Gasket.getMartingaleOpenOneLot();
-        int steep = martingale.getSteep(IDs);
+//        double priceLot = Gasket.getTake() / Gasket.getBitmexQuote().getAskPrice();
+        double priceLot = Gasket.getTake() / 10000.0;
+//        double resultLot = Gasket.getMartingaleOpenOneLot();
+        double openLot = openTransactions.getOrderVolumeTest(IDs);
+//        int steep = martingale.getSteep(IDs);
         double result = 0.0;
-
-        if (steep > 1) {
-            for (int i = 2; i <= steep; i++) {
-                resultLot = (resultLot * Gasket.getMartingaleIndex());
-            }
-        }
-
-        result = resultLot * priseLot;
+//        if (steep > 1) {
+//            for (int i = 2; i <= steep; i++) {
+//                resultLot = (resultLot * Gasket.getMartingaleIndex());
+//            }
+//        }
+//        result = resultLot * priseLot;
+        result = priceLot * openLot;
         martingale.setMartingalePROFIT(martingale.getMartingalePROFIT() + result);
     }
 }

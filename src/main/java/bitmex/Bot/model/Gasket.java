@@ -130,14 +130,14 @@ public class Gasket {
     private static String valueNULL = TypeData.NULL.toString();
     private static String typeNULL = TypeData.type.toString();
     private static String avgNULL = TypeData.NULL.toString();
-    private static String dirNULL = TypeData.NULL.toString();
+    private static String dirNULL = TypeData.dir.toString();
     private static String openNULL = TypeData.NULL.toString();
     private static String closeNULL = TypeData.NULL.toString();
     private static String highNULL = TypeData.NULL.toString();
     private static String lowNULL = TypeData.NULL.toString();
 
     private static boolean addOrTESTatTheEndOfTheLine = true;        // добавлять или нет тест в конце строки
-    private static boolean replaceDataWithNULLPro = false;           // включить выключить замену в паттернах для юзера
+    private static boolean replaceDataWithNULLPro = true;           // включить выключить замену в паттернах для юзера
     private static boolean replaceDataWithNULL = true;               // включить выключить замену в паттернах для юзера
 
 
@@ -147,6 +147,11 @@ public class Gasket {
             + "-OPEN_POS_ASK_PLUS" + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS"
             + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
             + "-ASK" + "-BID";                      // уровни для сравнения в II Pro
+
+    private static String levelsForTrimmedPatterns = "OPEN_POS_BID_MINUS" + "-OPEN_POS_ASK_MINUS"
+            + "-OPEN_POS_ASK_PLUS" + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS"
+            + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
+            + "-ASK" + "-BID";                      // уровни для урезаных паттернов User
 
 
 
@@ -1804,6 +1809,16 @@ public class Gasket {
 
     public static void setOpenTransactions(OpenTransactions openTransactions) {
         Gasket.openTransactions = openTransactions;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public static String getLevelsForTrimmedPatterns() {
+        return levelsForTrimmedPatterns;
+    }
+
+    public static void setLevelsForTrimmedPatterns(String levelsForTrimmedPatterns) {
+        Gasket.levelsForTrimmedPatterns = levelsForTrimmedPatterns;
     }
 }
 

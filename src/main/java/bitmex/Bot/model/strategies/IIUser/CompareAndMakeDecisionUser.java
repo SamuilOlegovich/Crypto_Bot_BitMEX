@@ -39,10 +39,10 @@ public class CompareAndMakeDecisionUser extends Thread {
                     + StringHelper.giveData(ID, zeroString));
 
 
-            if (StringHelper.giveData(ID, zeroString).contains(MARTINGALE.toString())) {
-                if (!StringHelper.giveData(MARTINGALE, zeroString).equalsIgnoreCase(OFF.toString())) {
-                    new MakeDealMartingale(marketList, zeroString);
-                }
+//            if (StringHelper.giveData(ID, zeroString).contains(MARTINGALE.toString())) {
+            if (!StringHelper.giveData(MARTINGALE, zeroString).equalsIgnoreCase(OFF.toString())) {
+                new MakeDealMartingale(marketList, zeroString);
+//                }
             } else if (Gasket.isPredictor()) {
                 new Predictor(marketList, zeroString);
             } else {

@@ -1,6 +1,7 @@
 package bitmex.Bot.model.strategies.II;
 
 
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.CompareHelper;
 import bitmex.Bot.model.Gasket;
@@ -145,13 +146,14 @@ public class ListensLooksAndCompares {
         if (b) {
             if (marketListInListString.size() > 0) {
                 for (ArrayList<String> arrayListString : marketListInListString) {
-                    String stringBias = BIAS.toString() + "===" + getBias() + "===" + getDateTerminal() + "\n";
+                    String stringBias = BIAS.toString() + "===" + getBias() + "==="
+                            + TypeData.TIME.toString() + "===" + getDateTerminal() + "\n";
                     arrayListString.add(stringBias);
                 }
             }
 
             ArrayList<String> arrayListOut = new ArrayList<>();
-            arrayListOut.add(NULL.toString() + "===" + getDateTerminal() + "\n");
+            arrayListOut.add(NULL.toString() + "===" + TypeData.TIME.toString() + "===" + getDateTerminal() + "\n");
             marketListInListString.add(arrayListOut);
             priceStart = Gasket.getBitmexQuote().getBidPrice();
 

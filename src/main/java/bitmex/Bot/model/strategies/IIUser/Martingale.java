@@ -1,24 +1,28 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.DatesTimes;
+import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.StringHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
-
+import java.util.Map;
 
 
 // класс хранит айди и шаг в данный момент, если сделка окончена шаг равен - 0
 public class Martingale {
 
     private volatile HashMap<String, String> volumeForEachStep; // все значения следующих шагов
+//    private volatile HashMap<String, Integer> volumeMaxStep;    // значение максимально разрешенного шага по данной стратегии
     private volatile HashMap<String, Integer> hashMap;
-    private double martingalePROFIT;
+    private volatile double martingalePROFIT;
 
     public Martingale() {
         this.volumeForEachStep = new HashMap<>();
         this.hashMap = new HashMap<>();
         this.martingalePROFIT = 0.0;
+        setMartin();
     }
 
 
@@ -61,6 +65,7 @@ public class Martingale {
         }
     }
 
+
     public void setHashMap(String key, int value) {
         synchronized (hashMap) {
             hashMap.put(key, value);
@@ -68,17 +73,38 @@ public class Martingale {
     }
 
 
-
     public synchronized void setVolumeForEachStep(String in) {
+//        Integer steep = Integer.parseInt(StringHelper.giveData(TypeData.STEEP, in));
         String value = StringHelper.giveData(TypeData.LOT, in);
         String key = StringHelper.giveData(TypeData.ID, in);
         volumeForEachStep.put(key, value);
+//        volumeMaxStep.put(key, steep);
+    }
+
+
+    private synchronized void setMartin() {
+        ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsUserClass().getListsPricePatternsUser();
+        for (ArrayList<String> a : arrayLists) {
+            String value = StringHelper.giveData(TypeData.LOT, a.get(0).replaceAll("\n", ""));
+            String key = StringHelper.giveData(TypeData.ID, a.get(0).replaceAll("\n", ""));
+            volumeForEachStep.put(key, value);
+        }
     }
 
 
 
     public synchronized Double getLotForThisSteep(String key, int steep) {
         String[] strings = volumeForEachStep.get(key).split("\\*");
-        return Double.parseDouble(strings[steep - 1]);
+        return steep < strings.length ? Double.parseDouble(strings[steep - 1]) : null;
+    }
+
+
+    public synchronized String showVolumeForEachStep() {
+        StringBuilder stringBuilder = new StringBuilder("\n\nMartingale Settings\n");
+
+        for (Map.Entry entry : volumeForEachStep.entrySet()) {
+            stringBuilder.append("ID===" + entry.getKey() + "===LOT===" + entry.getValue() + "\n");
+        }
+        return stringBuilder.toString() + "\n\n";
     }
 }

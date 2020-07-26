@@ -200,6 +200,8 @@ public class ConsoleHelper {
                 + " ----- показывать загрузку паттернов при запуске программы\n"
                 + "levelsToCompare === " + Gasket.getLevelsToCompare()
                 + " ----- уровни для сравнения II Pro\n"
+                + "levelsForTrimmedPatterns === " + Gasket.getLevelsForTrimmedPatterns()
+                + " ----- уровни которые следует оставлять для урезаных паттернов USERR"
                 + "ERROR === " + Gasket.isERROR()
                 + " ----- включить - отключить показ ошибок в окне программы\n"
                 + "DEBUG === " + Gasket.isDEBUG()
@@ -399,8 +401,8 @@ public class ConsoleHelper {
     public static void printStatisticsMartingale() {
         writeMessage("\n"
                         + "   ----- ***** " + TypeData.MARTINGALE.toString() + " ***** -----" + "\n"
-                        + "PROFIT === " + Gasket.getMartingaleClass().getMartingalePROFIT() + "\n"
-                        + "---------------------------   " + "\n");
+                        + "        PROFIT === " + Gasket.getMartingaleClass().getMartingalePROFIT() + "\n"
+                        + "   ----- ************************************************** -----\n\n");
     }
 
 
@@ -415,6 +417,7 @@ public class ConsoleHelper {
                 + "numberOfCandlesForAnalysis\n"
                 + "takeForCollectingPatterns\n"
                 + "useStopLevelOrNotStopTime\n"
+                + "levelsForTrimmedPatterns\n"
                 + "replaceDataWithNULLPro\n"
                 + "useStopLevelOrNotStop\n"
                 + "numberOfHistoryBlocks\n"

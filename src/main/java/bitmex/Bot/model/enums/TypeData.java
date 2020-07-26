@@ -6,6 +6,7 @@ public enum TypeData {
     NULL_NULL,
     EXAMPLE,
     AVERAGE,
+    STEEP,
     BLOCK,
     START,
     ERROR,

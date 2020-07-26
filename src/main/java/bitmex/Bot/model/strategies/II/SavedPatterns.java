@@ -159,9 +159,7 @@ public class SavedPatterns implements Serializable {
                             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                                     + " --- II ПАТТЕРН такой есть - обновляю информацию по === "
                                     + giveData(ID, stringZero));
-
-                            ReadAndSavePatterns.saveSavedPatternsFromUser();
-                            ReadAndSavePatterns.saveSavedPatterns();
+                            savedPatterns();
                             return;
                         }
                     }
@@ -179,13 +177,17 @@ public class SavedPatterns implements Serializable {
                 maxArraySize = Math.max(inArrayListCopy.size(), maxArraySize);
 
                 listsPricePatterns.sort(getSortSize());
-
-                ReadAndSavePatterns.saveSavedPatternsFromUser();
-                ReadAndSavePatterns.saveSavedPatterns();
+                savedPatterns();
             }
         } else {
             inArrayList.clear();
         }
+    }
+
+    private void savedPatterns() {
+        ReadAndSavePatterns.saveSavedTrimmedPatternsFromUser();
+        ReadAndSavePatterns.saveSavedPatternsFromUser();
+        ReadAndSavePatterns.saveSavedPatterns();
     }
 
 

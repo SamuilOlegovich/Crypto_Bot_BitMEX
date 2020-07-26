@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.iiPro;
 
+import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.model.StringHelper;
@@ -78,7 +79,7 @@ public class ReadAndSavePatternsPro {
 
 
 
-    // сделать тут преобразование стров в строки для юзера
+    // сделать тут преобразование строк в строки для юзера
     public static void saveSavedPatternsFromUser() {
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
@@ -109,6 +110,72 @@ public class ReadAndSavePatternsPro {
 
         WriterAndReadFile.writerFile(stringBuilder.toString(),
                 Gasket.getFilesAndPathCreator().getPathPatternsForUserIIPro(), false);
+    }
+
+
+
+    // сделать тут преобразование строк в строки для юзера с учетом укорочения
+    public static void saveSavedTrimmedPatternsFromUser() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String lineBreak = "\n";
+        String next = NEXT.toString() + lineBreak;
+        stringBuilder.append(START.toString()).append(lineBreak);
+        ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsProClass().getListsPricePatterns();
+
+
+        for (ArrayList<String> arr : arrayLists) {
+
+            for (String s : arr) {
+                if (!s.startsWith(BIAS.toString()) && !s.startsWith(BUY.toString())) {
+                    if (eqalseTrimmedLevels(s)) {
+                        String one = arr.get(arr.indexOf(s) > 0 ? arr.indexOf(s) - 1 : 0);
+                        String two = arr.get(arr.indexOf(s) < arr.size() - 1 ? arr.indexOf(s) + 1 : arr.indexOf(s));
+                        String original = ifPricesAreEqualPutNull(one, s, two);
+
+                        if (Gasket.isReplaceDataWithNULLPro()) {
+                            stringBuilder.append(StringHelper.convertStringForUserInsertNulls(original));
+                            stringBuilder.append("\n");
+                        } else {
+                            stringBuilder.append(StringHelper.convertStringForUser(s));
+                        }
+                    }
+                } else if (s.startsWith(BIAS.toString())) {
+                    stringBuilder.append(s);
+                } else if (s.startsWith(BUY.toString())) {
+                    stringBuilder.append(StringHelper.insertTheMissingDataInTheZeroLine(s));
+                }
+            }
+            stringBuilder.append(next);
+        }
+        stringBuilder.append(END.toString()).append(lineBreak);
+
+        WriterAndReadFile.writerFile(stringBuilder.toString(),
+                Gasket.getFilesAndPathCreator().getPathLevelsForTrimmedPatternsIIPro(), false);
+    }
+
+    private static boolean eqalseTrimmedLevels(String in) {
+        String[] strings = Gasket.getLevelsForTrimmedPatterns().split("-");
+        for (String s : strings) {
+            if (s.equals(StringHelper.giveData(type, in))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // смотрим, ровны ли цены на ближайших строках, если ровны, то меняем ее на null
+    private static String ifPricesAreEqualPutNull(String one, String original, String two) {
+        if (one != null && !one.startsWith(TypeData.BIAS.toString()) && !one.startsWith(TypeData.BUY.toString())) {
+            if (StringHelper.giveData(price, original).equals(StringHelper.giveData(price, one))) {
+                return StringHelper.setData(price, NULL.toString(), original);
+            }
+        }
+        if (two != null && !two.startsWith(TypeData.BIAS.toString()) && !two.startsWith(TypeData.BUY.toString())) {
+            if (StringHelper.giveData(price, original).equals(StringHelper.giveData(price, two))) {
+                return StringHelper.setData(price, NULL.toString(), original);
+            }
+        }
+        return original;
     }
 
 

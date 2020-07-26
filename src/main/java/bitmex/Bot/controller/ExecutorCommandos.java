@@ -45,6 +45,11 @@ public class ExecutorCommandos {
                         writeMessage("indexRatioTransactionsAtWhichEnterMarket === "
                                 + getIndexRatioTransactionsAtWhichEnterMarket() + "\n");
                     break;
+                case "levelsForTrimmedPatterns" :
+                    setLevelsForTrimmedPatterns(strings[1]);
+                        writeMessage("levelsForTrimmedPatterns === "
+                                + getLevelsForTrimmedPatterns() + "\n");
+                    break;
                 case "useStopLevelOrNotStop" :
                     setUseStopLevelOrNotStop(strings[1].equalsIgnoreCase("true"));
                         writeMessage("useStopLevelOrNotStop === "

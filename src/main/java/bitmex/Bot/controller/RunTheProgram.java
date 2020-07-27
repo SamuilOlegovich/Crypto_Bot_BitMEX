@@ -59,7 +59,10 @@ public class RunTheProgram extends Thread {
         Gasket.setOpenTransactions(new OpenTransactions());
         Gasket.setMartingaleClass(new Martingale());
         ConsoleHelper.writeMessage(Gasket.getMartingaleClass().showVolumeForEachStep());
+        
         Gasket.getSavedPatternsUserClass().putinOrderId();
+        Gasket.getSavedPatternsProClass().putinOrderId();
+        Gasket.getSavedPatternsClass().putinOrderId();
 
 
         try {

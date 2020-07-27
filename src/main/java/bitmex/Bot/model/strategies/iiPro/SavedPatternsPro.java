@@ -5,6 +5,7 @@ import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
+import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
 
 import java.util.ArrayList;
 
@@ -402,5 +403,17 @@ public class SavedPatternsPro {
             writeMessage(DatesTimes.getDateTerminal()
                     + " --- Такого номера ===" + StringHelper.giveData(ID, string) + "=== iiPRO ПАТТЕРНА нет");
         }
+    }
+
+
+
+    // приводим в порядок id
+    public void putinOrderId() {
+        int id = 1;
+        for (ArrayList<String> arrayList : listsPricePatterns) {
+            arrayList.set(0, StringHelper.setData(ID, id + "\n", arrayList.get(0)));
+            id++;
+        }
+        ReadAndSavePatternsPro.saveSavedPatterns();
     }
 }

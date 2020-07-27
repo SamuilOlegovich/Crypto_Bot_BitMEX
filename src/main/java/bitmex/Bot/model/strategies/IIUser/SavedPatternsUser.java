@@ -7,8 +7,7 @@ import bitmex.Bot.view.ConsoleHelper;
 
 import java.util.ArrayList;
 
-import static bitmex.Bot.model.enums.TypeData.BIAS;
-import static bitmex.Bot.model.enums.TypeData.ID;
+import static bitmex.Bot.model.enums.TypeData.*;
 
 
 public class SavedPatternsUser {
@@ -126,6 +125,18 @@ public class SavedPatternsUser {
                 arrayList.set(0, out);
             }
         }
+    }
+
+
+
+    // приводим в порядок id
+    public void putinOrderId() {
+        int id = 1;
+        for (ArrayList<String> arrayList : listsPricePatternsUser) {
+            arrayList.set(0, StringHelper.setData(ID, id + " - " + TEST.toString(), arrayList.get(0)));
+            id++;
+        }
+        ReadAndSavePatternsUser.saveSavedPatternsUser();
     }
 
 

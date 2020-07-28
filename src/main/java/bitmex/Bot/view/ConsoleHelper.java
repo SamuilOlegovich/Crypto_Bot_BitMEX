@@ -7,7 +7,7 @@ import bitmex.Bot.model.Gasket;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static bitmex.Bot.view.WriterAndReadFile.writerFile;
+import static bitmex.Bot.model.WriterAndReadFile.writerFile;
 import static bitmex.Bot.model.Gasket.*;
 
 
@@ -257,6 +257,10 @@ public class ConsoleHelper {
                 + " ----- включить тестировку мартингейла\n"
                 + "tradingMartingale === " + isTradingMartingale()
                 + " ----- торговать или нет с помощью мартингейла\n"
+                + "broadcastSignalsFurther === " + isBroadcastSignalsFurther()
+                + " ----- транслировать сигналы дальше для других програм\n"
+                + "BroadcastAddresses === " + getBroadcastAddresses()
+                + " -----  адреса на которые надо ретраслировать сигналы"
                 ;
     }
 
@@ -418,6 +422,7 @@ public class ConsoleHelper {
                 + "takeForCollectingPatterns\n"
                 + "useStopLevelOrNotStopTime\n"
                 + "levelsForTrimmedPatterns\n"
+                + "broadcastSignalsFurther\n"
                 + "replaceDataWithNULLPro\n"
                 + "useStopLevelOrNotStop\n"
                 + "numberOfHistoryBlocks\n"
@@ -428,6 +433,7 @@ public class ConsoleHelper {
                 + "tradingPatternsUser\n"
                 + "apiKeyName2Accounts\n"
                 + "martingaleMaxSteep\n"
+                + "broadcastAddresses\n"
                 + "showLoadPatternsII\n"
                 + "timeBetweenOrders\n"
                 + "gameAllDirection\n"
@@ -464,6 +470,7 @@ public class ConsoleHelper {
                 + "typeOrder\n"
                 + "predictor\n"
                 + "closeNULL\n"
+                + "showSteps\n"
                 + "timeNULL\n"
                 + "openNULL\n"
                 + "highNULL\n"

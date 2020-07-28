@@ -14,7 +14,7 @@ import java.util.Map;
 // класс хранит айди и шаг в данный момент, если сделка окончена шаг равен - 0
 public class Martingale {
 
-    private volatile HashMap<String, String> volumeForEachStep; // все значения следующих шагов
+    private volatile HashMap<String, String> volumeForEachStep;     // все значения следующих шагов
 //    private volatile HashMap<String, Integer> volumeMaxStep;    // значение максимально разрешенного шага по данной стратегии
     private volatile HashMap<String, Integer> hashMap;
     private volatile double martingalePROFIT;
@@ -90,6 +90,15 @@ public class Martingale {
             String key = StringHelper.giveData(TypeData.ID, a.get(0).replaceAll("\n", ""));
             volumeForEachStep.put(key, value);
         }
+    }
+
+
+    public String showSteps() {
+        StringBuilder stringBuilder = new StringBuilder("\n\nMartingale STEEP\n");
+        for (Map.Entry entry : hashMap.entrySet()) {
+            stringBuilder.append("ID===" + entry.getKey() + "===STEEP===" + entry.getValue() + "\n");
+        }
+        return stringBuilder.toString() + "\n\n";
     }
 
 

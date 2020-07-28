@@ -1,5 +1,7 @@
-package bitmex.Bot.view;
+package bitmex.Bot.model;
 
+
+import bitmex.Bot.view.ConsoleHelper;
 
 import java.util.ArrayList;
 import java.io.*;

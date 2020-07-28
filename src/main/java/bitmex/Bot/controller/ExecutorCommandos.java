@@ -65,6 +65,16 @@ public class ExecutorCommandos {
                         writeMessage("predictor === "
                                 + isPredictor() + "\n");
                     break;
+                case "broadcastSignalsFurther" :
+                    setBroadcastSignalsFurther(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("broadcastSignalsFurther === "
+                                + isBroadcastSignalsFurther() + "\n");
+                    break;
+                case "broadcastAddresses" :
+                    setBroadcastAddresses(strings[1]);
+                        writeMessage("broadcastAddresses === "
+                                + getBroadcastAddresses() + "\n");
+                    break;
                 case "useRealOrNotReal":
                     setUseRealOrNotReal(strings[1].equalsIgnoreCase("true"));
                         writeMessage("useRealOrNotReal === "

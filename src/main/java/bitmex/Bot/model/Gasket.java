@@ -40,6 +40,7 @@ public class Gasket {
     private static String numberOfHistoryBlocks = "5-4-3-2";                    // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
+    private static boolean broadcastSignalsFurther = false;         // транслировать сигналы дальше для других програм
     private static boolean showLoadPatternsIIPro = false;           // показывать загрузку паттернов при запуске программы
     private static double takeForCollectingPatterns = 30;           // тейк для сбора и накопления паттернов
     private static int timeStopLiveForUserPatterns = 10;            // время за которое паттерн должен отработать
@@ -139,7 +140,7 @@ public class Gasket {
     private static String lowNULL = TypeData.NULL.toString();
 
     private static boolean addOrTESTatTheEndOfTheLine = true;        // добавлять или нет тест в конце строки
-    private static boolean replaceDataWithNULLPro = true;           // включить выключить замену в паттернах для юзера
+    private static boolean replaceDataWithNULLPro = true;            // включить выключить замену в паттернах для юзера
     private static boolean replaceDataWithNULL = true;               // включить выключить замену в паттернах для юзера
 
 
@@ -154,6 +155,9 @@ public class Gasket {
             + "-OPEN_POS_ASK_PLUS" + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS"
             + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
             + "-ASK" + "-BID";                      // уровни для урезаных паттернов User
+
+    private static String BroadcastAddresses = "IP===localhost===PORT===5555" +
+            "***" + "IP===localhost===PORT===6666";    // адреса на которые надо ретранслировать сигналы
 
 
 
@@ -1829,6 +1833,22 @@ public class Gasket {
 
     public static void setRunTheProgram(RunTheProgram runTheProgram) {
         Gasket.runTheProgram = runTheProgram;
+    }
+
+    public static boolean isBroadcastSignalsFurther() {
+        return broadcastSignalsFurther;
+    }
+
+    public static void setBroadcastSignalsFurther(boolean broadcastSignalsFurther) {
+        Gasket.broadcastSignalsFurther = broadcastSignalsFurther;
+    }
+
+    public static String getBroadcastAddresses() {
+        return BroadcastAddresses;
+    }
+
+    public static void setBroadcastAddresses(String broadcastAddresses) {
+        BroadcastAddresses = broadcastAddresses;
     }
 }
 

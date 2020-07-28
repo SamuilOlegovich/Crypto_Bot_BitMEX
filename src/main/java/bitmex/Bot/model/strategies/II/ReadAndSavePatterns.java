@@ -2,7 +2,7 @@ package bitmex.Bot.model.strategies.II;
 
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.view.WriterAndReadFile;
+import bitmex.Bot.model.WriterAndReadFile;
 import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;

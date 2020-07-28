@@ -1,7 +1,7 @@
 package bitmex.Bot.model.serverAndParser;
 
 import bitmex.Bot.model.Gasket;
-import bitmex.Bot.view.WriterAndReadFile;
+import bitmex.Bot.model.WriterAndReadFile;
 
 
 

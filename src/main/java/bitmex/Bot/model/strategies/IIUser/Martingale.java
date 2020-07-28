@@ -96,7 +96,7 @@ public class Martingale {
 
     public synchronized Double getLotForThisSteep(String key, int steep) {
         String[] strings = volumeForEachStep.get(key).split("\\*");
-        return steep < strings.length ? Double.parseDouble(strings[steep - 1]) : null;
+        return steep - 1 < strings.length ? Double.parseDouble(strings[steep - 1]) : null;
     }
 
 

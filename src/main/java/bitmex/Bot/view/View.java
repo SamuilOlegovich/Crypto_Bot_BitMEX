@@ -65,6 +65,7 @@ public class View extends Thread {
                 jPanel.setBackground(Color.GREEN);
 
                 if (runTheProgram != null) {
+                    runTheProgram.startProgram();
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                             + " --- Программа ЗАПУЩЕНА");
                     Gasket.getListensLooksAndComparesUser().setStopStartFlag(false);
@@ -74,8 +75,8 @@ public class View extends Thread {
 
                 if (runTheProgram == null) {
                     runTheProgram = new RunTheProgram();
+                    Gasket.setRunTheProgram(runTheProgram);
                 }
-
             }
         });
 
@@ -86,6 +87,7 @@ public class View extends Thread {
                 // тут прописать Стоп программы
                 jPanel.setBackground(Color.RED);
 
+                runTheProgram.stopPrograms();
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                         + " --- Программа ОСТАНОВЛЕНА");
 

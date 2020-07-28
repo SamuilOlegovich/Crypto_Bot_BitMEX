@@ -1,5 +1,6 @@
 package bitmex.Bot.model;
 
+import bitmex.Bot.controller.RunTheProgram;
 import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
 import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
 import bitmex.Bot.model.strategies.iiPro.ListensLooksAndComparesPro;
@@ -73,6 +74,7 @@ public class Gasket {
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean tradingTestII = true;
     private static boolean tradingIIPro = false;
+    private static RunTheProgram runTheProgram;
     private static boolean tradingUser = false;
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
     private static double rangePriceMAX = 4.0;          // диапазон в долларах от уровней для срабатывания ордера
@@ -1819,6 +1821,14 @@ public class Gasket {
 
     public static void setLevelsForTrimmedPatterns(String levelsForTrimmedPatterns) {
         Gasket.levelsForTrimmedPatterns = levelsForTrimmedPatterns;
+    }
+
+    public static RunTheProgram getRunTheProgram() {
+        return runTheProgram;
+    }
+
+    public static void setRunTheProgram(RunTheProgram runTheProgram) {
+        Gasket.runTheProgram = runTheProgram;
     }
 }
 

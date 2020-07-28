@@ -1,5 +1,7 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.Gasket;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,11 +20,11 @@ public class OpenTransactions {
 
 
 
-    public Double getOrderVolumeTest(String key) {
+    public synchronized Double getOrderVolumeTest(String key) {
         return mapTest.get(key);
     }
 
-    public void zeroSteepTest(String key) {
+    public synchronized void zeroSteepTest(String key) {
         mapTest.put(key, 0.0);
     }
 
@@ -30,8 +32,13 @@ public class OpenTransactions {
         return mapTest.containsKey(key);
     }
 
-    public void setMapTest(String key, Double value) {
+    public synchronized void setMapTest(String key, Double value) {
         mapTest.put(key, value);
+        try {
+            Thread.sleep(Gasket.getSECOND());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setMapReal(String key, Double value) {

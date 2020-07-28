@@ -1,13 +1,14 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.DatesTimes;
-import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.Gasket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+
 
 
 // класс хранит айди и шаг в данный момент, если сделка окончена шаг равен - 0
@@ -55,7 +56,7 @@ public class Martingale {
         return martingalePROFIT;
     }
 
-    public synchronized void setMartingalePROFIT(double martingalePROFIT) {
+    public void setMartingalePROFIT(double martingalePROFIT) {
         this.martingalePROFIT = martingalePROFIT;
     }
 
@@ -99,9 +100,9 @@ public class Martingale {
     }
 
 
+
     public synchronized String showVolumeForEachStep() {
         StringBuilder stringBuilder = new StringBuilder("\n\nMartingale Settings\n");
-
         for (Map.Entry entry : volumeForEachStep.entrySet()) {
             stringBuilder.append("ID===" + entry.getKey() + "===LOT===" + entry.getValue() + "\n");
         }

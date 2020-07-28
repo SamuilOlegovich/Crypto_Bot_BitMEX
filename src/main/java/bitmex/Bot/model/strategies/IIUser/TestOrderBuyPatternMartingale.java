@@ -54,7 +54,9 @@ public class TestOrderBuyPatternMartingale extends Thread {
                 openTransactions.zeroSteepTest(IDs);
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + IDs + " --- Сработал СТОП ЛОСС USER " + MARTINGALE.toString());
+                        + IDs + " --- Сработал СТОП ЛОСС USER " + MARTINGALE.toString() + " - по цене - "
+                        + Gasket.getBitmexQuote().getBidPrice()
+                );
                 break;
             }
 
@@ -71,7 +73,9 @@ public class TestOrderBuyPatternMartingale extends Thread {
                 martingale.zeroSteep(IDs);
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + IDs + " --- Сработал ТЕЙК ПРОФИТ USER " + MARTINGALE.toString());
+                        + IDs + " --- Сработал ТЕЙК ПРОФИТ USER " + MARTINGALE.toString() + " - по цене - "
+                        + Gasket.getBitmexQuote().getAskPrice()
+                );
                 break;
             }
 
@@ -86,35 +90,17 @@ public class TestOrderBuyPatternMartingale extends Thread {
     }
 
     private void setStop() {
-//        double priseLot = Gasket.getStop() / Gasket.getBitmexQuote().getAskPrice();
         double openLot = openTransactions.getOrderVolumeTest(IDs);
-//        double resultLot = Gasket.getMartingaleOpenOneLot();
         double priceLot = Gasket.getStop() / 10000.0;
-//        int steep = martingale.getSteep(IDs);
         double result = 0.0;
-//        if (steep > 1) {
-//            for (int i = 2; i <= steep; i++) {
-//                resultLot = resultLot + (result * Gasket.getMartingaleIndex());
-//            }
-//        }
-//        result = resultLot * priseLot;
         result = priceLot * openLot;
         martingale.setMartingalePROFIT(martingale.getMartingalePROFIT() - result);
     }
 
     private void setTake() {
-//        double priceLot = Gasket.getTake() / Gasket.getBitmexQuote().getAskPrice();
         double priceLot = Gasket.getTake() / 10000.0;
-//        double resultLot = Gasket.getMartingaleOpenOneLot();
         double openLot = openTransactions.getOrderVolumeTest(IDs);
-//        int steep = martingale.getSteep(IDs);
         double result = 0.0;
-//        if (steep > 1) {
-//            for (int i = 2; i <= steep; i++) {
-//                resultLot = (resultLot * Gasket.getMartingaleIndex());
-//            }
-//        }
-//        result = resultLot * priseLot;
         result = priceLot * openLot;
         martingale.setMartingalePROFIT(martingale.getMartingalePROFIT() + result);
     }

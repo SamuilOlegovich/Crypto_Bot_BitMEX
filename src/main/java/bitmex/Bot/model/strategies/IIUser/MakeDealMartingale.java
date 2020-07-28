@@ -107,7 +107,8 @@ public class MakeDealMartingale extends Thread {
 
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                                 + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
-                                + " сделал сделку БАЙ USER - TEST " + MARTINGALE.toString()
+                                + " сделал сделку БАЙ USER - TEST " + MARTINGALE.toString() + " - по цене - "
+                                + Gasket.getBitmexQuote().getAskPrice()
                         );
                     } else {
                         martingale.downSteep(IDs);
@@ -122,7 +123,7 @@ public class MakeDealMartingale extends Thread {
             } else {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
-                        + " сделку БАЙ USER " + MARTINGALE.toString() + "отменил по истечению времени"
+                        + " сделку БАЙ USER " + MARTINGALE.toString() + "отменил по истечению ВРЕМЕНИ"
                 );
             }
 
@@ -169,7 +170,8 @@ public class MakeDealMartingale extends Thread {
 
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                                 + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
-                                + " сделал сделку СЕЛЛ USER - TEST " + MARTINGALE.toString()
+                                + " сделал сделку СЕЛЛ USER - TEST " + MARTINGALE.toString() + " - по цене - "
+                                + Gasket.getBitmexQuote().getBidPrice()
                         );
                     } else {
                         martingale.downSteep(IDs);
@@ -185,7 +187,7 @@ public class MakeDealMartingale extends Thread {
             } else {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
-                        + " сделку СЕЛЛ USER " + MARTINGALE.toString() + "отменил по истечению времени"
+                        + " сделку СЕЛЛ USER " + MARTINGALE.toString() + "отменил по истечению ВРЕМЕНИ"
                 );
             }
         }

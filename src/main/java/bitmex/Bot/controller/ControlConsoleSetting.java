@@ -21,7 +21,7 @@ public class ControlConsoleSetting extends Thread {
             if (string.length() > 3) {
                 if (string.trim().equals("info")) {
                     ConsoleHelper.printInfoSettings();
-                } else if (string.trim().equalsIgnoreCase("showSteps")) {
+                } else if (string.trim().equalsIgnoreCase("showSteeps")) {
                     Gasket.getMartingaleClass().showSteps();
                 } else if (string.trim().equalsIgnoreCase("flag")) {
                     ConsoleHelper.printFlag();

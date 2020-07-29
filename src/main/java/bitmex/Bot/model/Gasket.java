@@ -1,30 +1,32 @@
 package bitmex.Bot.model;
 
-import bitmex.Bot.controller.RunTheProgram;
 import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
-import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
 import bitmex.Bot.model.strategies.iiPro.ListensLooksAndComparesPro;
 import bitmex.Bot.model.strategies.iiPro.ListensToLooksAndFillsPro;
 import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
 import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
 import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
+import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
 import bitmex.Bot.model.strategies.iiPro.SavedPatternsPro;
-import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
+import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.strategies.IIUser.Martingale;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
+import bitmex.Bot.model.serverAndParser.Repeater;
 import bitmex.Bot.controller.ExecutorCommandos;
+import bitmex.Bot.controller.RunTheProgram;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.View;
 
 import java.util.List;
 
-
-
-
 import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
+
+
+
+
 
 public class Gasket {
 
@@ -81,7 +83,7 @@ public class Gasket {
     private static double rangePriceMAX = 4.0;          // диапазон в долларах от уровней для срабатывания ордера
     private static double rangePriceMIN = 0.0;          // диапазон в долларах от уровней для отмены ордера
     private static String typeOrder = "Limit";          // тип первого открываемого ордера
-    private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
+    private static int timeBetweenOrders = 1;           // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;
     private static boolean tradingII = false;
     private static int secondsSleepTime = 13;       // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
@@ -97,6 +99,7 @@ public class Gasket {
     private static boolean INFO = true;
     private static double take = 15.0;              // тейк профит в долларах
     private static double stop = 30.0;              // стоп лосс в долларах
+    private static Repeater repeater;
     private static double lot = 1.0;                // количество контрактов
     private static String path = "";
     private static View viewThread;
@@ -1849,6 +1852,14 @@ public class Gasket {
 
     public static void setBroadcastAddresses(String broadcastAddresses) {
         BroadcastAddresses = broadcastAddresses;
+    }
+
+    public static Repeater getRepeater() {
+        return repeater;
+    }
+
+    public static void setRepeater(Repeater repeater) {
+        Gasket.repeater = repeater;
     }
 }
 

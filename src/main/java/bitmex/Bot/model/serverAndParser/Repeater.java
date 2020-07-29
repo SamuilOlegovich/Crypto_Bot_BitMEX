@@ -4,21 +4,21 @@ import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.Gasket;
 
-import java.net.Socket;
-import java.io.*;
+import java.util.ArrayList;
 
 
 
-public class Repeater extends Thread {
-    private String inString;
 
-    public Repeater(String in) {
-        this.inString = in;
-        start();
+
+public class Repeater {
+    private ArrayList<RepeaterSocket> repeaterSockets;
+
+    public Repeater() {
+        this.repeaterSockets = new ArrayList<>();
+//        init();
     }
 
-    @Override
-    public void run() {
+    private void init() {
         String[] ipPort = Gasket.getBroadcastAddresses().split("\\*\\*\\*");
         String port;
         String ip;
@@ -26,49 +26,25 @@ public class Repeater extends Thread {
         for (String s : ipPort) {
             port = StringHelper.giveData(TypeData.PORT, s);
             ip = StringHelper.giveData(TypeData.IP, s);
-            new SocketThreads(ip, port, inString);
+//            repeaterSockets.add(new RepeaterSocket(ip, port));
         }
     }
 
-    private class SocketThreads extends Thread {
-        private Socket clientSocket;
-        private BufferedWriter out;
-        private String ip;
-        private String in;
-        private int port;
+    public synchronized void transferTo(ArrayList<String> in) {
+        ArrayList<String> arrayList = new ArrayList<>(in);
+//        for (RepeaterSocket repeaterSocket : repeaterSockets) {
+//            repeaterSocket.addSignals(arrayList);
+//        }
 
-        public SocketThreads(String ip, String port, String in) {
-            this.port = Integer.parseInt(port);
-            this.in = in;
-            this.ip = ip;
-            start();
-        }
+        String[] ipPort = Gasket.getBroadcastAddresses().split("\\*\\*\\*");
+        String port;
+        String ip;
 
-        @Override
-        public void run() {
-//            try {
-//                try {
-//                    //clientSocket = new Socket("localhost", 5555); // этой строкой мы запрашиваем
-//                    clientSocket = new Socket(ip, port); // этой строкой мы запрашиваем
-////                    out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-//
-//                    out.write(in + "\n"); // отправляем сообщение на сервер
-//                    out.flush();
-//                } finally { // в любом случае необходимо закрыть сокет и потоки
-//                    ConsoleHelper.writeMessage("Клиент был закрыт...");
-//                    clientSocket.close();
-//                    out.close();
-//                }
-//            } catch (IOException e) {
-//                try {
-//                    clientSocket.close();
-//                    out.close();
-//                } catch (IOException ioException) {
-//                    ioException.printStackTrace();
-//                }
-//                ConsoleHelper.writeMessage("Что-то не то с репитером.");
-//            }
-
+        for (String s : ipPort) {
+            port = StringHelper.giveData(TypeData.PORT, s);
+            ip = StringHelper.giveData(TypeData.IP, s);
+//            repeaterSockets.add(new RepeaterSocket(ip, port));
+            new RepeaterSocket(ip, port, arrayList);
         }
     }
 }

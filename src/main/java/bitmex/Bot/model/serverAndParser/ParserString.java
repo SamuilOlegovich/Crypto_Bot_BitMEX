@@ -29,6 +29,8 @@ public class ParserString {
 
     public synchronized void parserStringJson(String string) {
         new WriterString(string);
+//        ConsoleHelper.writeMessage("Входящаа строка ---- " + string);
+
 
         if (linkWithIndicator) {
             if (string.length() > 20) {

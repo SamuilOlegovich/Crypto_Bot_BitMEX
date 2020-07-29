@@ -122,6 +122,8 @@ public class View extends Thread {
                         ConsoleHelper.printInfoSettings();
                     } else if (string.trim().equalsIgnoreCase("commands")) {
                         ConsoleHelper.showCommands();
+                    } else if (string.trim().equalsIgnoreCase("showSteeps")) {
+                        ConsoleHelper.writeMessage(Gasket.getMartingaleClass().showSteps());
                     } else if (string.trim().equalsIgnoreCase("flag")) {
                         ConsoleHelper.printFlag();
                     } else if (string.trim().equalsIgnoreCase("price")) {

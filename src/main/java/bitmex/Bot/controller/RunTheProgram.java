@@ -5,6 +5,7 @@ import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.strategies.IIUser.Martingale;
 import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
+import bitmex.Bot.model.serverAndParser.Repeater;
 import bitmex.Bot.model.serverAndParser.Server;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
@@ -19,6 +20,7 @@ public class RunTheProgram extends Thread {
     private BitmexClient bitmexClient2Accounts;
     private BitmexApiKey bitmexApiKey;
     private BitmexClient bitmexClient;
+    private Repeater repeater;
     private Ticker ticker;
     private Server server;
 
@@ -69,6 +71,10 @@ public class RunTheProgram extends Thread {
         Gasket.getSavedPatternsProClass().putinOrderId();
         Gasket.getSavedPatternsClass().putinOrderId();
 
+        if (Gasket.isBroadcastSignalsFurther()) {
+            repeater = new Repeater();
+            Gasket.setRepeater(repeater);
+        }
 
         try {
             Thread.sleep(1000 * 5);

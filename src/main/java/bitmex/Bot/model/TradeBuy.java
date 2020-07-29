@@ -38,7 +38,21 @@ public class TradeBuy extends Thread {
         this.stop = Gasket.getStop();
         this.lot = Gasket.getLot();
         this.ID = id;
+        init();
+    }
 
+    public TradeBuy(String id, double lot) {
+        this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
+        this.bitmexClient = Gasket.getBitmexClient();
+        this.priceActiv = Gasket.getPriceActive();
+        this.typeOrder = Gasket.getTypeOrder();
+        this.orderBuyOpen = new BitmexOrder();
+        this.visible = Gasket.getVisible();
+        this.ticker = Gasket.getTicker();
+        this.take = Gasket.getTake();
+        this.stop = Gasket.getStop();
+        this.lot = lot;
+        this.ID = id;
         init();
     }
 
@@ -67,7 +81,7 @@ public class TradeBuy extends Thread {
                 + orderBuyAnswer.toString());
 
         try {
-            Thread.sleep(1000 * timeBetweenOrders);
+            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -87,7 +101,7 @@ public class TradeBuy extends Thread {
                 + orderLimitIfTouchedAnswer.toString());
 
         try {
-            Thread.sleep(1000 * timeBetweenOrders);
+            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

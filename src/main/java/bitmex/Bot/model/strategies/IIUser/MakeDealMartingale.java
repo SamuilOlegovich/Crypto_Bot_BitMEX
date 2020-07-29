@@ -78,7 +78,8 @@ public class MakeDealMartingale extends Thread {
                     if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
                         openTransactions.setMapTest(IDs, Gasket.getLot());
                         martingale.upSteep(IDs);
-                        new TradeBuy(stringOut);
+//                        new TradeBuy(stringOut);
+                        new TradeBuy(stringOut, martingale.getLotForThisSteep(IDs, martingale.getSteep(IDs)));
                     }
 
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "

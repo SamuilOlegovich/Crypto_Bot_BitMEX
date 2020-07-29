@@ -38,7 +38,21 @@ public class TradeSell extends Thread {
         this.stop = Gasket.getStop();
         this.lot = Gasket.getLot();
         this.ID = id;
+        init();
+    }
 
+    public TradeSell(String id, double lot) {
+        this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
+        this.bitmexClient = Gasket.getBitmexClient();
+        this.priceActiv = Gasket.getPriceActive();
+        this.typeOrder = Gasket.getTypeOrder();
+        this.orderSellOpen = new BitmexOrder();
+        this.visible = Gasket.getVisible();
+        this.ticker = Gasket.getTicker();
+        this.take = Gasket.getTake();
+        this.stop = Gasket.getStop();
+        this.lot = lot;
+        this.ID = id;
         init();
     }
 
@@ -52,7 +66,6 @@ public class TradeSell extends Thread {
     }
 
     private double getPrise() {
-
         if (Gasket.isTwoAccounts()) {
             return Gasket.getBitmex2Quote().getAskPrice();
         } else return Gasket.getBitmexQuote().getAskPrice();
@@ -77,7 +90,7 @@ public class TradeSell extends Thread {
                 + orderSellAnswer.toString());
 
         try {
-            Thread.sleep(1000 * timeBetweenOrders);
+            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -98,7 +111,7 @@ public class TradeSell extends Thread {
                 + orderLimitIfTouchedAnswer.toString());
 
         try {
-            Thread.sleep(1000 * timeBetweenOrders);
+            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

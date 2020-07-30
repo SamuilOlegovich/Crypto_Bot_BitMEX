@@ -15,17 +15,16 @@ import static bitmex.Bot.model.enums.TypeData.*;
 
 
 
-
-
-// Определяем какую сделку сделать и даем команду на ее исполнение
-public class MakeDealUser extends Thread {
+public class MakeDealPredictor extends Thread {
     private ArrayList<String> marketList;
     private String patternZeroString;
+    private boolean doNotDoDeal;
 
 
-    public MakeDealUser(ArrayList<String> marketList, String patternZeroString) {
+    public MakeDealPredictor(boolean doNotDoDeal, ArrayList<String> marketList, String patternZeroString) {
         this.marketList = new ArrayList<>(marketList);
         this.patternZeroString = patternZeroString;
+        this.doNotDoDeal = doNotDoDeal;
         start();
     }
 
@@ -35,7 +34,7 @@ public class MakeDealUser extends Thread {
     public void run() {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Определяю какую сделку сделать согласно ПАТТЕРНАМ USER");
-        
+
         String stringOut = patternZeroString;
 
 
@@ -47,7 +46,7 @@ public class MakeDealUser extends Thread {
                     double index = (double) Integer.parseInt(giveData(BUY, patternZeroString))
                             / Integer.parseInt(giveData(SELL, patternZeroString));
 
-                    if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
+                    if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket() && doNotDoDeal) {
                         new TradeBuy(stringOut);
                     }
 
@@ -57,7 +56,7 @@ public class MakeDealUser extends Thread {
                 }
 
                 if (Gasket.isTradingTestUser()) {
-                    new TestOrderBuyPatternUser(stringOut, Gasket.getBitmexQuote().getAskPrice());
+                    new TestOrderBuyPatternPredictor(doNotDoDeal, stringOut, Gasket.getBitmexQuote().getAskPrice());
 
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                             + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
@@ -75,11 +74,10 @@ public class MakeDealUser extends Thread {
 
             if (conditionsAreMet(false)) {
                 if (Gasket.isTradingUser() && !patternZeroString.endsWith(TEST.toString())) {
-
                     double index = (double) Integer.parseInt(giveData(SELL, patternZeroString))
                             / Integer.parseInt(giveData(BUY, patternZeroString));
 
-                    if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
+                    if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket() && doNotDoDeal) {
                         new TradeSell(stringOut);
                     }
 
@@ -90,7 +88,7 @@ public class MakeDealUser extends Thread {
                 }
 
                 if (Gasket.isTradingTestUser()) {
-                    new TestOrderSellPatternUser(stringOut, Gasket.getBitmexQuote().getBidPrice());
+                    new TestOrderSellPatternPredictor(doNotDoDeal, stringOut, Gasket.getBitmexQuote().getBidPrice());
 
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                             + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
@@ -199,43 +197,3 @@ public class MakeDealUser extends Thread {
     }
 }
 
-
-
-//    0 {"period": "M5",
-//    1 "preview": "1",
-//    2 "time": "2020-05-27 12:28:00",
-//    3 "price": "9175.0",
-//    4 "value": "2920763",
-//    5 "type": "ASK",
-//    6 "avg": "2871888",
-//    7 "dir": "1",
-//    8 "open": "9167.5",
-//    9 "close": "9178.5",
-//    10 "high": "9183.0",
-//    11 "low": "9167.0"}
-//
-//
-//    0 period
-//    1 period.toString()
-//    2 ===preview=== +
-//    3 preview +
-//    4 "===time===" +
-//    5 dateFormat.format(time)
-//    6 "===price===" +
-//    7 price
-//    8 "===value===" +
-//    9 value +
-//    10 "===type===" +
-//    11 type.toString() +
-//    12 "===avg===" +
-//    13 avg
-//    14 "===dir===" +
-//    15 dir + "
-//    16 ===open===" +
-//    17 open + "
-//    18 ===close===" +
-//    19 close + "
-//    20 ===high===" +
-//    21 high
-//    22 ===low===" +
-//    23 low

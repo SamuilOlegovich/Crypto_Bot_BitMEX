@@ -20,9 +20,5 @@ public class Test {
 //        System.out.println(giveData(TypeData.avg, string));
 //        System.out.println(giveData(TypeData.dir, string));
 
-
-
-
-
     }
 }

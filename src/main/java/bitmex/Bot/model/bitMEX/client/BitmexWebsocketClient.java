@@ -231,12 +231,6 @@ public class BitmexWebsocketClient implements IBitmexWebsocketClient, WebsocketD
         return command;
     }
 
-//    protected String buildSubscribeCommand(String... args) {
-//        String command = buildCommandJson("subscribe", (Object) args);
-//        subscribeCommandList.add(command);
-//        return command;
-//    }
-
     protected String buildCommandJson(String command, Object... args) {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"op\": \"")

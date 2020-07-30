@@ -24,8 +24,8 @@ public class FilesAndPathCreator {
     private String pathPatternsIIPro;
     private String pathPatternsUser;
     private String pathFullHistory;
-    private String pathPatterns;
     private String pathSettings;
+    private String pathPatterns;
     private String pathLogs;
 
 
@@ -48,10 +48,8 @@ public class FilesAndPathCreator {
 
     private void createdPath() {
 
-//        String[] strings = getClass().getResource("").getPath().split("bitmex-client.jar");
-        String[] strings = getClass().getResource("").getPath().split("bitmex-client-master.jar");
+        String[] strings = getClass().getResource("").getPath().split("bitmex-client.jar");
         String finish = strings[0].replaceAll("file:", "");
-        String path = getClass().getResource("").getPath();
 
         if (System.getProperty("os.name").startsWith("Windows")) {
             finish = finish.replaceFirst("/", "").replaceAll("/", "\\\\");
@@ -244,7 +242,6 @@ public class FilesAndPathCreator {
             String string = getClass().getResource("").getPath()
                     .replaceAll("target/classes", "src/main/java")
                     .replaceAll("model/", "");
-
 
             pathPureHistoryOfPatternsIn = string + "Logs/PureHistoryOfPatternsIn/PureHistoryOfPatternsIn.txt";
             pathPatternsTemporaryIIPro = string + "Logs/PatternsUser/iiProTemporaryPatterns.txt";

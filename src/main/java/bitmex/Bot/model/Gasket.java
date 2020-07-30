@@ -115,9 +115,9 @@ public class Gasket {
     private static String highNULL = TypeData.NULL.toString();
     private static String lowNULL = TypeData.NULL.toString();
 
-    private static boolean addOrTESTatTheEndOfTheLine = false;      // добавлять или нет тест в конце строки
-    private static boolean replaceDataWithNULLPro = false;          // включить выключить замену в паттернах для юзера
-    private static boolean replaceDataWithNULL = true;              // включить выключить замену в паттернах для юзера
+    private static boolean addOrTESTatTheEndOfTheLine = true;        // добавлять или нет тест в конце строки
+    private static boolean replaceDataWithNULLPro = false;           // включить выключить замену в паттернах для юзера
+    private static boolean replaceDataWithNULL = true;               // включить выключить замену в паттернах для юзера
 
 
 

@@ -9,6 +9,7 @@ import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.view.View;
 
 

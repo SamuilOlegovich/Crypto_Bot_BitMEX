@@ -111,8 +111,7 @@ public class StringHelper {
         return "period===" + period + "===preview===" + preview + "===time===" + time + "===price===" + price
                 + "===value===" + value + "===type===" + type + "===avg===" + avg + "===dir===" + dir
                 + "===open===" + open + "===close===" + close + "===high===" + high
-                + "===low===" + low
-                + "\n";
+                + "===low===" + low;
     }
 
 
@@ -146,8 +145,7 @@ public class StringHelper {
         return "period===" +  period + "===preview===" + preview + "===time===" + time + "===price===" + price
                 + "===value===" + value + "===type===" + type + "===avg===" + avg + "===dir===" + dir
                 + "===open===" + open + "===close===" + close + "===high===" + high
-                + "===low===" + low
-                + "\n";
+                + "===low===" + low;
     }
 
 
@@ -188,6 +186,10 @@ public class StringHelper {
         stringBuilder.append("===");
         stringBuilder.append(TypeData.NULL.toString());
         stringBuilder.append("===");
+        stringBuilder.append(TypeData.PREDICTOR.toString());
+        stringBuilder.append("===");
+        stringBuilder.append(TypeData.NULL.toString());
+        stringBuilder.append("===");
 
         stringBuilder.append(strings[10]);
         stringBuilder.append("===");
@@ -197,7 +199,7 @@ public class StringHelper {
             stringBuilder.append(" --- " + TypeData.TEST.toString());
         }
 
-        stringBuilder.append("\n");
+        //stringBuilder.append("\n");
 
         return stringBuilder.toString();
     }

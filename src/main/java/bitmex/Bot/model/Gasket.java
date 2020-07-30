@@ -32,7 +32,7 @@ public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
-    private static double  indexRatioTransactionsAtWhichEnterMarket = 2.5;      // индекс соотношения сделок прикотором входим в рынок
+    private static double  indexRatioTransactionsAtWhichEnterMarket = 2.0;      // индекс соотношения сделок прикотором входим в рынок
     private static ListensLooksAndComparesPro listensLooksAndComparesPro;
     private static ListensToLooksAndFillsPro listensToLooksAndFillsPro;
     private static ListensLooksAndCompares listensLooksAndCompares;

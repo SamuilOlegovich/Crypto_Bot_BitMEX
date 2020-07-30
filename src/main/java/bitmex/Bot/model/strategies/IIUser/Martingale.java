@@ -16,12 +16,15 @@ public class Martingale {
 
     private volatile HashMap<String, String> volumeForEachStep;     // все значения следующих шагов
 //    private volatile HashMap<String, Integer> volumeMaxStep;    // значение максимально разрешенного шага по данной стратегии
-    private volatile HashMap<String, Integer> hashMap;
+    private volatile HashMap<String, Integer> steepTest;
+    private volatile HashMap<String, Integer> steepReal;
     private volatile double martingalePROFIT;
+
 
     public Martingale() {
         this.volumeForEachStep = new HashMap<>();
-        this.hashMap = new HashMap<>();
+        this.steepTest = new HashMap<>();
+        this.steepReal = new HashMap<>();
         this.martingalePROFIT = 0.0;
         setMartin();
     }
@@ -29,26 +32,50 @@ public class Martingale {
 
 
     public int getSteep(String key) {
-        synchronized (hashMap) {
-            return hashMap.get(key);
+        synchronized (steepTest) {
+            return steepTest.get(key);
+        }
+    }
+
+    public int getSteepReal(String key) {
+        synchronized (steepReal) {
+            return steepReal.get(key);
         }
     }
 
     public void upSteep(String key) {
-        synchronized (hashMap) {
-            hashMap.put(key, hashMap.get(key) + 1);
+        synchronized (steepTest) {
+            steepTest.put(key, steepTest.get(key) + 1);
+        }
+    }
+
+    public void upSteepReal(String key) {
+        synchronized (steepReal) {
+            steepReal.put(key, steepReal.get(key) + 1);
         }
     }
 
     public void downSteep(String key) {
-        synchronized (hashMap) {
-            hashMap.put(key, hashMap.get(key) - 1);
+        synchronized (steepTest) {
+            steepTest.put(key, steepTest.get(key) - 1);
+        }
+    }
+
+    public void downSteepReal(String key) {
+        synchronized (steepReal) {
+            steepReal.put(key, steepReal.get(key) - 1);
         }
     }
 
     public void zeroSteep(String key) {
-        synchronized (hashMap) {
-            hashMap.put(key, 0);
+        synchronized (steepTest) {
+            steepTest.put(key, 0);
+        }
+    }
+
+    public void zeroSteepReal(String key) {
+        synchronized (steepReal) {
+            steepReal.put(key, 0);
         }
     }
 
@@ -61,15 +88,27 @@ public class Martingale {
     }
 
     public boolean isThereSuchKey(String key) {
-        synchronized (hashMap) {
-            return hashMap.containsKey(key);
+        synchronized (steepTest) {
+            return steepTest.containsKey(key);
+        }
+    }
+
+    public boolean isThereSuchKeyReal(String key) {
+        synchronized (steepReal) {
+            return steepReal.containsKey(key);
         }
     }
 
 
-    public void setHashMap(String key, int value) {
-        synchronized (hashMap) {
-            hashMap.put(key, value);
+    public void setMapSteep(String key, int value) {
+        synchronized (steepTest) {
+            steepTest.put(key, value);
+        }
+    }
+
+    public void setMapSteepReal(String key, int value) {
+        synchronized (steepTest) {
+            steepTest.put(key, value);
         }
     }
 
@@ -95,7 +134,7 @@ public class Martingale {
 
     public String showSteps() {
         StringBuilder stringBuilder = new StringBuilder("\n\nMartingale STEEP\n");
-        for (Map.Entry entry : hashMap.entrySet()) {
+        for (Map.Entry entry : steepTest.entrySet()) {
             stringBuilder.append("ID===" + entry.getKey() + "===STEEP===" + entry.getValue() + "\n");
         }
         return stringBuilder.toString() + "\n\n";

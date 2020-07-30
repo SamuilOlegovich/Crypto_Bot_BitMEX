@@ -24,6 +24,10 @@ public class OpenTransactions {
         return mapTest.get(key);
     }
 
+    public synchronized Double getOrderVolumeReal(String key) {
+        return mapReal.get(key);
+    }
+
     public synchronized void zeroSteepTest(String key) {
         mapTest.put(key, 0.0);
     }
@@ -41,8 +45,13 @@ public class OpenTransactions {
         }
     }
 
-    public void setMapReal(String key, Double value) {
+    public synchronized void setMapReal(String key, Double value) {
         mapReal.put(key, value);
+        try {
+            Thread.sleep(Gasket.getSECOND());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 

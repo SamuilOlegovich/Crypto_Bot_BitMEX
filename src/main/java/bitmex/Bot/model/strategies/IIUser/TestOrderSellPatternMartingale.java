@@ -14,6 +14,7 @@ public class TestOrderSellPatternMartingale extends Thread {
     private Martingale martingale;
     private double priseTakeOrder;
     private double priseStopOrder;
+    private boolean testOrReal;
     private String zeroString;
     private String steeps;
     private String IDs;
@@ -27,6 +28,19 @@ public class TestOrderSellPatternMartingale extends Thread {
         this.openTransactions = Gasket.getOpenTransactions();
         this.martingale = Gasket.getMartingaleClass();
         this.zeroString = zeroString;
+        this.testOrReal = false;
+        start();
+    }
+
+    public TestOrderSellPatternMartingale(boolean b, String zeroString, double priseOpenOrder) {
+        this.steeps = StringHelper.giveData(MARTINGALE, zeroString);
+        this.IDs = StringHelper.giveData(TypeData.ID, zeroString);
+        this.priseTakeOrder = priseOpenOrder - Gasket.getTake();
+        this.priseStopOrder = priseOpenOrder + Gasket.getStop();
+        this.openTransactions = Gasket.getOpenTransactions();
+        this.martingale = Gasket.getMartingaleClass();
+        this.zeroString = zeroString;
+        this.testOrReal = b;
         start();
     }
 

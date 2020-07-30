@@ -32,8 +32,16 @@ public class OpenTransactions {
         mapTest.put(key, 0.0);
     }
 
+    public synchronized void zeroSteepReal(String key) {
+        mapReal.put(key, 0.0);
+    }
+
     public boolean isThereSuchKeyTest(String key) {
         return mapTest.containsKey(key);
+    }
+
+    public boolean isThereSuchKeyReal(String key) {
+        return mapReal.containsKey(key);
     }
 
     public synchronized void setMapTest(String key, Double value) {

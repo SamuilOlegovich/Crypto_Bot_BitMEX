@@ -31,6 +31,7 @@ import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
 public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
+    private static boolean enableDisableReplacementIDinPatternsUser = false;    // включить выключить замену id в паттернах USER
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
     private static double  indexRatioTransactionsAtWhichEnterMarket = 2.0;      // индекс соотношения сделок прикотором входим в рынок
     private static ListensLooksAndComparesPro listensLooksAndComparesPro;
@@ -57,6 +58,7 @@ public class Gasket {
     private static volatile boolean oneBuyFLAG = true;
     private static int useStopLevelOrNotStopTime = 10;              // сколько минут отслеживать сделку вышедшею за MIN уровни
     private static BitmexClient bitmexClient2Accounts;
+    private static boolean testOrRealAtTheEnd = false;              // на что меняем окончание строки ID - на тест(false) или на реал(true)
     private static SavedPatternsPro savedPatternsPro;
     private static volatile BitmexQuote bitmex2Quote;               // для получения данных по насущной котировке.
     private static boolean savedPatternsIIPro = true;               // включить нахождение и запись патернов
@@ -270,6 +272,22 @@ public class Gasket {
     private static int OS_STOP_PAT = 0;
 
 
+    public static boolean isEnableDisableReplacementIDinPatternsUser() {
+        return enableDisableReplacementIDinPatternsUser;
+    }
+
+    public static void setEnableDisableReplacementIDinPatternsUser(boolean enableDisableReplacementIDinPatternsUser) {
+        Gasket.enableDisableReplacementIDinPatternsUser = enableDisableReplacementIDinPatternsUser;
+    }
+
+    public static boolean isTestOrRealAtTheEnd() {
+        return testOrRealAtTheEnd;
+    }
+
+
+    public static void setTestOrRealAtTheEnd(boolean testOrRealAtTheEnd) {
+        Gasket.testOrRealAtTheEnd = testOrRealAtTheEnd;
+    }
 
     public static BitmexChartData price(Ticker ticker) {
             List<BitmexChartData> list = bitmexClient.getChartData(ticker, 1, ONE_MINUTE);

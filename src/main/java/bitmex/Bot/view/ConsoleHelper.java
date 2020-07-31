@@ -1,15 +1,18 @@
 package bitmex.Bot.view;
 
+import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.enums.TypeData;
 import java.io.InputStreamReader;
-import bitmex.Bot.model.Gasket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static bitmex.Bot.model.WriterAndReadFile.writerFile;
 import static bitmex.Bot.model.Gasket.*;
-
+import static bitmex.Bot.model.Gasket.getViewThread;
+import static bitmex.Bot.model.Gasket.getViewThread;
+import static bitmex.Bot.model.WriterAndReadFile.writerFile;
+import static bitmex.Bot.model.enums.TypeData.MARTINGALE;
+import static bitmex.Bot.model.enums.TypeData.REAL;
 
 
 public class ConsoleHelper {
@@ -111,8 +114,8 @@ public class ConsoleHelper {
                 + " ----- Выбираем счет, true - реальный счет\n"
                 + "gameAllDirection === " + Gasket.isGameAllDirection()
                 + " ----- true - играть во все стороны на одном счету\n"
-                + "gameAllDirection === " + Gasket.isGameAllDirection()
-                + " ----- true - играть во все стороны на одном счету\n"
+//                + "gameAllDirection === " + Gasket.isGameAllDirection()
+//                + " ----- true - играть во все стороны на одном счету\n"
                 + "gameDirection === " + Gasket.isGameDirection()
                 + " ----- направление игры при одном счете, true - Buy, false - Sell\n"
                 + "twoAccounts === " + Gasket.isTwoAccounts()
@@ -238,8 +241,13 @@ public class ConsoleHelper {
                 + " ----- включить выключить замену данных\n"
                 + "replaceDataWithNULLPro === " + Gasket.isReplaceDataWithNULL()
                 + " ----- включить выключить замену данных\n"
+                + "enableDisableReplacementIDinPatternsUser === "
+                + Gasket.isEnableDisableReplacementIDinPatternsUser()
+                + " ----- включить выключить замену id в паттернах USER\n"
                 + "addOrTESTatTheEndOfTheLine === " + Gasket.isReplaceDataWithNULL()
                 + " ----- добавлять или нет тест в конце строки\n"
+                + "testOrRealAtTheEnd === " + Gasket.isTestOrRealAtTheEnd()
+                + " ----- на что меняем окончание строки ID - на тест(false) или на реал(true)\n"
                 + "indexRatioTransactionsAtWhichEnterMarket === "
                 + Gasket.getIndexRatioTransactionsAtWhichEnterMarket()
                 + " ----- индекс соотношения сделок прикотором входим в рынок\n"
@@ -261,6 +269,7 @@ public class ConsoleHelper {
                 + " ----- транслировать сигналы дальше для других програм\n"
                 + "BroadcastAddresses === " + getBroadcastAddresses()
                 + " -----  адреса на которые надо ретраслировать сигналы"
+
                 ;
     }
 
@@ -404,15 +413,19 @@ public class ConsoleHelper {
 
     public static void printStatisticsMartingale() {
         writeMessage("\n"
-                        + "   ----- ***** " + TypeData.MARTINGALE.toString() + " ***** -----" + "\n"
-                        + "        PROFIT === " + Gasket.getMartingaleClass().getMartingalePROFIT() + "\n"
-                        + "   ----- ************************************************** -----\n\n");
+                + "   ----- ***** " + MARTINGALE.toString() + " ***** -----\n"
+                + "        PROFIT === " + Gasket.getMartingaleClass().getMartingalePROFIT() + "\n"
+                + "   -----     =====     -----\n"
+                + "   ----- ***** " + MARTINGALE.toString() + " - " + REAL.toString() + " ***** -----\n"
+                + "        PROFIT === " + Gasket.getMartingaleClass().getMartingalePROFIT() + "\n"
+                + "   ----- ******************************** -----\n\n");
     }
 
 
     public static void showCommands() {
         writeMessage("\n\n"
                 + "SETTINGS=RESTART программа перезапустит настройки не отключаясь\n"
+                + "enableDisableReplacementIDinPatternsUser\n"
                 + "indexRatioTransactionsAtWhichEnterMarket\n"
                 + "activeNumberOfCandlesForAnalysis\n"
                 + "timeCalculationCombinationLevel\n"
@@ -434,6 +447,7 @@ public class ConsoleHelper {
                 + "apiKeyName2Accounts\n"
                 + "martingaleMaxSteep\n"
                 + "broadcastAddresses\n"
+                + "testOrRealAtTheEnd\n"
                 + "showLoadPatternsII\n"
                 + "timeBetweenOrders\n"
                 + "gameAllDirection\n"

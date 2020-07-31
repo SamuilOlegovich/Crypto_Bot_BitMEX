@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 // класс хранит айди и объем открытой сделки, если все закрыто - то объем равен 0.0
 public class OpenTransactions {
-    private volatile HashMap<String, ArrayList<Double>> mapRealAllLots;
-    private volatile HashMap<String, ArrayList<Double>> mapTestAllLots;
+//    private volatile HashMap<String, ArrayList<Double>> mapRealAllLots;
+//    private volatile HashMap<String, ArrayList<Double>> mapTestAllLots;
     private volatile HashMap<String, Double> mapReal;
     private volatile HashMap<String, Double> mapTest;
 

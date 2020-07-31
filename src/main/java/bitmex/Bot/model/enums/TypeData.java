@@ -23,6 +23,7 @@ public enum TypeData {
     TAKE,
     LOSS,
     PORT,
+    REAL,
     LOT,
     OFF,
     BUY,

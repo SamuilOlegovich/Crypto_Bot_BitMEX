@@ -76,6 +76,7 @@ public class TradeBuy extends Thread {
 
 
         orderBuyAnswer = bitmexClient.submitOrder(orderBuyOpen);
+
         ConsoleHelper.writeMessage(ID + " --- Открыл BUY позицию --- "
                 + orderBuyAnswer.getOrderID() + "\n"
                 + orderBuyAnswer.toString());

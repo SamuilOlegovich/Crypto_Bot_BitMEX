@@ -60,6 +60,16 @@ public class ExecutorCommandos {
                         writeMessage("gameAllDirection === "
                                 + isGameAllDirection() + "\n");
                     break;
+                case "testOrRealAtTheEnd" :
+                    setTestOrRealAtTheEnd(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("testOrRealAtTheEnd === "
+                                + isTestOrRealAtTheEnd() + "\n");
+                    break;
+                case "enableDisableReplacementIDinPatternsUser" :
+                    setEnableDisableReplacementIDinPatternsUser(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("enableDisableReplacementIDinPatternsUser === "
+                                + isEnableDisableReplacementIDinPatternsUser() + "\n");
+                    break;
                 case "predictor" :
                     setPredictor(strings[1].equalsIgnoreCase("true"));
                         writeMessage("predictor === "

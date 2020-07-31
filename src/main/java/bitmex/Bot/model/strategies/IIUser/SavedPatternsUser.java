@@ -1,5 +1,6 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.DatesTimes;
@@ -132,8 +133,16 @@ public class SavedPatternsUser {
     // приводим в порядок id
     public void putinOrderId() {
         int id = 1;
+        String out = "";
+
+        if (Gasket.isTestOrRealAtTheEnd()) {
+            out = out + REAL.toString();
+        } else {
+            out = out + TEST.toString();
+        }
+
         for (ArrayList<String> arrayList : listsPricePatternsUser) {
-            arrayList.set(0, StringHelper.setData(ID, id + " - " + TEST.toString(), arrayList.get(0)));
+            arrayList.set(0, StringHelper.setData(ID, id + out, arrayList.get(0)));
             id++;
         }
         ReadAndSavePatternsUser.saveSavedPatternsUser();

@@ -40,27 +40,45 @@ public class MakeDealMartingale extends Thread {
         writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Определяю какую сделку сделать согласно ПАТТЕРНАМ USER " + MARTINGALE.toString());
 
-        // проверяем есть ли такой айди в мапе
-        if (openTransactions.isThereSuchKeyTest(IDs)) {
-            // если есть то проверяем равен ли он нулю, что значит в данный момент все сделки закрыты
-            // и можно делать сделку
-            if (openTransactions.getOrderVolumeTest(IDs) == 0.0) {
-                makeDeal();
+        if (patternZeroString.endsWith(TEST.toString())) {
+            // проверяем есть ли такой айди в мапе
+            if (openTransactions.isThereSuchKeyTest(IDs)) {
+                // если есть то проверяем равен ли он нулю, что значит в данный момент все сделки закрыты
+                // и можно делать сделку
+                if (openTransactions.getOrderVolumeTest(IDs) == 0.0) {
+                    makeDeal(false);
+                } else {
+                    writeMessage(DatesTimes.getDateTerminal() + " --- "
+                            + "В данный момент уже есть такая сделка ПАТТЕРНА USER "
+                            + IDs + " - " + MARTINGALE.toString());
+                }
             } else {
-                writeMessage(DatesTimes.getDateTerminal() + " --- "
-                        + "В данный момент уже есть такая сделка ПАТТЕРНА USER "
-                        + IDs + " - " + MARTINGALE.toString());
+                openTransactions.setMapTest(IDs, 0.0);
+                makeDeal(false);
             }
-        } else {
-            openTransactions.setMapTest(IDs, 0.0);
-            makeDeal();
+        } else if (patternZeroString.endsWith(REAL.toString())) {
+            // проверяем есть ли такой айди в мапе
+            if (openTransactions.isThereSuchKeyReal(IDs)) {
+                // если есть то проверяем равен ли он нулю, что значит в данный момент все сделки закрыты
+                // и можно делать сделку
+                if (openTransactions.getOrderVolumeReal(IDs) == 0.0) {
+                    makeDeal(true);
+                } else {
+                    writeMessage(DatesTimes.getDateTerminal() + " --- "
+                            + "В данный момент уже есть такая сделка ПАТТЕРНА USER "
+                            + IDs + " - " + MARTINGALE.toString());
+                }
+            } else {
+                openTransactions.setMapReal(IDs, 0.0);
+                makeDeal(true);
+            }
         }
     }
 
 
 
 
-    private void makeDeal() {
+    private void makeDeal(boolean b) {
         int sell = Integer.parseInt(giveData(SELL, patternZeroString));
         int buy = Integer.parseInt(giveData(BUY, patternZeroString));
         String stringOut = patternZeroString;
@@ -69,16 +87,13 @@ public class MakeDealMartingale extends Thread {
         if (buy > sell) {
             if (conditionsAreMet(true)) {
 
-                // REAL
-                if (Gasket.isTradingMartingale() && !patternZeroString.endsWith(TEST.toString())
-                        && openTransactions.getOrderVolumeReal(IDs) == 0.0) {
 
-                    if (Gasket.isTradingTestMartingale() || Gasket.isTradingMartingale()) {
-                        if (martingale.isThereSuchKeyReal(IDs)) {
-                            martingale.upSteepReal(IDs);
-                        } else {
-                            martingale.setMapSteepReal(IDs, 1);
-                        }
+                // REAL
+                if (b && Gasket.isTradingMartingale() && openTransactions.getOrderVolumeReal(IDs) == 0.0) {
+                    if (martingale.isThereSuchKeyReal(IDs)) {
+                        martingale.upSteepReal(IDs);
+                    } else {
+                        martingale.setMapSteepReal(IDs, 1);
                     }
 
                     Double lotSize = martingale.getLotForThisSteep(IDs, martingale.getSteepReal(IDs));
@@ -88,11 +103,18 @@ public class MakeDealMartingale extends Thread {
                                 / Math.abs(Integer.parseInt(giveData(SELL, patternZeroString)));
 
                         if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
-//                            openTransactions.setMapTest(IDs, Gasket.getLot());
                             openTransactions.setMapReal(IDs, lotSize);
-                            martingale.upSteepReal(IDs);
-//                        new TradeBuy(stringOut);
-                            new TradeBuy(stringOut, martingale.getLotForThisSteep(IDs, martingale.getSteepReal(IDs)));
+//                            martingale.upSteepReal(IDs);
+
+                            double lot = martingale.getLotForThisSteep(IDs, martingale.getSteepReal(IDs));
+                            ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " ----- LOT === " + lot
+                                    + " === STEEP === " + martingale.getSteepReal(IDs)
+                            );
+
+                            if (lot > 0) {
+                                new TradeBuy(stringOut, lot);
+                                new TestOrderBuyPatternMartingale(true, stringOut, Gasket.getBitmexQuote().getAskPrice());
+                            }
                         }
 
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
@@ -113,7 +135,7 @@ public class MakeDealMartingale extends Thread {
 
 
                 // TEST
-                if (Gasket.isTradingTestMartingale() && openTransactions.getOrderVolumeTest(IDs) == 0.0) {
+                if (!b && Gasket.isTradingTestMartingale() && openTransactions.getOrderVolumeTest(IDs) == 0.0) {
                     if (martingale.isThereSuchKey(IDs)) {
                         martingale.upSteep(IDs);
                     } else {
@@ -154,28 +176,53 @@ public class MakeDealMartingale extends Thread {
             }
 
         } else if (buy < sell) {
+            if (conditionsAreMet(false)) {
 
-            // REAL
-            if (conditionsAreMet(false) && openTransactions.getOrderVolumeTest(IDs) == 0.0) {
-                if (Gasket.isTradingMartingale() && !patternZeroString.endsWith(TEST.toString())) {
 
-                    double index = (double) Math.abs(Integer.parseInt(giveData(SELL, patternZeroString)))
-                            / Math.abs(Integer.parseInt(giveData(BUY, patternZeroString)));
+                // REAL
+                if (b && Gasket.isTradingMartingale() && openTransactions.getOrderVolumeReal(IDs) == 0.0) {
 
-                    if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
-                        openTransactions.setMapTest(IDs, Gasket.getLot());
-                        martingale.upSteep(IDs);
-                        new TradeSell(stringOut);
+                    if (martingale.isThereSuchKeyReal(IDs)) {
+                        martingale.upSteepReal(IDs);
+                    } else {
+                        martingale.setMapSteepReal(IDs, 1);
                     }
 
-                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
-                            + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
-                            + " сделал сделку СЕЛЛ USER " + MARTINGALE.toString() + " - REAL"
-                    );
+
+                    Double lotSize = martingale.getLotForThisSteep(IDs, martingale.getSteepReal(IDs));
+
+                    if (lotSize != null) {
+                        double index = (double) Math.abs(Integer.parseInt(giveData(SELL, patternZeroString)))
+                                / Math.abs(Integer.parseInt(giveData(BUY, patternZeroString)));
+
+                        if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
+                            openTransactions.setMapReal(IDs, lotSize);
+//                            martingale.upSteepReal(IDs);
+
+                            double lot = martingale.getLotForThisSteep(IDs, martingale.getSteepReal(IDs));
+
+                            new TradeSell(stringOut, lot);
+                            new TestOrderSellPatternMartingale(true, stringOut, Gasket.getBitmexQuote().getAskPrice());
+                        }
+
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                                + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
+                                + " сделал сделку СЕЛЛ USER " + MARTINGALE.toString() + " - REAL"
+                        );
+                    } else {
+                        martingale.downSteepReal(IDs);
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+                                + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
+                                + " сделку СЕЛЛ USER " + MARTINGALE.toString()
+                                + "ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - REAL"
+                        );
+                    }
                 }
 
+
+
                 // TEST
-                if (Gasket.isTradingTestMartingale()) {
+                if (!b && Gasket.isTradingTestMartingale() && openTransactions.getOrderVolumeTest(IDs) == 0.0) {
 
                     if (martingale.isThereSuchKey(IDs)) {
                         martingale.upSteep(IDs);
@@ -186,7 +233,6 @@ public class MakeDealMartingale extends Thread {
                     Double lotSize = martingale.getLotForThisSteep(IDs, martingale.getSteep(IDs));
 
                     if (lotSize != null) {
-//                    if (Gasket.getMartingaleMaxSteep() >= martingale.getSteep(IDs)) {
                         openTransactions.setMapTest(IDs, lotSize);
 
                         stringOut = Integer.parseInt(steeps) > martingale.getSteep(IDs) ? stringOut

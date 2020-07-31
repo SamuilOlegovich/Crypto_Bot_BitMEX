@@ -18,6 +18,7 @@ public class Martingale {
 //    private volatile HashMap<String, Integer> volumeMaxStep;    // значение максимально разрешенного шага по данной стратегии
     private volatile HashMap<String, Integer> steepTest;
     private volatile HashMap<String, Integer> steepReal;
+    private volatile double martingaleRealPROFIT;
     private volatile double martingalePROFIT;
 
 
@@ -25,6 +26,7 @@ public class Martingale {
         this.volumeForEachStep = new HashMap<>();
         this.steepTest = new HashMap<>();
         this.steepReal = new HashMap<>();
+        this.martingaleRealPROFIT = 0.0;
         this.martingalePROFIT = 0.0;
         setMartin();
     }
@@ -83,8 +85,16 @@ public class Martingale {
         return martingalePROFIT;
     }
 
+    public double getMartingaleRealPROFIT() {
+        return martingaleRealPROFIT;
+    }
+
     public void setMartingalePROFIT(double martingalePROFIT) {
         this.martingalePROFIT = martingalePROFIT;
+    }
+
+    public void setMartingaleRealPROFIT(double martingaleRealPROFIT) {
+        this.martingaleRealPROFIT = martingaleRealPROFIT;
     }
 
     public boolean isThereSuchKey(String key) {
@@ -107,26 +117,24 @@ public class Martingale {
     }
 
     public void setMapSteepReal(String key, int value) {
-        synchronized (steepTest) {
-            steepTest.put(key, value);
+        synchronized (steepReal) {
+            steepReal.put(key, value);
         }
     }
 
 
     public synchronized void setVolumeForEachStep(String in) {
-//        Integer steep = Integer.parseInt(StringHelper.giveData(TypeData.STEEP, in));
         String value = StringHelper.giveData(TypeData.LOT, in);
         String key = StringHelper.giveData(TypeData.ID, in);
         volumeForEachStep.put(key, value);
-//        volumeMaxStep.put(key, steep);
     }
 
 
     private synchronized void setMartin() {
         ArrayList<ArrayList<String>> arrayLists = Gasket.getSavedPatternsUserClass().getListsPricePatternsUser();
         for (ArrayList<String> a : arrayLists) {
-            String value = StringHelper.giveData(TypeData.LOT, a.get(0).replaceAll("\n", ""));
             String key = StringHelper.giveData(TypeData.ID, a.get(0).replaceAll("\n", ""));
+            String value = StringHelper.giveData(TypeData.LOT, a.get(0));
             volumeForEachStep.put(key, value);
         }
     }
@@ -134,8 +142,20 @@ public class Martingale {
 
     public String showSteps() {
         StringBuilder stringBuilder = new StringBuilder("\n\nMartingale STEEP\n");
-        for (Map.Entry entry : steepTest.entrySet()) {
-            stringBuilder.append("ID===" + entry.getKey() + "===STEEP===" + entry.getValue() + "\n");
+        stringBuilder.append("   ===*** " + TypeData.TEST.toString() + " ***===\n");
+
+        if (steepTest.size() > 0) {
+            for (Map.Entry entry : steepTest.entrySet()) {
+                stringBuilder.append("ID===" + entry.getKey() + "===STEEP===" + entry.getValue() + "\n");
+            }
+        }
+
+        stringBuilder.append("\n\n   ===*** " + TypeData.REAL.toString() + " ***===\n");
+
+        if (steepReal.size() > 0) {
+            for (Map.Entry entry : steepReal.entrySet()) {
+                stringBuilder.append("ID===" + entry.getKey() + "===STEEP===" + entry.getValue() + "\n");
+            }
         }
         return stringBuilder.toString() + "\n\n";
     }

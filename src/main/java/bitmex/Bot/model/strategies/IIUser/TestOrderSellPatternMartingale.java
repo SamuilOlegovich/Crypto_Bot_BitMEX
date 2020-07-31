@@ -63,7 +63,12 @@ public class TestOrderSellPatternMartingale extends Thread {
                 String out = StringHelper.setData(TypeData.BUY, data, zeroString);
 
                 new UpdatingStatisticsDataUser(out);
-                openTransactions.zeroSteepTest(IDs);
+
+                if (testOrReal) {
+                    openTransactions.zeroSteepReal(IDs);
+                } else {
+                    openTransactions.zeroSteepTest(IDs);
+                }
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + IDs + " --- Сработал СТОП ЛОСС USER " + MARTINGALE.toString() + " - по цене - "
@@ -81,8 +86,13 @@ public class TestOrderSellPatternMartingale extends Thread {
                 String out = StringHelper.setData(TypeData.SELL, data, zeroString);
 
                 new UpdatingStatisticsDataUser(out);
-                openTransactions.zeroSteepTest(IDs);
-                martingale.zeroSteep(IDs);
+                if (testOrReal) {
+                    openTransactions.zeroSteepReal(IDs);
+                    martingale.zeroSteepReal(IDs);
+                } else {
+                    openTransactions.zeroSteepTest(IDs);
+                    martingale.zeroSteep(IDs);
+                }
 
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + IDs + " --- Сработал ТЕЙК ПРОФИТ USER " + MARTINGALE.toString() + " - по цене - "
@@ -102,19 +112,46 @@ public class TestOrderSellPatternMartingale extends Thread {
     }
 
 
+
     private void setStop() {
-        double openLot = openTransactions.getOrderVolumeTest(IDs);
         double priceLot = Gasket.getStop() / 10000.0;
         double result = 0.0;
+        double openLot;
+
+        if (testOrReal) {
+            openLot = openTransactions.getOrderVolumeReal(IDs);
+        } else {
+            openLot = openTransactions.getOrderVolumeTest(IDs);
+        }
+
         result = priceLot * openLot;
-        martingale.setMartingalePROFIT(martingale.getMartingalePROFIT() - result);
+
+        if (testOrReal) {
+            martingale.setMartingaleRealPROFIT(martingale.getMartingaleRealPROFIT() - result);
+        } else {
+            martingale.setMartingalePROFIT(martingale.getMartingalePROFIT() - result);
+        }
     }
+
+
 
     private void setTake() {
         double priceLot = Gasket.getTake() / 10000.0;
-        double openLot = openTransactions.getOrderVolumeTest(IDs);
         double result = 0.0;
+        double openLot;
+
+        if (testOrReal) {
+            openLot = openTransactions.getOrderVolumeReal(IDs);
+        } else {
+            openLot = openTransactions.getOrderVolumeTest(IDs);
+        }
+
         result = priceLot * openLot;
-        martingale.setMartingalePROFIT(martingale.getMartingalePROFIT() + result);
+
+        if (testOrReal) {
+            martingale.setMartingaleRealPROFIT(martingale.getMartingaleRealPROFIT() + result);
+        } else {
+            martingale.setMartingalePROFIT(martingale.getMartingalePROFIT() + result);
+        }
     }
 }

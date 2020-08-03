@@ -1,11 +1,8 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.model.strategies.oneStrategies.TestOrderSellMiniRevers;
-import bitmex.Bot.model.strategies.oneStrategies.TestOrderSellRevers;
-import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 public class TestOrderSellPattern extends Thread {
 

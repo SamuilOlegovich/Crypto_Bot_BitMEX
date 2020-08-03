@@ -1,31 +1,28 @@
 package bitmex.Bot.controller;
 
-import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
-import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
-import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
-import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
+import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
-import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
-import bitmex.Bot.model.strategies.II.SavedPatterns;
+import bitmex.Bot.model.strategies.IIUser.Martingale;
 import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
+import bitmex.Bot.model.serverAndParser.Repeater;
 import bitmex.Bot.model.serverAndParser.Server;
-import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
 
-import java.util.List;
 
 
 
 
 public class RunTheProgram extends Thread {
-    private static BitmexApiKey bitmexApiKey2Accounts;
-    private static BitmexClient bitmexClient2Accounts;
-    private static BitmexApiKey bitmexApiKey;
-    private static BitmexClient bitmexClient;
-    private static Ticker ticker;
+    private BitmexApiKey bitmexApiKey2Accounts;
+    private BitmexClient bitmexClient2Accounts;
+    private BitmexApiKey bitmexApiKey;
+    private BitmexClient bitmexClient;
+    private Repeater repeater;
+    private Ticker ticker;
+    private Server server;
 
     public RunTheProgram() {
         start();
@@ -33,31 +30,19 @@ public class RunTheProgram extends Thread {
 
     @Override
     public void run() {
-//        FilesAndPathCreator filesAndPathCreator = new FilesAndPathCreator();
-
-//        SavedPatternsUser savedPatternsUser = SavedPatternsUser.getInstance();
-//        SavedPatterns savedPatterns = SavedPatterns.getInstance();
-
-//        Gasket.setSavedPatternsUserClass(savedPatternsUser);
-//        ReadAndSavePatternsUser.createSavedPatternsUser();
-//
-//        Gasket.setSavedPatternsClass(savedPatterns);
-//        ReadAndSavePatterns.createSavedPatterns();
 
         ticker = new Ticker("XBTUSD");
 
-//        ExecutorCommandos executorCommandos = new ExecutorCommandos();
-//        ParserSetting parserSetting = new ParserSetting(executorCommandos);
-
         bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), Gasket.isUseRealOrNotReal());
         bitmexClient = new BitmexClient(Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName(), ApiKey.getApiKey());
-//        ControlConsoleSetting controlConsoleSetting = new ControlConsoleSetting(Gasket.getExecutorCommandos());
+//        bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), false);
+//        bitmexClient = new BitmexClient(false, ApiKey.getApiKeyName(), ApiKey.getApiKey());
         bitmexClient.subscribeQuotes(ticker, bitmexClient);
         Gasket.setBitmexClient(bitmexClient);
         Gasket.setGameDirection(true);
         Gasket.setTwoAccounts(false);
-        Server server = new Server();
         Gasket.setTicker(ticker);
+        server = new Server();
         bitmexClient.setID(1);
 
         if (Gasket.isTwoAccounts()) {
@@ -74,14 +59,27 @@ public class RunTheProgram extends Thread {
         }
 
         ConsoleHelper.printInfoSettings();
-//        controlConsoleSetting.start();
         server.start();
 
         // подготавливаем строки предсказания
         Gasket.getSavedPatternsUserClass().replacePredictions();
+        Gasket.setOpenTransactions(new OpenTransactions());
+        Gasket.setMartingaleClass(new Martingale());
+        ConsoleHelper.writeMessage(Gasket.getMartingaleClass().showVolumeForEachStep());
+
+        if (Gasket.isEnableDisableReplacementIDinPatternsUser()) {
+            Gasket.getSavedPatternsUserClass().putinOrderId();
+        }
+        Gasket.getSavedPatternsProClass().putinOrderId();
+        Gasket.getSavedPatternsClass().putinOrderId();
+
+        if (Gasket.isBroadcastSignalsFurther()) {
+            repeater = new Repeater();
+            Gasket.setRepeater(repeater);
+        }
 
         try {
-            Thread.sleep(1000 * 10);
+            Thread.sleep(1000 * 5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -90,16 +88,58 @@ public class RunTheProgram extends Thread {
                 + DatesTimes.getDateTerminal()
                 + " --- ПРОГРАММА УСПЕШНО ЗАПУЩЕНА - ОЖИДАЙТЕ РЕЗУЛЬТАТОВ"
                 + "\n\n");
+    }
 
-//        List<BitmexChartData> list = Gasket.getBitmexClient().getChartData(Gasket.getTicker(),
-//                Gasket.getNumberOfCandlesForAnalysis(), ChartDataBinSize.ONE_MINUTE);
-//        double maxAverage = 0.0;
-//        double max = 0.0;
-//
-//        for (BitmexChartData biData : list) {
-//            max = Math.max(max, biData.getHigh());
-//            maxAverage = maxAverage + biData.getHigh();
-//            System.out.println(max + " ---- " + maxAverage);
-//        }
+
+    public void stopPrograms() {
+        bitmexClient.disconnect();
+        bitmexApiKey = null;
+        bitmexClient = null;
+        server.interrupt();
+        server = null;
+
+        if (Gasket.isTwoAccounts()) {
+            if (!ApiKey.getApiKey2Accounts().equals("") || !ApiKey.getApiKeyName2Accounts().equals("")) {
+                bitmexClient2Accounts.disconnect();
+                bitmexApiKey2Accounts = null;
+                bitmexClient2Accounts = null;
+            }
+        }
+    }
+
+
+
+    public void startProgram() {
+        ticker = new Ticker("XBTUSD");
+
+        bitmexApiKey = new BitmexApiKey(ApiKey.getApiKeyName(), ApiKey.getApiKey(), Gasket.isUseRealOrNotReal());
+        bitmexClient = new BitmexClient(Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName(), ApiKey.getApiKey());
+        bitmexClient.subscribeQuotes(ticker, bitmexClient);
+        Gasket.setBitmexClient(bitmexClient);
+        Gasket.setGameDirection(true);
+        Gasket.setTwoAccounts(false);
+        server = new Server();
+        Gasket.setTicker(ticker);
+        bitmexClient.setID(1);
+
+        if (Gasket.isTwoAccounts()) {
+            if (!ApiKey.getApiKey2Accounts().equals("") || !ApiKey.getApiKeyName2Accounts().equals("")) {
+                bitmexApiKey2Accounts = new BitmexApiKey(
+                        ApiKey.getApiKeyName2Accounts(), ApiKey.getApiKey2Accounts(), Gasket.isUseRealOrNotReal());
+                bitmexClient2Accounts = new BitmexClient(
+                        Gasket.isUseRealOrNotReal(), ApiKey.getApiKeyName2Accounts(), ApiKey.getApiKey2Accounts());
+                bitmexClient2Accounts.subscribeQuotes(ticker, bitmexClient2Accounts);
+                Gasket.setBitmexClient2Accounts(bitmexClient2Accounts);
+                bitmexClient2Accounts.setID(2);
+            } else { ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                    + "Данные второго счета отсутствуют или не верны"); }
+        }
+
+        server.start();
+
+        ConsoleHelper.writeMessage("\n\n"
+                + DatesTimes.getDateTerminal()
+                + " --- ПРОГРАММА УСПЕШНО ПЕРЕ-ЗАПУЩЕНА - ОЖИДАЙТЕ РЕЗУЛЬТАТОВ"
+                + "\n\n");
     }
 }

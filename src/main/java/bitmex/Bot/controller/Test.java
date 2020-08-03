@@ -2,9 +2,6 @@ package bitmex.Bot.controller;
 
 
 
-import java.util.*;
-
-import static bitmex.Bot.model.enums.TypeData.NULL;
 
 public class Test {
 
@@ -19,6 +16,5 @@ public class Test {
 //        System.out.println(giveData(TypeData.type, string));
 //        System.out.println(giveData(TypeData.avg, string));
 //        System.out.println(giveData(TypeData.dir, string));
-
     }
 }

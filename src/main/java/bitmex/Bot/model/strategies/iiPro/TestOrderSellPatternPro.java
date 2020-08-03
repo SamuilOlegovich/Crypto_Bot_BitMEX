@@ -1,10 +1,8 @@
 package bitmex.Bot.model.strategies.iiPro;
 
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
-
-
+import bitmex.Bot.view.ConsoleHelper;
 
 
 public class TestOrderSellPatternPro extends Thread {

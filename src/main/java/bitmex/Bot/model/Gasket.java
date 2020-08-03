@@ -6,28 +6,34 @@ import bitmex.Bot.model.strategies.iiPro.ListensToLooksAndFillsPro;
 import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
 import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
 import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
+import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
 import bitmex.Bot.model.strategies.iiPro.SavedPatternsPro;
-import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
+import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
+import bitmex.Bot.model.strategies.IIUser.Martingale;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
+import bitmex.Bot.model.serverAndParser.Repeater;
 import bitmex.Bot.controller.ExecutorCommandos;
+import bitmex.Bot.controller.RunTheProgram;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.View;
 
 import java.util.List;
 
-
-
-
 import static bitmex.Bot.model.bitMEX.enums.ChartDataBinSize.ONE_MINUTE;
+
+
+
+
 
 public class Gasket {
 
             // флаги для разных режимов работы стратегий (можно дорабоать)
+    private static boolean enableDisableReplacementIDinPatternsUser = false;    // включить выключить замену id в паттернах USER
     private static ListensLooksAndComparesUser listensLooksAndComparesUser;
-    private static double  indexRatioTransactionsAtWhichEnterMarket = 2.5;      // индекс соотношения сделок прикотором входим в рынок
+    private static double  indexRatioTransactionsAtWhichEnterMarket = 2.0;      // индекс соотношения сделок прикотором входим в рынок
     private static ListensLooksAndComparesPro listensLooksAndComparesPro;
     private static ListensToLooksAndFillsPro listensToLooksAndFillsPro;
     private static ListensLooksAndCompares listensLooksAndCompares;
@@ -37,6 +43,7 @@ public class Gasket {
     private static String numberOfHistoryBlocks = "5-4-3-2";                    // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;
     private static FilesAndPathCreator filesAndPathCreator;
+    private static boolean broadcastSignalsFurther = false;         // транслировать сигналы дальше для других програм
     private static boolean showLoadPatternsIIPro = false;           // показывать загрузку паттернов при запуске программы
     private static double takeForCollectingPatterns = 30;           // тейк для сбора и накопления паттернов
     private static int timeStopLiveForUserPatterns = 10;            // время за которое паттерн должен отработать
@@ -51,9 +58,11 @@ public class Gasket {
     private static volatile boolean oneBuyFLAG = true;
     private static int useStopLevelOrNotStopTime = 10;              // сколько минут отслеживать сделку вышедшею за MIN уровни
     private static BitmexClient bitmexClient2Accounts;
+    private static boolean testOrRealAtTheEnd = false;              // на что меняем окончание строки ID - на тест(false) или на реал(true)
     private static SavedPatternsPro savedPatternsPro;
     private static volatile BitmexQuote bitmex2Quote;               // для получения данных по насущной котировке.
     private static boolean savedPatternsIIPro = true;               // включить нахождение и запись патернов
+    private static OpenTransactions openTransactions;
     private static SavedPatterns savedPatternsClass;
     private static boolean gameAllDirection = false;    // true - играть во все стороны на одном счету
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
@@ -70,32 +79,52 @@ public class Gasket {
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean tradingTestII = true;
     private static boolean tradingIIPro = false;
+    private static RunTheProgram runTheProgram;
     private static boolean tradingUser = false;
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
     private static double rangePriceMAX = 4.0;          // диапазон в долларах от уровней для срабатывания ордера
     private static double rangePriceMIN = 0.0;          // диапазон в долларах от уровней для отмены ордера
     private static String typeOrder = "Limit";          // тип первого открываемого ордера
-    private static int timeBetweenOrders = 10;          // время в секундах между выставлениями ордеров по одной стратегии
+    private static int timeBetweenOrders = 1;           // время в секундах между выставлениями ордеров по одной стратегии
     private static BitmexClient bitmexClient;
     private static boolean tradingII = false;
     private static int secondsSleepTime = 13;       // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
+    private static boolean predictor = false;       // предсказатель
     private static double priceActive = 3.0;        // цена тригер для стоп лимитов и тейк лимитов
-    private static boolean predictor = true;        // предсказатель
     private static int strategyWorkOne = 2;         // количество стратегий одновременно работающих (можно еще допелить или убрать)
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
     private static int dateDifference = -3;         // разница в часовом поясе
     private static boolean trading = false;         // торговать - true нет - false
-    private static double visible = 0.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
+    private static double visible = 1.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
     private static boolean ERROR = true;            // включить - отключить показ ошибок в окне приложения
     private static boolean DEBUG = true;
     private static boolean INFO = true;
     private static double take = 15.0;              // тейк профит в долларах
     private static double stop = 30.0;              // стоп лосс в долларах
+    private static Repeater repeater;
     private static double lot = 1.0;                // количество контрактов
     private static String path = "";
     private static View viewThread;
     private static int PORT = 4444;                 // порт подключения
     private static Ticker ticker;
+
+    private static final long MINUTE = 1000 * 60;
+    private static final long SECOND = 1000;
+
+
+    // martingale
+    private static boolean tradingTestMartingale = true;    // включить тестировку мартингейла
+    private static double martingaleOpenOneLot = 10.0;      // количество первой сделки при мартингейле
+    private static boolean tradingMartingale = false;        // торговать или нет с помощью мартингейла
+    private static boolean martingaleOnOff = true;          // включить выключить игру по мартингейлу
+    private static double martingalePROFIT = 0.0;
+    private static double martingaleIndex = 2.5;            // индекс мартингейла
+    private static int martingaleMaxSteep = 10;             // максимально разрешенный шаг
+    // id4s-M-T*1000*2000*4000*8000;
+    // id5s-M-T*500*1000*2000*8000;
+    private static String strategiesMartingale;             // настройки для каждого отдельно айди Мартингейла
+    private static Martingale martingale;
+
 
 
     // выставляем данные для юзера которые надо заменить,
@@ -109,22 +138,31 @@ public class Gasket {
     private static String valueNULL = TypeData.NULL.toString();
     private static String typeNULL = TypeData.type.toString();
     private static String avgNULL = TypeData.NULL.toString();
-    private static String dirNULL = TypeData.NULL.toString();
+    private static String dirNULL = TypeData.dir.toString();
     private static String openNULL = TypeData.NULL.toString();
     private static String closeNULL = TypeData.NULL.toString();
     private static String highNULL = TypeData.NULL.toString();
     private static String lowNULL = TypeData.NULL.toString();
 
     private static boolean addOrTESTatTheEndOfTheLine = true;        // добавлять или нет тест в конце строки
-    private static boolean replaceDataWithNULLPro = false;           // включить выключить замену в паттернах для юзера
+    private static boolean replaceDataWithNULLPro = true;            // включить выключить замену в паттернах для юзера
     private static boolean replaceDataWithNULL = true;               // включить выключить замену в паттернах для юзера
 
 
 
 
-    private static String levelsToCompare = "OPEN_POS_BID_MINUS" + "-OPEN_POS_ASK_MINUS" + "-OPEN_POS_ASK_PLUS"
-            + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS" + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
+    private static String levelsToCompare = "OPEN_POS_BID_MINUS" + "-OPEN_POS_ASK_MINUS"
+            + "-OPEN_POS_ASK_PLUS" + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS"
+            + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
             + "-ASK" + "-BID";                      // уровни для сравнения в II Pro
+
+    private static String levelsForTrimmedPatterns = "OPEN_POS_BID_MINUS" + "-OPEN_POS_ASK_MINUS"
+            + "-OPEN_POS_ASK_PLUS" + "-OPEN_POS_BID_PLUS" + "-OPEN_POS_MINUS"
+            + "-OPEN_POS_PLUS-DELTA_ASK" + "-DELTA_BID" + "-VOLUME"
+            + "-ASK" + "-BID";                      // уровни для урезаных паттернов User
+
+    private static String BroadcastAddresses = "IP===localhost===PORT===5555" +
+            "***" + "IP===localhost===PORT===6666";    // адреса на которые надо ретранслировать сигналы
 
 
 
@@ -234,6 +272,22 @@ public class Gasket {
     private static int OS_STOP_PAT = 0;
 
 
+    public static boolean isEnableDisableReplacementIDinPatternsUser() {
+        return enableDisableReplacementIDinPatternsUser;
+    }
+
+    public static void setEnableDisableReplacementIDinPatternsUser(boolean enableDisableReplacementIDinPatternsUser) {
+        Gasket.enableDisableReplacementIDinPatternsUser = enableDisableReplacementIDinPatternsUser;
+    }
+
+    public static boolean isTestOrRealAtTheEnd() {
+        return testOrRealAtTheEnd;
+    }
+
+
+    public static void setTestOrRealAtTheEnd(boolean testOrRealAtTheEnd) {
+        Gasket.testOrRealAtTheEnd = testOrRealAtTheEnd;
+    }
 
     public static BitmexChartData price(Ticker ticker) {
             List<BitmexChartData> list = bitmexClient.getChartData(ticker, 1, ONE_MINUTE);
@@ -1445,6 +1499,13 @@ public class Gasket {
         Gasket.showLoadPatternsII = showLoadPatternsII;
     }
 
+    public static long getMINUTE() {
+        return MINUTE;
+    }
+
+    public static long getSECOND() {
+        return SECOND;
+    }
 
     public static boolean isServerRestart() {
         return serverRestart;
@@ -1700,6 +1761,123 @@ public class Gasket {
 
     public static void setPredictor(boolean predictor) {
         Gasket.predictor = predictor;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static double getMartingaleOpenOneLot() {
+        return martingaleOpenOneLot;
+    }
+
+    public static void setMartingaleOpenOneLot(double martingaleOpenOneLot) {
+        Gasket.martingaleOpenOneLot = martingaleOpenOneLot;
+    }
+
+    public static boolean isMartingaleOnOff() {
+        return martingaleOnOff;
+    }
+
+    public static void setMartingaleOnOff(boolean martingaleOnOff) {
+        Gasket.martingaleOnOff = martingaleOnOff;
+    }
+
+    public static double getMartingaleIndex() {
+        return martingaleIndex;
+    }
+
+    public static void setMartingaleIndex(double martingaleIndex) {
+        Gasket.martingaleIndex = martingaleIndex;
+    }
+
+    public static Martingale getMartingaleClass() {
+        return martingale;
+    }
+
+    public static void setMartingaleClass(Martingale martingale) {
+        Gasket.martingale = martingale;
+    }
+
+    public static int getMartingaleMaxSteep() {
+        return martingaleMaxSteep;
+    }
+
+    public static void setMartingaleMaxSteep(int martingaleMaxSteep) {
+        Gasket.martingaleMaxSteep = martingaleMaxSteep;
+    }
+
+    public static double getMartingalePROFIT() {
+        return martingalePROFIT;
+    }
+
+    public static void setMartingalePROFIT(double martingalePROFIT) {
+        Gasket.martingalePROFIT = martingalePROFIT;
+    }
+
+    public static boolean isTradingTestMartingale() {
+        return tradingTestMartingale;
+    }
+
+    public static void setTradingTestMartingale(boolean tradingTestMartingale) {
+        Gasket.tradingTestMartingale = tradingTestMartingale;
+    }
+
+    public static boolean isTradingMartingale() {
+        return tradingMartingale;
+    }
+
+    public static void setTradingMartingale(boolean tradingMartingale) {
+        Gasket.tradingMartingale = tradingMartingale;
+    }
+
+    public static OpenTransactions getOpenTransactions() {
+        return openTransactions;
+    }
+
+    public static void setOpenTransactions(OpenTransactions openTransactions) {
+        Gasket.openTransactions = openTransactions;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public static String getLevelsForTrimmedPatterns() {
+        return levelsForTrimmedPatterns;
+    }
+
+    public static void setLevelsForTrimmedPatterns(String levelsForTrimmedPatterns) {
+        Gasket.levelsForTrimmedPatterns = levelsForTrimmedPatterns;
+    }
+
+    public static RunTheProgram getRunTheProgram() {
+        return runTheProgram;
+    }
+
+    public static void setRunTheProgram(RunTheProgram runTheProgram) {
+        Gasket.runTheProgram = runTheProgram;
+    }
+
+    public static boolean isBroadcastSignalsFurther() {
+        return broadcastSignalsFurther;
+    }
+
+    public static void setBroadcastSignalsFurther(boolean broadcastSignalsFurther) {
+        Gasket.broadcastSignalsFurther = broadcastSignalsFurther;
+    }
+
+    public static String getBroadcastAddresses() {
+        return BroadcastAddresses;
+    }
+
+    public static void setBroadcastAddresses(String broadcastAddresses) {
+        BroadcastAddresses = broadcastAddresses;
+    }
+
+    public static Repeater getRepeater() {
+        return repeater;
+    }
+
+    public static void setRepeater(Repeater repeater) {
+        Gasket.repeater = repeater;
     }
 }
 

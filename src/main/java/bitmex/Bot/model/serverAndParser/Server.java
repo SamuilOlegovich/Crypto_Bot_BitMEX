@@ -26,10 +26,15 @@ public class Server extends Thread {
 
             while (true) {
                 // Блокируется до возникновения нового соединения:
-                socket = server.accept();
-                new SocketThread(socket, parserString);
+                if (!isInterrupted()) {
+                    socket = server.accept();
+                    new SocketThread(socket, parserString);
+                } else {
+                    break;
+                }
             }
-
+            server.close();
+            socket.close();
         } catch (IOException e) {
             try {
                 server.close();

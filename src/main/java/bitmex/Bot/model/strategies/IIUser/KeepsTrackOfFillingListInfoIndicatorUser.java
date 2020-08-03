@@ -2,9 +2,9 @@ package bitmex.Bot.model.strategies.IIUser;
 
 
 import bitmex.Bot.model.serverAndParser.WriterString;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;

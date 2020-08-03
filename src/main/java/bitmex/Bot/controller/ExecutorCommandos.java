@@ -45,6 +45,11 @@ public class ExecutorCommandos {
                         writeMessage("indexRatioTransactionsAtWhichEnterMarket === "
                                 + getIndexRatioTransactionsAtWhichEnterMarket() + "\n");
                     break;
+                case "levelsForTrimmedPatterns" :
+                    setLevelsForTrimmedPatterns(strings[1]);
+                        writeMessage("levelsForTrimmedPatterns === "
+                                + getLevelsForTrimmedPatterns() + "\n");
+                    break;
                 case "useStopLevelOrNotStop" :
                     setUseStopLevelOrNotStop(strings[1].equalsIgnoreCase("true"));
                         writeMessage("useStopLevelOrNotStop === "
@@ -55,10 +60,30 @@ public class ExecutorCommandos {
                         writeMessage("gameAllDirection === "
                                 + isGameAllDirection() + "\n");
                     break;
+                case "testOrRealAtTheEnd" :
+                    setTestOrRealAtTheEnd(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("testOrRealAtTheEnd === "
+                                + isTestOrRealAtTheEnd() + "\n");
+                    break;
+                case "enableDisableReplacementIDinPatternsUser" :
+                    setEnableDisableReplacementIDinPatternsUser(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("enableDisableReplacementIDinPatternsUser === "
+                                + isEnableDisableReplacementIDinPatternsUser() + "\n");
+                    break;
                 case "predictor" :
                     setPredictor(strings[1].equalsIgnoreCase("true"));
                         writeMessage("predictor === "
                                 + isPredictor() + "\n");
+                    break;
+                case "broadcastSignalsFurther" :
+                    setBroadcastSignalsFurther(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("broadcastSignalsFurther === "
+                                + isBroadcastSignalsFurther() + "\n");
+                    break;
+                case "broadcastAddresses" :
+                    setBroadcastAddresses(strings[1]);
+                        writeMessage("broadcastAddresses === "
+                                + getBroadcastAddresses() + "\n");
                     break;
                 case "useRealOrNotReal":
                     setUseRealOrNotReal(strings[1].equalsIgnoreCase("true"));
@@ -84,6 +109,36 @@ public class ExecutorCommandos {
                     setLevelsToCompare(strings[1]);
                     writeMessage("levelsToCompare === "
                             + getLevelsToCompare() + "\n");
+                    break;
+                case "martingaleOpenOneLot" :
+                    setMartingaleOpenOneLot(Double.parseDouble(strings[1]));
+                    writeMessage("martingaleOpenOneLot === "
+                            + getMartingaleOpenOneLot() + "\n");
+                    break;
+                case "martingaleIndex" :
+                    setMartingaleIndex(Double.parseDouble(strings[1]));
+                    writeMessage("martingaleIndex === "
+                            + getMartingaleIndex() + "\n");
+                    break;
+                case "martingaleOnOff" :
+                    setMartingaleOnOff(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("martingaleOnOff === "
+                            + isMartingaleOnOff() + "\n");
+                    break;
+                case "tradingTestMartingale" :
+                    setTradingTestMartingale(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("tradingTestMartingale === "
+                            + isTradingTestMartingale() + "\n");
+                    break;
+                case "tradingMartingale" :
+                    setTradingMartingale(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("tradingMartingale === "
+                            + isTradingMartingale() + "\n");
+                    break;
+                case "martingaleMaxSteep" :
+                    setMartingaleMaxSteep(Integer.parseInt(strings[1]));
+                    writeMessage("martingaleMaxSteep === "
+                            + getMartingaleMaxSteep() + "\n");
                     break;
                 case "maxAndMinAverage" :
                     setMaxAndMinAverage(strings[1].equalsIgnoreCase("true"));

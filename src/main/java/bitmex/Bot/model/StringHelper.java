@@ -4,11 +4,6 @@ package bitmex.Bot.model;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
 
-import java.util.ArrayList;
-
-import static bitmex.Bot.model.Gasket.getPeriodNULL;
-import static bitmex.Bot.model.Gasket.getPreviewNULL;
-
 
 public class StringHelper {
 
@@ -78,7 +73,6 @@ public class StringHelper {
 
             for (int i = 0; i < strings.length; i++) {
                 stringBuilder.append(strings[i]);
-
                 if (i != strings.length - 1) {
                     stringBuilder.append("===");
                 }
@@ -152,7 +146,7 @@ public class StringHelper {
     // in
     // BUY===2===SELL===0===AVERAGE===0.5===MAX===0.5===SIZE===27===ID===2964
     // out
-    // BUY===1===SELL===1===AVERAGE===3.28===MAX===5.0===SIZE===220===BLOCK===1===TYPE===VOLUME===ID===400
+    // BUY===1===SELL===1===AVERAGE===3.28===MAX===5.0===SIZE===220===BLOCK===1===TYPE===VOLUME===ID===400===LOT===0*0*0
     public static String insertTheMissingDataInTheZeroLine(String in) {
         String[] strings = in.split("===");
         StringBuilder stringBuilder = new StringBuilder();
@@ -165,18 +159,19 @@ public class StringHelper {
         stringBuilder.append("===");
         stringBuilder.append(strings[3]);
         stringBuilder.append("===");
-        stringBuilder.append(strings[4]);
-        stringBuilder.append("===");
-        stringBuilder.append(strings[5]);
-        stringBuilder.append("===");
-        stringBuilder.append(strings[6]);
-        stringBuilder.append("===");
-        stringBuilder.append(strings[7]);
-        stringBuilder.append("===");
-        stringBuilder.append(strings[8]);
-        stringBuilder.append("===");
-        stringBuilder.append(strings[9]);
-        stringBuilder.append("===");
+
+//        stringBuilder.append(strings[4]);
+//        stringBuilder.append("===");
+//        stringBuilder.append(strings[5]);
+//        stringBuilder.append("===");
+//        stringBuilder.append(strings[6]);
+//        stringBuilder.append("===");
+//        stringBuilder.append(strings[7]);
+//        stringBuilder.append("===");
+//        stringBuilder.append(strings[8]);
+//        stringBuilder.append("===");
+//        stringBuilder.append(strings[9]);
+//        stringBuilder.append("===");
 
         stringBuilder.append(TypeData.BLOCK.toString());
         stringBuilder.append("===");
@@ -190,14 +185,23 @@ public class StringHelper {
         stringBuilder.append("===");
         stringBuilder.append(TypeData.NULL.toString());
         stringBuilder.append("===");
+        stringBuilder.append(TypeData.MARTINGALE.toString());
+        stringBuilder.append("===");
+        stringBuilder.append("0");
+        stringBuilder.append("===");
 
         stringBuilder.append(strings[10]);
         stringBuilder.append("===");
-        stringBuilder.append(strings[11]);
+        stringBuilder.append(strings[11].replaceAll("\n", ""));
 
         if (Gasket.isAddOrTESTatTheEndOfTheLine()) {
-            stringBuilder.append(" --- " + TypeData.TEST.toString());
+            stringBuilder.append("---" + TypeData.TEST.toString());
         }
+
+        stringBuilder.append("===");
+        stringBuilder.append(TypeData.LOT);
+        stringBuilder.append("===");
+        stringBuilder.append("0*0*0" + "\n");
 
         //stringBuilder.append("\n");
 

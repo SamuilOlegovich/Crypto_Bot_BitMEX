@@ -1,16 +1,19 @@
 package bitmex.Bot.controller;
 
 import bitmex.Bot.model.FilesAndPathCreator;
-import bitmex.Bot.view.WriterAndReadFile;
 import bitmex.Bot.view.ConsoleHelper;
+import bitmex.Bot.model.WriterAndReadFile;
 import bitmex.Bot.model.Gasket;
 
 import java.util.ArrayList;
 
 
+
+
 public class ParserSetting {
     private ExecutorCommandos executorCommandos;
     private String path;
+
 
 
     public ParserSetting(ExecutorCommandos executorCommandos) {

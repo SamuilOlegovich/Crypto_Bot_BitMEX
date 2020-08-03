@@ -4,7 +4,6 @@ import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.Gasket;
 
 public class TradeBuy extends Thread {
 
@@ -39,7 +38,21 @@ public class TradeBuy extends Thread {
         this.stop = Gasket.getStop();
         this.lot = Gasket.getLot();
         this.ID = id;
+        init();
+    }
 
+    public TradeBuy(String id, double lot) {
+        this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
+        this.bitmexClient = Gasket.getBitmexClient();
+        this.priceActiv = Gasket.getPriceActive();
+        this.typeOrder = Gasket.getTypeOrder();
+        this.orderBuyOpen = new BitmexOrder();
+        this.visible = Gasket.getVisible();
+        this.ticker = Gasket.getTicker();
+        this.take = Gasket.getTake();
+        this.stop = Gasket.getStop();
+        this.lot = lot;
+        this.ID = id;
         init();
     }
 
@@ -52,7 +65,7 @@ public class TradeBuy extends Thread {
 
     @Override
     public void run() {
-        price = Gasket.getBitmexQuote().getAskPrice();
+        price = Gasket.getBitmexQuote().getBidPrice() - 0.5;
         orderBuyOpen.setTimeInForce("GoodTillCancel");
         orderBuyOpen.setSymbol(ticker.getSymbol());
         orderBuyOpen.setDisplayQty(visible);
@@ -63,12 +76,15 @@ public class TradeBuy extends Thread {
 
 
         orderBuyAnswer = bitmexClient.submitOrder(orderBuyOpen);
+
         ConsoleHelper.writeMessage(ID + " --- Открыл BUY позицию --- "
-                + orderBuyAnswer.getOrderID() + "\n"
-                + orderBuyAnswer.toString());
+                + orderBuyAnswer.getOrderID() + " --- "
+                + orderBuyAnswer.toString()
+                + "\n"
+        );
 
         try {
-            Thread.sleep(1000 * timeBetweenOrders);
+            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -84,11 +100,13 @@ public class TradeBuy extends Thread {
 
         orderLimitIfTouchedAnswer = bitmexClient.submitOrder(orderLimitIfTouchedOpen);
         ConsoleHelper.writeMessage(ID + " --- Выставил Тейк для позиции --- "
-                + orderLimitIfTouchedAnswer.getOrderID() + "\n"
-                + orderLimitIfTouchedAnswer.toString());
+                + orderLimitIfTouchedAnswer.getOrderID()
+                + orderLimitIfTouchedAnswer.toString()
+                + "\n"
+        );
 
         try {
-            Thread.sleep(1000 * timeBetweenOrders);
+            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -105,7 +123,9 @@ public class TradeBuy extends Thread {
 
         orderStopLimitAnswer = bitmexClient.submitOrder(orderStopLimitOpen);
         ConsoleHelper.writeMessage(ID + " --- Выставил Стоп для позиции --- "
-                + orderStopLimitAnswer.getOrderID() + "\n"
-                + orderStopLimitAnswer.toString());
+                + orderStopLimitAnswer.getOrderID()
+                + orderStopLimitAnswer.toString()
+                + "\n"
+        );
     }
 }

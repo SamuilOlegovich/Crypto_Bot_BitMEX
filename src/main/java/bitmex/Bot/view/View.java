@@ -1,6 +1,5 @@
 package bitmex.Bot.view;
 
-import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.controller.RunTheProgram;
 import bitmex.Bot.model.DatesTimes;
@@ -66,6 +65,7 @@ public class View extends Thread {
                 jPanel.setBackground(Color.GREEN);
 
                 if (runTheProgram != null) {
+                    runTheProgram.startProgram();
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                             + " --- Программа ЗАПУЩЕНА");
                     Gasket.getListensLooksAndComparesUser().setStopStartFlag(false);
@@ -75,8 +75,8 @@ public class View extends Thread {
 
                 if (runTheProgram == null) {
                     runTheProgram = new RunTheProgram();
+                    Gasket.setRunTheProgram(runTheProgram);
                 }
-
             }
         });
 
@@ -87,6 +87,7 @@ public class View extends Thread {
                 // тут прописать Стоп программы
                 jPanel.setBackground(Color.RED);
 
+                runTheProgram.stopPrograms();
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                         + " --- Программа ОСТАНОВЛЕНА");
 
@@ -121,6 +122,8 @@ public class View extends Thread {
                         ConsoleHelper.printInfoSettings();
                     } else if (string.trim().equalsIgnoreCase("commands")) {
                         ConsoleHelper.showCommands();
+                    } else if (string.trim().equalsIgnoreCase("showSteeps")) {
+                        ConsoleHelper.writeMessage(Gasket.getMartingaleClass().showSteps());
                     } else if (string.trim().equalsIgnoreCase("flag")) {
                         ConsoleHelper.printFlag();
                     } else if (string.trim().equalsIgnoreCase("price")) {

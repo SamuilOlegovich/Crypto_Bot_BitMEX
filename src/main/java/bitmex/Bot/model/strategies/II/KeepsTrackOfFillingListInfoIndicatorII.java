@@ -1,8 +1,8 @@
 package bitmex.Bot.model.strategies.II;
 
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;

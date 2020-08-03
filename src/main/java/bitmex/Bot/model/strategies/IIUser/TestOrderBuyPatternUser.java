@@ -2,10 +2,9 @@ package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.enums.TypeData;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
-
+import bitmex.Bot.view.ConsoleHelper;
 
 
 public class TestOrderBuyPatternUser extends Thread {
@@ -15,11 +14,11 @@ public class TestOrderBuyPatternUser extends Thread {
     private double priseOpenOrder;
     private String ID;
 
-    public TestOrderBuyPatternUser(String id, double priseOpenOrder) {
+    public TestOrderBuyPatternUser(String zeroStrimg, double priseOpenOrder) {
         this.priseTakeOrder = priseOpenOrder + Gasket.getTake();
         this.priseStopOrder = priseOpenOrder - Gasket.getStop();
         this.priseOpenOrder = priseOpenOrder;
-        this.ID =  id;
+        this.ID =  zeroStrimg;
         start();
     }
 

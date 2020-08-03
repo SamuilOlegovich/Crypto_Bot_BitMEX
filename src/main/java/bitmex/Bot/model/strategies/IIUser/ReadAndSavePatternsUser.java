@@ -1,6 +1,6 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.view.WriterAndReadFile;
+import bitmex.Bot.model.WriterAndReadFile;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -13,9 +13,11 @@ import java.io.File;
 import static bitmex.Bot.model.enums.TypeData.*;
 
 
+
+
 public class ReadAndSavePatternsUser {
 
-    public static void createSavedPatternsUser() {
+    public static synchronized void createSavedPatternsUser() {
         SavedPatternsUser savedPatternsUser = Gasket.getSavedPatternsUserClass();
         ConsoleHelper.writeMessage(DatesTimes.getDate() + " --- Востанавливаю Saved Patterns USER");
 
@@ -52,6 +54,7 @@ public class ReadAndSavePatternsUser {
     }
 
 
+
     public static synchronized void saveTemporarySavedPatternsUser(ArrayList<ArrayList<String>> arrayListArrayList) {
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
         StringBuilder stringBuilder = new StringBuilder();
@@ -72,7 +75,8 @@ public class ReadAndSavePatternsUser {
     }
 
 
-    public static void saveSavedPatternsDeleteUser(ArrayList<ArrayList<String>> arrayListArrayList) {
+
+    public static synchronized void saveSavedPatternsDeleteUser(ArrayList<ArrayList<String>> arrayListArrayList) {
         ArrayList<ArrayList<String>> arrayLists = new ArrayList<>(arrayListArrayList);
 
         if (arrayLists.size() > 0) {
@@ -93,7 +97,9 @@ public class ReadAndSavePatternsUser {
         }
     }
 
-    public static void saveSavedPatternsUser() {
+
+
+    public static synchronized void saveSavedPatternsUser() {
         StringBuilder stringBuilder = new StringBuilder();
         String lineBreak = "\n";
         String next = NEXT.toString() + lineBreak;

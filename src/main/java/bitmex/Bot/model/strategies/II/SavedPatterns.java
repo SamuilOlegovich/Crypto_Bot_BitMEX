@@ -1,8 +1,9 @@
 package bitmex.Bot.model.strategies.II;
 
 
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.*;
+import bitmex.Bot.model.strategies.IIUser.ReadAndSavePatternsUser;
+import bitmex.Bot.view.ConsoleHelper;
 
 
 import java.util.ArrayList;
@@ -159,9 +160,7 @@ public class SavedPatterns implements Serializable {
                             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                                     + " --- II ПАТТЕРН такой есть - обновляю информацию по === "
                                     + giveData(ID, stringZero));
-
-                            ReadAndSavePatterns.saveSavedPatternsFromUser();
-                            ReadAndSavePatterns.saveSavedPatterns();
+                            savedPatterns();
                             return;
                         }
                     }
@@ -179,13 +178,17 @@ public class SavedPatterns implements Serializable {
                 maxArraySize = Math.max(inArrayListCopy.size(), maxArraySize);
 
                 listsPricePatterns.sort(getSortSize());
-
-                ReadAndSavePatterns.saveSavedPatternsFromUser();
-                ReadAndSavePatterns.saveSavedPatterns();
+                savedPatterns();
             }
         } else {
             inArrayList.clear();
         }
+    }
+
+    private void savedPatterns() {
+        ReadAndSavePatterns.saveSavedTrimmedPatternsFromUser();
+        ReadAndSavePatterns.saveSavedPatternsFromUser();
+        ReadAndSavePatterns.saveSavedPatterns();
     }
 
 
@@ -306,5 +309,17 @@ public class SavedPatterns implements Serializable {
             ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                     + " --- Такого номера ===" + giveData(ID, string) + "=== ПАТТЕРНА нет");
         }
+    }
+
+
+
+    // приводим в порядок id
+    public void putinOrderId() {
+        int id = 1;
+        for (ArrayList<String> arrayList : listsPricePatterns) {
+            arrayList.set(0, StringHelper.setData(ID, id + "\n", arrayList.get(0)));
+            id++;
+        }
+        ReadAndSavePatterns.saveSavedPatterns();
     }
 }

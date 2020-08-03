@@ -1,15 +1,13 @@
 package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.enums.TypeData;
+import bitmex.Bot.model.*;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.DatesTimes;
-import bitmex.Bot.model.TradeSell;
-import bitmex.Bot.model.TradeBuy;
-import bitmex.Bot.model.Gasket;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
 
@@ -33,7 +31,7 @@ public class MakeDealUser extends Thread {
 
     @Override
     public void run() {
-        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
+        writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + "Определяю какую сделку сделать согласно ПАТТЕРНАМ USER");
         
         String stringOut = patternZeroString;
@@ -44,8 +42,9 @@ public class MakeDealUser extends Thread {
 
             if (conditionsAreMet(true)) {
                 if (Gasket.isTradingUser() && !patternZeroString.endsWith(TEST.toString())) {
-                    double index = (double) Integer.parseInt(giveData(BUY, patternZeroString))
-                            / Integer.parseInt(giveData(SELL, patternZeroString));
+
+                    double index = (double) Math.abs(Integer.parseInt(giveData(BUY, patternZeroString)))
+                            / Math.abs(Integer.parseInt(giveData(SELL, patternZeroString)));
 
                     if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
                         new TradeBuy(stringOut);
@@ -53,7 +52,7 @@ public class MakeDealUser extends Thread {
 
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                             + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
-                            + " сделал сделку БАЙ USER");
+                            + " сделал сделку БАЙ USER REAL");
                 }
 
                 if (Gasket.isTradingTestUser()) {
@@ -67,7 +66,7 @@ public class MakeDealUser extends Thread {
             } else {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
-                        + " сделку БАЙ USER отменил по истечению времени");
+                        + " сделку БАЙ USER отменил по истечению времени " + MARTINGALE.toString());
             }
 
         } else if (Integer.parseInt(giveData(BUY, patternZeroString))
@@ -76,8 +75,8 @@ public class MakeDealUser extends Thread {
             if (conditionsAreMet(false)) {
                 if (Gasket.isTradingUser() && !patternZeroString.endsWith(TEST.toString())) {
 
-                    double index = (double) Integer.parseInt(giveData(SELL, patternZeroString))
-                            / Integer.parseInt(giveData(BUY, patternZeroString));
+                    double index = (double) Math.abs(Integer.parseInt(giveData(SELL, patternZeroString)))
+                            / Math.abs(Integer.parseInt(giveData(BUY, patternZeroString)));
 
                     if (index >= Gasket.getIndexRatioTransactionsAtWhichEnterMarket()) {
                         new TradeSell(stringOut);
@@ -85,7 +84,7 @@ public class MakeDealUser extends Thread {
 
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                             + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(ID, patternZeroString)
-                            + " сделал сделку СЕЛЛ USER");
+                            + " сделал сделку СЕЛЛ USER REAL");
 
                 }
 

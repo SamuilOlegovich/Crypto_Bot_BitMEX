@@ -9,7 +9,6 @@ import bitmex.Bot.model.strategies.II.ReadAndSavePatterns;
 import bitmex.Bot.model.strategies.II.SavedPatterns;
 import bitmex.Bot.model.FilesAndPathCreator;
 import bitmex.Bot.model.Gasket;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.view.View;
 
 
@@ -27,7 +26,7 @@ public class Main {
                 break;
             } else {
                 try {
-                    Thread.sleep(300);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

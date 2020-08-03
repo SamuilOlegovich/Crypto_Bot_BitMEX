@@ -6,6 +6,7 @@
 package bitmex.Bot.model.bitMEX.client;
 
 import bitmex.Bot.model.bitMEX.listener.WebsocketDisconnectListener;
+import bitmex.Bot.view.ConsoleHelper;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -16,7 +17,6 @@ import org.eclipse.jetty.websocket.api.Session;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
-import bitmex.Bot.view.ConsoleHelper;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Future;
 import com.google.gson.JsonParser;

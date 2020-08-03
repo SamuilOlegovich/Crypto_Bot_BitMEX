@@ -2,11 +2,9 @@ package bitmex.Bot.model.strategies.IIUser;
 
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.StringHelper;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
-
-
+import bitmex.Bot.view.ConsoleHelper;
 
 
 public class TestOrderSellPatternPredictor extends Thread {
@@ -17,13 +15,13 @@ public class TestOrderSellPatternPredictor extends Thread {
     private boolean doNotDoDeal;
     private String ID;
 
-    public TestOrderSellPatternPredictor(boolean doNotDoDeal, String id, double priseOpenOrder) {
+    public TestOrderSellPatternPredictor(boolean doNotDoDeal, String zeroString, double priseOpenOrder) {
         this.priseTakeOrder = priseOpenOrder - Gasket.getTake();
         this.priseStopOrder = priseOpenOrder + Gasket.getStop();
         this.priseOpenOrder = priseOpenOrder;
         this.doNotDoDeal = doNotDoDeal;
 
-        this.ID = id;
+        this.ID = zeroString;
         start();
     }
 
@@ -46,7 +44,7 @@ public class TestOrderSellPatternPredictor extends Thread {
                 String out = StringHelper.setData(TypeData.PREDICTOR, TypeData.LOSS.toString(), ID);
 
                 if (doNotDoDeal) {
-                    String data = (Integer.parseInt(StringHelper.giveData(TypeData.BUY, ID)) + 1) + "";
+                    String data = (Integer.parseInt(StringHelper.giveData(TypeData.BUY, ID)) - 1) + "";
                     out = StringHelper.setData(TypeData.BUY, data, out);
                 }
 

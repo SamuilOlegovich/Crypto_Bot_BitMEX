@@ -1,11 +1,10 @@
 package bitmex.Bot.model.strategies.iiPro;
 
-import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.serverAndParser.InfoIndicator;
 import bitmex.Bot.model.CompareHelper;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.view.ConsoleHelper;
 
 import java.util.Collections;
 import java.util.ArrayList;

@@ -1,15 +1,17 @@
 package bitmex.Bot.view;
 
+import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.enums.TypeData;
 import java.io.InputStreamReader;
-import bitmex.Bot.model.Gasket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static bitmex.Bot.model.Gasket.getFilesAndPathCreator;
-import static bitmex.Bot.view.WriterAndReadFile.writerFile;
-import static bitmex.Bot.model.Gasket.getViewThread;
+import static bitmex.Bot.model.Gasket.*;
+import static bitmex.Bot.model.Gasket.getBroadcastAddresses;
+import static bitmex.Bot.model.WriterAndReadFile.writerFile;
+import static bitmex.Bot.model.enums.TypeData.MARTINGALE;
+import static bitmex.Bot.model.enums.TypeData.REAL;
 
 
 
@@ -113,8 +115,8 @@ public class ConsoleHelper {
                 + " ----- Выбираем счет, true - реальный счет\n"
                 + "gameAllDirection === " + Gasket.isGameAllDirection()
                 + " ----- true - играть во все стороны на одном счету\n"
-                + "gameAllDirection === " + Gasket.isGameAllDirection()
-                + " ----- true - играть во все стороны на одном счету\n"
+//                + "gameAllDirection === " + Gasket.isGameAllDirection()
+//                + " ----- true - играть во все стороны на одном счету\n"
                 + "gameDirection === " + Gasket.isGameDirection()
                 + " ----- направление игры при одном счете, true - Buy, false - Sell\n"
                 + "twoAccounts === " + Gasket.isTwoAccounts()
@@ -202,6 +204,8 @@ public class ConsoleHelper {
                 + " ----- показывать загрузку паттернов при запуске программы\n"
                 + "levelsToCompare === " + Gasket.getLevelsToCompare()
                 + " ----- уровни для сравнения II Pro\n"
+                + "levelsForTrimmedPatterns === " + Gasket.getLevelsForTrimmedPatterns()
+                + " ----- уровни которые следует оставлять для урезаных паттернов USERR"
                 + "ERROR === " + Gasket.isERROR()
                 + " ----- включить - отключить показ ошибок в окне программы\n"
                 + "DEBUG === " + Gasket.isDEBUG()
@@ -238,11 +242,35 @@ public class ConsoleHelper {
                 + " ----- включить выключить замену данных\n"
                 + "replaceDataWithNULLPro === " + Gasket.isReplaceDataWithNULL()
                 + " ----- включить выключить замену данных\n"
+                + "enableDisableReplacementIDinPatternsUser === "
+                + Gasket.isEnableDisableReplacementIDinPatternsUser()
+                + " ----- включить выключить замену id в паттернах USER\n"
                 + "addOrTESTatTheEndOfTheLine === " + Gasket.isReplaceDataWithNULL()
                 + " ----- добавлять или нет тест в конце строки\n"
+                + "testOrRealAtTheEnd === " + Gasket.isTestOrRealAtTheEnd()
+                + " ----- на что меняем окончание строки ID - на тест(false) или на реал(true)\n"
                 + "indexRatioTransactionsAtWhichEnterMarket === "
                 + Gasket.getIndexRatioTransactionsAtWhichEnterMarket()
-                + " ----- индекс соотношения сделок прикотором входим в рынок\n";
+                + " ----- индекс соотношения сделок прикотором входим в рынок\n"
+                + "\n"
+//                + TypeData.MARTINGALE.toString() + "\n"
+                + "martingaleOpenOneLot === " + getMartingaleOpenOneLot()
+                + " ----- количество первой сделки при мартингейле\n"
+                + "martingaleOnOff === " + isMartingaleOnOff()
+                + " ----- включить выключить игру по мартингейлу\n"
+                + "martingaleIndex === " + getMartingaleIndex()
+                + " ----- индекс мартингейла\n"
+                + "martingaleMaxSteep === " + getMartingaleMaxSteep()
+                + " ----- максимально разрешенный шаг\n"
+                + "tradingTestMartingale === " + isTradingTestMartingale()
+                + " ----- включить тестировку мартингейла\n"
+                + "tradingMartingale === " + isTradingMartingale()
+                + " ----- торговать или нет с помощью мартингейла\n"
+                + "broadcastSignalsFurther === " + isBroadcastSignalsFurther()
+                + " ----- транслировать сигналы дальше для других програм\n"
+                + "BroadcastAddresses === " + getBroadcastAddresses()
+                + " -----  адреса на которые надо ретраслировать сигналы"
+                ;
     }
 
 
@@ -256,7 +284,8 @@ public class ConsoleHelper {
                 + "\nЕСЛИ ВЫ ЖЕЛАЕТЕ - ЭТИ НАСТРОЙКИ МОЖНО ИЗМЕНИТЬ\n"
                 + "ВВЕДИТЕ ЖЕЛАЕМЫЙ ПАРАМЕТР И ЗНАЧЕНИЕ В ФОРМАТЕ\n"
                 + "команда=значение ----> PORT=777\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -285,7 +314,8 @@ public class ConsoleHelper {
                 + "OB_STOP === " + Gasket.getObStop() + "\n"
                 + "OS_TAKE === " + Gasket.getOsTake() + "\n"
                 + "OS_STOP === " + Gasket.getOsStop() + "\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -343,7 +373,8 @@ public class ConsoleHelper {
                 + "OB_STOP_R === " + Gasket.getObStopR() + "\n"
                 + "OS_TAKE_R === " + Gasket.getOsTakeR() + "\n"
                 + "OS_STOP_R === " + Gasket.getOsStopR() + "\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -356,7 +387,8 @@ public class ConsoleHelper {
                 + "OB_STOP_PAT === " + Gasket.getObStopPat() + "\n"
                 + "OS_TAKE_PAT === " + Gasket.getOsTakePat() + "\n"
                 + "OS_STOP_PAT === " + Gasket.getOsStopPat() + "\n"
-                + "\n");
+                + "\n"
+        );
     }
 
 
@@ -373,13 +405,27 @@ public class ConsoleHelper {
                 + "OS_2 === " + Gasket.isOsFlag_2() + "\n"
                 + "OB === " + Gasket.isObFlag() + "\n"
                 + "OS === " + Gasket.isOsFlag() + "\n"
-                + "\n");
+                + "\n"
+        );
+    }
+
+
+
+    public static void printStatisticsMartingale() {
+        writeMessage("\n"
+                + "   ----- ***** " + MARTINGALE.toString() + " ***** -----\n"
+                + "        PROFIT === " + Gasket.getMartingaleClass().getMartingalePROFIT() + "\n"
+                + "   -----     =====     -----\n"
+                + "   ----- ***** " + MARTINGALE.toString() + " - " + REAL.toString() + " ***** -----\n"
+                + "        PROFIT === " + Gasket.getMartingaleClass().getMartingalePROFIT() + "\n"
+                + "   ----- ******************************** -----\n\n");
     }
 
 
     public static void showCommands() {
         writeMessage("\n\n"
                 + "SETTINGS=RESTART программа перезапустит настройки не отключаясь\n"
+                + "enableDisableReplacementIDinPatternsUser\n"
                 + "indexRatioTransactionsAtWhichEnterMarket\n"
                 + "activeNumberOfCandlesForAnalysis\n"
                 + "timeCalculationCombinationLevel\n"
@@ -388,20 +434,28 @@ public class ConsoleHelper {
                 + "numberOfCandlesForAnalysis\n"
                 + "takeForCollectingPatterns\n"
                 + "useStopLevelOrNotStopTime\n"
+                + "levelsForTrimmedPatterns\n"
+                + "broadcastSignalsFurther\n"
                 + "replaceDataWithNULLPro\n"
                 + "useStopLevelOrNotStop\n"
                 + "numberOfHistoryBlocks\n"
                 + "showLoadPatternsUser\n"
                 + "timeCalculationLevel\n"
+                + "martingaleOpenOneLot\n"
                 + "replaceDataWithNULL\n"
                 + "tradingPatternsUser\n"
                 + "apiKeyName2Accounts\n"
+                + "martingaleMaxSteep\n"
+                + "broadcastAddresses\n"
+                + "testOrRealAtTheEnd\n"
                 + "showLoadPatternsII\n"
                 + "timeBetweenOrders\n"
                 + "gameAllDirection\n"
                 + "useRealOrNotReal\n"
                 + "maxAndMinAverage\n"
                 + "secondsSleepTime\n"
+                + "martingaleIndex\n"
+                + "martingaleOnOff\n"
                 + "tradingPatterns\n"
                 + "strategyWorkOne\n"
                 + "apiKey2Accounts\n"
@@ -430,6 +484,7 @@ public class ConsoleHelper {
                 + "typeOrder\n"
                 + "predictor\n"
                 + "closeNULL\n"
+                + "showSteps\n"
                 + "timeNULL\n"
                 + "openNULL\n"
                 + "highNULL\n"
@@ -450,10 +505,10 @@ public class ConsoleHelper {
                 + "PORT\n"
                 + "stop\n"
                 + "take\n"
+                + "INFO\n"
                 + "obs\n"
                 + "lot\n"
-                + "INFO\n"
-
-                + "\n\n");
+                + "\n\n"
+        );
     }
 }

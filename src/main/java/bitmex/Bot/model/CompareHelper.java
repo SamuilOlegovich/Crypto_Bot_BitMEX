@@ -131,15 +131,7 @@ public class CompareHelper {
     public synchronized static boolean finallyComparisonForPro(String marketString, String patternString) {
         String[] levelsToCompare = getLevelsToCompare().split("-");
 
-        writeMessage(getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4 iiPro");
-
-
         if (!giveData(type, marketString).equals(giveData(type, patternString))) {
-
-            writeMessage(getDateTerminal() + " --- "
-                    + "---------------------------------------------------------------------------- 4-3 iiPro");
-
             return false;
         }
 
@@ -147,18 +139,10 @@ public class CompareHelper {
         for (String string : levelsToCompare) {
             if (string.equals(giveData(type, marketString)) && string.equals(giveData(type, patternString))) {
                 if (!giveData(dir, marketString).equals(giveData(dir, patternString))) {
-
-                    writeMessage(getDateTerminal() + " --- "
-                            + "---------------------------------------------------------------------------- 4-4 iiPro");
-
                     return false;
                 }
             }
         }
-
-        writeMessage(getDateTerminal() + " --- "
-                + "---------------------------------------------------------------------------- 4-5 iiPro");
-
         return true;
     }
 

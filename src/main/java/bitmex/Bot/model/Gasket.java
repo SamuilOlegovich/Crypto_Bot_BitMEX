@@ -95,7 +95,7 @@ public class Gasket {
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
     private static int dateDifference = -3;         // разница в часовом поясе
     private static boolean trading = false;         // торговать - true нет - false
-    private static double visible = 0.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
+    private static double visible = 1.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
     private static boolean ERROR = true;            // включить - отключить показ ошибок в окне приложения
     private static boolean DEBUG = true;
     private static boolean INFO = true;

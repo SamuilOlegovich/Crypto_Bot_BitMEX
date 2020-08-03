@@ -8,11 +8,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import static bitmex.Bot.model.Gasket.*;
-import static bitmex.Bot.model.Gasket.getViewThread;
-import static bitmex.Bot.model.Gasket.getViewThread;
+import static bitmex.Bot.model.Gasket.getBroadcastAddresses;
 import static bitmex.Bot.model.WriterAndReadFile.writerFile;
 import static bitmex.Bot.model.enums.TypeData.MARTINGALE;
 import static bitmex.Bot.model.enums.TypeData.REAL;
+
+
 
 
 public class ConsoleHelper {
@@ -269,7 +270,6 @@ public class ConsoleHelper {
                 + " ----- транслировать сигналы дальше для других програм\n"
                 + "BroadcastAddresses === " + getBroadcastAddresses()
                 + " -----  адреса на которые надо ретраслировать сигналы"
-
                 ;
     }
 

@@ -65,7 +65,7 @@ public class TradeBuy extends Thread {
 
     @Override
     public void run() {
-        price = Gasket.getBitmexQuote().getAskPrice();
+        price = Gasket.getBitmexQuote().getBidPrice() - 0.5;
         orderBuyOpen.setTimeInForce("GoodTillCancel");
         orderBuyOpen.setSymbol(ticker.getSymbol());
         orderBuyOpen.setDisplayQty(visible);
@@ -78,8 +78,10 @@ public class TradeBuy extends Thread {
         orderBuyAnswer = bitmexClient.submitOrder(orderBuyOpen);
 
         ConsoleHelper.writeMessage(ID + " --- Открыл BUY позицию --- "
-                + orderBuyAnswer.getOrderID() + "\n"
-                + orderBuyAnswer.toString());
+                + orderBuyAnswer.getOrderID() + " --- "
+                + orderBuyAnswer.toString()
+                + "\n"
+        );
 
         try {
             Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
@@ -98,8 +100,10 @@ public class TradeBuy extends Thread {
 
         orderLimitIfTouchedAnswer = bitmexClient.submitOrder(orderLimitIfTouchedOpen);
         ConsoleHelper.writeMessage(ID + " --- Выставил Тейк для позиции --- "
-                + orderLimitIfTouchedAnswer.getOrderID() + "\n"
-                + orderLimitIfTouchedAnswer.toString());
+                + orderLimitIfTouchedAnswer.getOrderID()
+                + orderLimitIfTouchedAnswer.toString()
+                + "\n"
+        );
 
         try {
             Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
@@ -119,7 +123,9 @@ public class TradeBuy extends Thread {
 
         orderStopLimitAnswer = bitmexClient.submitOrder(orderStopLimitOpen);
         ConsoleHelper.writeMessage(ID + " --- Выставил Стоп для позиции --- "
-                + orderStopLimitAnswer.getOrderID() + "\n"
-                + orderStopLimitAnswer.toString());
+                + orderStopLimitAnswer.getOrderID()
+                + orderStopLimitAnswer.toString()
+                + "\n"
+        );
     }
 }

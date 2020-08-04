@@ -126,7 +126,7 @@ public class MakeDealMartingale extends Thread {
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                                 + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
                                 + " сделку БАЙ USER " + MARTINGALE.toString()
-                                + "ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - REAL"
+                                + " ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - REAL"
                         );
                     }
                 }
@@ -163,14 +163,14 @@ public class MakeDealMartingale extends Thread {
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                                 + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
                                 + " сделку БАЙ USER " + MARTINGALE.toString()
-                                + "ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - TEST"
+                                + " ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - TEST"
                         );
                     }
                 }
             } else {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
-                        + " сделку БАЙ USER " + MARTINGALE.toString() + "отменил по истечению ВРЕМЕНИ"
+                        + " сделку БАЙ USER " + MARTINGALE.toString() + " ОТМЕНИЛ по истечению ВРЕМЕНИ"
                 );
             }
 
@@ -213,7 +213,7 @@ public class MakeDealMartingale extends Thread {
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                                 + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
                                 + " сделку СЕЛЛ USER " + MARTINGALE.toString()
-                                + "ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - REAL"
+                                + " ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - REAL"
                         );
                     }
                 }
@@ -250,7 +250,7 @@ public class MakeDealMartingale extends Thread {
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                                 + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
                                 + " сделку БАЙ USER " + MARTINGALE.toString()
-                                + "ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - TEST"
+                                + " ОТМЕНИЛ --- перевышен МАКСИМАЛЬНЫЙ шаг - TEST"
                         );
                     }
                 }
@@ -258,7 +258,7 @@ public class MakeDealMartingale extends Thread {
             } else {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + stringOut + " --- Согластно ПАТТЕРНУ " + giveData(TypeData.ID, patternZeroString)
-                        + " сделку СЕЛЛ USER " + MARTINGALE.toString() + "отменил по истечению ВРЕМЕНИ"
+                        + " сделку СЕЛЛ USER " + MARTINGALE.toString() + " ОТМЕНИЛ по истечению ВРЕМЕНИ"
                 );
             }
         }

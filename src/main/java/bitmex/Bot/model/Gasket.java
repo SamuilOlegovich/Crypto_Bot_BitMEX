@@ -67,6 +67,7 @@ public class Gasket {
     private static boolean gameAllDirection = false;    // true - играть во все стороны на одном счету
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
     private static boolean tradingPatternsII = true;    // торговля по паттернам II
+    private static boolean indentPriceOnOff = false;    // включить выключить цена отступа
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
     private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
@@ -90,6 +91,7 @@ public class Gasket {
     private static boolean tradingII = false;
     private static int secondsSleepTime = 13;       // время в секундах, указывает сколько по времени отдохнуть по появлению новой пятиминутки
     private static boolean predictor = false;       // предсказатель
+    private static double indentPrice = 10.0;       // цена отступа, сколько долларов ждем отката назад чтобы войти в рынок при пробитии указанного уровня
     private static double priceActive = 3.0;        // цена тригер для стоп лимитов и тейк лимитов
     private static int strategyWorkOne = 2;         // количество стратегий одновременно работающих (можно еще допелить или убрать)
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
@@ -1878,6 +1880,24 @@ public class Gasket {
 
     public static void setRepeater(Repeater repeater) {
         Gasket.repeater = repeater;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static double getIndentPrice() {
+        return indentPrice;
+    }
+
+    public static void setIndentPrice(double indentPrice) {
+        Gasket.indentPrice = indentPrice;
+    }
+
+    public static boolean isIndentPriceOnOff() {
+        return indentPriceOnOff;
+    }
+
+    public static void setIndentPriceOnOff(boolean indentPriceOnOff) {
+        Gasket.indentPriceOnOff = indentPriceOnOff;
     }
 }
 

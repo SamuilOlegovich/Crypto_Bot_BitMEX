@@ -3,6 +3,7 @@ package bitmex.Bot.controller;
 import bitmex.Bot.model.Gasket;
 
 import static bitmex.Bot.model.DatesTimes.getDateTerminal;
+import static bitmex.Bot.model.Gasket.setMartingaleOpenOneLot;
 import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 import static bitmex.Bot.model.Gasket.*;
 
@@ -114,6 +115,16 @@ public class ExecutorCommandos {
                     setMartingaleOpenOneLot(Double.parseDouble(strings[1]));
                     writeMessage("martingaleOpenOneLot === "
                             + getMartingaleOpenOneLot() + "\n");
+                    break;
+                case "indentPrice" :
+                    setIndentPrice(Double.parseDouble(strings[1]));
+                    writeMessage("indentPrice === "
+                            + getIndentPrice() + "\n");
+                    break;
+                case "indentPriceOnOff" :
+                    setIndentPriceOnOff(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("indentPrice === "
+                            + isIndentPriceOnOff() + "\n");
                     break;
                 case "martingaleIndex" :
                     setMartingaleIndex(Double.parseDouble(strings[1]));

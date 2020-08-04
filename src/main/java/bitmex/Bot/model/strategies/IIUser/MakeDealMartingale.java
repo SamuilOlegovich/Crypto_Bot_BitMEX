@@ -1,17 +1,16 @@
 package bitmex.Bot.model.strategies.IIUser;
 
+import bitmex.Bot.model.*;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static bitmex.Bot.view.ConsoleHelper.writeMessage;
+import static bitmex.Bot.model.Gasket.isIndentPriceOnOff;
 import static bitmex.Bot.model.StringHelper.giveData;
 import static bitmex.Bot.model.enums.TypeData.*;
-
-
+import static bitmex.Bot.view.ConsoleHelper.writeMessage;
 
 
 public class MakeDealMartingale extends Thread {
@@ -267,6 +266,7 @@ public class MakeDealMartingale extends Thread {
 
 
 
+
     // BUY===1===SELL===0===AVERAGE===3.28===MAX===5.0===SIZE===220===BLOCK===1===TYPE===ASK===ID===4
     // тут мы находим цену выше которой надо подняться или опустится в течении определенного времени
     // что бы сделать сделку иначе отбой
@@ -331,31 +331,101 @@ public class MakeDealMartingale extends Thread {
             prices = Gasket.getBitmexQuote().getAskPrice();
         }
 
-        while (time < timeStop) {
+        if (!isIndentPriceOnOff()) {
+            while (time < timeStop) {
 
-            if (b) {
-                if (Gasket.getBitmexQuote().getBidPrice() > prices) {
-                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- цена уровня - " + types + " - " + prices
-                            + " - пробита - " + MARTINGALE.toString());
-                    return true;
+                if (b) {
+                    if (Gasket.getBitmexQuote().getBidPrice() > prices) {
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                                + " --- цена уровня - " + types + " - " + prices
+                                + " - пробита - " + MARTINGALE.toString());
+                        return true;
+                    }
+                } else {
+                    if (Gasket.getBitmexQuote().getAskPrice() < prices) {
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                                + " --- цена уровня - " + types + " - " + prices
+                                + " - пробита - " + MARTINGALE.toString());
+                        return true;
+                    }
                 }
-            } else {
-                if (Gasket.getBitmexQuote().getAskPrice() < prices) {
-                    ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
-                            + " --- цена уровня - " + types + " - " + prices
-                            + " - пробита - " + MARTINGALE.toString());
-                    return true;
+
+                try {
+                    Thread.sleep(Gasket.getSECOND());
+                } catch (InterruptedException e) {
+                    ConsoleHelper.writeERROR(Arrays.toString(e.getStackTrace()));
                 }
+
+                time++;
+            }
+        } else {
+            double indentPriceOut = 0.0;
+
+            while (time < timeStop) {
+
+                if (b) {
+                    if (Gasket.getBitmexQuote().getBidPrice() > prices) {
+                        indentPriceOut = Gasket.getBitmexQuote().getAskPrice() - Gasket.getIndentPrice();
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                                + " --- цена уровня - " + types + " - " + prices
+                                + " - пробита - " + MARTINGALE.toString() + " жду пробития цены отката - "
+                                + indentPriceOut
+                        );
+                        break;
+                    }
+                } else {
+                    if (Gasket.getBitmexQuote().getAskPrice() < prices) {
+                        indentPriceOut = Gasket.getBitmexQuote().getBidPrice() + Gasket.getIndentPrice();
+
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                                + " --- цена уровня - " + types + " - " + prices
+                                + " - пробита - " + MARTINGALE.toString() + " жду пробития цены отката - "
+                                + indentPriceOut
+                        );
+                        break;
+                    }
+                }
+
+                try {
+                    Thread.sleep(Gasket.getSECOND());
+                } catch (InterruptedException e) {
+                    ConsoleHelper.writeERROR(Arrays.toString(e.getStackTrace()));
+                }
+
+                time++;
             }
 
-            try {
-                Thread.sleep(Gasket.getSECOND());
-            } catch (InterruptedException e) {
-                ConsoleHelper.writeERROR(Arrays.toString(e.getStackTrace()));
-            }
+            while (time < timeStop) {
 
-            time++;
+                if (b) {
+                    if (indentPriceOut != 0.0 && Gasket.getBitmexQuote().getAskPrice() < indentPriceOut) {
+
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                                + " --- цена уровня отката - " + types + " - " + indentPriceOut
+                                + " - пробита - " + MARTINGALE.toString()
+                        );
+                        return true;
+                    }
+                } else {
+                    if (indentPriceOut != 0.0 && Gasket.getBitmexQuote().getBidPrice() > prices) {
+                        indentPriceOut = Gasket.getBitmexQuote().getBidPrice() + Gasket.getIndentPrice();
+
+                        ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
+                                + " --- цена уровня - " + types + " - " + indentPriceOut
+                                + " - пробита - " + MARTINGALE.toString()
+                        );
+                        return true;
+                    }
+                }
+
+                try {
+                    Thread.sleep(Gasket.getSECOND());
+                } catch (InterruptedException e) {
+                    ConsoleHelper.writeERROR(Arrays.toString(e.getStackTrace()));
+                }
+
+                time++;
+            }
         }
         return false;
     }

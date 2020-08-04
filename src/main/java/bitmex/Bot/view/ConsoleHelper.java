@@ -9,6 +9,8 @@ import java.io.IOException;
 
 import static bitmex.Bot.model.Gasket.*;
 import static bitmex.Bot.model.Gasket.getBroadcastAddresses;
+import static bitmex.Bot.model.Gasket.getFilesAndPathCreator;
+import static bitmex.Bot.model.Gasket.getViewThread;
 import static bitmex.Bot.model.WriterAndReadFile.writerFile;
 import static bitmex.Bot.model.enums.TypeData.MARTINGALE;
 import static bitmex.Bot.model.enums.TypeData.REAL;
@@ -21,7 +23,7 @@ public class ConsoleHelper {
 
 
     public static void writeMessage(String string) {
-        getViewThread().updateInfoView(string);
+        bitmex.Bot.model.Gasket.getViewThread().updateInfoView(string);
         writerFile(string + "\n", getFilesAndPathCreator().getPathLogs(), true);
 //        System.out.println(string);
     }
@@ -269,7 +271,12 @@ public class ConsoleHelper {
                 + "broadcastSignalsFurther === " + isBroadcastSignalsFurther()
                 + " ----- транслировать сигналы дальше для других програм\n"
                 + "BroadcastAddresses === " + getBroadcastAddresses()
-                + " -----  адреса на которые надо ретраслировать сигналы"
+                + " -----  адреса на которые надо ретраслировать сигналы\n"
+                + "\n"
+                + "indentPrice === " + getIndentPrice()
+                + " ----- цена отступа, сколько долларов ждем отката назад чтобы войти в рынок при пробитии указанного уровня\n"
+                + "indentPriceOnOff === " + isIndentPriceOnOff()
+                + " ----- включить выключить цена отступа\n"
                 ;
     }
 
@@ -454,6 +461,7 @@ public class ConsoleHelper {
                 + "useRealOrNotReal\n"
                 + "maxAndMinAverage\n"
                 + "secondsSleepTime\n"
+                + "indentPriceOnOff\n"
                 + "martingaleIndex\n"
                 + "martingaleOnOff\n"
                 + "tradingPatterns\n"
@@ -467,6 +475,7 @@ public class ConsoleHelper {
                 + "gameDirection\n"
                 + "savedPatterns\n"
                 + "tradingTestII\n"
+                + "indentPrice\n"
                 + "twoAccounts\n"
                 + "oneSellFLAG\n"
                 + "priceActive\n"

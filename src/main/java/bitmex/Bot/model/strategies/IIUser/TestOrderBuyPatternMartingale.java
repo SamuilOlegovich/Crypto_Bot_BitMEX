@@ -1,12 +1,11 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.enums.TypeData;
-import bitmex.Bot.model.StringHelper;
-import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.StringHelper;
+import bitmex.Bot.model.enums.TypeData;
+import bitmex.Bot.view.ConsoleHelper;
 
-import static bitmex.Bot.model.enums.TypeData.ID;
 import static bitmex.Bot.model.enums.TypeData.MARTINGALE;
 
 
@@ -51,6 +50,11 @@ public class TestOrderBuyPatternMartingale extends Thread {
     public void run() {
         ConsoleHelper.writeMessage( DatesTimes.getDateTerminal() + " --- "
                 + IDs + " --- RUN класса TestOrderBuyPatternMartingale начал считать");
+
+        if (Gasket.isIndentPriceOnOff()) {
+            priseStopOrder = priseStopOrder + Gasket.getIndentPrice();
+        }
+
 
         while (true) {
             double priceAsk = Gasket.getBitmexQuote().getAskPrice();

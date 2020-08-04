@@ -51,6 +51,11 @@ public class TestOrderSellPatternMartingale extends Thread {
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                 + IDs + " --- RUN класса TestOrderSellPatternMartingale начал считать");
 
+        if (Gasket.isIndentPriceOnOff()) {
+            priseStopOrder = priseStopOrder - Gasket.getIndentPrice();
+        }
+
+
         while (true) {
             double priceAsk = Gasket.getBitmexQuote().getAskPrice();
             double priceBid = Gasket.getBitmexQuote().getBidPrice();

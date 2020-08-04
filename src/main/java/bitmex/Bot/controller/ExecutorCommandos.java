@@ -123,7 +123,7 @@ public class ExecutorCommandos {
                     break;
                 case "indentPriceOnOff" :
                     setIndentPriceOnOff(strings[1].equalsIgnoreCase("true"));
-                    writeMessage("indentPrice === "
+                    writeMessage("indentPriceOnOff === "
                             + isIndentPriceOnOff() + "\n");
                     break;
                 case "martingaleIndex" :

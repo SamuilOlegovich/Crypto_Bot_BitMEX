@@ -331,6 +331,9 @@ public class MakeDealMartingale extends Thread {
             prices = Gasket.getBitmexQuote().getAskPrice();
         }
 
+        // тут мы по разному отслеживаем точку входа в рынок
+        // в первом случаи сразу по условного расчетного уровня пробою входим в рынок
+        // во втором после пробоя дожидаемся отката и в случаи его только потом входим в рынок
         if (!isIndentPriceOnOff()) {
             while (time < timeStop) {
 
@@ -360,6 +363,9 @@ public class MakeDealMartingale extends Thread {
             }
         } else {
             double indentPriceOut = 0.0;
+            double virtTakeOut = b ? Gasket.getBitmexQuote().getAskPrice() + Gasket.getTake()
+                    : Gasket.getBitmexQuote().getBidPrice() - Gasket.getTake();
+
 
             while (time < timeStop) {
 
@@ -398,6 +404,10 @@ public class MakeDealMartingale extends Thread {
             while (time < timeStop) {
 
                 if (b) {
+                    if (virtTakeOut <= Gasket.getBitmexQuote().getBidPrice()) {
+                        return false;
+                    }
+
                     if (indentPriceOut != 0.0 && Gasket.getBitmexQuote().getAskPrice() < indentPriceOut) {
 
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
@@ -407,6 +417,10 @@ public class MakeDealMartingale extends Thread {
                         return true;
                     }
                 } else {
+                    if (virtTakeOut >= Gasket.getBitmexQuote().getAskPrice()) {
+                        return false;
+                    }
+
                     if (indentPriceOut != 0.0 && Gasket.getBitmexQuote().getBidPrice() > prices) {
                         indentPriceOut = Gasket.getBitmexQuote().getBidPrice() + Gasket.getIndentPrice();
 

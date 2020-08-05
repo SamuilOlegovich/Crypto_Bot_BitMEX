@@ -9,6 +9,7 @@ import bitmex.Bot.view.ConsoleHelper;
 import static bitmex.Bot.model.enums.TypeData.MARTINGALE;
 
 
+
 public class TestOrderBuyPatternMartingale extends Thread {
     private OpenTransactions openTransactions;
     private Martingale martingale;

@@ -335,6 +335,7 @@ public class MakeDealMartingale extends Thread {
         // в первом случаи сразу по условного расчетного уровня пробою входим в рынок
         // во втором после пробоя дожидаемся отката и в случаи его только потом входим в рынок
         if (!isIndentPriceOnOff()) {
+
             while (time < timeStop) {
 
                 if (b) {
@@ -363,6 +364,8 @@ public class MakeDealMartingale extends Thread {
             }
         } else {
             double indentPriceOut = 0.0;
+            // расчитывает виртуальный тейк, чтобы отслеживать его и не нарваться на разворот
+            // если цена сходит к нему раньше чем к основному ордеру - отменяем сделку
             double virtTakeOut = b ? Gasket.getBitmexQuote().getAskPrice() + Gasket.getTake()
                     : Gasket.getBitmexQuote().getBidPrice() - Gasket.getTake();
 
@@ -372,6 +375,7 @@ public class MakeDealMartingale extends Thread {
                 if (b) {
                     if (Gasket.getBitmexQuote().getBidPrice() > prices) {
                         indentPriceOut = Gasket.getBitmexQuote().getAskPrice() - Gasket.getIndentPrice();
+
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                                 + " --- цена уровня - " + types + " - " + prices
                                 + " - пробита - " + MARTINGALE.toString() + " жду пробития цены отката - "
@@ -401,7 +405,8 @@ public class MakeDealMartingale extends Thread {
                 time++;
             }
 
-            while (time < timeStop) {
+//            while (time < timeStop) {
+            while (true) {
 
                 if (b) {
                     if (virtTakeOut <= Gasket.getBitmexQuote().getBidPrice()) {
@@ -421,8 +426,7 @@ public class MakeDealMartingale extends Thread {
                         return false;
                     }
 
-                    if (indentPriceOut != 0.0 && Gasket.getBitmexQuote().getBidPrice() > prices) {
-                        indentPriceOut = Gasket.getBitmexQuote().getBidPrice() + Gasket.getIndentPrice();
+                    if (indentPriceOut != 0.0 && Gasket.getBitmexQuote().getBidPrice() > indentPriceOut) {
 
                         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                                 + " --- цена уровня - " + types + " - " + indentPriceOut

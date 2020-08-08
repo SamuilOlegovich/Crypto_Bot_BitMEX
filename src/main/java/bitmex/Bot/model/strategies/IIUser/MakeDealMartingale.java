@@ -111,7 +111,10 @@ public class MakeDealMartingale extends Thread {
                             );
 
                             if (lot > 0) {
-                                new TradeBuy(stringOut, lot);
+                                if (Gasket.getMartingaleClass().getDeal() == 0) {
+                                    new TradeBuy(stringOut, lot);
+                                    Gasket.getMartingaleClass().setDeal(1);
+                                }
                                 new TestOrderBuyPatternMartingale(true, stringOut, Gasket.getBitmexQuote().getAskPrice());
                             }
                         }

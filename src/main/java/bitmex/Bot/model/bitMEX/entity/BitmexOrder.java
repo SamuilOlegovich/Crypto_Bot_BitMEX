@@ -21,19 +21,16 @@ public class BitmexOrder {
     protected String symbol;
     protected Double stopPx;//////////////////////
     protected Double price;
-    
     //Valid options: Buy, Sell. 
     protected String side;
-    
-    // Valid options: Market, Limit, Stop, StopLimit, MarketIfTouched, LimitIfTouched, MarketWithLeftOverAsLimit, Pegged. 
+    // Valid options: Market, Limit, Stop, StopLimit, MarketIfTouched, LimitIfTouched, MarketWithLeftOverAsLimit,
+    // Pegged.
     protected String ordType;
-    
     // Day, GoodTillCancel, ImmediateOrCancel, FillOrKill. Defaults to 'GoodTillCancel' for 'Limit', 'StopLimit',
     // 'LimitIfTouched', and 'MarketWithLeftOverAsLimit' orders.
     // День, GoodTillCancel, ImmediateOrCancel, FillOrKill. По умолчанию используется GoodTillCancel для ордеров Limit,
     // StopLimit, LimitIfTouched и MarketWithLeftOverAsLimit.
     protected String timeInForce;
-    
      // Valid options: ParticipateDoNotInitiate, AllOrNone, MarkPrice, IndexPrice, LastPrice, Close, ReduceOnly, Fixed.
      // 'AllOrNone' instruction requires displayQty to be 0. 'MarkPrice', 'IndexPrice' or
      // 'LastPrice' instruction valid for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders.
@@ -42,14 +39,12 @@ public class BitmexOrder {
     // Fixed. // Инструкция «AllOrNone» требует, чтобы displayQty было равно 0. Инструкция «MarkPrice»,
     // «IndexPrice» или // «LastPrice» действительна для ордеров «Stop», «StopLimit», «MarketIfTouched» и «LimitIfTouched».
     protected String execInst;
-    
     protected String ordStatus;
-
     // видно ли ордер в книге заказов 0 - не видно 1 - видно
     protected double displayQty;//////////////////////////////////////////
-
     // доп инфа для ордера
     protected String text;/////////////////////////////////
+
 
     public String getSymbol() {
         return symbol;

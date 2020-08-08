@@ -20,6 +20,7 @@ public class Martingale {
     private volatile HashMap<String, Integer> steepReal;
     private volatile double martingaleRealPROFIT;
     private volatile double martingalePROFIT;
+    private volatile int deal = 0;////////////////////////////
 
 
     public Martingale() {
@@ -28,6 +29,7 @@ public class Martingale {
         this.steepReal = new HashMap<>();
         this.martingaleRealPROFIT = 0.0;
         this.martingalePROFIT = 0.0;
+        this.deal = 0;//////////////////////////////////////
         setMartin();
     }
 
@@ -176,4 +178,15 @@ public class Martingale {
         }
         return stringBuilder.toString() + "\n\n";
     }
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+    public synchronized int getDeal() {
+        return deal;
+    }
+
+    public synchronized void setDeal(int deal) {
+        this.deal = deal;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
 }

@@ -39,6 +39,7 @@ public class Gasket {
     private static ListensLooksAndCompares listensLooksAndCompares;
     private static boolean activeNumberOfCandlesForAnalysis = true;             // включаем отклюаем отслеживания диапазона в котором находится цена true - включено
     private static ListensToLooksAndFills listensToLooksAndFills;
+    private static String execInst = "ParticipateDoNotInitiate";                // выбираем дополнительные параметры ордера (в данном случаи стоит - пассивный ордер)
     private static int timeCalculationCombinationLevel = 20;                    // когда уровни сформированы указываем время жизни данной комбинации
     private static String numberOfHistoryBlocks = "5-4-3-2";                    // количество блоков истории выше которого обрезать историю
     private static SavedPatternsUser savedPatternsUserClass;
@@ -97,7 +98,7 @@ public class Gasket {
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
     private static int dateDifference = -3;         // разница в часовом поясе
     private static boolean trading = false;         // торговать - true нет - false
-    private static double visible = 0.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
+    private static double visible = -1.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
     private static boolean ERROR = true;            // включить - отключить показ ошибок в окне приложения
     private static boolean DEBUG = true;
     private static boolean INFO = true;
@@ -1898,6 +1899,14 @@ public class Gasket {
 
     public static void setIndentPriceOnOff(boolean indentPriceOnOff) {
         Gasket.indentPriceOnOff = indentPriceOnOff;
+    }
+
+    public static String getExecInst() {
+        return execInst;
+    }
+
+    public static void setExecInst(String execInst) {
+        Gasket.execInst = execInst;
     }
 }
 

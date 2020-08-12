@@ -38,9 +38,10 @@ public class BitmexOrder {
     // Допустимые параметры: ParticipateDoNotInitiate, AllOrNone, MarkPrice, IndexPrice, LastPrice, Close, ReduceOnly,
     // Fixed. // Инструкция «AllOrNone» требует, чтобы displayQty было равно 0. Инструкция «MarkPrice»,
     // «IndexPrice» или // «LastPrice» действительна для ордеров «Stop», «StopLimit», «MarketIfTouched» и «LimitIfTouched».
+    // ставим для сто процентного получения ребейта ParticipateDoNotInitiate
     protected String execInst;
     protected String ordStatus;
-    // видно ли ордер в книге заказов 0 - не видно 1 - видно
+    // видно ли ордер в книге заказов 0 - не видно 1 - видно один (чтобы был полностю открыт - оставить поле пустое)
     protected double displayQty;//////////////////////////////////////////
     // доп инфа для ордера
     protected String text;/////////////////////////////////

@@ -5,6 +5,11 @@ import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
 import bitmex.Bot.view.ConsoleHelper;
 
+
+
+
+
+
 public class TradeBuy extends Thread {
 
     private BitmexOrder orderLimitIfTouchedAnswer;
@@ -66,9 +71,12 @@ public class TradeBuy extends Thread {
     @Override
     public void run() {
         price = Gasket.getBitmexQuote().getBidPrice() - 2.0;
+        orderBuyOpen.setExecInst(Gasket.getExecInst());
         orderBuyOpen.setTimeInForce("GoodTillCancel");
         orderBuyOpen.setSymbol(ticker.getSymbol());
-        orderBuyOpen.setDisplayQty(visible);
+        if (Gasket.getVisible() != -1) {
+            orderBuyOpen.setDisplayQty(visible);
+        }
         orderBuyOpen.setOrdType(typeOrder);
         orderBuyOpen.setOrderQty(lot);
         orderBuyOpen.setPrice(price);
@@ -91,9 +99,12 @@ public class TradeBuy extends Thread {
 
         //////////////////ПРОВЕРКА//////////////////////////////////////////////////////////////
         price = price + Gasket.getTake();
+        orderBuyOpen.setExecInst(Gasket.getExecInst());
         orderBuyOpen.setTimeInForce("GoodTillCancel");
         orderBuyOpen.setSymbol(ticker.getSymbol());
-        orderBuyOpen.setDisplayQty(visible);
+        if (Gasket.getVisible() != -1) {
+            orderBuyOpen.setDisplayQty(visible);
+        }
         orderBuyOpen.setOrdType(typeOrder);
         orderBuyOpen.setOrderQty(lot);
         orderBuyOpen.setPrice(price);

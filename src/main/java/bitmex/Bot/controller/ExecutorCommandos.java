@@ -116,6 +116,11 @@ public class ExecutorCommandos {
                     writeMessage("martingaleOpenOneLot === "
                             + getMartingaleOpenOneLot() + "\n");
                     break;
+                case "execInst" :
+                    setExecInst(strings[1]);
+                    writeMessage("execInst === "
+                            + getExecInst() + "\n");
+                    break;
                 case "indentPrice" :
                     setIndentPrice(Double.parseDouble(strings[1]));
                     writeMessage("indentPrice === "

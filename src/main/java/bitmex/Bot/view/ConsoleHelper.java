@@ -145,6 +145,11 @@ public class ConsoleHelper {
                 + " ----- стоп лосс в долларах\n"
                 + "lot === " + Gasket.getLot()
                 + " ----- количество контрактов\n"
+                + "execInst === " + Gasket.getExecInst()
+                + " ----- выбираем дополнительные параметры ордера ("
+                + "Valid options: ParticipateDoNotInitiate, AllOrNone, MarkPrice, IndexPrice, LastPrice, Close, ReduceOnly, Fixed.\n"
+                + "'AllOrNone' instruction requires displayQty to be 0. 'MarkPrice', 'IndexPrice' or\n"
+                + "'LastPrice' instruction valid for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders.)\n"
                 + "\n"
 
                 + "PROFIT_Sell === " + Gasket.getPROFIT_Sell()

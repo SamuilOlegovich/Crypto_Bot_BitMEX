@@ -110,6 +110,8 @@ public class ConsoleHelper {
                 + " ----- тип первого открываемого ордера\n"
                 + "visible === " + Gasket.getVisible()
                 + " ----- видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно\n"
+                + "visibleOnOff === " + Gasket.isVisibleOnOff()
+                + " ----- видимость ордера включить - выключить (true видимый - false невидимый)\n"
                 + "\n"
 
 

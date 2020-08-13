@@ -83,6 +83,7 @@ public class Gasket {
     private static boolean tradingIIPro = false;
     private static RunTheProgram runTheProgram;
     private static boolean tradingUser = false;
+    private static boolean visibleOnOff = true;         // видимость ордера включить - выключить (true видимый - false невидимый)
     private static boolean twoAccounts = true;          // true - два счета, можно играть в две стороны, false - только в одну сторону
     private static double rangePriceMAX = 4.0;          // диапазон в долларах от уровней для срабатывания ордера
     private static double rangePriceMIN = 0.0;          // диапазон в долларах от уровней для отмены ордера
@@ -98,7 +99,7 @@ public class Gasket {
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
     private static int dateDifference = -3;         // разница в часовом поясе
     private static boolean trading = false;         // торговать - true нет - false
-    private static double visible = -1.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
+    private static double visible = 1.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
     private static boolean ERROR = true;            // включить - отключить показ ошибок в окне приложения
     private static boolean DEBUG = true;
     private static boolean INFO = true;
@@ -1907,6 +1908,14 @@ public class Gasket {
 
     public static void setExecInst(String execInst) {
         Gasket.execInst = execInst;
+    }
+
+    public static boolean isVisibleOnOff() {
+        return visibleOnOff;
+    }
+
+    public static void setVisibleOnOff(boolean visibleOnOff) {
+        Gasket.visibleOnOff = visibleOnOff;
     }
 }
 

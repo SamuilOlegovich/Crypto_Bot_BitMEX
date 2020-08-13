@@ -96,6 +96,11 @@ public class ExecutorCommandos {
                     writeMessage("showLoadPatternsUser === "
                             + isShowLoadPatternsUser() + "\n");
                     break;
+                case "visibleOnOff" :
+                    setVisibleOnOff(strings[1].equalsIgnoreCase("true"));
+                    writeMessage("visibleOnOff === "
+                            + isVisibleOnOff() + "\n");
+                    break;
                 case "showLoadPatternsII" :
                     setShowLoadPatternsII(strings[1].equalsIgnoreCase("true"));
                     writeMessage("showLoadPatternsII === "

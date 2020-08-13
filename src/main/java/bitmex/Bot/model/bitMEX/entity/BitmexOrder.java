@@ -5,6 +5,7 @@
  */
 package bitmex.Bot.model.bitMEX.entity;
 
+import bitmex.Bot.model.Gasket;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Objects;
 
@@ -215,14 +216,17 @@ public class BitmexOrder {
 
     @Override
     public String toString() {
-        return "BitmexOrder{" + "orderID=" + orderID + ", symbol=" + symbol + ", orderQty=" + orderQty + ", price=" + price + ", stopPx=" + stopPx + ", side=" + side + ", ordType=" + ordType + ", timeInForce=" + timeInForce + ", execInst=" + execInst + ", displayQty=" + displayQty + ", ordStatus=" + ordStatus + '}';
+        if (Gasket.isVisibleOnOff()) {
+            return "BitmexOrder{" + "orderID=" + orderID + ", symbol=" + symbol + ", orderQty=" + orderQty
+                    + ", price=" + price + ", stopPx=" + stopPx + ", side=" + side + ", ordType=" + ordType
+                    + ", timeInForce=" + timeInForce + ", execInst=" + execInst + ", ordStatus=" + ordStatus
+                    + '}';
+        }
+        return "BitmexOrder{" + "orderID=" + orderID + ", symbol=" + symbol + ", orderQty=" + orderQty
+                + ", price=" + price + ", stopPx=" + stopPx + ", side=" + side + ", ordType=" + ordType
+                + ", timeInForce=" + timeInForce + ", execInst=" + execInst + ", displayQty=" + displayQty
+                + ", ordStatus=" + ordStatus + '}';
     }
-    
-    
-
-    
-    
-    
 }
 
 

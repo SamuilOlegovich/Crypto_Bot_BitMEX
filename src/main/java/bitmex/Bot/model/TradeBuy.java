@@ -74,9 +74,7 @@ public class TradeBuy extends Thread {
         orderBuyOpen.setExecInst(Gasket.getExecInst());
         orderBuyOpen.setTimeInForce("GoodTillCancel");
         orderBuyOpen.setSymbol(ticker.getSymbol());
-        if (Gasket.getVisible() != -1) {
-            orderBuyOpen.setDisplayQty(visible);
-        }
+        orderBuyOpen.setDisplayQty(visible);
         orderBuyOpen.setOrdType(typeOrder);
         orderBuyOpen.setOrderQty(lot);
         orderBuyOpen.setPrice(price);
@@ -102,9 +100,7 @@ public class TradeBuy extends Thread {
         orderBuyOpen.setExecInst(Gasket.getExecInst());
         orderBuyOpen.setTimeInForce("GoodTillCancel");
         orderBuyOpen.setSymbol(ticker.getSymbol());
-        if (Gasket.getVisible() != -1) {
-            orderBuyOpen.setDisplayQty(visible);
-        }
+        orderBuyOpen.setDisplayQty(visible);
         orderBuyOpen.setOrdType(typeOrder);
         orderBuyOpen.setOrderQty(lot);
         orderBuyOpen.setPrice(price);

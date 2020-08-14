@@ -5,9 +5,12 @@
  */
 package bitmex.Bot.model.bitMEX.entity;
 
-import bitmex.Bot.model.Gasket;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Objects;
+
+
 
 /**
  *
@@ -43,6 +46,7 @@ public class BitmexOrder {
     protected String execInst;
     protected String ordStatus;
     // видно ли ордер в книге заказов 0 - не видно 1 - видно один (чтобы был полностю открыт - оставить поле пустое)
+    @JsonIgnore
     protected double displayQty;//////////////////////////////////////////
     // доп инфа для ордера
     protected String text;/////////////////////////////////
@@ -130,7 +134,7 @@ public class BitmexOrder {
     }
 
     public double getDisplayQty() {
-        return displayQty;
+        return getDisplayQty();
     }
 
     public void setDisplayQty(double displayQty) {
@@ -150,9 +154,12 @@ public class BitmexOrder {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.orderQty) ^ (Double.doubleToLongBits(this.orderQty) >>> 32));
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.stopPx) ^ (Double.doubleToLongBits(this.stopPx) >>> 32));///////////////
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.price) ^ (Double.doubleToLongBits(this.price) >>> 32));
+        hash = 59 * hash + (int) (Double.doubleToLongBits(this.orderQty)
+                ^ (Double.doubleToLongBits(this.orderQty) >>> 32));
+        hash = 59 * hash + (int) (Double.doubleToLongBits(this.stopPx)
+                ^ (Double.doubleToLongBits(this.stopPx) >>> 32));///////////////
+        hash = 59 * hash + (int) (Double.doubleToLongBits(this.price)
+                ^ (Double.doubleToLongBits(this.price) >>> 32));
         hash = 59 * hash + Objects.hashCode(this.timeInForce);
         hash = 59 * hash + Objects.hashCode(this.ordStatus);
         hash = 59 * hash + Objects.hashCode(this.execInst);
@@ -207,6 +214,7 @@ public class BitmexOrder {
         if (Double.doubleToLongBits(this.stopPx) != Double.doubleToLongBits(other.stopPx)) {
             return false;
         }
+
         if (Double.doubleToLongBits(this.displayQty) != Double.doubleToLongBits(other.displayQty)) {
             return false;
         }
@@ -216,18 +224,21 @@ public class BitmexOrder {
 
     @Override
     public String toString() {
-        if (Gasket.isVisibleOnOff()) {
-            return "BitmexOrder{" + "orderID=" + orderID + ", symbol=" + symbol + ", orderQty=" + orderQty
-                    + ", price=" + price + ", stopPx=" + stopPx + ", side=" + side + ", ordType=" + ordType
-                    + ", timeInForce=" + timeInForce + ", execInst=" + execInst + ", ordStatus=" + ordStatus
-                    + '}';
-        }
         return "BitmexOrder{" + "orderID=" + orderID + ", symbol=" + symbol + ", orderQty=" + orderQty
-                + ", price=" + price + ", stopPx=" + stopPx + ", side=" + side + ", ordType=" + ordType
-                + ", timeInForce=" + timeInForce + ", execInst=" + execInst + ", displayQty=" + displayQty
+                + ", price=" + price + ", stopPx=" + stopPx + ", side=" + side + ", ordType="
+                + ordType + ", timeInForce=" + timeInForce + ", execInst=" + execInst
                 + ", ordStatus=" + ordStatus + '}';
     }
+
+    public String toStringForJson() {
+        return  "{\"orderQty\":" + orderQty + ",\"orderID\":" + orderID + ",\"symbol\":" + symbol
+                + ",\"stopPx\":" + stopPx +",\"price\":" + price + ",\"side\":" + side
+                + ",\"ordType\":" + ordType + ",\"timeInForce\":" + timeInForce
+                + ",\"execInst\":" + execInst + ",\"ordStatus\":" + ordStatus
+                + ",\"text\":" + text + "}";
+    }
 }
+
 
 
 /**

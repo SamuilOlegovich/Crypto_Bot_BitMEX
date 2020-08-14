@@ -120,7 +120,8 @@ public class BitmexQuote {
 
     @Override
     public String toString() {
-        return "BitmexQuote{" + "symbol=" + symbol + ", bidPrice=" + bidPrice + ", askPrice=" + askPrice + ", bidSize=" + bidSize + ", askSize=" + askSize + ", timestamp=" + timestamp + '}';
+        return "BitmexQuote{" + "symbol=" + symbol + ", bidPrice=" + bidPrice + ", askPrice=" + askPrice
+                + ", bidSize=" + bidSize + ", askSize=" + askSize + ", timestamp=" + timestamp + '}';
     }
     
 }

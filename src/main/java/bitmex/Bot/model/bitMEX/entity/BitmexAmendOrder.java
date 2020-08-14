@@ -121,7 +121,11 @@ public class BitmexAmendOrder {
 
     @Override
     public String toString() {
-        return "BitmexAmendOrder{" + "orderID=" + orderID + ", origCLOrdID=" + origCLOrdID + ", clOrdID=" + clOrdID + ", simpleOrderQty=" + simpleOrderQty + ", orderQty=" + orderQty + ", simpleLeavesQty=" + simpleLeavesQty + ", leavesQty=" + leavesQty + ", price=" + price + ", stopPx=" + stopPx + ", pegOffsetValue=" + pegOffsetValue + ", text=" + text + '}';
+        return "BitmexAmendOrder{" + "orderID=" + orderID + ", origCLOrdID=" + origCLOrdID + ", clOrdID="
+                + clOrdID + ", simpleOrderQty=" + simpleOrderQty + ", orderQty=" + orderQty
+                + ", simpleLeavesQty=" + simpleLeavesQty + ", leavesQty=" + leavesQty
+                + ", price=" + price + ", stopPx=" + stopPx + ", pegOffsetValue="
+                + pegOffsetValue + ", text=" + text + '}';
     }
      
      

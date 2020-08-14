@@ -72,8 +72,10 @@ public class BitmexInstrument {
     public int hashCode() {
         int hash = 7;
         hash = 29 * hash + Objects.hashCode(this.symbol);
-        hash = 29 * hash + (int) (Double.doubleToLongBits(this.indicativeFundingRate) ^ (Double.doubleToLongBits(this.indicativeFundingRate) >>> 32));
-        hash = 29 * hash + (int) (Double.doubleToLongBits(this.fundingRate) ^ (Double.doubleToLongBits(this.fundingRate) >>> 32));
+        hash = 29 * hash + (int) (Double.doubleToLongBits(this.indicativeFundingRate)
+                ^ (Double.doubleToLongBits(this.indicativeFundingRate) >>> 32));
+        hash = 29 * hash + (int) (Double.doubleToLongBits(this.fundingRate)
+                ^ (Double.doubleToLongBits(this.fundingRate) >>> 32));
         hash = 29 * hash + Objects.hashCode(this.fundingTimestamp);
         return hash;
     }
@@ -90,7 +92,8 @@ public class BitmexInstrument {
             return false;
         }
         final BitmexInstrument other = (BitmexInstrument) obj;
-        if (Double.doubleToLongBits(this.indicativeFundingRate) != Double.doubleToLongBits(other.indicativeFundingRate)) {
+        if (Double.doubleToLongBits(this.indicativeFundingRate)
+                != Double.doubleToLongBits(other.indicativeFundingRate)) {
             return false;
         }
         if (Double.doubleToLongBits(this.fundingRate) != Double.doubleToLongBits(other.fundingRate)) {
@@ -107,7 +110,8 @@ public class BitmexInstrument {
 
     @Override
     public String toString() {
-        return "BitmexInstrument{" + "symbol=" + symbol + ", indicativeFundingRate=" + indicativeFundingRate + ", fundingRate=" + fundingRate + ", fundingTimestamp=" + fundingTimestamp + '}';
+        return "BitmexInstrument{" + "symbol=" + symbol + ", indicativeFundingRate=" + indicativeFundingRate
+                + ", fundingRate=" + fundingRate + ", fundingTimestamp=" + fundingTimestamp + '}';
     }
 
     

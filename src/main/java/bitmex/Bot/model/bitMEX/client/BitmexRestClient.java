@@ -5,43 +5,33 @@
  */
 package bitmex.Bot.model.bitMEX.client;
 
-import bitmex.Bot.view.ConsoleHelper;
-import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import org.glassfish.jersey.jackson.internal.jackson.jaxrs.cfg.Annotations;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import bitmex.Bot.model.bitMEX.entity.BitmexCancelOrder;
-import bitmex.Bot.model.bitMEX.entity.BitmexInstrument;
-import bitmex.Bot.model.bitMEX.entity.BitmexAmendOrder;
+import bitmex.Bot.model.bitMEX.entity.*;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
-import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
 import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
-import org.glassfish.jersey.client.ClientProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.glassfish.jersey.jackson.JacksonFeature;
-//import com.sumzerotrading.data.SumZeroException;
-import bitmex.Bot.model.bitMEX.entity.BitmexError;
-import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
-import org.glassfish.jersey.client.ClientConfig;
 import bitmex.Bot.model.bitMEX.enums.Verb;
-import javax.ws.rs.client.ClientBuilder;
-//import com.sumzerotrading.data.Ticker;
+import bitmex.Bot.view.ConsoleHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Strings;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.jackson.internal.jackson.jaxrs.cfg.Annotations;
+import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Arrays;
 import java.io.IOError;
-import java.util.List;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import static bitmex.Bot.model.bitMEX.enums.Verb.*;
+
 
 
 
@@ -50,8 +40,6 @@ import static bitmex.Bot.model.bitMEX.enums.Verb.*;
  * @author RobTerpilowski
  */
 public class BitmexRestClient implements IBitmexRestClient {
-
-//    protected static Logger logger = LoggerFactory.getLogger(BitmexRestClient.class);///////////////////////
 
     protected Client client;
 
@@ -103,7 +91,7 @@ public class BitmexRestClient implements IBitmexRestClient {
         Response response = builder.get();
 
         response.bufferEntity();
-        ConsoleHelper.writeINFO("Response: " + response.readEntity(String.class));//////////////////////
+        ConsoleHelper.writeINFO("Response: " + response.readEntity(String.class));
         BitmexInstrument[] instruments = response.readEntity(BitmexInstrument[].class);
         return instruments[0];
     }
@@ -112,7 +100,7 @@ public class BitmexRestClient implements IBitmexRestClient {
     public BitmexOrder submitOrder(BitmexOrder order) { // подтвердить заказ
         Response response = submitRequestWithBody("order", order, POST);
         ConsoleHelper.writeDEBUG("Response code: " + response.getStatus());/////////////////////////////////info
-        
+
         if (response.getStatus() == 503) {
             ConsoleHelper.writeERROR("503 response returned");
             throw new BitmexSystemOverloadedException(order);
@@ -125,14 +113,14 @@ public class BitmexRestClient implements IBitmexRestClient {
         BitmexCancelOrder cancel = new BitmexCancelOrder();
         cancel.setOrderID(order.getOrderID());
         Response response = submitRequestWithBody("order", cancel, DELETE);
-        ConsoleHelper.writeINFO("Response code: " + response.getStatus());//////////////////////////////////////
+        ConsoleHelper.writeINFO("Response code: " + response.getStatus());
         return response.readEntity(BitmexOrder[].class);
     }
 
     @Override
     public BitmexOrder amendOrder(BitmexAmendOrder order) { // изменить ордер
         Response response = submitRequestWithBody("order", order, PUT);
-        ConsoleHelper.writeINFO("Response code: " + response.getStatus());/////////////////////////////////////
+        ConsoleHelper.writeINFO("Response code: " + response.getStatus());
         return response.readEntity(BitmexOrder.class);
     }
 
@@ -167,7 +155,7 @@ public class BitmexRestClient implements IBitmexRestClient {
 
         response.bufferEntity();
 
-        ConsoleHelper.writeINFO("Response: " + response.readEntity(String.class));////////////////////////////
+        ConsoleHelper.writeINFO("Response: " + response.readEntity(String.class));
         BitmexChartData[] data = response.readEntity(BitmexChartData[].class);
         List<BitmexChartData> returnList = Arrays.asList(data);
         Collections.reverse(returnList);
@@ -186,7 +174,8 @@ public class BitmexRestClient implements IBitmexRestClient {
         }
 
         String jsonObject = toJson(object);
-        ConsoleHelper.writeDEBUG("Submitting object: " + jsonObject);
+//        ConsoleHelper.writeDEBUG("Submitting object: " + jsonObject);
+        ConsoleHelper.writeERROR("Submitting object: " + jsonObject);
         WebTarget target = client.target(apiURL).path(path);
         Invocation.Builder builder = target.request(MediaType.APPLICATION_JSON);
         addHeaders(builder, target.getUri(), verb.toString(), jsonObject);
@@ -194,10 +183,11 @@ public class BitmexRestClient implements IBitmexRestClient {
         Response response = builder.build(verb.toString(), entity).invoke();
         response.bufferEntity();    
         String stringResponse = response.readEntity(String.class);
-        ConsoleHelper.writeDEBUG("Response: " + stringResponse);
+//        ConsoleHelper.writeDEBUG("Response: " + stringResponse);
+        ConsoleHelper.writeERROR("Response: " + stringResponse);
 
         if( stringResponse.contains("error") ) {
-            ConsoleHelper.writeINFO("HTTP: " + verb.name() + " Error Submitting object: " + jsonObject);///////////////////////
+            ConsoleHelper.writeINFO("HTTP: " + verb.name() + " Error Submitting object: " + jsonObject);
             throw new BitmexException( response.readEntity(BitmexError.class).getError() );
         }
         

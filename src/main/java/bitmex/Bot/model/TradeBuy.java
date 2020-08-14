@@ -1,5 +1,6 @@
 package bitmex.Bot.model;
 
+import bitmex.Bot.model.bitMEX.entity.BitmexOrderVisual;
 import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
@@ -32,11 +33,11 @@ public class TradeBuy extends Thread {
 
 
     public TradeBuy(String id) {
+        this.orderBuyOpen = Gasket.isVisibleOnOff() ? new BitmexOrder() : new BitmexOrderVisual();
         this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
         this.bitmexClient = Gasket.getBitmexClient();
         this.priceActiv = Gasket.getPriceActive();
         this.typeOrder = Gasket.getTypeOrder();
-        this.orderBuyOpen = new BitmexOrder();
         this.visible = Gasket.getVisible();
         this.ticker = Gasket.getTicker();
         this.take = Gasket.getTake();
@@ -47,11 +48,11 @@ public class TradeBuy extends Thread {
     }
 
     public TradeBuy(String id, double lot) {
+        this.orderBuyOpen = Gasket.isVisibleOnOff() ? new BitmexOrder() : new BitmexOrderVisual();
         this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
         this.bitmexClient = Gasket.getBitmexClient();
         this.priceActiv = Gasket.getPriceActive();
         this.typeOrder = Gasket.getTypeOrder();
-        this.orderBuyOpen = new BitmexOrder();
         this.visible = Gasket.getVisible();
         this.ticker = Gasket.getTicker();
         this.take = Gasket.getTake();

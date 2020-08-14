@@ -102,7 +102,8 @@ public class BitmexTrade {
 
     @Override
     public String toString() {
-        return "BitmexTrade{" + "symbol=" + symbol + ", side=" + side + ", price=" + price + ", size=" + size + ", timestamp=" + timestamp + '}';
+        return "BitmexTrade{" + "symbol=" + symbol + ", side=" + side + ", price=" + price + ", size=" + size
+                + ", timestamp=" + timestamp + '}';
     }
     
     

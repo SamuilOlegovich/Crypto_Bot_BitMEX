@@ -158,7 +158,9 @@ public class BitmexChartData {
 
     @Override
     public String toString() {
-        return "BitmaxChartData{" + "timestamp=" + timestamp + ", symbol=" + symbol + ", open=" + open + ", high=" + high + ", low=" + low + ", close=" + close + ", trades=" + trades + ", volume=" + volume + ", vwap=" + vwap + '}';
+        return "BitmaxChartData{" + "timestamp=" + timestamp + ", symbol=" + symbol + ", open=" + open
+                + ", high=" + high + ", low=" + low + ", close=" + close + ", trades=" + trades
+                + ", volume=" + volume + ", vwap=" + vwap + '}';
     }
     
     

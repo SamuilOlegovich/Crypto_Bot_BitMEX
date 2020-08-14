@@ -178,17 +178,23 @@ public class BitmexExecution {
         hash = 41 * hash + Objects.hashCode(this.execID);
         hash = 41 * hash + Objects.hashCode(this.orderID);
         hash = 41 * hash + Objects.hashCode(this.symbol);
-        hash = 41 * hash + (int) (Double.doubleToLongBits(this.lastQty) ^ (Double.doubleToLongBits(this.lastQty) >>> 32));
-        hash = 41 * hash + (int) (Double.doubleToLongBits(this.lastPx) ^ (Double.doubleToLongBits(this.lastPx) >>> 32));
-        hash = 41 * hash + (int) (Double.doubleToLongBits(this.orderQty) ^ (Double.doubleToLongBits(this.orderQty) >>> 32));
+        hash = 41 * hash + (int) (Double.doubleToLongBits(this.lastQty)
+                ^ (Double.doubleToLongBits(this.lastQty) >>> 32));
+        hash = 41 * hash + (int) (Double.doubleToLongBits(this.lastPx)
+                ^ (Double.doubleToLongBits(this.lastPx) >>> 32));
+        hash = 41 * hash + (int) (Double.doubleToLongBits(this.orderQty)
+                ^ (Double.doubleToLongBits(this.orderQty) >>> 32));
         hash = 41 * hash + Objects.hashCode(this.side);
         hash = 41 * hash + Objects.hashCode(this.ordType);
         hash = 41 * hash + Objects.hashCode(this.execType);
         hash = 41 * hash + Objects.hashCode(this.ordStatus);
         hash = 41 * hash + Objects.hashCode(this.ordRejectReason);
-        hash = 41 * hash + (int) (Double.doubleToLongBits(this.leavesQty) ^ (Double.doubleToLongBits(this.leavesQty) >>> 32));
-        hash = 41 * hash + (int) (Double.doubleToLongBits(this.execCost) ^ (Double.doubleToLongBits(this.execCost) >>> 32));
-        hash = 41 * hash + (int) (Double.doubleToLongBits(this.execCommision) ^ (Double.doubleToLongBits(this.execCommision) >>> 32));
+        hash = 41 * hash + (int) (Double.doubleToLongBits(this.leavesQty)
+                ^ (Double.doubleToLongBits(this.leavesQty) >>> 32));
+        hash = 41 * hash + (int) (Double.doubleToLongBits(this.execCost)
+                ^ (Double.doubleToLongBits(this.execCost) >>> 32));
+        hash = 41 * hash + (int) (Double.doubleToLongBits(this.execCommision)
+                ^ (Double.doubleToLongBits(this.execCommision) >>> 32));
         return hash;
     }
 
@@ -251,7 +257,11 @@ public class BitmexExecution {
 
     @Override
     public String toString() {
-        return "BitmexExecution{" + "execID=" + execID + ", orderID=" + orderID + ", symbol=" + symbol + ", lastQty=" + lastQty + ", lastPx=" + lastPx + ", orderQty=" + orderQty + ", side=" + side + ", ordType=" + ordType + ", execType=" + execType + ", ordStatus=" + ordStatus + ", ordRejectReason=" + ordRejectReason + ", leavesQty=" + leavesQty + ", execCost=" + execCost + ", execCommision=" + execCommision + '}';
+        return "BitmexExecution{" + "execID=" + execID + ", orderID=" + orderID + ", symbol=" + symbol
+                + ", lastQty=" + lastQty + ", lastPx=" + lastPx + ", orderQty=" + orderQty + ", side="
+                + side + ", ordType=" + ordType + ", execType=" + execType + ", ordStatus=" + ordStatus
+                + ", ordRejectReason=" + ordRejectReason + ", leavesQty=" + leavesQty + ", execCost="
+                + execCost + ", execCommision=" + execCommision + '}';
     }
 
  

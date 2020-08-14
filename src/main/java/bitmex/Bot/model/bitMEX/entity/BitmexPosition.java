@@ -183,7 +183,10 @@ public class BitmexPosition {
 
     @Override
     public String toString() {
-        return "BitmexPosition{" + "symbol=" + symbol + ", currency=" + currency + ", underlying=" + underlying + ", quoteCurrency=" + quoteCurrency + ", commission=" + commission + ", currentQty=" + currentQty + ", currentCost=" + currentCost + ", currentComm=" + currentComm + ", isOpen=" + isOpen + ", simpleQty=" + simpleQty + ", simpleCost=" + simpleCost + '}';
+        return "BitmexPosition{" + "symbol=" + symbol + ", currency=" + currency + ", underlying=" + underlying
+                + ", quoteCurrency=" + quoteCurrency + ", commission=" + commission + ", currentQty=" + currentQty
+                + ", currentCost=" + currentCost + ", currentComm=" + currentComm + ", isOpen=" + isOpen
+                + ", simpleQty=" + simpleQty + ", simpleCost=" + simpleCost + '}';
     }
             
 }

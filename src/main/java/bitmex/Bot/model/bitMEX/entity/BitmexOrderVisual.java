@@ -5,6 +5,16 @@ public class BitmexOrderVisual extends BitmexOrder{
     protected double displayQty;
 
     @Override
+    public double getDisplayQty() {
+        return displayQty;
+    }
+
+    @Override
+    public void setDisplayQty(double displayQty) {
+        this.displayQty = displayQty;
+    }
+
+    @Override
     public String toString() {
         return "BitmexOrder{" + "orderID=" + super.orderID + ", symbol=" + super.symbol + ", orderQty=" + super.orderQty
                 + ", price=" + super.price + ", stopPx=" + super.stopPx + ", side=" + super.side + ", ordType="

@@ -112,7 +112,7 @@ public class MakeDealMartingale extends Thread {
 
                             if (lot > 0) {
                                 if (Gasket.getMartingaleClass().getDeal() == 0) {
-                                    new TradeBuy(stringOut, lot);
+                                    new TradeBuyPro(stringOut, lot);
                                     Gasket.getMartingaleClass().setDeal(1);
                                 }
                                 new TestOrderBuyPatternMartingale(true, stringOut, Gasket.getBitmexQuote().getAskPrice());
@@ -203,7 +203,7 @@ public class MakeDealMartingale extends Thread {
 
                             double lot = martingale.getLotForThisSteep(IDs, martingale.getSteepReal(IDs));
 
-                            new TradeSell(stringOut, lot);
+                            new TradeSellPro(stringOut, lot);
                             new TestOrderSellPatternMartingale(true, stringOut, Gasket.getBitmexQuote().getAskPrice());
                         }
 

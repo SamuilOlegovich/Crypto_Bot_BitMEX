@@ -71,8 +71,8 @@ public class TradeBuy extends Thread {
 
     @Override
     public void run() {
-        price = Gasket.getBitmexQuote().getBidPrice() - 2.0;
         orderBuyOpen.setExecInst(Gasket.getExecInst());
+        price = Gasket.getBitmexQuote().getBidPrice();
         orderBuyOpen.setTimeInForce("GoodTillCancel");
         orderBuyOpen.setSymbol(ticker.getSymbol());
         orderBuyOpen.setDisplayQty(visible);
@@ -96,63 +96,44 @@ public class TradeBuy extends Thread {
             e.printStackTrace();
         }
 
-        //////////////////ПРОВЕРКА//////////////////////////////////////////////////////////////
-        price = price + Gasket.getTake();
-        orderBuyOpen.setExecInst(Gasket.getExecInst());
-        orderBuyOpen.setTimeInForce("GoodTillCancel");
-        orderBuyOpen.setSymbol(ticker.getSymbol());
-        orderBuyOpen.setDisplayQty(visible);
-        orderBuyOpen.setOrdType(typeOrder);
-        orderBuyOpen.setOrderQty(lot);
-        orderBuyOpen.setPrice(price);
-        orderBuyOpen.setSide("Sell");
 
-        orderBuyAnswer = bitmexClient.submitOrder(orderBuyOpen);
+        orderLimitIfTouchedOpen = orderBuyOpen;
+        orderLimitIfTouchedOpen.setText("Take profit - " + orderBuyAnswer.getOrderID());
+        orderLimitIfTouchedOpen.setStopPx(price + priceActiv);
+        orderLimitIfTouchedOpen.setOrdType(typeOrder);
+        orderLimitIfTouchedOpen.setPrice(price + take);
+        orderLimitIfTouchedOpen.setSide("Sell");
+        orderLimitIfTouchedOpen.setOrderID("");
 
-        ConsoleHelper.writeMessage(ID + " --- Открыл BUY - TAKE позицию --- "
-                + orderBuyAnswer.getOrderID() + " --- "
-                + orderBuyAnswer.toString()
+
+        orderLimitIfTouchedAnswer = bitmexClient.submitOrder(orderLimitIfTouchedOpen);
+        ConsoleHelper.writeMessage(ID + " --- Выставил Тейк для позиции --- "
+                + orderLimitIfTouchedAnswer.getOrderID()
+                + orderLimitIfTouchedAnswer.toString()
                 + "\n"
         );
-        ////////////////////////////////////////////////////////////////////////////////////////
 
-//        orderLimitIfTouchedOpen = orderBuyOpen;
-//        orderLimitIfTouchedOpen.setText("Take profit - " + orderBuyAnswer.getOrderID());
-//        orderLimitIfTouchedOpen.setStopPx(price + priceActiv);
-//        orderLimitIfTouchedOpen.setOrdType(typeOrder);
-//        orderLimitIfTouchedOpen.setPrice(price + take);
-//        orderLimitIfTouchedOpen.setSide("Sell");
-//        orderLimitIfTouchedOpen.setOrderID("");
+        try {
+            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
-//        orderLimitIfTouchedAnswer = bitmexClient.submitOrder(orderLimitIfTouchedOpen);
-//        ConsoleHelper.writeMessage(ID + " --- Выставил Тейк для позиции --- "
-//                + orderLimitIfTouchedAnswer.getOrderID()
-//                + orderLimitIfTouchedAnswer.toString()
-//                + "\n"
-//        );
+        orderStopLimitOpen = orderBuyOpen;
+        orderStopLimitOpen.setText("Stop loss - " + orderBuyAnswer.getOrderID());
+        //orderStopLimitOpen.setStopPx(price - priceActiv);
+        orderStopLimitOpen.setOrdType("Stop");
+        orderStopLimitOpen.setPrice(price - stop);
+        orderStopLimitOpen.setSide("Sell");
+        orderStopLimitOpen.setOrderID("");
 
-//        try {
-//            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        orderStopLimitOpen = orderBuyOpen;
-//        orderStopLimitOpen.setText("Stop loss - " + orderBuyAnswer.getOrderID());
-//        //orderStopLimitOpen.setStopPx(price - priceActiv);
-//        orderStopLimitOpen.setOrdType("Stop");
-//        orderStopLimitOpen.setPrice(price - stop);
-//        orderStopLimitOpen.setSide("Sell");
-//        orderStopLimitOpen.setOrderID("");
-//
-//
-//        orderStopLimitAnswer = bitmexClient.submitOrder(orderStopLimitOpen);
-//        ConsoleHelper.writeMessage(ID + " --- Выставил Стоп для позиции --- "
-//                + orderStopLimitAnswer.getOrderID()
-//                + orderStopLimitAnswer.toString()
-//                + "\n"
-//        );
+
+        orderStopLimitAnswer = bitmexClient.submitOrder(orderStopLimitOpen);
+        ConsoleHelper.writeMessage(ID + " --- Выставил Стоп для позиции --- "
+                + orderStopLimitAnswer.getOrderID()
+                + orderStopLimitAnswer.toString()
+                + "\n"
+        );
     }
 }

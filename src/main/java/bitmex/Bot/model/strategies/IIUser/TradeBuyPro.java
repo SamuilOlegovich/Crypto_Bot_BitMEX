@@ -1,14 +1,16 @@
 package bitmex.Bot.model.strategies.IIUser;
 
-import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
+import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.bitMEX.entity.BitmexOrder;
+import bitmex.Bot.model.bitMEX.entity.BitmexOrderVisual;
+import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.view.ConsoleHelper;
-import bitmex.Bot.model.Gasket;
 
 
 
-
+// этот класс пока очень простой и без проверок и сопровождения ордеров, а так же без стоп ордера
+// все выше перечисленное для полноценной торговли надо доделать(но пока не стоит такой задачи)
 public class TradeBuyPro extends Thread {
 
     private BitmexOrder orderLimitIfTouchedAnswer;
@@ -31,11 +33,11 @@ public class TradeBuyPro extends Thread {
 
 
     public TradeBuyPro(String id) {
+        this.orderBuyOpen = Gasket.isVisibleOnOff() ? new BitmexOrder() : new BitmexOrderVisual();
         this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
         this.bitmexClient = Gasket.getBitmexClient();
         this.priceActiv = Gasket.getPriceActive();
         this.typeOrder = Gasket.getTypeOrder();
-        this.orderBuyOpen = new BitmexOrder();
         this.visible = Gasket.getVisible();
         this.ticker = Gasket.getTicker();
         this.take = Gasket.getTake();
@@ -46,11 +48,11 @@ public class TradeBuyPro extends Thread {
     }
 
     public TradeBuyPro(String id, double lot) {
+        this.orderBuyOpen = Gasket.isVisibleOnOff() ? new BitmexOrder() : new BitmexOrderVisual();
         this.timeBetweenOrders = Gasket.getTimeBetweenOrders();
         this.bitmexClient = Gasket.getBitmexClient();
         this.priceActiv = Gasket.getPriceActive();
         this.typeOrder = Gasket.getTypeOrder();
-        this.orderBuyOpen = new BitmexOrder();
         this.visible = Gasket.getVisible();
         this.ticker = Gasket.getTicker();
         this.take = Gasket.getTake();
@@ -69,7 +71,9 @@ public class TradeBuyPro extends Thread {
 
     @Override
     public void run() {
-        price = Gasket.getBitmexQuote().getBidPrice() - 0.5;
+        price = Gasket.getBitmexQuote().getBidPrice() - 1.0;
+//        price = Gasket.getBitmexQuote().getBidPrice();
+        orderBuyOpen.setExecInst(Gasket.getExecInst());
         orderBuyOpen.setTimeInForce("GoodTillCancel");
         orderBuyOpen.setSymbol(ticker.getSymbol());
         orderBuyOpen.setDisplayQty(visible);
@@ -93,42 +97,21 @@ public class TradeBuyPro extends Thread {
             e.printStackTrace();
         }
 
-        orderLimitIfTouchedOpen = orderBuyOpen;
-        orderLimitIfTouchedOpen.setText("Take profit - " + orderBuyAnswer.getOrderID());
-        orderLimitIfTouchedOpen.setStopPx(price + priceActiv);
-        orderLimitIfTouchedOpen.setOrdType("LimitIfTouched");
-        orderLimitIfTouchedOpen.setPrice(price + take);
-        orderLimitIfTouchedOpen.setSide("Sell");
-        orderLimitIfTouchedOpen.setOrderID("");
+        price = price + Gasket.getTake();
+        orderBuyOpen.setExecInst(Gasket.getExecInst());
+        orderBuyOpen.setTimeInForce("GoodTillCancel");
+        orderBuyOpen.setSymbol(ticker.getSymbol());
+        orderBuyOpen.setDisplayQty(visible);
+        orderBuyOpen.setOrdType(typeOrder);
+        orderBuyOpen.setOrderQty(lot);
+        orderBuyOpen.setPrice(price);
+        orderBuyOpen.setSide("Sell");
 
+        orderBuyAnswer = bitmexClient.submitOrder(orderBuyOpen);
 
-        orderLimitIfTouchedAnswer = bitmexClient.submitOrder(orderLimitIfTouchedOpen);
-        ConsoleHelper.writeMessage(ID + " --- Выставил Тейк для позиции --- "
-                + orderLimitIfTouchedAnswer.getOrderID()
-                + orderLimitIfTouchedAnswer.toString()
-                + "\n"
-        );
-
-        try {
-            Thread.sleep(Gasket.getSECOND() * timeBetweenOrders);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        orderStopLimitOpen = orderBuyOpen;
-        orderStopLimitOpen.setText("Stop loss - " + orderBuyAnswer.getOrderID());
-        //orderStopLimitOpen.setStopPx(price - priceActiv);
-        orderStopLimitOpen.setOrdType("Stop");
-        orderStopLimitOpen.setPrice(price - stop);
-        orderStopLimitOpen.setSide("Sell");
-        orderStopLimitOpen.setOrderID("");
-
-
-        orderStopLimitAnswer = bitmexClient.submitOrder(orderStopLimitOpen);
-        ConsoleHelper.writeMessage(ID + " --- Выставил Стоп для позиции --- "
-                + orderStopLimitAnswer.getOrderID()
-                + orderStopLimitAnswer.toString()
+        ConsoleHelper.writeMessage(ID + " --- Открыл BUY - TAKE позицию --- "
+                + orderBuyAnswer.getOrderID() + " --- "
+                + orderBuyAnswer.toString()
                 + "\n"
         );
     }

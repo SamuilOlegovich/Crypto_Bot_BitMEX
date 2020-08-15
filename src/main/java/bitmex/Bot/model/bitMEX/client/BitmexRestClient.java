@@ -174,8 +174,7 @@ public class BitmexRestClient implements IBitmexRestClient {
         }
 
         String jsonObject = toJson(object);
-//        ConsoleHelper.writeDEBUG("Submitting object: " + jsonObject);
-        ConsoleHelper.writeERROR("Submitting object: " + jsonObject);
+        ConsoleHelper.writeDEBUG("Submitting object: " + jsonObject);
         WebTarget target = client.target(apiURL).path(path);
         Invocation.Builder builder = target.request(MediaType.APPLICATION_JSON);
         addHeaders(builder, target.getUri(), verb.toString(), jsonObject);
@@ -183,8 +182,7 @@ public class BitmexRestClient implements IBitmexRestClient {
         Response response = builder.build(verb.toString(), entity).invoke();
         response.bufferEntity();    
         String stringResponse = response.readEntity(String.class);
-//        ConsoleHelper.writeDEBUG("Response: " + stringResponse);
-        ConsoleHelper.writeERROR("Response: " + stringResponse);
+        ConsoleHelper.writeDEBUG("Response: " + stringResponse);
 
         if( stringResponse.contains("error") ) {
             ConsoleHelper.writeINFO("HTTP: " + verb.name() + " Error Submitting object: " + jsonObject);

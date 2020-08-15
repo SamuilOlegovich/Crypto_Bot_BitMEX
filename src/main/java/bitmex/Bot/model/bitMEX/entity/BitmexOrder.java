@@ -19,11 +19,10 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BitmexOrder {
     // ордер
-
     protected double orderQty;
     protected String orderID;
     protected String symbol;
-    protected Double stopPx;//////////////////////
+    protected Double stopPx;
     protected Double price;
     //Valid options: Buy, Sell. 
     protected String side;
@@ -47,9 +46,9 @@ public class BitmexOrder {
     protected String ordStatus;
     // видно ли ордер в книге заказов 0 - не видно 1 - видно один (чтобы был полностю открыт - оставить поле пустое)
     @JsonIgnore
-    protected double displayQty;//////////////////////////////////////////
+    protected double displayQty;
     // доп инфа для ордера
-    protected String text;/////////////////////////////////
+    protected String text;
 
 
     public String getSymbol() {
@@ -124,7 +123,6 @@ public class BitmexOrder {
         this.ordStatus = ordStatus;
     }
 
-    /////////////////////
     public Double getStopPx() {
         return stopPx;
     }
@@ -134,7 +132,7 @@ public class BitmexOrder {
     }
 
     public double getDisplayQty() {
-        return getDisplayQty();
+        return displayQty;
     }
 
     public void setDisplayQty(double displayQty) {
@@ -149,7 +147,7 @@ public class BitmexOrder {
         this.text = text;
     }
 
-    //////////////////////
+
 
     @Override
     public int hashCode() {
@@ -157,7 +155,7 @@ public class BitmexOrder {
         hash = 59 * hash + (int) (Double.doubleToLongBits(this.orderQty)
                 ^ (Double.doubleToLongBits(this.orderQty) >>> 32));
         hash = 59 * hash + (int) (Double.doubleToLongBits(this.stopPx)
-                ^ (Double.doubleToLongBits(this.stopPx) >>> 32));///////////////
+                ^ (Double.doubleToLongBits(this.stopPx) >>> 32));
         hash = 59 * hash + (int) (Double.doubleToLongBits(this.price)
                 ^ (Double.doubleToLongBits(this.price) >>> 32));
         hash = 59 * hash + Objects.hashCode(this.timeInForce);
@@ -210,7 +208,7 @@ public class BitmexOrder {
         if (!Objects.equals(this.ordStatus, other.ordStatus)) {
             return false;
         }
-        /////////////////////////////////////////////////////////////////////////////////////
+
         if (Double.doubleToLongBits(this.stopPx) != Double.doubleToLongBits(other.stopPx)) {
             return false;
         }
@@ -218,7 +216,7 @@ public class BitmexOrder {
         if (Double.doubleToLongBits(this.displayQty) != Double.doubleToLongBits(other.displayQty)) {
             return false;
         }
-        /////////////////////////////////////////////////////////////////////////////////////
+
         return true;
     }
 

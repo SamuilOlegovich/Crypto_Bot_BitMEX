@@ -147,6 +147,8 @@ public class ConsoleHelper {
                 + " ----- стоп лосс в долларах\n"
                 + "lot === " + Gasket.getLot()
                 + " ----- количество контрактов\n"
+                + "timeIntervals === " + Gasket.getTimeIntervals()
+                + " ----- временные помежутки, выбираем на каком таймфрейме работает программа(указываем в минутах)\n"
                 + "execInst === " + Gasket.getExecInst()
                 + " ----- выбираем дополнительные параметры ордера ("
                 + "Valid options: ParticipateDoNotInitiate, AllOrNone, MarkPrice, IndexPrice, LastPrice, Close, ReduceOnly, Fixed.\n"
@@ -482,6 +484,7 @@ public class ConsoleHelper {
                 + "gameDirection\n"
                 + "savedPatterns\n"
                 + "tradingTestII\n"
+                + "timeIntervals\n"
                 + "indentPrice\n"
                 + "twoAccounts\n"
                 + "oneSellFLAG\n"

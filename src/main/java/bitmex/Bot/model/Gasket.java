@@ -1,23 +1,23 @@
 package bitmex.Bot.model;
 
-import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
-import bitmex.Bot.model.strategies.iiPro.ListensLooksAndComparesPro;
-import bitmex.Bot.model.strategies.iiPro.ListensToLooksAndFillsPro;
-import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
-import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
-import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
-import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
-import bitmex.Bot.model.strategies.iiPro.SavedPatternsPro;
-import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
-import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
-import bitmex.Bot.model.strategies.IIUser.Martingale;
-import bitmex.Bot.model.strategies.II.SavedPatterns;
-import bitmex.Bot.model.bitMEX.client.BitmexClient;
-import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
-import bitmex.Bot.model.serverAndParser.Repeater;
 import bitmex.Bot.controller.ExecutorCommandos;
 import bitmex.Bot.controller.RunTheProgram;
+import bitmex.Bot.model.bitMEX.client.BitmexClient;
+import bitmex.Bot.model.bitMEX.entity.BitmexChartData;
+import bitmex.Bot.model.bitMEX.entity.BitmexQuote;
+import bitmex.Bot.model.bitMEX.entity.newClass.Ticker;
 import bitmex.Bot.model.enums.TypeData;
+import bitmex.Bot.model.serverAndParser.Repeater;
+import bitmex.Bot.model.strategies.II.ListensLooksAndCompares;
+import bitmex.Bot.model.strategies.II.ListensToLooksAndFills;
+import bitmex.Bot.model.strategies.II.SavedPatterns;
+import bitmex.Bot.model.strategies.IIUser.ListensLooksAndComparesUser;
+import bitmex.Bot.model.strategies.IIUser.Martingale;
+import bitmex.Bot.model.strategies.IIUser.OpenTransactions;
+import bitmex.Bot.model.strategies.IIUser.SavedPatternsUser;
+import bitmex.Bot.model.strategies.iiPro.ListensLooksAndComparesPro;
+import bitmex.Bot.model.strategies.iiPro.ListensToLooksAndFillsPro;
+import bitmex.Bot.model.strategies.iiPro.SavedPatternsPro;
 import bitmex.Bot.view.View;
 
 import java.util.List;
@@ -69,6 +69,7 @@ public class Gasket {
     private static volatile BitmexQuote bitmexQuote;    // для получения данных по насущной котировке.
     private static boolean tradingPatternsII = true;    // торговля по паттернам II
     private static boolean indentPriceOnOff = false;    // включить выключить цена отступа
+    private static TimeIntervals timeIntervalsClass;
     private static BitmexChartData bitmexChartData;     // для получение данных по истории свечек
     private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
@@ -99,6 +100,7 @@ public class Gasket {
     private static double rangeLevel = 8.0;         // диапазон в долларах для появления уровней
     private static int dateDifference = -3;         // разница в часовом поясе
     private static boolean trading = false;         // торговать - true нет - false
+    private static int timeIntervals = 1;           // временные помежутки, выбираем на каком таймфрейме работает программа(указываем в минутах)
     private static double visible = 1.0;            // видимость ордера в стакане -- 0.0 - не видно, 1.0 - видно
     private static boolean ERROR = true;            // включить - отключить показ ошибок в окне приложения
     private static boolean DEBUG = true;
@@ -1916,6 +1918,22 @@ public class Gasket {
 
     public static void setVisibleOnOff(boolean visibleOnOff) {
         Gasket.visibleOnOff = visibleOnOff;
+    }
+
+    public static int getTimeIntervals() {
+        return timeIntervals;
+    }
+
+    public static void setTimeIntervals(int timeIntervals) {
+        Gasket.timeIntervals = timeIntervals;
+    }
+
+    public static TimeIntervals getTimeIntervalsClass() {
+        return timeIntervalsClass;
+    }
+
+    public static void setTimeIntervalsClass(TimeIntervals timeIntervalsClass) {
+        Gasket.timeIntervalsClass = timeIntervalsClass;
     }
 }
 

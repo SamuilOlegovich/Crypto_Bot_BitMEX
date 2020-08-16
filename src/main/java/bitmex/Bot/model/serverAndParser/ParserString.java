@@ -2,6 +2,7 @@ package bitmex.Bot.model.serverAndParser;
 
 
 import bitmex.Bot.model.StrategyFactory;
+import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.enums.TimeFrame;
 import bitmex.Bot.model.enums.TypeData;
 import bitmex.Bot.model.enums.BidAsk;
@@ -10,6 +11,7 @@ import bitmex.Bot.view.ConsoleHelper;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static bitmex.Bot.model.StringHelper.giveData;
@@ -17,7 +19,9 @@ import static bitmex.Bot.model.StringHelper.giveData;
 
 public class ParserString {
     private StrategyFactory strategyFactory;
+    private ArrayList<String> arrayList;
     private boolean linkWithIndicator;
+    private boolean show = true;
 
 
 
@@ -31,7 +35,6 @@ public class ParserString {
         new WriterString(string);
 //        ConsoleHelper.writeMessage("Входящаа строка ---- " + string);
 
-
         if (linkWithIndicator) {
             if (string.length() > 20) {
                 linkWithIndicator = false;
@@ -41,7 +44,8 @@ public class ParserString {
                         + " --- " + string);
             }
         }
-//        showAllAvailableLevels(string);
+
+        showAllAvailableLevels(string);
 
 //        String in = string.replaceAll("\\{", "");
 //        in = in.replaceAll("}", "");
@@ -111,8 +115,6 @@ public class ParserString {
             }
         }
         return null;
-
-
     }
 
 
@@ -126,5 +128,32 @@ public class ParserString {
             }
         }
         return null;
+    }
+
+
+    private void showAllAvailableLevels(String string) {
+        if (show) {
+            if (arrayList == null) {
+                arrayList = new ArrayList<>();
+                arrayList.add(string);
+            } else {
+                for (String s : arrayList) {
+                    if (StringHelper.giveData(TypeData.type, s)
+                            .equalsIgnoreCase(StringHelper.giveData(TypeData.type, string))) {
+                        return;
+                    }
+                }
+                arrayList.add(string);
+                if (arrayList.size() == 34) {
+                    StringBuilder stringBuilder = new StringBuilder("\n\n");
+                    for (String s : arrayList) {
+                        stringBuilder.append(s + "\n");
+                    }
+                    stringBuilder.append("\n\n");
+                    ConsoleHelper.writeMessage(stringBuilder.toString());
+                    show = false;
+                }
+            }
+        }
     }
 }

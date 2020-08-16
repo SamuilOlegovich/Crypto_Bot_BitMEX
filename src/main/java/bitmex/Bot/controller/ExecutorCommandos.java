@@ -161,6 +161,11 @@ public class ExecutorCommandos {
                     writeMessage("martingaleMaxSteep === "
                             + getMartingaleMaxSteep() + "\n");
                     break;
+                case "timeIntervals" :
+                    setTimeIntervals(Integer.parseInt(strings[1]));
+                    writeMessage("timeIntervals === "
+                            + getTimeIntervals() + "\n");
+                    break;
                 case "maxAndMinAverage" :
                     setMaxAndMinAverage(strings[1].equalsIgnoreCase("true"));
                         writeMessage("maxAndMinAverage === "

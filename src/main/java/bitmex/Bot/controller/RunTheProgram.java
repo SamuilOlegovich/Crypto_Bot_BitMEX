@@ -7,6 +7,7 @@ import bitmex.Bot.model.bitMEX.client.BitmexApiKey;
 import bitmex.Bot.model.bitMEX.client.BitmexClient;
 import bitmex.Bot.model.serverAndParser.Repeater;
 import bitmex.Bot.model.serverAndParser.Server;
+import bitmex.Bot.model.TimeIntervals;
 import bitmex.Bot.view.ConsoleHelper;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
@@ -58,6 +59,7 @@ public class RunTheProgram extends Thread {
                     + "Данные второго счета отсутствуют или не верны"); }
         }
 
+        Gasket.setTimeIntervalsClass(new TimeIntervals());
         ConsoleHelper.printInfoSettings();
         server.start();
 

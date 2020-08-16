@@ -100,7 +100,7 @@ public class TestOrderBuyPatternUser extends Thread {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(Gasket.getSECOND());
             } catch (InterruptedException e) {
                 ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- "
                         + ID + " --- Не смогли проснуться в методе RUN класса StrategyOneSell USER");

@@ -53,7 +53,8 @@ public class KeepsTrackOfFillingListInfoIndicatorIIPro extends Thread {
 
         String[] strings = dateFormat.format(date).split(":");
 
-        int minute = (5 - (Integer.parseInt(strings[0]) % 5)) * 60 * 1000;
+        int minute = (Gasket.getTimeIntervalsClass().getTime()
+                - (Integer.parseInt(strings[0]) % Gasket.getTimeIntervalsClass().getTime())) * 60 * 1000;
         int seconds = ((60 - (Integer.parseInt(strings[1]))) == 60
                 ? 0 : Integer.parseInt(strings[1])) * 1000;
         long timeStart = minute - seconds;
@@ -73,7 +74,7 @@ public class KeepsTrackOfFillingListInfoIndicatorIIPro extends Thread {
                     listensToLooksAndFillsPro.startListSorter(true);
                 }
             }
-        }, timeStart, 1000 * 60 * 5);
+        }, timeStart, Gasket.getMINUTE() * Gasket.getTimeIntervalsClass().getTime());
 
 
         time2.scheduleAtFixedRate(new TimerTask() {
@@ -91,7 +92,7 @@ public class KeepsTrackOfFillingListInfoIndicatorIIPro extends Thread {
                     }
                 }
             }
-        }, timeStart, 1000 * 10);
+        }, timeStart, Gasket.getSECOND() * 10);
     }
 
 

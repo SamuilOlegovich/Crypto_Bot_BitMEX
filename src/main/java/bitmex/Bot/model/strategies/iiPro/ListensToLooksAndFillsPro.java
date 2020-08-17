@@ -219,9 +219,9 @@ public class ListensToLooksAndFillsPro {
 
             // согласно количеству BIAS находим максимальный нужный нам промежуток времени
             if (count >= 1) {
-                times = timeNow - (1000 * 60 * 5 * (count + 1));
+                times = timeNow - (Gasket.getMINUTE() * Gasket.getTimeIntervalsClass().getTime() * (count + 1));
             } else {
-                times = timeNow - (1000 * 60 * 6);
+                times = timeNow - (Gasket.getMINUTE() * (Gasket.getTimeIntervalsClass().getTime() + 1));
             }
 
             // перебираем объекты и смотрим вписываются ли они в промежуток времени
@@ -265,7 +265,7 @@ public class ListensToLooksAndFillsPro {
         }
 
         // определяем пределы последнего блока
-        times = timeNow - (1000 * 60 * 6);
+        times = timeNow - (Gasket.getMINUTE() * (Gasket.getTimeIntervalsClass().getTime() + 1));
 
         // если еще остались строки, то добаляем их в последний блок
         if (infoIndicatorArrayListWorking.size() > 0) {
@@ -320,7 +320,8 @@ public class ListensToLooksAndFillsPro {
                 if (!inEdit.get(index).startsWith(BIAS.toString())) {
                     inEdit.add(index, marketInfo.toString());
                 } else {
-                    long time = DatesTimes.getDate(giveData(TIME, inEdit.get(index))).getTime() - (1000 * 60 * 5);
+                    long time = DatesTimes.getDate(giveData(TIME, inEdit.get(index))).getTime()
+                            - (Gasket.getMINUTE() * Gasket.getTimeIntervalsClass().getTime());
 
                     if (time != 0 && time <= marketInfo.getTime().getTime()) {
                         inEdit.add(index + 1, marketInfo.toString());
@@ -527,7 +528,7 @@ public class ListensToLooksAndFillsPro {
                 }
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(Gasket.getSECOND());
                 } catch (InterruptedException e) {
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                             + " --- Не смог проснуться в методе countPriseBuy() "
@@ -589,7 +590,7 @@ public class ListensToLooksAndFillsPro {
                 }
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(Gasket.getSECOND());
                 } catch (InterruptedException e) {
                     ConsoleHelper.writeMessage(DatesTimes.getDateTerminal()
                             + " --- Не смог проснуться в методе countPriseSell() "

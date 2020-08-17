@@ -216,9 +216,9 @@ public class ListensToLooksAndFills {
 
             // согласно количеству BIAS находим максимальный нужный нам промежуток времени
             if (count >= 1) {
-                times = timeNow - (1000 * 60 * 5 * (count + 1));
+                times = timeNow - (Gasket.getMINUTE() * Gasket.getTimeIntervalsClass().getTime() * (count + 1));
             } else {
-                times = timeNow - (1000 * 60 * 6);
+                times = timeNow - (Gasket.getMINUTE() * (Gasket.getTimeIntervalsClass().getTime() + 1));
             }
 
             // перебираем объекты и смотрим вписываются ли они в промежуток времени
@@ -262,7 +262,7 @@ public class ListensToLooksAndFills {
         }
 
         // определяем пределы последнего блока
-        times = timeNow - (1000 * 60 * 6);
+        times = timeNow - (Gasket.getMINUTE() * (Gasket.getTimeIntervalsClass().getTime() + 1));
 
         // если еще остались строки, то добаляем их в последний блок
         if (infoIndicatorArrayListWorking.size() > 0) {
@@ -323,7 +323,8 @@ public class ListensToLooksAndFills {
 
                     for (int i = 0; i < stringBias.length; i++) {
                         if (stringBias[i].equalsIgnoreCase(TIME.toString())) {
-                            times = getDate(stringBias[i + 1]).getTime() - (1000 * 60 * 5);
+                            times = getDate(stringBias[i + 1]).getTime()
+                                    - (Gasket.getMINUTE() * Gasket.getTimeIntervalsClass().getTime());
                             break;
                         }
                     }
@@ -537,7 +538,7 @@ public class ListensToLooksAndFills {
                 }
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(Gasket.getSECOND());
                 } catch (InterruptedException e) {
                     writeMessage(getDateTerminal()
                             + " --- Не смог проснуться в методе countPriseBuy() "
@@ -596,7 +597,7 @@ public class ListensToLooksAndFills {
                 }
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(Gasket.getSECOND());
                 } catch (InterruptedException e) {
                     writeMessage(getDateTerminal()
                             + " --- Не смог проснуться в методе countPriseSell() "

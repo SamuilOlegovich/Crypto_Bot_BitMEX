@@ -286,6 +286,10 @@ public class ConsoleHelper {
                 + " ----- цена отступа, сколько долларов ждем отката назад чтобы войти в рынок при пробитии указанного уровня\n"
                 + "indentPriceOnOff === " + isIndentPriceOnOff()
                 + " ----- включить выключить цена отступа\n"
+                + "showAllLevels === " + isShowAllLevels()
+                + " ----- показать все уровнеи\n"
+                + "totalNumberOfAllLevels === " + getTotalNumberOfAllLevels()
+                + " ----- сколько всего уровней\n"
                 ;
     }
 

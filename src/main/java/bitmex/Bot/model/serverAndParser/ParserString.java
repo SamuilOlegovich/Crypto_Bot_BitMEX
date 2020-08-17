@@ -1,6 +1,7 @@
 package bitmex.Bot.model.serverAndParser;
 
 
+import bitmex.Bot.model.Gasket;
 import bitmex.Bot.model.StrategyFactory;
 import bitmex.Bot.model.StringHelper;
 import bitmex.Bot.model.enums.TimeFrame;
@@ -21,13 +22,15 @@ public class ParserString {
     private StrategyFactory strategyFactory;
     private ArrayList<String> arrayList;
     private boolean linkWithIndicator;
-    private boolean show = true;
+    private boolean show;
 
 
 
     public ParserString() {
         this.strategyFactory = StrategyFactory.getInstance();
+        this.show = true;
         this.linkWithIndicator = true;
+
         ConsoleHelper.writeMessage(DatesTimes.getDateTerminal() + " --- ПАРСЕР ЗАПУЩЕН");
     }
 
@@ -45,25 +48,9 @@ public class ParserString {
             }
         }
 
-        showAllAvailableLevels(string);
-
-//        String in = string.replaceAll("\\{", "");
-//        in = in.replaceAll("}", "");
-//        in = in.replaceAll("\"", " ");
-//        String[] strings = in.split(" , ");
-//
-//        TimeFrame period = getTimeFrame(strings[0].trim().replaceAll("period : {2}",""));
-//        int preview = Integer.parseInt(strings[1].trim().replaceAll("preview : {2}", ""));
-//        Date time = getDate(strings[2].trim().replaceAll("time : {2}", ""));
-//        double price = getDouble(strings[3].trim().replaceAll("price : {2}", ""));
-//        long value = Long.parseLong(strings[4].trim().replaceAll("value : {2}", ""));
-//        BidAsk type = getType(strings[5].trim().replaceAll("type : {2}", ""));
-//        long avg = Long.parseLong(strings[6].trim().replaceAll("avg : {2}", ""));
-//        int dir = Integer.parseInt(strings[7].trim().replaceAll("dir : {2}", ""));
-//        double open = getDouble(strings[8].trim().replaceAll("open : {2}", ""));
-//        double close = getDouble(strings[9].trim().replaceAll("close : {2}", ""));
-//        double high = getDouble(strings[10].trim().replaceAll("high : {2}", ""));
-//        double low = getDouble(strings[11].trim().replaceAll("low : {2}", ""));
+        if (show && Gasket.isShowAllLevels()) {
+            showAllAvailableLevels(string);
+        }
 
         double price = Double.parseDouble(giveData(TypeData.price, string));
         double close = Double.parseDouble(giveData(TypeData.close, string));
@@ -77,7 +64,6 @@ public class ParserString {
         long avg = Long.parseLong(giveData(TypeData.avg, string));
         BidAsk type = getType(giveData(TypeData.type, string));
         Date time = getDate(giveData(TypeData.time, string));
-
 
         InfoIndicator infoIndicator =
                 new InfoIndicator(period, preview, time, price, value, type, avg, dir, open, close, high, low);
@@ -132,27 +118,25 @@ public class ParserString {
 
 
     private void showAllAvailableLevels(String string) {
-        if (show) {
-            if (arrayList == null) {
-                arrayList = new ArrayList<>();
-                arrayList.add(string);
-            } else {
+        if (arrayList == null) {
+            arrayList = new ArrayList<>();
+            arrayList.add(string);
+        } else {
+            for (String s : arrayList) {
+                if (StringHelper.giveData(TypeData.type, s)
+                        .equalsIgnoreCase(StringHelper.giveData(TypeData.type, string))) {
+                    return;
+                }
+            }
+            arrayList.add(string);
+            if (arrayList.size() == 34) {
+                StringBuilder stringBuilder = new StringBuilder("\n\n");
                 for (String s : arrayList) {
-                    if (StringHelper.giveData(TypeData.type, s)
-                            .equalsIgnoreCase(StringHelper.giveData(TypeData.type, string))) {
-                        return;
-                    }
+                    stringBuilder.append(s + "\n");
                 }
-                arrayList.add(string);
-                if (arrayList.size() == 34) {
-                    StringBuilder stringBuilder = new StringBuilder("\n\n");
-                    for (String s : arrayList) {
-                        stringBuilder.append(s + "\n");
-                    }
-                    stringBuilder.append("\n\n");
-                    ConsoleHelper.writeMessage(stringBuilder.toString());
-                    show = false;
-                }
+                stringBuilder.append("\n\n");
+                ConsoleHelper.writeMessage(stringBuilder.toString());
+                show = false;
             }
         }
     }

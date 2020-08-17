@@ -251,10 +251,20 @@ public class ExecutorCommandos {
                         writeMessage("useStopLevelOrNotStopTime === "
                                 + Gasket.getUseStopLevelOrNotStopTime() + "\n");
                     break;
+                case "totalNumberOfAllLevels" :
+                    Gasket.setTotalNumberOfAllLevels(Integer.parseInt(strings[1]));
+                        writeMessage("totalNumberOfAllLevels === "
+                                + Gasket.getTotalNumberOfAllLevels() + "\n");
+                    break;
                 case "trading":
                     Gasket.setTrading(strings[1].equalsIgnoreCase("true"));
                         writeMessage("trading === "
                                 + Gasket.isTrading() + "\n");
+                    break;
+                case "showAllLevels" :
+                    Gasket.setShowAllLevels(strings[1].equalsIgnoreCase("true"));
+                        writeMessage("showAllLevels === "
+                                + Gasket.isShowAllLevels() + "\n");
                     break;
                 case "ERROR" :
                     Gasket.setERROR(strings[1].equalsIgnoreCase("true"));

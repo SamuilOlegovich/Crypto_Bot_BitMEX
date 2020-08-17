@@ -74,10 +74,12 @@ public class Gasket {
     private static boolean maxAndMinAverage = true;     // при подсчете границ канала считаем среднюю пиков если - true или просто берем пики если false
     private static boolean useRealOrNotReal = true;     // true - реальный счет
     private static boolean tradingTestIIPro = true;
+    private static int totalNumberOfAllLevels = 34;     // итоговое количество всех уровней
     private static boolean tradingTestUser = true;
     private static boolean savedPatternsII = true;      // включить нахождение и запись патернов
     private static int timeCalculationLevel = 50;       // время за которое должны сформироваться уровни иначе все отменяется
     private static boolean serverRestart = true;        // перезапускаем сервер когда меняем номер порта из консоли
+    private static boolean showAllLevels = true;        // показать все уровни
     private static volatile double PROFIT = 0.0;        // итоговый профит
     private static boolean gameDirection = true;        // направление игры при одном счете, true - Buy, false - Sell
     private static boolean tradingTestII = true;
@@ -1934,6 +1936,22 @@ public class Gasket {
 
     public static void setTimeIntervalsClass(TimeIntervals timeIntervalsClass) {
         Gasket.timeIntervalsClass = timeIntervalsClass;
+    }
+
+    public static boolean isShowAllLevels() {
+        return showAllLevels;
+    }
+
+    public static void setShowAllLevels(boolean showAllLevels) {
+        Gasket.showAllLevels = showAllLevels;
+    }
+
+    public static int getTotalNumberOfAllLevels() {
+        return totalNumberOfAllLevels;
+    }
+
+    public static void setTotalNumberOfAllLevels(int totalNumberOfAllLevels) {
+        Gasket.totalNumberOfAllLevels = totalNumberOfAllLevels;
     }
 }
 

@@ -1,14 +1,14 @@
 package bitmex.Bot.view;
 
-import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 import bitmex.Bot.controller.RunTheProgram;
 import bitmex.Bot.model.DatesTimes;
 import bitmex.Bot.model.Gasket;
+import bitmex.Bot.model.bitMEX.enums.ChartDataBinSize;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 
@@ -106,13 +106,14 @@ public class View extends Thread {
                 new Thread() {
                     @Override
                     public void run() {
+                        Color color = jPanel.getBackground();
                         jPanel.setBackground(Color.yellow);
                         try {
                             Thread.sleep(1000 * 10);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
-                        jPanel.setBackground(Color.GREEN);
+                        jPanel.setBackground(color);
                     }
                 }.start();
 

@@ -129,7 +129,7 @@ public class ParserString {
                 }
             }
             arrayList.add(string);
-            if (arrayList.size() == 34) {
+            if (arrayList.size() == Gasket.getTotalNumberOfAllLevels()) {
                 StringBuilder stringBuilder = new StringBuilder("\n\n");
                 for (String s : arrayList) {
                     stringBuilder.append(s + "\n");

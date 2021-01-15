@@ -130,7 +130,7 @@ public class FilesAndPathCreator {
                     }
                 }
 
-                pathLogs = finish  + "Logs\\" + DatesTimes.getDateLogs().replaceAll(":", "-")
+                pathLogs = finish + "Logs\\" + DatesTimes.getDateLogs().replaceAll(":", "-")
                         + " Log.txt";
                 pathPureHistoryOfPatternsIn = finish + "PureHistoryOfPatternsIn\\PureHistoryOfPatternsIn.txt";
                 pathPatternsTemporaryIIPro = finish + "iiProPatterns\\iiProTemporaryPatterns.txt";
